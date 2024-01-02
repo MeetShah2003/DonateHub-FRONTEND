@@ -1,6 +1,10 @@
 import { useFormik } from "formik";
+import Cookies from "js-cookie";
 
 const SignUp = () => {
+  const token = Cookies.get("access_token");
+  console.log(token);
+
   const initialValue: {
     username: string;
     email: string;
@@ -19,12 +23,16 @@ const SignUp = () => {
       await fetch("http://localhost:8090/signup", {
         method: "POST",
         headers: {
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify(values),
-      }).then((res) => {
-        console.log(res);
-      });
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          // Cookies.set("access_token", data.token);
+          Cookies.set("access_token", data.token, { expires: 7, path: "/" });
+        });
     },
   });
   return (
