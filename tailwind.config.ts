@@ -8,6 +8,10 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        josefinSans: ["Josefin Sans", "sans-serif"],
+        inter: ["Inter", "sans-serif"],
+      },
       spacing: {
         "90%": "90%",
       },
@@ -15,6 +19,9 @@ const config: Config = {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+      },
+      colors: {
+        primary: "#674CC4",
       },
     },
   },
