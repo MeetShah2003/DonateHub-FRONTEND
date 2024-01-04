@@ -1,10 +1,11 @@
+import SignUp from "@/components/SignUp";
 import WelcomePage from "@/components/WelcomePage";
 
 const home = () => {
   return (
     <div>
-      <WelcomePage />
-      {/* <SignUp /> */}
+      {/* <WelcomePage /> */}
+      <SignUp />
       {/* trust
       <AddTrust /> */}
     </div>
