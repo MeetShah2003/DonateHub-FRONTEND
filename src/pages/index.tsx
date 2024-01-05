@@ -1,12 +1,13 @@
-import AddTrust from "../../components/AddTrust";
-import SignUp from "../../components/SignUp";
+import SignUp from "@/components/SignUp";
+import WelcomePage from "@/components/WelcomePage";
 
 const home = () => {
   return (
     <div>
+      {/* <WelcomePage /> */}
       <SignUp />
-      trust
-      <AddTrust />
+      {/* trust
+      <AddTrust /> */}
     </div>
   );
 };
