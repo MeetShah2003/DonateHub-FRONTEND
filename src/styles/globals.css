@@ -2,3 +2,22 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.slideAndHidden {
+  animation-duration: 3s;
+  animation-iteration-count: 1;
+  animation-name: slideAndHidden;
+  transition: transform ease-in-out 0.2s;
+}
+
+@keyframes slideAndHidden {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-1800px);
+    z-index: -500;
+    display: none;
+  }
+}
