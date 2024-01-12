@@ -5,6 +5,10 @@ import WelcomePage from "../WelcomePage";
 import GoogleIcon from "@/icons/GoogleIcon";
 import GithubIcon from "@/icons/GithubIcon";
 import * as Yup from "yup";
+import FacebookIcon from "@/icons/FacebookIcon";
+import HidePasswordIcon from "@/icons/HidePasswordIcon";
+import ShowPasswordIcon from "@/icons/ShowPasswordIcon";
+import { useState } from "react";
 
 const initialValue: {
   email: string;
@@ -30,6 +34,7 @@ const loginSchema = Yup.object().shape({
 
 const LogIn = () => {
   const token = Cookies.get("access_token");
+  const [showPassword, setShowPassword] = useState(false);
   const { handleChange, handleSubmit, handleBlur, errors, touched } = useFormik(
     {
       initialValues: initialValue,
@@ -75,17 +80,26 @@ const LogIn = () => {
             <span className="text-sm text-red-600">{errors.email}</span>
           )}
         </div>
-        <div className="flex flex-col border-t-transparent border-2 px-2 py-1 rounded-b-lg focus-within:border-primary">
+        <div className="flex flex-col border-t-transparent rounded-b-lg border-2 px-2 py-1 focus-within:border-primary">
           <label className="pb-1 text-sm font-medium">Password</label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            onChange={handleChange}
-            onBlur={handleBlur}
-            className="outline-none tracking-wider"
-            placeholder="*************"
-          />
+          <div className="flex justify-between">
+            <input
+              id="password"
+              name="password"
+              type={showPassword ? "text" : "password"}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className="outline-none tracking-wider w-full"
+              placeholder="••••••••"
+            />
+            <div
+              onClick={() => {
+                setShowPassword(!showPassword);
+              }}
+            >
+              {showPassword ? <HidePasswordIcon /> : <ShowPasswordIcon />}
+            </div>
+          </div>
           {touched.password && errors.password && (
             <span className="text-sm text-red-600">{errors.password}</span>
           )}
@@ -108,6 +122,17 @@ const LogIn = () => {
               <GoogleIcon />
             </span>
             Continue with Google
+          </button>
+        </div>
+        <div className="flex flex-col border-2 mt-4 shadow-sm rounded-lg px-2 py-2">
+          <button
+            type="button"
+            className="outline-none flex justify-center gap-3 text-black font-inter font-medium"
+          >
+            <span>
+              <FacebookIcon />
+            </span>
+            Continue with Facebook
           </button>
         </div>
         <div className="flex flex-col border-2 mt-4 shadow-sm rounded-lg px-2 py-2">
