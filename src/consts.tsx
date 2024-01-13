@@ -1,0 +1,56 @@
+export const TRUST_CATAGORY_OPTIONS: {
+  id: number;
+  option: { value: string; label: string };
+}[] = [
+  { id: 1, option: { label: "Education", value: "education" } },
+  { id: 2, option: { label: "HealthCare", value: "healthcare" } },
+  { id: 3, option: { label: "technology", value: "Technology" } },
+  { id: 4, option: { label: "food", value: "Food" } },
+  { id: 5, option: { label: "financial", value: "Financial" } },
+];
+
+// export const CITY: {
+//   id: number;
+//   city: { value: string; label: string };
+// }[] = [
+//   { id: 1, city: { label: "Surat", value: "surat" } },
+//   { id: 2, city: { label: "Vadodra", value: "vadodra" } },
+//   { id: 3, city: { label: "Ahmedabad", value: "ahmedabad" } },
+//   { id: 4, city: { label: "Rajkot", value: "rajkot" } },
+// ];
+
+export const CITY_AND_STATE: {
+  id: number;
+  state: { value: string; label: string };
+  city: { value: string; label: string }[];
+}[] = [
+  {
+    id: 1,
+    state: { label: "Gujrat", value: "gujrat" },
+    city: [
+      { label: "Surat", value: "surat" },
+      { label: "Vadodra", value: "vadodra" },
+      { label: "Ahmedabad", value: "ahmedabad" },
+      { label: "Rajkot", value: "rajkot" },
+    ],
+  },
+  {
+    id: 2,
+    state: { label: "Maharashtra", value: "maharashtra" },
+    city: [
+      { label: "Mumbai", value: "mumbai" },
+      { label: "Pune", value: "Pune" },
+      { label: "Nashik", value: "nashik" },
+    ],
+  },
+  {
+    id: 3,
+    state: { label: "Karnatak", value: "karnatak" },
+    city: [
+      { label: "Bangalore", value: "bangalore" },
+      { label: "Mysuru", value: "mysuru" },
+      { label: "Hubballi", value: "hubballi" },
+      { label: "Mangaluru", value: "mangaluru" },
+    ],
+  },
+];
