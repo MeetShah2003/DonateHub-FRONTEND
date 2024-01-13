@@ -2,11 +2,12 @@ export const TRUST_CATAGORY_OPTIONS: {
   id: number;
   option: { value: string; label: string };
 }[] = [
-  { id: 1, option: { label: "Education", value: "education" } },
-  { id: 2, option: { label: "HealthCare", value: "healthcare" } },
-  { id: 3, option: { label: "technology", value: "Technology" } },
-  { id: 4, option: { label: "food", value: "Food" } },
-  { id: 5, option: { label: "financial", value: "Financial" } },
+  { id: 1, option: { label: "Select Catagory", value: "" } },
+  { id: 2, option: { label: "Education", value: "education" } },
+  { id: 3, option: { label: "HealthCare", value: "healthcare" } },
+  { id: 4, option: { label: "technology", value: "Technology" } },
+  { id: 5, option: { label: "food", value: "Food" } },
+  { id: 6, option: { label: "financial", value: "Financial" } },
 ];
 
 // export const CITY: {
@@ -26,6 +27,11 @@ export const CITY_AND_STATE: {
 }[] = [
   {
     id: 1,
+    state: { label: "Select State", value: "" },
+    city: [{ label: "Select City", value: "" }],
+  },
+  {
+    id: 2,
     state: { label: "Gujrat", value: "gujrat" },
     city: [
       { label: "Surat", value: "surat" },
@@ -35,7 +41,7 @@ export const CITY_AND_STATE: {
     ],
   },
   {
-    id: 2,
+    id: 3,
     state: { label: "Maharashtra", value: "maharashtra" },
     city: [
       { label: "Mumbai", value: "mumbai" },
@@ -44,7 +50,7 @@ export const CITY_AND_STATE: {
     ],
   },
   {
-    id: 3,
+    id: 4,
     state: { label: "Karnatak", value: "karnatak" },
     city: [
       { label: "Bangalore", value: "bangalore" },
