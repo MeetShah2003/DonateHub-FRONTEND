@@ -48,22 +48,22 @@ const loginSchema = Yup.object().shape({
 //     console.log(error);
 //     alert("Login failed try again Later...!");
 //   }
-  // try {
-  //   fetch("/auth/google")
-  //   .then((res)=>res.json())
-  //   .then((data)=>{
-  //     if(data){
-  //       alert("login sucessfull");
-  //     }
-  //     else{
-  //       alert("login failed");
-  //     }
-  //   })
-  //   .catch((err)=>console.log(err)
-  //   )
-  // } catch (error) {
-  //   console.log(error);
-  // }
+// try {
+//   fetch("/auth/google")
+//   .then((res)=>res.json())
+//   .then((data)=>{
+//     if(data){
+//       alert("login sucessfull");
+//     }
+//     else{
+//       alert("login failed");
+//     }
+//   })
+//   .catch((err)=>console.log(err)
+//   )
+// } catch (error) {
+//   console.log(error);
+// }
 // };
 
 const LogIn = () => {
@@ -75,19 +75,18 @@ const LogIn = () => {
       validationSchema: loginSchema,
       onSubmit: async (values) => {
         try {
-          
-        const checkUser=await fetch(`http://127.0.0.1:8090/checkSignup?email=${values.email}`)
-        const checkUserData=await checkUser.json();
+          const checkUser = await fetch(
+            `http://127.0.0.1:8090/checkSignup?email=${values.email}`
+          );
+          const checkUserData = await checkUser.json();
 
-        if(checkUserData.user){
-          alert("Login sucessfull");
-        }
-        else{
-          alert("user not found");
-        }
+          if (checkUserData.user) {
+            alert("Login sucessfull");
+          } else {
+            alert("user not found");
+          }
         } catch (error) {
-         console.log(error);
-          
+          console.log(error);
         }
         // await fetch("http://localhost:8090/login", {
         //   method: "POST",
@@ -165,12 +164,10 @@ const LogIn = () => {
         <div className="flex flex-col border-2 mt-4 shadow-sm rounded-lg px-2 py-2">
           <button
             type="button"
-            onClick={()=>{
+            onClick={() => {
               // googleLogin
-              window.location.href="http://127.0.0.1:8090/auth/google"
-            }
-            }
-            
+              window.location.href = "http://127.0.0.1:8090/auth/google";
+            }}
             className="outline-none flex justify-center gap-3 text-black font-inter font-medium"
           >
             <span>
@@ -200,6 +197,14 @@ const LogIn = () => {
             </span>
             Continue with GitHub
           </button>
+        </div>
+        <div className="my-3 flex justify-center ">
+          <p>
+            Not a registered user yet?
+            <span className="text-primary underline-offset-2 underline">
+              <Link href={"/"}>SignUp</Link>
+            </span>
+          </p>
         </div>
       </form>
     </WelcomePage>
