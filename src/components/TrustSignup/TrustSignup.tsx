@@ -5,20 +5,23 @@ import CameraIcon from "@/icons/CameraIcon";
 import * as Yup from "yup";
 import HidePasswordIcon from "@/icons/HidePasswordIcon";
 import ShowPasswordIcon from "@/icons/ShowPasswordIcon";
-import { ReactNode, useState } from "react";
+import { ChangeEvent, ReactNode, useState } from "react";
 import { CITY_AND_STATE, TRUST_CATAGORY_OPTIONS } from "@/consts";
+import ErrorToast from "../ToastMessage";
+import { toast } from "react-toastify";
+import ToastMessage from "../ToastMessage";
+import { v4 as uuidv4 } from "uuid";
 
 const TrustSignup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [selectedState, setSelectedState] = useState("");
+  const [trustId, setTrustId] = useState(uuidv4());
   const [cities, setCities] = useState<{ label: string; value: string }[]>([
-    { label: "Surat", value: "surat" },
-    { label: "Vadodra", value: "vadodra" },
-    { label: "Ahmedabad", value: "ahmedabad" },
-    { label: "Rajkot", value: "rajkot" },
+    { label: "Select City", value: "" },
   ]);
   const [currentStep, setCurrentStep] = useState(1);
   const initialValue: {
+    trustId: string;
     trustname: string;
     trustlogo: string;
     trustemail: string;
@@ -36,21 +39,23 @@ const TrustSignup = () => {
     };
     role: string;
   } = {
+    trustId: trustId,
     trustname: "",
     trustemail: "",
-    trustlogo: "",
+    trustlogo:
+      "https://tse1.mm.bing.net/th?id=OIP.TpqSE-tsrMBbQurUw2Su-AHaHk&pid=Api&P=0&h=180",
     founder: "",
     creationdate: new Date(2023, 0, 1),
     catagory: "",
-    contactno: NaN,
+    contactno: 0,
     abouttrust: "",
     password: "",
     role: "trust",
     address: {
       address: "",
       city: "",
-      pincode: NaN,
-      state: "gujrat",
+      pincode: 0,
+      state: "",
     },
   };
 
@@ -91,6 +96,10 @@ const TrustSignup = () => {
     }),
   });
 
+  const errorToast = (errorMessage: string) => toast.error(errorMessage);
+  const successToast = (successMessage: string) =>
+    toast.success(successMessage);
+
   const handleStateChange = (selectedState: string) => {
     values.address.state = selectedState;
     setSelectedState(selectedState);
@@ -110,6 +119,7 @@ const TrustSignup = () => {
     handleSubmit,
     handleChange,
     handleBlur,
+    setFieldValue,
     values,
     touched,
     errors,
@@ -117,19 +127,60 @@ const TrustSignup = () => {
   } = useFormik({
     initialValues: initialValue,
     validationSchema: trustDetailSchema,
-    onSubmit: (e) => {
-      console.log("values", values);
+    onSubmit: () => {
+      if (values && isValid) {
+        console.log("values>>", values);
+        successToast("Account Is Successfully Created");
+      } else {
+        errorToast("Please Check Form");
+      }
     },
   });
 
-  const handleNext = () => {
-    if (isValid) {
-      setCurrentStep((prevStep) => prevStep + 1);
+  const handleFileChange = (event: ChangeEvent) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFieldValue("trustlogo", reader.result);
+      };
+      reader.readAsDataURL(file);
+      successToast("Image Uploaded Successfully");
     }
   };
 
-  const handlePrev = () => {
-    setCurrentStep((prevStep) => prevStep - 1);
+  const handleFirstStep = () => {
+    if (
+      values.trustname &&
+      values.trustemail &&
+      values.password &&
+      values.abouttrust
+    ) {
+      setCurrentStep((prevStep) => prevStep + 1);
+    } else {
+      errorToast("Please fill all fields");
+    }
+  };
+
+  const handleSecondStep = () => {
+    if (
+      values.trustname &&
+      values.trustemail &&
+      values.password &&
+      values.abouttrust &&
+      values.catagory &&
+      values.creationdate &&
+      values.founder &&
+      values.contactno
+    ) {
+      setCurrentStep((prevStep) => prevStep + 1);
+    } else {
+      if (!values.catagory) {
+        errorToast("Please Select Catagory");
+      } else {
+        errorToast("Please fill all fields");
+      }
+    }
   };
 
   const formSections: ReactNode[] = [
@@ -235,6 +286,7 @@ const TrustSignup = () => {
           placeholder="John Doe"
           onChange={handleChange}
           onBlur={handleBlur}
+          max={new Date().toISOString().split("T")[0]}
         />
       </div>
       <div className="flex flex-col border-t-transparent border-2 px-2 py-1 focus-within:border-primary">
@@ -348,8 +400,9 @@ const TrustSignup = () => {
 
   return (
     <WelcomePage>
+      <ToastMessage />
       <div className="mx-5 lg:mx-20 mb-10 flex flex-col justify-center items-center gap-8">
-        <div className="relative bottom-6">
+        {/* <div className="relative bottom-6">
           <div className="border-4 h-32 w-32 p-1 border-primary rounded-full overflow-hidden">
             <img
               className="rounded-full h-full w-full object-contain"
@@ -359,6 +412,28 @@ const TrustSignup = () => {
           </div>
           <div className="absolute z-50  left-1/2 bottom-0 translate-x-1/2 ">
             <CameraIcon />
+          </div>
+        </div> */}
+        <div className="relative bottom-6">
+          <div className="border-4 h-32 w-32 p-1 border-primary rounded-full overflow-hidden">
+            <img
+              className="rounded-full h-full w-full object-contain"
+              src={values.trustlogo}
+              alt=""
+            />
+          </div>
+          <input
+            type="file"
+            id="imageUpload"
+            name="imageUpload"
+            accept="image/*"
+            className="hidden"
+            onChange={handleFileChange}
+          />
+          <div className="absolute z-50  left-1/2 bottom-0 translate-x-1/2 ">
+            <label htmlFor="imageUpload" className="cursor-pointer">
+              <CameraIcon />
+            </label>
           </div>
         </div>
         <div className="w-full flex justify-around">
@@ -382,7 +457,16 @@ const TrustSignup = () => {
                 : "text-primary border-primary"
             }`}
             onClick={() => {
-              setCurrentStep(2);
+              if (
+                values.trustname &&
+                values.trustemail &&
+                values.password &&
+                values.abouttrust
+              ) {
+                setCurrentStep(2);
+              } else {
+                errorToast("Please Complete Step 1");
+              }
             }}
           >
             2
@@ -420,7 +504,7 @@ const TrustSignup = () => {
               className={`outline-none ${
                 currentStep !== 1 ? "hidden" : "block"
               } text-white font-inter font-medium`}
-              onClick={handleNext}
+              onClick={handleFirstStep}
             >
               Next
             </button>
@@ -431,7 +515,7 @@ const TrustSignup = () => {
               className={`outline-none ${
                 currentStep !== 2 ? "hidden" : "block"
               } text-white font-inter font-medium`}
-              onClick={handleNext}
+              onClick={handleSecondStep}
             >
               Next
             </button>
@@ -439,6 +523,8 @@ const TrustSignup = () => {
           {currentStep === 3 && (
             <button
               type="submit"
+              name="submit"
+              id="submit"
               className={`outline-none ${
                 currentStep !== 3 ? "hidden" : "block"
               } text-white font-inter font-medium`}
