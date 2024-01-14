@@ -51,19 +51,53 @@ const SignUp = () => {
       validationSchema: SignupSchema,
       onSubmit: async (values) => {
         const { confirmPassword, ...data } = values;
-        await fetch("https://silly-overalls-toad.cyclic.app/signup", {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            // Cookies.set("access_token", data.token);
-            Cookies.set("access_token", data.token, { expires: 7, path: "/" });
+        try {          
+        const checkUser=await fetch(`http://127.0.0.1:8090/checkSignup?email=${values.email}`)
+        const checkUserData=await checkUser.json();
+        if(checkUserData.user){
+          alert("user already exist");
+        }
+        else{
+          const userSignup=await fetch("http://127.0.0.1:8090/signup",{
+            method:"POST",
+            headers:{
+              "Authorization":`Bearer ${token}`,
+              "Content-Type":"application/json"
+            },
+            body:JSON.stringify(values)
           });
+          if (!userSignup.ok) {
+            throw new Error("Failed to sign up");
+          }
+          const signupData=await userSignup.json();
+          
+          Cookies.set("access_token",signupData.token , { expires: 7, path: "/" });
+        }
+        } catch (error) {
+         console.log(error);
+          
+        }
+        // await fetch(`http://127.0.0.1:8090/checkSignup?email=${values.email}`)
+        // .then((res)=>res.json())
+        // .then(async(data)=>{
+        //   if(data.user){
+        //     alert("user already exist");
+        //   }
+        //   else{
+        //     await fetch("http://127.0.0.1:8090/signup", {
+        //       method: "POST",
+        //       headers: {
+        //         "Authorization": `Bearer ${token}`,
+        //         "Content-Type": "application/json",
+        //       },
+        //       body: JSON.stringify(values),
+        //     }).then((res)=>res.json())
+        //     .then((data)=>{
+        //       Cookies.set("access_token", data.token, { expires: 7, path: "/" });
+        //     })
+
+        //   }
+        // })
         console.log("values", values);
       },
     });

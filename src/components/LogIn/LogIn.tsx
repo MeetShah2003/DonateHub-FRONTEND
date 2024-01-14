@@ -32,6 +32,40 @@ const loginSchema = Yup.object().shape({
     .required("Password is required"),
 });
 
+// const googleLogin=async()=>{
+//   try {
+//     const userResponse=await fetch("http://127.0.0.1:8090/auth/google")
+//     const userLogin=await userResponse.json();
+
+//     if(userLogin.token){
+//       alert("Login Sucessfull...!");
+//       window.location.href="/";
+//     }
+//     else{
+//       console.log("Login Failed");
+//     }
+//   } catch (error) {
+//     console.log(error);
+//     alert("Login failed try again Later...!");
+//   }
+  // try {
+  //   fetch("/auth/google")
+  //   .then((res)=>res.json())
+  //   .then((data)=>{
+  //     if(data){
+  //       alert("login sucessfull");
+  //     }
+  //     else{
+  //       alert("login failed");
+  //     }
+  //   })
+  //   .catch((err)=>console.log(err)
+  //   )
+  // } catch (error) {
+  //   console.log(error);
+  // }
+// };
+
 const LogIn = () => {
   const token = Cookies.get("access_token");
   const [showPassword, setShowPassword] = useState(false);
@@ -40,6 +74,21 @@ const LogIn = () => {
       initialValues: initialValue,
       validationSchema: loginSchema,
       onSubmit: async (values) => {
+        try {
+          
+        const checkUser=await fetch(`http://127.0.0.1:8090/checkSignup?email=${values.email}`)
+        const checkUserData=await checkUser.json();
+
+        if(checkUserData.user){
+          alert("Login sucessfull");
+        }
+        else{
+          alert("user not found");
+        }
+        } catch (error) {
+         console.log(error);
+          
+        }
         // await fetch("http://localhost:8090/login", {
         //   method: "POST",
         //   headers: {
@@ -116,6 +165,12 @@ const LogIn = () => {
         <div className="flex flex-col border-2 mt-4 shadow-sm rounded-lg px-2 py-2">
           <button
             type="button"
+            onClick={()=>{
+              // googleLogin
+              window.location.href="http://127.0.0.1:8090/auth/google"
+            }
+            }
+            
             className="outline-none flex justify-center gap-3 text-black font-inter font-medium"
           >
             <span>
