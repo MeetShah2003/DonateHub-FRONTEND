@@ -51,31 +51,34 @@ const SignUp = () => {
       validationSchema: SignupSchema,
       onSubmit: async (values) => {
         const { confirmPassword, ...data } = values;
-        try {          
-        const checkUser=await fetch(`http://127.0.0.1:8090/checkSignup?email=${values.email}`)
-        const checkUserData=await checkUser.json();
-        if(checkUserData.user){
-          alert("user already exist");
-        }
-        else{
-          const userSignup=await fetch("http://127.0.0.1:8090/signup",{
-            method:"POST",
-            headers:{
-              "Authorization":`Bearer ${token}`,
-              "Content-Type":"application/json"
-            },
-            body:JSON.stringify(values)
-          });
-          if (!userSignup.ok) {
-            throw new Error("Failed to sign up");
+        try {
+          const checkUser = await fetch(
+            `http://127.0.0.1:8090/checkSignup?email=${values.email}`
+          );
+          const checkUserData = await checkUser.json();
+          if (checkUserData.user) {
+            alert("user already exist");
+          } else {
+            const userSignup = await fetch("http://127.0.0.1:8090/signup", {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(values),
+            });
+            if (!userSignup.ok) {
+              throw new Error("Failed to sign up");
+            }
+            const signupData = await userSignup.json();
+
+            Cookies.set("access_token", signupData.token, {
+              expires: 7,
+              path: "/",
+            });
           }
-          const signupData=await userSignup.json();
-          
-          Cookies.set("access_token",signupData.token , { expires: 7, path: "/" });
-        }
         } catch (error) {
-         console.log(error);
-          
+          console.log(error);
         }
         // await fetch(`http://127.0.0.1:8090/checkSignup?email=${values.email}`)
         // .then((res)=>res.json())
@@ -203,29 +206,14 @@ const SignUp = () => {
             Sign Up
           </button>
         </div>
-
-        {/* <div className="flex flex-col border-2 mt-4 shadow-sm rounded-lg px-2 py-2">
-          <button
-            type="button"
-            className="outline-none flex justify-center gap-3 text-black font-inter font-medium"
-          >
-            <span>
-              <GoogleIcon />
+        <div className="my-3 flex justify-center ">
+          <p>
+            Already have an account?
+            <span className="text-primary underline-offset-2 underline">
+              <Link href={"/login"}>Login</Link>
             </span>
-            Continue with Google
-          </button>
+          </p>
         </div>
-        <div className="flex flex-col border-2 mt-4 shadow-sm rounded-lg px-2 py-2">
-          <button
-            type="button"
-            className="outline-none flex justify-center gap-3 text-black font-inter font-medium"
-          >
-            <span>
-              <GithubIcon />
-            </span>
-            Continue with GitHub
-          </button>
-        </div> */}
       </form>
     </WelcomePage>
   );
