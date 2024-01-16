@@ -9,6 +9,8 @@ import FacebookIcon from "@/icons/FacebookIcon";
 import HidePasswordIcon from "@/icons/HidePasswordIcon";
 import ShowPasswordIcon from "@/icons/ShowPasswordIcon";
 import { useState } from "react";
+import { useRouter } from "next/router";
+import { getAuthenticatedRouteCheck } from "@/authguard/authguard";
 
 const initialValue: {
   email: string;
@@ -69,6 +71,7 @@ const loginSchema = Yup.object().shape({
 const LogIn = () => {
   const token = Cookies.get("access_token");
   const [showPassword, setShowPassword] = useState(false);
+  const router = useRouter(null);
   const { handleChange, handleSubmit, handleBlur, errors, touched } = useFormik(
     {
       initialValues: initialValue,
@@ -81,7 +84,8 @@ const LogIn = () => {
           const checkUserData = await checkUser.json();
 
           if (checkUserData.user) {
-            alert("Login sucessfull");
+            console.log(checkUserData);
+            router.push("/dashboard");
           } else {
             alert("user not found");
           }
@@ -101,8 +105,6 @@ const LogIn = () => {
         //     // Cookies.set("access_token", data.token);
         //     Cookies.set("access_token", data.token, { expires: 7, path: "/" });
         //   });
-
-        console.log(values);
       },
     }
   );
@@ -210,5 +212,7 @@ const LogIn = () => {
     </WelcomePage>
   );
 };
+
+export const getServerSideProps = getAuthenticatedRouteCheck;
 
 export default LogIn;
