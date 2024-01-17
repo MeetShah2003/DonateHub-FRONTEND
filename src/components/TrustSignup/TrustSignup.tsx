@@ -128,7 +128,8 @@ const TrustSignup = () => {
     validationSchema: trustDetailSchema,
     onSubmit: () => {
       if (values && isValid) {
-        console.log("values>>", values);
+        // console.log("values>>", values);        
+        console.log("Submitted Values:", values);
         successToast("Account Is Successfully Created");
       } else {
         errorToast("Please Check Form");
