@@ -13,7 +13,7 @@ import { useRouter } from "next/router";
 const SignUp = () => {
   const token = Cookies.get("access_token");
   const [showPassword, setShowPassword] = useState(false);
-  const router = useRouter(null);
+  const router = useRouter();
 
   const SignupSchema = Yup.object().shape({
     username: Yup.string().trim().required("Username is required"),
@@ -29,7 +29,7 @@ const SignUp = () => {
       )
       .required("Password is required"),
     confirmPassword: Yup.string()
-      .oneOf([Yup.ref("password"), null], "Passwords must match")
+      .oneOf([Yup.ref("password")], "Passwords must match")
       .required("Confirm Password is required"),
   });
 

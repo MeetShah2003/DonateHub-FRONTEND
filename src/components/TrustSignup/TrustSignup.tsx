@@ -1,16 +1,15 @@
-import Link from "next/link";
 import WelcomePage from "../WelcomePage";
 import { useFormik } from "formik";
 import CameraIcon from "@/icons/CameraIcon";
 import * as Yup from "yup";
 import HidePasswordIcon from "@/icons/HidePasswordIcon";
 import ShowPasswordIcon from "@/icons/ShowPasswordIcon";
-import { ChangeEvent, ReactNode, useState } from "react";
+import React, { ChangeEvent, ReactNode, useState } from "react";
 import { CITY_AND_STATE, TRUST_CATAGORY_OPTIONS } from "@/consts";
-import ErrorToast from "../ToastMessage";
 import { toast } from "react-toastify";
 import ToastMessage from "../ToastMessage";
 import { v4 as uuidv4 } from "uuid";
+import Image from "next/image";
 
 const TrustSignup = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -137,17 +136,61 @@ const TrustSignup = () => {
     },
   });
 
-  const handleFileChange = (event: ChangeEvent) => {
-    const file = event.target.files[0];
+  // const handleFileChange = (event: ChangeEvent) => {
+  //   const file = event.target.files[0];
+  //   if (file) {
+  //     const reader = new FileReader();
+  //     reader.onloadend = () => {
+  //       setFieldValue("trustlogo", reader.result);
+  //     };
+  //     reader.readAsDataURL(file);
+  //     successToast("Image Uploaded Successfully");
+  //   }
+  // };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
         setFieldValue("trustlogo", reader.result);
+        console.log("imageUrl>>", reader.result);
       };
       reader.readAsDataURL(file);
       successToast("Image Uploaded Successfully");
     }
   };
+
+  // const handleFileChange = async (
+  //   event: React.ChangeEvent<HTMLInputElement>
+  // ) => {
+  //   const file = event.target?.files?.[0];
+  //   if (file) {
+  //     const formData = new FormData();
+  //     formData.append("trustlogo", file);
+
+  //     try {
+  //       const response = await fetch(
+  //         "http://localhost:8090/trust/trustSignup",
+  //         {
+  //           method: "POST",
+  //           body: formData,
+  //         }
+  //       );
+
+  //       if (response.ok) {
+  //         const result = await response.json();
+  //         setFieldValue("trustlogo", result.imageUrl);
+  //         successToast("Image Uploaded Successfully");
+  //       } else {
+  //         errorToast("Failed to upload image");
+  //       }
+  //     } catch (error) {
+  //       console.error("Error uploading image:", error);
+  //       errorToast("Error uploading image");
+  //     }
+  //   }
+  // };
 
   const handleFirstStep = () => {
     if (
@@ -416,10 +459,10 @@ const TrustSignup = () => {
         </div> */}
         <div className="relative bottom-6">
           <div className="border-4 h-32 w-32 p-1 border-primary rounded-full overflow-hidden">
-            <img
+            <Image
               className="rounded-full h-full w-full object-contain"
               src={values.trustlogo}
-              alt=""
+              alt="trustLogo"
             />
           </div>
           <input

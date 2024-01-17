@@ -71,7 +71,7 @@ const loginSchema = Yup.object().shape({
 const LogIn = () => {
   const token = Cookies.get("access_token");
   const [showPassword, setShowPassword] = useState(false);
-  const router = useRouter(null);
+  const router = useRouter();
   const { handleChange, handleSubmit, handleBlur, errors, touched } = useFormik(
     {
       initialValues: initialValue,
