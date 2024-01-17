@@ -34,38 +34,37 @@ const loginSchema = Yup.object().shape({
     .required("Password is required"),
 });
 
-const googleLogin=async()=>{
+const googleLogin = async () => {
   // try {
-    const userResponse=await fetch("http://127.0.0.1:8090/auth/google")
-    const userLogin=await userResponse.json();
+  const userResponse = await fetch("http://127.0.0.1:8090/auth/google");
+  const userLogin = await userResponse.json();
 
-    if(userLogin.token){
-      alert("Login Sucessfull...!");
-      window.location.href="/";
-    }
-    else{
-      alert("Login Failed...!");
-    }
+  if (userLogin.token) {
+    alert("Login Sucessfull...!");
+    window.location.href = "/";
+  } else {
+    alert("Login Failed...!");
+  }
   // } catch (error) {
   //   console.log(error);
   //   alert("Login failed try again Later...!");
   // }
-// try {
-//   fetch("/auth/google")
-//   .then((res)=>res.json())
-//   .then((data)=>{
-//     if(data){
-//       alert("login sucessfull");
-//     }
-//     else{
-//       alert("login failed");
-//     }
-//   })
-//   .catch((err)=>console.log(err)
-//   )
-// } catch (error) {
-//   console.log(error);
-// }
+  // try {
+  //   fetch("/auth/google")
+  //   .then((res)=>res.json())
+  //   .then((data)=>{
+  //     if(data){
+  //       alert("login sucessfull");
+  //     }
+  //     else{
+  //       alert("login failed");
+  //     }
+  //   })
+  //   .catch((err)=>console.log(err)
+  //   )
+  // } catch (error) {
+  //   console.log(error);
+  // }
 };
 
 const LogIn = () => {
@@ -167,7 +166,7 @@ const LogIn = () => {
           <button
             type="button"
             onClick={() => {
-              googleLogin()
+              googleLogin();
               // window.location.href = "http://127.0.0.1:8090/auth/google";
             }}
             className="outline-none flex justify-center gap-3 text-black font-inter font-medium"
