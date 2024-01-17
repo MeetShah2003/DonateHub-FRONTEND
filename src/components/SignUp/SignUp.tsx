@@ -13,7 +13,7 @@ import { useRouter } from "next/router";
 const SignUp = () => {
   const token = Cookies.get("access_token");
   const [showPassword, setShowPassword] = useState(false);
-  const router = useRouter(null);
+  const router = useRouter();
 
   const SignupSchema = Yup.object().shape({
     username: Yup.string().trim().required("Username is required"),
