@@ -8,10 +8,12 @@ import Link from "next/link";
 import ShowPasswordIcon from "@/icons/ShowPasswordIcon";
 import HidePasswordIcon from "@/icons/HidePasswordIcon";
 import { useState } from "react";
+import { useRouter } from "next/router";
 
 const SignUp = () => {
   const token = Cookies.get("access_token");
   const [showPassword, setShowPassword] = useState(false);
+  const router = useRouter(null);
 
   const SignupSchema = Yup.object().shape({
     username: Yup.string().trim().required("Username is required"),
@@ -58,6 +60,8 @@ const SignUp = () => {
           const checkUserData = await checkUser.json();
           if (checkUserData.user) {
             alert("user already exist");
+            console.log(checkUserData);
+            router.push("/login");
           } else {
             const userSignup = await fetch("http://127.0.0.1:8090/signup", {
               method: "POST",
@@ -72,10 +76,14 @@ const SignUp = () => {
             }
             const signupData = await userSignup.json();
 
+            console.log("signupdata>>", signupData);
+
             Cookies.set("access_token", signupData.token, {
               expires: 7,
               path: "/",
             });
+
+            router.push("/login");
           }
         } catch (error) {
           console.log(error);
