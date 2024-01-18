@@ -1,8 +1,5 @@
 import { useFormik } from "formik";
-import Cookies from "js-cookie";
 import WelcomePage from "../WelcomePage";
-import GoogleIcon from "@/icons/GoogleIcon";
-import GithubIcon from "@/icons/GithubIcon";
 import * as Yup from "yup";
 import Link from "next/link";
 import ShowPasswordIcon from "@/icons/ShowPasswordIcon";
@@ -11,7 +8,6 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 
 const SignUp = () => {
-  const token = Cookies.get("access_token");
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
 
@@ -54,62 +50,27 @@ const SignUp = () => {
       onSubmit: async (values) => {
         const { confirmPassword, ...data } = values;
         try {
-          const checkUser = await fetch(
-            `http://127.0.0.1:8090/checkSignup?email=${values.email}`
-          );
-          const checkUserData = await checkUser.json();
-          if (checkUserData.user) {
-            alert("user already exist");
-            console.log(checkUserData);
-            router.push("/login");
-          } else {
-            const userSignup = await fetch("http://127.0.0.1:8090/signup", {
-              method: "POST",
-              headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(values),
+          fetch(`http://127.0.0.1:8090/signup`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(values),
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              console.log(data);
+              if (data.message == "user already exist") {
+                alert("user already exists");
+                router.push("/login");
+              } else {
+                alert(
+                  `Account created successfully. Username: ${data.user.username}`
+                );
+                router.push("/login");
+              }
             });
-            if (!userSignup.ok) {
-              throw new Error("Failed to sign up");
-            }
-            const signupData = await userSignup.json();
-
-            console.log("signupdata>>", signupData);
-
-            Cookies.set("access_token", signupData.token, {
-              expires: 7,
-              path: "/",
-            });
-
-            router.push("/login");
-          }
         } catch (error) {
           console.log(error);
         }
-        // await fetch(`http://127.0.0.1:8090/checkSignup?email=${values.email}`)
-        // .then((res)=>res.json())
-        // .then(async(data)=>{
-        //   if(data.user){
-        //     alert("user already exist");
-        //   }
-        //   else{
-        //     await fetch("http://127.0.0.1:8090/signup", {
-        //       method: "POST",
-        //       headers: {
-        //         "Authorization": `Bearer ${token}`,
-        //         "Content-Type": "application/json",
-        //       },
-        //       body: JSON.stringify(values),
-        //     }).then((res)=>res.json())
-        //     .then((data)=>{
-        //       Cookies.set("access_token", data.token, { expires: 7, path: "/" });
-        //     })
-
-        //   }
-        // })
-        console.log("values", values);
       },
     });
   return (
@@ -190,19 +151,6 @@ const SignUp = () => {
             </span>
           )}
         </div>
-        {/* <div className="flex flex-col border-t-transparent border-2 px-2 py-1 rounded-b-lg focus-within:border-primary">
-          <label className="pb-1 text-sm font-medium">Role</label>
-          <select
-            className="outline-none tracking-wider"
-            id="role"
-            name="role"
-            onChange={handleChange}
-            onBlur={handleBlur}
-          >
-            <option value="user">User</option>
-            <option value="trust">Trust</option>
-          </select>
-        </div> */}
         <div className="my-3 text-primary underline-offset-2 underline">
           <Link href={"/trustsignup"}>As a trust?</Link>
         </div>

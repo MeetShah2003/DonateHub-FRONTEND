@@ -11,7 +11,6 @@ import ShowPasswordIcon from "@/icons/ShowPasswordIcon";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { getAuthenticatedRouteCheck } from "@/authguard/authguard";
-import bcrypt from "bcryptjs";
 
 const initialValue: {
   email: string;
@@ -77,53 +76,43 @@ const LogIn = () => {
       initialValues: initialValue,
       validationSchema: loginSchema,
       onSubmit: async (values) => {
+        console.log(values);
         try {
-          const checkUser = await fetch(
-            `http://127.0.0.1:8090/checkSignup?email=${values.email}`
-          );
-          const checkUserData = await checkUser.json();
-
-          // if (checkUserData.user) {
-          //   console.log(checkUserData);
-          //   router.push("/dashboard");
-          // } else {
-          //   alert("user not found");
-          // }
-          console.log(checkUserData);
-          const isPasswordMatch = await bcrypt.compare(
-            values.password,
-            checkUserData.user.password
-          );
-
-          console.log("password match", isPasswordMatch);
-          console.log("length", checkUserData.length);
-          console.log("password", checkUserData.user.password);
-          // if (checkUserData) {
-          //   console.log(checkUserData, values.password);
-          //   if (checkUserData === values.password) {
-          //     alert("login sucessfull");
-          //   } else {
-          //     alert("invalid password");
-          //   }
-          // } else {
-          //   alert("user not found");
-          // }
+          fetch("http://127.0.0.1:8090/login", {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(values),
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              if (data.message == "login sucessfull") {
+                alert(`Welcome back ${data.user.username}`);
+                Cookies.set("access_token", data.token, {
+                  expires: 7,
+                  path: "/",
+                });
+                router.push("/dashboard");
+              } else {
+                if (data.message == "user not found") {
+                  alert(
+                    "Email not found. Please check your email and try again."
+                  );
+                }
+                if (data.message == "invalid password") {
+                  alert(
+                    "Invalid password. Please check your password and try again."
+                  );
+                } else {
+                  alert("Login failed. Try again later...!");
+                }
+              }
+            });
         } catch (error) {
           console.log(error);
         }
-        // await fetch("http://localhost:8090/login", {
-        //   method: "POST",
-        //   headers: {
-        //     Authorization: `Bearer ${token}`,
-        //     "Content-Type": "application/json",
-        //   },
-        //   body: JSON.stringify(values),
-        // })
-        //   .then((res) => res.json())
-        //   .then((data) => {
-        //     // Cookies.set("access_token", data.token);
-        //     Cookies.set("access_token", data.token, { expires: 7, path: "/" });
-        //   });
       },
     }
   );
