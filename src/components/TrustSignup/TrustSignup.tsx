@@ -128,7 +128,7 @@ const TrustSignup = () => {
     validationSchema: trustDetailSchema,
     onSubmit: () => {
       if (values && isValid) {
-        // console.log("values>>", values);        
+        // console.log("values>>", values);
         console.log("Submitted Values:", values);
         successToast("Account Is Successfully Created");
       } else {
@@ -464,6 +464,8 @@ const TrustSignup = () => {
               className="rounded-full h-full w-full object-contain"
               src={values.trustlogo}
               alt="trustLogo"
+              width={128}
+              height={128}
             />
           </div>
           <input
