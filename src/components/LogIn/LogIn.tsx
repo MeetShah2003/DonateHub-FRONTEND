@@ -11,6 +11,7 @@ import ShowPasswordIcon from "@/icons/ShowPasswordIcon";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { getAuthenticatedRouteCheck } from "@/authguard/authguard";
+import bcrypt from "bcryptjs";
 
 const initialValue: {
   email: string;
@@ -82,12 +83,31 @@ const LogIn = () => {
           );
           const checkUserData = await checkUser.json();
 
-          if (checkUserData.user) {
-            console.log(checkUserData);
-            router.push("/dashboard");
-          } else {
-            alert("user not found");
-          }
+          // if (checkUserData.user) {
+          //   console.log(checkUserData);
+          //   router.push("/dashboard");
+          // } else {
+          //   alert("user not found");
+          // }
+          console.log(checkUserData);
+          const isPasswordMatch = await bcrypt.compare(
+            values.password,
+            checkUserData.user.password
+          );
+
+          console.log("password match", isPasswordMatch);
+          console.log("length", checkUserData.length);
+          console.log("password", checkUserData.user.password);
+          // if (checkUserData) {
+          //   console.log(checkUserData, values.password);
+          //   if (checkUserData === values.password) {
+          //     alert("login sucessfull");
+          //   } else {
+          //     alert("invalid password");
+          //   }
+          // } else {
+          //   alert("user not found");
+          // }
         } catch (error) {
           console.log(error);
         }
