@@ -11,6 +11,8 @@ import HidePasswordIcon from "@/icons/HidePasswordIcon";
 import ShowPasswordIcon from "@/icons/ShowPasswordIcon";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import { toast } from "react-toastify";
+import ToastMessage from "../ToastMessage";
 import { getAuthenticatedRouteCheck } from "@/authguard/authguard";
 
 const initialValue: {
@@ -39,6 +41,10 @@ const LogIn = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const token = Cookies.get("access_token");
+
+  const errorToast = (errorMessage: string) => toast.error(errorMessage);
+  const successToast = (successMessage: string) =>
+    toast.success(successMessage);
 
   // const googleLogin= async (response) => {
   //   try {
@@ -84,15 +90,15 @@ const LogIn = () => {
         const userLogin = await userResponse.json();
 
         if (userLogin.token) {
-          alert("Login Successful...!");
+          successToast("Login Successful...!");
           window.location.href = "/";
         } else {
-          alert("Login Failed...!");
+          errorToast("Login Failed...!");
         }
       }
     } catch (error) {
       console.log(error);
-      alert("Login failed. Try again later...!");
+      errorToast("Login Failed...!");
     }
   };
 
@@ -114,7 +120,7 @@ const LogIn = () => {
             .then((res) => res.json())
             .then((data) => {
               if (data.message == "login sucessfull") {
-                alert(`Welcome back ${data.user.username}`);
+                successToast(`Welcome back ${data.user.username}`);
                 Cookies.set("access_token", data.token, {
                   expires: 7,
                   path: "/",
@@ -122,16 +128,12 @@ const LogIn = () => {
                 router.push("/dashboard");
               } else {
                 if (data.message == "user not found") {
-                  alert(
-                    "Email not found. Please check your email and try again."
-                  );
+                  errorToast("Email not found");
                 }
                 if (data.message == "invalid password") {
-                  alert(
-                    "Invalid password. Please check your password and try again."
-                  );
+                  errorToast("Invalid password");
                 } else {
-                  alert("Login failed. Try again later...!");
+                  errorToast("Login failed");
                 }
               }
             });
@@ -143,6 +145,7 @@ const LogIn = () => {
   );
   return (
     <WelcomePage>
+      <ToastMessage />
       <form className="mx-5 lg:mx-20 gap-10" onSubmit={handleSubmit}>
         <h3 className="font-inter text-3xl drop-shadow-2xl tracking-wider font-bold mb-8">
           Sign in

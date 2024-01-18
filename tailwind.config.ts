@@ -23,6 +23,8 @@ const config: Config = {
       colors: {
         primary: "#674CC4",
         secondary: "#9582D6",
+        steelGray: "#494B4D",
+        lightGray: "#6e7173",
       },
     },
   },
