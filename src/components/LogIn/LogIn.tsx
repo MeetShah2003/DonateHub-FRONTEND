@@ -66,7 +66,7 @@ const LogIn = () => {
   //   }
   // };
 
-  const googleLogin = async (response) => {
+  const googleLogin = async (response: any) => {
     try {
       console.log("Google Login Response:", response);
 
@@ -103,7 +103,7 @@ const LogIn = () => {
       onSubmit: async (values) => {
         console.log(values);
         try {
-          fetch("http://127.0.0.1:8090/login", {
+          fetch("http://localhost:8090/login", {
             method: "POST",
             headers: {
               Authorization: `Bearer ${token}`,

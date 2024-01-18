@@ -41,8 +41,7 @@ const TrustSignup = () => {
     trustId: trustId,
     trustname: "",
     trustemail: "",
-    trustlogo:
-      "https://tse1.mm.bing.net/th?id=OIP.TpqSE-tsrMBbQurUw2Su-AHaHk&pid=Api&P=0&h=180",
+    trustlogo: "",
     founder: "",
     creationdate: new Date(2023, 0, 1),
     catagory: "",
@@ -495,7 +494,12 @@ const TrustSignup = () => {
           >
             1
           </div>
-          <div className="text-primary">━━━━━━━━━━━━━━━</div>
+          <div className="hidden lg:block text-primary">━━━━━━━━━━━</div>
+          <div className="hidden md:block lg:hidden text-primary">━━━━━━━</div>
+          <div className="hidden sm:block md:hidden text-primary">
+            ━━━━━━━━━━━━━━━
+          </div>
+          <div className=" text-primary sm:hidden">━━━━━━━━━━━</div>
           <div
             className={`h-8 w-8 flex items-center cursor-pointer hover:scale-125 transition-transform ease-in-out justify-center font-bold rounded-full text-primary border ${
               currentStep === 3
@@ -517,7 +521,12 @@ const TrustSignup = () => {
           >
             2
           </div>
-          <div className="text-primary">━━━━━━━━━━━━━━━</div>
+          <div className="hidden lg:block text-primary">━━━━━━━━━━━</div>
+          <div className="hidden md:block lg:hidden text-primary">━━━━━━━</div>
+          <div className="hidden sm:block md:hidden text-primary">
+            ━━━━━━━━━━━━━━━
+          </div>
+          <div className=" text-primary sm:hidden">━━━━━━━━━━━</div>
 
           <div
             onClick={() => {
