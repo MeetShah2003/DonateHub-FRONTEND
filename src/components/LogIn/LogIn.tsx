@@ -1,5 +1,6 @@
 import { useFormik } from "formik";
 import Link from "next/link";
+import { GoogleLogin } from "react-google-login";
 import Cookies from "js-cookie";
 import WelcomePage from "../WelcomePage";
 import GoogleIcon from "@/icons/GoogleIcon";
@@ -34,43 +35,67 @@ const loginSchema = Yup.object().shape({
     .required("Password is required"),
 });
 
-const googleLogin = async () => {
-  // try {
-  const userResponse = await fetch("http://127.0.0.1:8090/auth/google");
-  const userLogin = await userResponse.json();
-
-  if (userLogin.token) {
-    alert("Login Sucessfull...!");
-    window.location.href = "/";
-  } else {
-    alert("Login Failed...!");
-  }
-  // } catch (error) {
-  //   console.log(error);
-  //   alert("Login failed try again Later...!");
-  // }
-  // try {
-  //   fetch("/auth/google")
-  //   .then((res)=>res.json())
-  //   .then((data)=>{
-  //     if(data){
-  //       alert("login sucessfull");
-  //     }
-  //     else{
-  //       alert("login failed");
-  //     }
-  //   })
-  //   .catch((err)=>console.log(err)
-  //   )
-  // } catch (error) {
-  //   console.log(error);
-  // }
-};
-
 const LogIn = () => {
-  const token = Cookies.get("access_token");
-  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
+  const token = Cookies.get("access_token");
+
+  // const googleLogin= async (response) => {
+  //   try {
+  //     if (response.tokenId) {
+  //       const userResponse = await fetch("http://127.0.0.1:8090/google/auth", {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify({ tokenId: response.tokenId }),
+  //       });
+
+  //       const userLogin = await userResponse.json();
+
+  //       if (userLogin.token) {
+  //         alert("Login Successful...!");
+  //         window.location.href = "/";
+  //       } else {
+  //         alert("Login Failed...!");
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //     alert("Login failed. Try again later...!");
+  //   }
+  // };
+
+  const googleLogin = async (response) => {
+    try {
+      console.log("Google Login Response:", response);
+
+      // Check the console log to understand the structure of the response object
+
+      if (response.tokenId) {
+        const userResponse = await fetch("http://127.0.0.1:8090/google/auth", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ tokenId: response.tokenId }),
+        });
+
+        const userLogin = await userResponse.json();
+
+        if (userLogin.token) {
+          alert("Login Successful...!");
+          window.location.href = "/";
+        } else {
+          alert("Login Failed...!");
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      alert("Login failed. Try again later...!");
+    }
+  };
+
   const { handleChange, handleSubmit, handleBlur, errors, touched } = useFormik(
     {
       initialValues: initialValue,
@@ -171,13 +196,9 @@ const LogIn = () => {
             Sign In
           </button>
         </div>
-        <div className="flex flex-col border-2 mt-4 shadow-sm rounded-lg px-2 py-2">
+        {/* <div className="flex flex-col border-2 mt-4 shadow-sm rounded-lg px-2 py-2">
           <button
             type="button"
-            onClick={() => {
-              googleLogin();
-              // window.location.href = "http://127.0.0.1:8090/auth/google";
-            }}
             className="outline-none flex justify-center gap-3 text-black font-inter font-medium"
           >
             <span>
@@ -185,6 +206,27 @@ const LogIn = () => {
             </span>
             Continue with Google
           </button>
+        </div> */}
+        <div className="flex flex-col border-2 mt-4 shadow-sm rounded-lg px-2 py-2">
+          <GoogleLogin
+            clientId="926208157257-d24k1337qap4o2p9j78hksrdbtc70i9g.apps.googleusercontent.com"
+            buttonText="Continue with Google"
+            onSuccess={googleLogin}
+            onFailure={googleLogin}
+            cookiePolicy={"single_host_origin"}
+            render={(renderProps) => (
+              <button
+                type="button"
+                onClick={renderProps.onClick}
+                className="outline-none flex justify-center gap-3 text-black font-inter font-medium"
+              >
+                <span>
+                  <GoogleIcon />
+                </span>
+                Continue with Google
+              </button>
+            )}
+          />
         </div>
         <div className="flex flex-col border-2 mt-4 shadow-sm rounded-lg px-2 py-2">
           <button
