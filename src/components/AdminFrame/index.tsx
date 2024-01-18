@@ -66,7 +66,10 @@ const AdminFrame = () => {
             ADMIN_MENUS.length > 0 &&
             ADMIN_MENUS.map(({ icon, id, menu, path }) => {
               return (
-                <div className="flex items-center cursor-pointer gap-5 py-4 px-5">
+                <div
+                  key={id}
+                  className="flex items-center cursor-pointer gap-5 py-4 px-5"
+                >
                   <div className="h-5">{icon}</div>
                   <li
                     onClick={() => {
@@ -111,7 +114,10 @@ const AdminFrame = () => {
             ADMIN_MENUS.length > 0 &&
             ADMIN_MENUS.map(({ icon, id, menu, path }) => {
               return (
-                <div className="flex items-center cursor-pointer gap-5 py-4 px-5">
+                <div
+                  key={id}
+                  className="flex items-center cursor-pointer gap-5 py-4 px-5"
+                >
                   <div className="h-5">{icon}</div>
                   <li
                     onClick={() => {
