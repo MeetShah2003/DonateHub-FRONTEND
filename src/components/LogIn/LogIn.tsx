@@ -14,6 +14,7 @@ import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import ToastMessage from "../ToastMessage";
 import { getAuthenticatedRouteCheck } from "@/authguard/authguard";
+import { useGoogleLogin } from "@react-oauth/google";
 
 const initialValue: {
   email: string;
@@ -72,36 +73,41 @@ const LogIn = () => {
   //   }
   // };
 
-  const googleLogin = async (response: any) => {
-    try {
-      console.log("Google Login Response:", response);
+  // const googleLogin = async (response: any) => {
+  //   try {
+  //     console.log("Google Login Response:", response);
 
-      // Check the console log to understand the structure of the response object
+  //     // Check the console log to understand the structure of the response object
 
-      if (response.tokenId) {
-        const userResponse = await fetch("http://127.0.0.1:8090/google/auth", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ tokenId: response.tokenId }),
-        });
+  //     if (response.tokenId) {
+  //       const userResponse = await fetch("http://127.0.0.1:8090/google/auth", {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify({ tokenId: response.tokenId }),
+  //       });
 
-        const userLogin = await userResponse.json();
+  //       const userLogin = await userResponse.json();
 
-        if (userLogin.token) {
-          successToast("Login Successful...!");
-          window.location.href = "/";
-        } else {
-          errorToast("Login Failed...!");
-        }
-      }
-    } catch (error) {
-      console.log(error);
-      errorToast("Login Failed...!");
-    }
-  };
+  //       if (userLogin.token) {
+  //         successToast("Login Successful...!");
+  //         window.location.href = "/";
+  //       } else {
+  //         errorToast("Login Failed...!");
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //     errorToast("Login Failed...!");
+  //   }
+  // };
 
+  const gLogin = useGoogleLogin({
+    onSuccess: (tokenResponse) => {
+      console.log(tokenResponse);
+    },
+  });
   const { handleChange, handleSubmit, handleBlur, errors, touched } = useFormik(
     {
       initialValues: initialValue,
@@ -210,7 +216,7 @@ const LogIn = () => {
             Continue with Google
           </button>
         </div> */}
-        <div className="flex flex-col border-2 mt-4 shadow-sm rounded-lg px-2 py-2">
+        {/* <div className="flex flex-col border-2 mt-4 shadow-sm rounded-lg px-2 py-2">
           <GoogleLogin
             clientId="926208157257-d24k1337qap4o2p9j78hksrdbtc70i9g.apps.googleusercontent.com"
             buttonText="Continue with Google"
@@ -230,6 +236,20 @@ const LogIn = () => {
               </button>
             )}
           />
+        </div> */}
+        <div className="flex flex-col border-2 mt-4 shadow-sm rounded-lg px-2 py-2">
+          <button
+            type="button"
+            onClick={() => {
+              gLogin();
+            }}
+            className="outline-none flex justify-center gap-3 text-black font-inter font-medium"
+          >
+            <span>
+              <GoogleIcon />
+            </span>
+            Continue with Google
+          </button>
         </div>
         <div className="flex flex-col border-2 mt-4 shadow-sm rounded-lg px-2 py-2">
           <button

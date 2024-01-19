@@ -1,9 +1,10 @@
 import type { GetServerSideProps } from "next";
 
 export const getNotAuthenticatedRouteCheck: GetServerSideProps = async (
-  contex
+  context
 ) => {
-  const accessToken = contex.req.cookies?.access_token;
+  const accessToken = context.req.cookies?.yourAccessTokenCookieName; // Replace with your actual cookie name
+
   if (accessToken) {
     return {
       redirect: {
@@ -12,13 +13,14 @@ export const getNotAuthenticatedRouteCheck: GetServerSideProps = async (
       },
     };
   }
+
   return { props: {} };
 };
 
 export const getAuthenticatedRouteCheck: GetServerSideProps = async (
-  contex
+  context
 ) => {
-  const accessToken = contex?.req?.cookies?.access_token || "";
+  const accessToken = context?.req?.cookies?.yourAccessTokenCookieName || ""; // Replace with your actual cookie name
 
   if (!accessToken) {
     return {
@@ -28,5 +30,6 @@ export const getAuthenticatedRouteCheck: GetServerSideProps = async (
       },
     };
   }
+
   return { props: {} };
 };
