@@ -6,10 +6,16 @@ import ShowPasswordIcon from "@/icons/ShowPasswordIcon";
 import HidePasswordIcon from "@/icons/HidePasswordIcon";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import { toast } from "react-toastify";
+import ToastMessage from "../ToastMessage";
 
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
+
+  const errorToast = (errorMessage: string) => toast.error(errorMessage);
+  const successToast = (successMessage: string) =>
+    toast.success(successMessage);
 
   const SignupSchema = Yup.object().shape({
     username: Yup.string().trim().required("Username is required"),
@@ -59,12 +65,10 @@ const SignUp = () => {
             .then((data) => {
               console.log(data);
               if (data.message == "user already exist") {
-                alert("user already exists");
+                errorToast("user already exists");
                 router.push("/login");
               } else {
-                alert(
-                  `Account created successfully. Username: ${data.user.username}`
-                );
+                successToast("Account created successfully");
                 router.push("/login");
               }
             });
@@ -75,6 +79,7 @@ const SignUp = () => {
     });
   return (
     <WelcomePage>
+      <ToastMessage />
       <form className="mx-5 lg:mx-20 gap-10" onSubmit={handleSubmit}>
         <h3 className="font-inter text-3xl drop-shadow-2xl tracking-wider font-bold mb-8">
           Sign Up
