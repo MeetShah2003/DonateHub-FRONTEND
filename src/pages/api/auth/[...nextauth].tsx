@@ -3,8 +3,8 @@ import GithubProvider from "next-auth/providers/github";
 export const authOptions = {
   providers: [
     GithubProvider({
-      clientId: process.env.GITHUB_ID || "",
-      clientSecret: process.env.GITHUB_SECRET || "",
+      clientId: "7cf82672c272cdaffae4" || "",
+      clientSecret: "f8c7b5fe7922600dab842e52d3ad5b8434452127" || "",
     }),
   ],
 };

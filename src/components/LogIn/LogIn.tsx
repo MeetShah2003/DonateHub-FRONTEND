@@ -238,38 +238,8 @@ const LogIn = () => {
           >
             Sign In
           </button>
-          <button
-            type="button"
-            onClick={async () => {
-              const response = await signIn("github");
-              if (response?.ok) {
-                router.push("/dashboard");
-              }
-            }}
-            className="outline-none text-white font-inter font-medium"
-          >
-            github logout
-          </button>
         </div>
-        {/* <div className="flex flex-col border-2 mt-4 shadow-sm rounded-lg px-2 py-2">
-          <button
-            type="button"
-            className="outline-none flex justify-center gap-3 text-black font-inter font-medium"
-          >
-            <span>
-              <GoogleIcon />
-            </span>
-            Continue with Google
-          </button>
-        </div> */}
-        {/* <GoogleLogin
-          onSuccess={(credentialResponse) => {
-            console.log(credentialResponse);
-          }}
-          onError={() => {
-            console.log("Login Failed");
-          }}
-        /> */}
+
         <div className="flex flex-col border-2 mt-4 shadow-sm rounded-lg px-2 py-2">
           <button
             type="button"
@@ -284,17 +254,7 @@ const LogIn = () => {
             Continue with Google
           </button>
         </div>
-        <div className="flex flex-col border-2 mt-4 shadow-sm rounded-lg px-2 py-2">
-          <button
-            type="button"
-            className="outline-none flex justify-center gap-3 text-black font-inter font-medium"
-          >
-            <span>
-              <FacebookIcon />
-            </span>
-            Continue with Facebook
-          </button>
-        </div>
+
         <div className="flex flex-col border-2 mt-4 shadow-sm rounded-lg px-2 py-2">
           <button
             type="button"
