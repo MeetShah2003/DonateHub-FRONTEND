@@ -14,6 +14,7 @@ import { toast } from "react-toastify";
 import ToastMessage from "../ToastMessage";
 import { getAuthenticatedRouteCheck } from "@/authguard/authguard";
 import { useGoogleLogin } from "@react-oauth/google";
+import { useSession, signIn, signOut } from "next-auth/react";
 
 const initialValue: {
   email: string;
@@ -37,10 +38,17 @@ const loginSchema = Yup.object().shape({
     .required("Password is required"),
 });
 
+// signOut();
+
 const LogIn = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const token = Cookies.get("access_token");
+
+  const { data: session } = useSession();
+
+  console.log(session?.user);
+  // signOut()
 
   const errorToast = (errorMessage: string) => toast.error(errorMessage);
   const successToast = (successMessage: string) =>
@@ -217,6 +225,18 @@ const LogIn = () => {
           >
             Sign In
           </button>
+          <button
+            type="button"
+            onClick={async () => {
+              const response = await signIn("github");
+              if (response?.ok) {
+                router.push("/dashboard");
+              }
+            }}
+            className="outline-none text-white font-inter font-medium"
+          >
+            github logout
+          </button>
         </div>
         {/* <div className="flex flex-col border-2 mt-4 shadow-sm rounded-lg px-2 py-2">
           <button
@@ -265,6 +285,9 @@ const LogIn = () => {
         <div className="flex flex-col border-2 mt-4 shadow-sm rounded-lg px-2 py-2">
           <button
             type="button"
+            onClick={() => {
+              signIn("github");
+            }}
             className="outline-none flex justify-center gap-3 text-black font-inter font-medium"
           >
             <span>
