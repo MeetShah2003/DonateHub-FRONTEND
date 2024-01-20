@@ -1,22 +1,33 @@
 import React, { useState, useEffect } from "react";
 import WelcomePage from "@/components/WelcomePage";
 import { useFormik } from "formik";
-import Link from "next/link";
 import OtpInput from "react-otp-input";
+import * as Yup from "yup";
 
 const EnterOtp = () => {
-  const [resendTimer, setResendTimer] = useState(60); // Set initial timer value in seconds
-  const { handleChange, handleSubmit, values } = useFormik({
+  const [resendTimer, setResendTimer] = useState(60);
+  const [submitted, setSubmitted] = useState(false);
+
+  const validationSchema = Yup.object().shape({
+    otp: Yup.string()
+      .length(4, "OTP must be exactly 4 characters")
+      .matches(/^\d+$/, "OTP must only contain digits")
+      .required("OTP is required"),
+  });
+
+  const { handleChange, handleSubmit, errors, values, touched } = useFormik({
     initialValues: {
       otp: "",
     },
+    validationSchema: validationSchema,
     onSubmit: () => {
       console.log(values);
+      setSubmitted(true);
     },
   });
 
   useEffect(() => {
-    let interval;
+    var interval: any;
 
     if (resendTimer > 0) {
       interval = setInterval(() => {
@@ -47,15 +58,17 @@ const EnterOtp = () => {
             handleChange({ target: { name: "otp", value: otp } })
           }
           numInputs={4}
-          separator={<span className="mx-2"></span>}
-          isInputNum={true}
           placeholder="0000"
           containerStyle="flex justify-center"
           renderInput={(props, index) => (
             <input
               {...props}
               key={index}
-              className="border-2 border-gray-300 focus:border-primary"
+              className={`border-2 ${
+                errors.otp && (touched.otp || submitted)
+                  ? "border-red-600"
+                  : "border-gray-300"
+              } focus:border-primary`}
               name="otp"
               id="otp"
               style={{
@@ -71,6 +84,9 @@ const EnterOtp = () => {
             />
           )}
         />
+        {errors.otp && (touched.otp || submitted) && (
+          <div className="text-red-600">{errors.otp}</div>
+        )}
 
         <div className="flex mt-5 flex-col border-2 bg-primary shadow-sm rounded-lg px-2 py-2">
           <button

@@ -57,7 +57,7 @@ const ForgotPassword = () => {
 
         <div className="my-5 flex justify-center ">
           <p className="text-steelGray">
-            <Link href={"/login"}>I'll remember the password</Link>
+            <Link href={"/login"}>I remember the password</Link>
           </p>
         </div>
       </form>
