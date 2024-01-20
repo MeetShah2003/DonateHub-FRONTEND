@@ -1,6 +1,5 @@
 import { useFormik } from "formik";
 import Link from "next/link";
-import { GoogleLogin } from "react-google-login";
 import Cookies from "js-cookie";
 import WelcomePage from "../WelcomePage";
 import GoogleIcon from "@/icons/GoogleIcon";
@@ -104,8 +103,24 @@ const LogIn = () => {
   // };
 
   const gLogin = useGoogleLogin({
-    onSuccess: (tokenResponse) => {
-      console.log(tokenResponse);
+    onSuccess: async (response) => {
+      try {
+        fetch("https://www.googleapis.com/oauth2/v1/userinfo", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${response.access_token}`,
+          },
+        })
+          .then((response) => response.json())
+          .then((userInfo) => {
+            console.log("User Information:", userInfo);
+          })
+          .catch((error) => {
+            console.error("Error fetching user information:", error);
+          });
+      } catch (err) {
+        console.log(err);
+      }
     },
   });
   const { handleChange, handleSubmit, handleBlur, errors, touched } = useFormik(
@@ -156,7 +171,6 @@ const LogIn = () => {
         <h3 className="font-inter text-3xl drop-shadow-2xl tracking-wider font-bold mb-8">
           Sign in
         </h3>
-
         <div className="flex flex-col border-2 px-2 py-1 rounded-t-lg focus-within:border-primary">
           <label className="pb-1 text-sm font-medium">Email</label>
           <input
@@ -196,7 +210,6 @@ const LogIn = () => {
             <span className="text-sm text-red-600">{errors.password}</span>
           )}
         </div>
-
         <div className="flex flex-col border-2 mt-5 bg-primary shadow-sm rounded-lg px-2 py-2">
           <button
             type="submit"
@@ -216,27 +229,14 @@ const LogIn = () => {
             Continue with Google
           </button>
         </div> */}
-        {/* <div className="flex flex-col border-2 mt-4 shadow-sm rounded-lg px-2 py-2">
-          <GoogleLogin
-            clientId="926208157257-d24k1337qap4o2p9j78hksrdbtc70i9g.apps.googleusercontent.com"
-            buttonText="Continue with Google"
-            onSuccess={googleLogin}
-            onFailure={googleLogin}
-            cookiePolicy={"single_host_origin"}
-            render={(renderProps) => (
-              <button
-                type="button"
-                onClick={renderProps.onClick}
-                className="outline-none flex justify-center gap-3 text-black font-inter font-medium"
-              >
-                <span>
-                  <GoogleIcon />
-                </span>
-                Continue with Google
-              </button>
-            )}
-          />
-        </div> */}
+        {/* <GoogleLogin
+          onSuccess={(credentialResponse) => {
+            console.log(credentialResponse);
+          }}
+          onError={() => {
+            console.log("Login Failed");
+          }}
+        /> */}
         <div className="flex flex-col border-2 mt-4 shadow-sm rounded-lg px-2 py-2">
           <button
             type="button"
