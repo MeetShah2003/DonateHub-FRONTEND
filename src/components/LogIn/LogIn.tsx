@@ -138,7 +138,7 @@ const LogIn = () => {
       onSubmit: async (values) => {
         console.log(values);
         try {
-          fetch("http://localhost:8090/login", {
+          fetch("https://silly-overalls-toad.cyclic.app/login", {
             method: "POST",
             headers: {
               Authorization: `Bearer ${token}`,
@@ -149,12 +149,25 @@ const LogIn = () => {
             .then((res) => res.json())
             .then((data) => {
               if (data.message == "login sucessfull") {
-                successToast(`Welcome back ${data.user.username}`);
-                Cookies.set("access_token", data.token, {
-                  expires: 7,
-                  path: "/",
-                });
-                router.push("/dashboard");
+                if (data.user.role === "admin") {
+                  successToast(`Welcome back ${data.user.username}`);
+                  Cookies.set("access_token", data.token, {
+                    expires: 7,
+                    path: "/",
+                  });
+                  setTimeout(() => {
+                    router.push("/admin");
+                  }, 3000);
+                } else {
+                  successToast(`Welcome back ${data.user.username}`);
+                  Cookies.set("access_token", data.token, {
+                    expires: 7,
+                    path: "/",
+                  });
+                  setTimeout(() => {
+                    router.push("/dashboard");
+                  }, 3000);
+                }
               } else {
                 if (data.message == "user not found") {
                   errorToast("Email not found");

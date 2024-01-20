@@ -3,7 +3,7 @@ import type { GetServerSideProps } from "next";
 export const getNotAuthenticatedRouteCheck: GetServerSideProps = async (
   context
 ) => {
-  const accessToken = context.req.cookies?.yourAccessTokenCookieName; // Replace with your actual cookie name
+  const accessToken = context.req.cookies?.access_token; // Replace with your actual cookie name
 
   if (accessToken) {
     return {
@@ -20,7 +20,7 @@ export const getNotAuthenticatedRouteCheck: GetServerSideProps = async (
 export const getAuthenticatedRouteCheck: GetServerSideProps = async (
   context
 ) => {
-  const accessToken = context?.req?.cookies?.yourAccessTokenCookieName || ""; // Replace with your actual cookie name
+  const accessToken = context?.req?.cookies?.access_token || ""; // Replace with your actual cookie name
 
   if (!accessToken) {
     return {

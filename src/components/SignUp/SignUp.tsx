@@ -56,7 +56,7 @@ const SignUp = () => {
       onSubmit: async (values) => {
         const { confirmPassword, ...data } = values;
         try {
-          fetch(`http://127.0.0.1:8090/signup`, {
+          fetch(`https://silly-overalls-toad.cyclic.app/signup`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(values),
@@ -66,10 +66,14 @@ const SignUp = () => {
               console.log(data);
               if (data.message == "user already exist") {
                 errorToast("user already exists");
-                router.push("/login");
+                setTimeout(() => {
+                  router.push("/login");
+                }, 3000);
               } else {
                 successToast("Account created successfully");
-                router.push("/login");
+                setTimeout(() => {
+                  router.push("/login");
+                }, 3000);
               }
             });
         } catch (error) {

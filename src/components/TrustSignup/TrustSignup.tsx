@@ -12,6 +12,8 @@ import { v4 as uuidv4 } from "uuid";
 import Image from "next/image";
 
 const TrustSignup = () => {
+
+  const [file, setFile] = useState()
   const [showPassword, setShowPassword] = useState(false);
   const [selectedState, setSelectedState] = useState("");
   const [trustId, setTrustId] = useState(uuidv4());
@@ -226,6 +228,14 @@ const TrustSignup = () => {
     }
   };
 
+
+  const handleImgChange=(event: React.ChangeEvent<HTMLInputElement>)=>{
+    const files = event.target.files?.[0];
+    
+  // const formData = new FormData()
+  // formData.append("image", files)
+
+  }
   const formSections: ReactNode[] = [
     <div key={1} className="mx-5 lg:mx-20 gap-10">
       <div className="flex flex-col border-2 px-2 py-1 rounded-t-lg focus-within:border-primary">
@@ -473,7 +483,7 @@ const TrustSignup = () => {
             name="imageUpload"
             accept="image/*"
             className="hidden"
-            onChange={handleFileChange}
+            onChange={handleImgChange}
           />
           <div className="absolute z-50  left-1/2 bottom-0 translate-x-1/2 ">
             <label htmlFor="imageUpload" className="cursor-pointer">
