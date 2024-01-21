@@ -11,7 +11,7 @@ import { v4 as uuidv4 } from "uuid";
 import Image from "next/image";
 
 const TrustSignup = () => {
-  const [file, setFile] = useState();
+  const [file, setFile] = useState<File>();
   const [showPassword, setShowPassword] = useState(false);
   const [selectedState, setSelectedState] = useState("");
   const [trustId, setTrustId] = useState(uuidv4());
@@ -125,9 +125,15 @@ const TrustSignup = () => {
   } = useFormik({
     initialValues: initialValue,
     validationSchema: trustDetailSchema,
-    onSubmit: () => {
+    onSubmit: async () => {
       if (values && isValid) {
-        // console.log("values>>", values);
+        // const formData = new FormData();
+        // formData.append("image", file);
+
+        // const result = await fetch("/api/images", formData, {
+        //   headers: { "Content-Type": "multipart/form-data" },
+        // });
+        // setImageName(result.data.imageName);
         console.log("Submitted Values:", values);
         successToast("Account Is Successfully Created");
       } else {
@@ -230,7 +236,6 @@ const TrustSignup = () => {
     const files = event.target.files?.[0];
   };
 
-  
   const formSections: ReactNode[] = [
     <div key={1} className="mx-5 lg:mx-20 gap-10">
       <div className="flex flex-col border-2 px-2 py-1 rounded-t-lg focus-within:border-primary">
@@ -477,7 +482,7 @@ const TrustSignup = () => {
             name="imageUpload"
             accept="image/*"
             className="hidden"
-            onChange={handleImgChange}
+            onChange={(e) => setFile(e.target.files?.[0])}
           />
           <div className="absolute z-50  left-1/2 bottom-0 translate-x-1/2 ">
             <label htmlFor="imageUpload" className="cursor-pointer">
