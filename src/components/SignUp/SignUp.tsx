@@ -7,7 +7,6 @@ import HidePasswordIcon from "@/icons/HidePasswordIcon";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
-import ToastMessage from "../ToastMessage";
 
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -82,8 +81,7 @@ const SignUp = () => {
       },
     });
   return (
-    <WelcomePage>
-      <ToastMessage />
+    <WelcomePage title="Welcome To" secondTitle="DonateHub">
       <form className="mx-5 lg:mx-20 gap-10" onSubmit={handleSubmit}>
         <h3 className="font-inter text-3xl drop-shadow-2xl tracking-wider font-bold mb-8">
           Sign Up

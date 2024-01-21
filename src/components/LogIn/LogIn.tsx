@@ -11,7 +11,6 @@ import ShowPasswordIcon from "@/icons/ShowPasswordIcon";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
-import ToastMessage from "../ToastMessage";
 import { getAuthenticatedRouteCheck } from "@/authguard/authguard";
 import { useGoogleLogin } from "@react-oauth/google";
 import { useSession, signIn, signOut } from "next-auth/react";
@@ -186,8 +185,7 @@ const LogIn = () => {
     }
   );
   return (
-    <WelcomePage>
-      <ToastMessage />
+    <WelcomePage title="Welcome To" secondTitle="DonateHub">
       <form className="mx-5 lg:mx-20 gap-10" onSubmit={handleSubmit}>
         <h3 className="font-inter text-3xl drop-shadow-2xl tracking-wider font-bold mb-8">
           Sign in
@@ -230,6 +228,9 @@ const LogIn = () => {
           {touched.password && errors.password && (
             <span className="text-sm text-red-600">{errors.password}</span>
           )}
+        </div>
+        <div className="w-full mt-5 font-normal flex flex-row-reverse">
+          <Link href={"/login/forgot-password"}>Forgot Password?</Link>
         </div>
         <div className="flex flex-col border-2 mt-5 bg-primary shadow-sm rounded-lg px-2 py-2">
           <button

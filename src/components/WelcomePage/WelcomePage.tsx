@@ -11,13 +11,17 @@ const DISPLAY_WORDS: string[] = [
   "Relief",
 ];
 
-const WelcomePage: React.FC<{ children: ReactNode }> = ({ children }) => {
+const WelcomePage: React.FC<{
+  children: ReactNode;
+  title: string;
+  secondTitle: string;
+}> = ({ children, secondTitle, title }) => {
   return (
     <div className="max-w-full w-full h-screen flex">
       <div className="hidden md:flex md:flex-col md:justify-center w-3/5 gap-3 bg-primary z-50 p-20 justify-start items-start">
         <div className="text-white font-bold flex flex-col text-6xl leading-snug font-josefinSans">
-          <p className="drop-shadow-2xl">Welcome To</p>
-          <p className="drop-shadow-2xl">DonateHub</p>
+          <p className="drop-shadow-2xl">{title}</p>
+          <p className="drop-shadow-2xl">{secondTitle}</p>
         </div>
         <div className="flex text-white text-3xl">
           <p className="mr-2">Help To</p>

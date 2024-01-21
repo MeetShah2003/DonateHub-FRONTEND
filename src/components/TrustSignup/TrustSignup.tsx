@@ -7,13 +7,11 @@ import ShowPasswordIcon from "@/icons/ShowPasswordIcon";
 import React, { ChangeEvent, ReactNode, useState } from "react";
 import { CITY_AND_STATE, TRUST_CATAGORY_OPTIONS } from "@/consts";
 import { toast } from "react-toastify";
-import ToastMessage from "../ToastMessage";
 import { v4 as uuidv4 } from "uuid";
 import Image from "next/image";
 
 const TrustSignup = () => {
-
-  const [file, setFile] = useState()
+  const [file, setFile] = useState();
   const [showPassword, setShowPassword] = useState(false);
   const [selectedState, setSelectedState] = useState("");
   const [trustId, setTrustId] = useState(uuidv4());
@@ -228,14 +226,12 @@ const TrustSignup = () => {
     }
   };
 
-
-  const handleImgChange=(event: React.ChangeEvent<HTMLInputElement>)=>{
+  const handleImgChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files?.[0];
-    
-  // const formData = new FormData()
-  // formData.append("image", files)
 
-  }
+    // const formData = new FormData()
+    // formData.append("image", files)
+  };
   const formSections: ReactNode[] = [
     <div key={1} className="mx-5 lg:mx-20 gap-10">
       <div className="flex flex-col border-2 px-2 py-1 rounded-t-lg focus-within:border-primary">
@@ -452,8 +448,7 @@ const TrustSignup = () => {
   ];
 
   return (
-    <WelcomePage>
-      <ToastMessage />
+    <WelcomePage title="Welcome To" secondTitle="DonateHub">
       <div className="mx-5 lg:mx-20 mb-10 flex flex-col justify-center items-center gap-8">
         {/* <div className="relative bottom-6">
           <div className="border-4 h-32 w-32 p-1 border-primary rounded-full overflow-hidden">
