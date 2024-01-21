@@ -5,6 +5,7 @@ import { useFormik } from "formik";
 import { useState } from "react";
 import * as Yup from "yup";
 import { useRouter } from "next/router";
+import { useUser } from "@/context/user";
 
 const validationSchema = Yup.object().shape({
   newPassword: Yup.string()
@@ -18,6 +19,9 @@ const validationSchema = Yup.object().shape({
 
 const NewPassword = () => {
   const router = useRouter();
+  const { forgotPasswordEmail } = useUser();
+  console.log(forgotPasswordEmail);
+
   const [showPassword, setShowPassword] = useState(false);
   const { handleSubmit, handleChange, handleBlur, errors, touched, values } =
     useFormik({
@@ -25,6 +29,18 @@ const NewPassword = () => {
       validationSchema: validationSchema,
       onSubmit: (formData) => {
         const { confirmPassword, ...passwordData } = formData;
+        fetch(`http://localhost:8090/api/updatePassword`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: forgotPasswordEmail,
+            password: passwordData,
+          }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data);
+          });
         router.push("/login/forgot-password/change-success");
         console.log(passwordData);
       },
