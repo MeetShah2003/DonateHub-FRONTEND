@@ -4,6 +4,8 @@ import { useFormik } from "formik";
 import { useRouter } from "next/router";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
+import { useUser } from "@/context/user";
+import { useEffect } from "react";
 
 const errorToast = (errorMessage: string) => toast.error(errorMessage);
 const successToast = (successMessage: string) => toast.success(successMessage);
@@ -17,8 +19,9 @@ const forgotPasswordSchema = Yup.object().shape({
 
 const ForgotPassword = () => {
   const router = useRouter();
-  const { handleChange, handleSubmit, handleBlur, touched, errors, values } =
-    useFormik({
+  const { forgotPasswordEmail, setForgotPasswordEmail } = useUser();
+  const { handleChange, handleSubmit, handleBlur, touched, errors } = useFormik(
+    {
       initialValues: {
         email: "",
       },
@@ -35,18 +38,24 @@ const ForgotPassword = () => {
               if (data.message === "user not found") {
                 errorToast("User not found");
               } else {
+                setForgotPasswordEmail(data.email);
                 successToast("Otp sent sucessfully");
                 setTimeout(() => {
                   router.push("/login/forgot-password/enterotp");
                 }, 3000);
               }
             });
+          console.log("forgotPasswordEmail", forgotPasswordEmail);
         } catch (error) {
           console.log(error);
         }
       },
-    });
-
+    }
+  );
+  // Use useEffect to log the updated value of forgotPasswordEmail
+  // useEffect(() => {
+  //   console.log("forgotPasswordEmail", forgotPasswordEmail);
+  // }, [forgotPasswordEmail]);
   return (
     <WelcomePage title="Reset" secondTitle="Password">
       <form className="mx-5 lg:mx-20 py-10 gap-20" onSubmit={handleSubmit}>

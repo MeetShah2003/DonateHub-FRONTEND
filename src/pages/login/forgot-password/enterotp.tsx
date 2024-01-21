@@ -5,6 +5,7 @@ import OtpInput from "react-otp-input";
 import * as Yup from "yup";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
+import { useUser } from "@/context/user";
 
 const errorToast = (errorMessage: string) => toast.error(errorMessage);
 const successToast = (successMessage: string) => toast.success(successMessage);
@@ -13,6 +14,9 @@ const EnterOtp = () => {
   const [resendTimer, setResendTimer] = useState(2);
   const [submitted, setSubmitted] = useState(false);
   const router = useRouter();
+  const { forgotPasswordEmail } = useUser();
+
+  console.log("otpEmail>>", forgotPasswordEmail);
 
   const validationSchema = Yup.object().shape({
     otp: Yup.string()
@@ -65,15 +69,14 @@ const EnterOtp = () => {
     return () => clearInterval(interval);
   }, [resendTimer]);
 
-  const handleResendOtp = () => {
-    // Add logic here to resend OTP
-    setResendTimer(60); // Reset timer to initial value
-    fetch(`http://localhost:8090/api/resendEmail`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(),
-    });
-  };
+  // const handleResendOtp = () => {
+  //   setResendTimer(60);
+  //   fetch(`http://localhost:8090/api/resendEmail`, {
+  //     method: "POST",
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify({ email: forgotPasswordEmail }),
+  //   });
+  // };
 
   return (
     <WelcomePage title="Reset" secondTitle="Password">
@@ -133,7 +136,7 @@ const EnterOtp = () => {
           {resendTimer === 0 ? (
             <p
               className="text-steelGray cursor-pointer"
-              onClick={handleResendOtp}
+              // onClick={handleResendOtp}
             >
               Resend Otp
             </p>

@@ -148,18 +148,18 @@ const TrustSignup = () => {
   //   }
   // };
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFieldValue("trustlogo", reader.result);
-        console.log("imageUrl>>", reader.result);
-      };
-      reader.readAsDataURL(file);
-      successToast("Image Uploaded Successfully");
-    }
-  };
+  // const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = event.target.files?.[0];
+  //   if (file) {
+  //     const reader = new FileReader();
+  //     reader.onloadend = () => {
+  //       setFieldValue("trustlogo", reader.result);
+  //       console.log("imageUrl>>", reader.result);
+  //     };
+  //     reader.readAsDataURL(file);
+  //     successToast("Image Uploaded Successfully");
+  //   }
+  // };
 
   // const handleFileChange = async (
   //   event: React.ChangeEvent<HTMLInputElement>
@@ -228,10 +228,9 @@ const TrustSignup = () => {
 
   const handleImgChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files?.[0];
-
-    // const formData = new FormData()
-    // formData.append("image", files)
   };
+
+  
   const formSections: ReactNode[] = [
     <div key={1} className="mx-5 lg:mx-20 gap-10">
       <div className="flex flex-col border-2 px-2 py-1 rounded-t-lg focus-within:border-primary">

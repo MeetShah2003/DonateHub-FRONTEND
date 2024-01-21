@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, createContext } from "react";
+import React, { createContext, useContext, useState } from "react";
 
 type UserData = {
   email: string;
@@ -10,19 +10,56 @@ type UserData = {
 type AuthType = {
   accessToken?: string;
   userData: UserData | null;
-  setUserData: Dispatch<SetStateAction<UserData | null>>;
+  setUserData: React.Dispatch<React.SetStateAction<UserData | null>>;
   getUserData: () => void;
   handleLogout: () => void;
+  forgotPasswordEmail: string;
   loading: boolean;
-  setLoading: Dispatch<SetStateAction<boolean>>;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  setForgotPasswordEmail: React.Dispatch<React.SetStateAction<string>>;
 };
 
-const AuthContext = createContext({
-    accessToken: '',
-    userData: null,
-    setUserData: () => {},
-    getUserData: () => {},
-    handleLogout: () => {},
-    loading: true,
-    setLoading: () => {},
-  } as AuthType);
+const AuthContext = createContext<AuthType | undefined>(undefined);
+
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
+  const [accessToken, setAccessToken] = useState<string>("");
+  const [userData, setUserData] = useState<UserData | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [forgotPasswordEmail, setForgotPasswordEmail] = useState<string>("");
+
+  const getUserData = () => {
+    // Implement logic to fetch user data
+  };
+
+  const handleLogout = () => {
+    // Implement logic to handle logout
+  };
+
+  return (
+    <AuthContext.Provider
+      value={{
+        accessToken,
+        userData,
+        setUserData,
+        getUserData,
+        handleLogout,
+        setForgotPasswordEmail,
+        loading,
+        setLoading,
+        forgotPasswordEmail,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+export const useUser = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useUser must be used within an AuthProvider");
+  }
+  return context;
+};
