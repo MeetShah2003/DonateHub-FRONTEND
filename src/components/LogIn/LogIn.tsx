@@ -137,7 +137,7 @@ const LogIn = () => {
       onSubmit: async (values) => {
         console.log(values);
         try {
-          fetch("https://silly-overalls-toad.cyclic.app/login", {
+          fetch("https://silly-overalls-toad.cyclic.app/api/login", {
             method: "POST",
             headers: {
               Authorization: `Bearer ${token}`,
