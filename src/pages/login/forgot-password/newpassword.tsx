@@ -4,6 +4,7 @@ import ShowPasswordIcon from "@/icons/ShowPasswordIcon";
 import { useFormik } from "formik";
 import { useState } from "react";
 import * as Yup from "yup";
+import { useRouter } from "next/router";
 
 const validationSchema = Yup.object().shape({
   newPassword: Yup.string()
@@ -16,6 +17,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const NewPassword = () => {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const { handleSubmit, handleChange, handleBlur, errors, touched, values } =
     useFormik({
@@ -23,6 +25,7 @@ const NewPassword = () => {
       validationSchema: validationSchema,
       onSubmit: (formData) => {
         const { confirmPassword, ...passwordData } = formData;
+        router.push("/login/forgot-password/change-success");
         console.log(passwordData);
       },
     });

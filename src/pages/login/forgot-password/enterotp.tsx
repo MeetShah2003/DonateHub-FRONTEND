@@ -25,7 +25,7 @@ const EnterOtp = () => {
     onSubmit: () => {
       console.log(values);
       setSubmitted(true);
-      router.push("");
+      router.push("/login/forgot-password/newpassword");
     },
   });
 
