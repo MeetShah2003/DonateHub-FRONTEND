@@ -3,6 +3,10 @@ import WelcomePage from "../../../components/WelcomePage";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
 import * as Yup from "yup";
+import { toast } from "react-toastify";
+
+const errorToast = (errorMessage: string) => toast.error(errorMessage);
+const successToast = (successMessage: string) => toast.success(successMessage);
 
 const forgotPasswordSchema = Yup.object().shape({
   email: Yup.string()
@@ -19,9 +23,27 @@ const ForgotPassword = () => {
         email: "",
       },
       validationSchema: forgotPasswordSchema,
-      onSubmit: () => {
-        router.push("/login/forgot-password/enterotp");
-        console.log(values);
+      onSubmit: (values) => {
+        try {
+          fetch(`http://localhost:8090/api/userEmail`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(values),
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              if (data.message === "user not found") {
+                errorToast("User not found");
+              } else {
+                successToast("Otp sent sucessfully");
+                setTimeout(() => {
+                  router.push("/login/forgot-password/enterotp");
+                }, 3000);
+              }
+            });
+        } catch (error) {
+          console.log(error);
+        }
       },
     });
 

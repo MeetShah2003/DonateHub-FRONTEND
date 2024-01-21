@@ -58,7 +58,7 @@ const SignUp = () => {
           fetch(`https://silly-overalls-toad.cyclic.app/api/signup`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(values),
+            body: JSON.stringify(data),
           })
             .then((res) => res.json())
             .then((data) => {

@@ -4,9 +4,13 @@ import { useFormik } from "formik";
 import OtpInput from "react-otp-input";
 import * as Yup from "yup";
 import { useRouter } from "next/router";
+import { toast } from "react-toastify";
+
+const errorToast = (errorMessage: string) => toast.error(errorMessage);
+const successToast = (successMessage: string) => toast.success(successMessage);
 
 const EnterOtp = () => {
-  const [resendTimer, setResendTimer] = useState(60);
+  const [resendTimer, setResendTimer] = useState(2);
   const [submitted, setSubmitted] = useState(false);
   const router = useRouter();
 
@@ -22,10 +26,30 @@ const EnterOtp = () => {
       otp: "",
     },
     validationSchema: validationSchema,
-    onSubmit: () => {
-      console.log(values);
-      setSubmitted(true);
-      router.push("");
+    onSubmit: (values) => {
+      try {
+        setSubmitted(true);
+        fetch(`http://localhost:8090/api/verify`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(values),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.message === "Correct OTP") {
+              successToast("Otp verified");
+              setTimeout(() => {
+                router.push("/login/forgot-password/newpassword");
+              }, 3000);
+            } else if (data.message === "In-Correct OTP") {
+              errorToast("Wrong Otp");
+            } else {
+              errorToast("Something went wrong");
+            }
+          });
+      } catch (error) {
+        console.log(error);
+      }
     },
   });
 
@@ -44,6 +68,11 @@ const EnterOtp = () => {
   const handleResendOtp = () => {
     // Add logic here to resend OTP
     setResendTimer(60); // Reset timer to initial value
+    fetch(`http://localhost:8090/api/resendEmail`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(),
+    });
   };
 
   return (
