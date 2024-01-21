@@ -170,8 +170,7 @@ const LogIn = () => {
               } else {
                 if (data.message == "user not found") {
                   errorToast("Email not found");
-                }
-                if (data.message == "invalid password") {
+                } else if (data.message == "invalid password") {
                   errorToast("Invalid password");
                 } else {
                   errorToast("Login failed");

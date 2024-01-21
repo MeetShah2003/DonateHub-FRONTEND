@@ -5,6 +5,7 @@ const HidePasswordIcon = () => {
       height="16"
       width="20"
       viewBox="0 0 640 512"
+      className="cursor-pointer"
     >
       <path
         fill="#674cc4"
