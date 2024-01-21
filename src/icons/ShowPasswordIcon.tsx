@@ -4,6 +4,7 @@ const ShowPasswordIcon = () => {
       xmlns="http://www.w3.org/2000/svg"
       height="16"
       width="18"
+      className="cursor-pointer"
       viewBox="0 0 576 512"
     >
       <path

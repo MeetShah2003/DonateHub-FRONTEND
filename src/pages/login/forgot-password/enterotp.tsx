@@ -3,10 +3,12 @@ import WelcomePage from "@/components/WelcomePage";
 import { useFormik } from "formik";
 import OtpInput from "react-otp-input";
 import * as Yup from "yup";
+import { useRouter } from "next/router";
 
 const EnterOtp = () => {
   const [resendTimer, setResendTimer] = useState(60);
   const [submitted, setSubmitted] = useState(false);
+  const router = useRouter();
 
   const validationSchema = Yup.object().shape({
     otp: Yup.string()
@@ -23,6 +25,7 @@ const EnterOtp = () => {
     onSubmit: () => {
       console.log(values);
       setSubmitted(true);
+      router.push("");
     },
   });
 
