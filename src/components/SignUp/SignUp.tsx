@@ -55,7 +55,7 @@ const SignUp = () => {
       onSubmit: async (values) => {
         const { confirmPassword, ...data } = values;
         try {
-          fetch(`https://silly-overalls-toad.cyclic.app/signup`, {
+          fetch(`https://silly-overalls-toad.cyclic.app/api/signup`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(values),
