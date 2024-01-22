@@ -8,16 +8,16 @@ import { useRouter } from "next/router";
 import { useUser } from "@/context/user";
 
 const validationSchema = Yup.object().shape({
-  newPassword: Yup.string()
+  password: Yup.string()
     .required("Required")
     .min(8, "Password must be at least 8 characters"),
   confirmPassword: Yup.string().oneOf(
-    [Yup.ref("newPassword")],
+    [Yup.ref("password")],
     "Passwords must match"
   ),
 });
 
-const NewPassword = () => {
+const password = () => {
   const router = useRouter();
   const { forgotPasswordEmail } = useUser();
   console.log(forgotPasswordEmail);
@@ -25,21 +25,22 @@ const NewPassword = () => {
   const [showPassword, setShowPassword] = useState(false);
   const { handleSubmit, handleChange, handleBlur, errors, touched, values } =
     useFormik({
-      initialValues: { newPassword: "", confirmPassword: "" },
+      initialValues: { password: "", confirmPassword: "" },
       validationSchema: validationSchema,
       onSubmit: (formData) => {
         const { confirmPassword, ...passwordData } = formData;
         fetch(`http://localhost:8090/api/updatePassword`, {
           method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email: forgotPasswordEmail,
-            password: passwordData,
-          }),
+          headers: {
+            Authorization: `Bearer ${forgotPasswordEmail}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(passwordData),
         })
           .then((res) => res.json())
           .then((data) => {
             console.log(data);
+            console.log(passwordData);
           });
         router.push("/login/forgot-password/change-success");
         console.log(passwordData);
@@ -55,8 +56,8 @@ const NewPassword = () => {
           <label className="pb-1 text-sm font-medium">New Password</label>
           <div className="flex justify-between">
             <input
-              id="newPassword"
-              name="newPassword"
+              id="password"
+              name="password"
               type={showPassword ? "text" : "password"}
               onChange={handleChange}
               onBlur={handleBlur}
@@ -71,8 +72,8 @@ const NewPassword = () => {
               {showPassword ? <HidePasswordIcon /> : <ShowPasswordIcon />}
             </div>
           </div>
-          {touched.newPassword && errors.newPassword && (
-            <span className="text-sm text-red-600">{errors.newPassword}</span>
+          {touched.password && errors.password && (
+            <span className="text-sm text-red-600">{errors.password}</span>
           )}
         </div>
         <div className="flex flex-col border-t-transparent border-2 rounded-b-lg px-2 py-1 focus-within:border-primary">
@@ -105,4 +106,4 @@ const NewPassword = () => {
   );
 };
 
-export default NewPassword;
+export default password;

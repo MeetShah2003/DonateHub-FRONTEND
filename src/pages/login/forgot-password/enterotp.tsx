@@ -69,14 +69,17 @@ const EnterOtp = () => {
     return () => clearInterval(interval);
   }, [resendTimer]);
 
-  // const handleResendOtp = () => {
-  //   setResendTimer(60);
-  //   fetch(`http://localhost:8090/api/resendEmail`, {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/json" },
-  //     body: JSON.stringify({ email: forgotPasswordEmail }),
-  //   });
-  // };
+  const handleResendOtp = () => {
+    setResendTimer(2);
+    fetch(`http://localhost:8090/api/resendEmail`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${forgotPasswordEmail}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email: forgotPasswordEmail }),
+    });
+  };
 
   return (
     <WelcomePage title="Reset" secondTitle="Password">
@@ -136,7 +139,7 @@ const EnterOtp = () => {
           {resendTimer === 0 ? (
             <p
               className="text-steelGray cursor-pointer"
-              // onClick={handleResendOtp}
+              onClick={handleResendOtp}
             >
               Resend Otp
             </p>
