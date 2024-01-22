@@ -55,14 +55,13 @@ const SignUp = () => {
       onSubmit: async (values) => {
         const { confirmPassword, ...data } = values;
         try {
-          fetch(`https://silly-overalls-toad.cyclic.app/api/signup`, {
+          fetch(`http://localhost:8090/api/signup`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data),
           })
             .then((res) => res.json())
             .then((data) => {
-              console.log(data);
               if (data.message == "user already exist") {
                 errorToast("user already exists");
                 setTimeout(() => {

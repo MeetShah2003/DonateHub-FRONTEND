@@ -5,7 +5,6 @@ import WelcomePage from "../WelcomePage";
 import GoogleIcon from "@/icons/GoogleIcon";
 import GithubIcon from "@/icons/GithubIcon";
 import * as Yup from "yup";
-import FacebookIcon from "@/icons/FacebookIcon";
 import HidePasswordIcon from "@/icons/HidePasswordIcon";
 import ShowPasswordIcon from "@/icons/ShowPasswordIcon";
 import { useState } from "react";
@@ -38,8 +37,6 @@ const loginSchema = Yup.object().shape({
     .required("Password is required"),
 });
 
-// signOut();
-
 const LogIn = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
@@ -48,81 +45,59 @@ const LogIn = () => {
 
   const { data: session } = useSession();
 
-  console.log(session?.user);
-  // signOut()
+  // console.log(session?.user);
 
   const errorToast = (errorMessage: string) => toast.error(errorMessage);
   const successToast = (successMessage: string) =>
     toast.success(successMessage);
 
-  // const googleLogin= async (response) => {
-  //   try {
-  //     if (response.tokenId) {
-  //       const userResponse = await fetch("http://127.0.0.1:8090/google/auth", {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify({ tokenId: response.tokenId }),
-  //       });
-
-  //       const userLogin = await userResponse.json();
-
-  //       if (userLogin.token) {
-  //         alert("Login Successful...!");
-  //         window.location.href = "/";
-  //       } else {
-  //         alert("Login Failed...!");
-  //       }
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //     alert("Login failed. Try again later...!");
-  //   }
-  // };
-
-  // const googleLogin = async (response: any) => {
-  //   try {
-  //     console.log("Google Login Response:", response);
-
-  //     // Check the console log to understand the structure of the response object
-
-  //     if (response.tokenId) {
-  //       const userResponse = await fetch("http://127.0.0.1:8090/google/auth", {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify({ tokenId: response.tokenId }),
-  //       });
-
-  //       const userLogin = await userResponse.json();
-
-  //       if (userLogin.token) {
-  //         successToast("Login Successful...!");
-  //         window.location.href = "/";
-  //       } else {
-  //         errorToast("Login Failed...!");
-  //       }
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //     errorToast("Login Failed...!");
-  //   }
-  // };
-
   const gLogin = useGoogleLogin({
     onSuccess: async (response) => {
+      const userData = Cookies.get("user_data");
       try {
         fetch("https://www.googleapis.com/oauth2/v1/userinfo", {
           method: "GET",
           headers: {
-            Authorization: `Bearer ${response.access_token}`,
+            Authorization: `Bearer ${(response.access_token, userData)}`,
           },
         })
           .then((response) => response.json())
           .then((userInfo) => {
-            console.log("User Information:", userInfo);
+            if (userInfo) {
+              fetch(`http://localhost:8090/api/googleData`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(userInfo),
+              })
+                .then((res) => res.json())
+                .then((data) => {
+                  if (!data) {
+                    errorToast("Something went wrong");
+                  }
+                  if (data.message === "login sucessfull") {
+                    successToast(`Welcome Back ${data.user.username}`);
+                    Cookies.set("user_data", JSON.stringify(data.user), {
+                      expires: 7,
+                      path: "/",
+                    });
+                    setTimeout(() => {
+                      router.push("/dashboard");
+                    }, 3000);
+                  }
+                  if (data.message === "account created sucessfull") {
+                    successToast(`Welcome Back ${data.user.username}`);
+                    Cookies.set("user_data", JSON.stringify(data.user), {
+                      expires: 7,
+                      path: "/",
+                    });
+                    setTimeout(() => {
+                      router.push("/dashboard");
+                    }, 3000);
+                  }
+                });
+            } else {
+              errorToast("something went wrong");
+            }
           })
           .catch((error) => {
             console.error("Error fetching user information:", error);
@@ -137,9 +112,7 @@ const LogIn = () => {
       initialValues: initialValue,
       validationSchema: loginSchema,
       onSubmit: async (values) => {
-        console.log(values);
         try {
-          // fetch("https://silly-overalls-toad.cyclic.app/api/login", {
           fetch("http://localhost:8090/api/login", {
             method: "POST",
             headers: {
