@@ -7,7 +7,7 @@ const Admin = () => {
   // console.log("adminUser", userData?.user.username);
 
   return (
-    <AdminFrame title="Home">
+    <AdminFrame title="Dashboard">
       <></>
     </AdminFrame>
   );

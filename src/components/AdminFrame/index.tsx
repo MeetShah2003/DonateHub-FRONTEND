@@ -10,6 +10,8 @@ import LogoutIcon from "@/icons/LogoutIcon";
 import CloseIcon from "@/icons/CloseIcon";
 import HamburgerIcon from "@/icons/HamburgurIcon";
 import ProfileIcon from "@/icons/ProfileIcon";
+import DashboardIcon from "@/icons/DashboardIcon";
+import ApproveIcon from "@/icons/ApproveIcon";
 
 const ADMIN_MENUS: {
   id: number;
@@ -17,33 +19,39 @@ const ADMIN_MENUS: {
   path: string;
   icon: ReactNode;
 }[] = [
-  { id: 1, menu: "Add Trust", path: "/admin/addtrust", icon: <PlusIcon /> },
+  { id: 1, menu: "Dashboard", path: "/admin", icon: <DashboardIcon /> },
   {
     id: 2,
+    menu: "Verify Trust",
+    path: "/admin/verifytrust",
+    icon: <ApproveIcon />,
+  },
+  {
+    id: 3,
     menu: "Manage Trust",
     path: "/admin/managetrust",
     icon: <ManageTrustIcon />,
   },
   {
-    id: 3,
+    id: 4,
     menu: "Manage User",
     path: "/admin/manageuser",
     icon: <ManageUserIcon />,
   },
   {
-    id: 4,
+    id: 5,
     menu: "Analytics",
     path: "/admin/analytics",
     icon: <AnalyticsIcon />,
   },
   {
-    id: 5,
+    id: 6,
     menu: "Profile",
     path: "/admin/profile",
     icon: <ProfileIcon />,
   },
   {
-    id: 6,
+    id: 7,
     menu: "Logout",
     path: "/login",
     icon: <LogoutIcon />,
@@ -94,7 +102,7 @@ const AdminFrame: React.FC<{
         </ul>
       </div>
       <div
-        className={`w-[70%] absolute z-50 md:hidden border ${
+        className={`w-[70%] bg-white absolute z-50 md:hidden border ${
           sideBarIsOpen
             ? "transition-all ease-in-out duration-500 -left-[2000px]"
             : "transition-all ease-in-out duration-500 left-0"
@@ -158,7 +166,7 @@ const AdminFrame: React.FC<{
         <p className="hidden md:block p-5 font-inter font-semibold text-steelGray text-xl sm:text-2xl">
           {title}
         </p>
-        {children}
+        <div className="px-5">{children}</div>
       </div>
     </div>
   );
