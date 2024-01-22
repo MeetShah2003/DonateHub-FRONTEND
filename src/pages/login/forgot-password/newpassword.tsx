@@ -17,7 +17,7 @@ const validationSchema = Yup.object().shape({
   ),
 });
 
-const password = () => {
+const Password = () => {
   const router = useRouter();
   const { forgotPasswordEmail } = useUser();
   console.log(forgotPasswordEmail);
@@ -106,4 +106,4 @@ const password = () => {
   );
 };
 
-export default password;
+export default Password;

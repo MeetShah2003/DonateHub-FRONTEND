@@ -11,9 +11,6 @@ import Cookies from "js-cookie";
 const AdminProfile = () => {
   //   const { userData } = useUser();
   const [file, setFile] = useState<File | null>(null);
-  const userData = Cookies.get("user_data")
-    ? JSON.parse(Cookies.get("user_data"))
-    : null;
 
   const profileSchema = Yup.object().shape({
     username: Yup.string().required("Username is required"),
@@ -36,8 +33,8 @@ const AdminProfile = () => {
     setFieldValue,
   } = useFormik({
     initialValues: {
-      username: userData?.username || "",
-      email: userData?.email || "",
+      username: "",
+      email: "",
     },
     validationSchema: profileSchema,
     onSubmit: async (formValues) => {
@@ -56,11 +53,7 @@ const AdminProfile = () => {
   };
 
   return (
-    <AdminFrame
-      title="Profile"
-      userEmail={userData?.email || ""}
-      userName={userData?.username || ""}
-    >
+    <AdminFrame title="Profile">
       <form className="mx-5  gap-10" onSubmit={handleSubmit}>
         <div className="flex items-center justify-center relative bottom-6">
           <div className="border-4 h-32 w-32 p-1 border-primary rounded-full overflow-hidden">

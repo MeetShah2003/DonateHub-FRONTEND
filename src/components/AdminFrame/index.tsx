@@ -52,10 +52,8 @@ const ADMIN_MENUS: {
 
 const AdminFrame: React.FC<{
   title: string;
-  userName: string;
-  userEmail: string;
   children: ReactNode;
-}> = ({ title, children, userEmail, userName }) => {
+}> = ({ title, children }) => {
   const router = useRouter();
   const [sideBarIsOpen, setSideBarIsOpen] = useState(false);
 
@@ -67,10 +65,10 @@ const AdminFrame: React.FC<{
             <Image alt="" src={""} />
           </div>
           <div className="pt-2">
-            <p className="text-steelGray font-bold">{userName}</p>
+            <p className="text-steelGray font-bold">Admin</p>
           </div>
           <div>
-            <p className="text-lightGray ">{userEmail}</p>
+            <p className="text-lightGray ">admin@gmail.com</p>
           </div>
         </div>
         <ul className="my-5">
@@ -115,10 +113,10 @@ const AdminFrame: React.FC<{
             <Image alt="" src={""} />
           </div>
           <div className="pt-2">
-            <p className="text-steelGray font-bold">{userName || ""}</p>
+            <p className="text-steelGray font-bold">Admin</p>
           </div>
           <div>
-            <p className="text-lightGray">{userEmail || ""}</p>
+            <p className="text-lightGray">admin@gmail.com</p>
           </div>
         </div>
         <ul className="">

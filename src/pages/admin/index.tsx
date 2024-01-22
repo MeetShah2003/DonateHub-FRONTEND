@@ -4,14 +4,10 @@ import { useUser } from "@/context/user";
 
 const Admin = () => {
   const { userData } = useUser();
-  console.log("adminUser", userData?.user.username);
+  // console.log("adminUser", userData?.user.username);
 
   return (
-    <AdminFrame
-      title="Home"
-      userEmail={userData?.user.email || ""}
-      userName={userData?.user.username || ""}
-    >
+    <AdminFrame title="Home">
       <></>
     </AdminFrame>
   );
