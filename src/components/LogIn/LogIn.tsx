@@ -14,6 +14,7 @@ import { toast } from "react-toastify";
 import { getAuthenticatedRouteCheck } from "@/authguard/authguard";
 import { useGoogleLogin } from "@react-oauth/google";
 import { useSession, signIn, signOut } from "next-auth/react";
+import { useUser } from "@/context/user";
 
 const initialValue: {
   email: string;
@@ -43,6 +44,7 @@ const LogIn = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const token = Cookies.get("access_token");
+  const { setUserData } = useUser();
 
   const { data: session } = useSession();
 
@@ -149,7 +151,17 @@ const LogIn = () => {
             .then((res) => res.json())
             .then((data) => {
               if (data.message == "login sucessfull") {
+                setUserData(data);
+                Cookies.set("user_data", JSON.stringify(data.user), {
+                  expires: 7,
+                  path: "/",
+                });
                 if (data.user.role === "admin") {
+                  setUserData(data);
+                  Cookies.set("user_data", JSON.stringify(data.user), {
+                    expires: 7,
+                    path: "/",
+                  });
                   successToast(`Welcome back ${data.user.username}`);
                   Cookies.set("access_token", data.token, {
                     expires: 7,

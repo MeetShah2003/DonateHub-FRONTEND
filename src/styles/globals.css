@@ -3,6 +3,11 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
 .slideAndHidden {
   animation-duration: 3s;
   animation-iteration-count: 1;
