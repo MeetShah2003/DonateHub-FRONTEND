@@ -4,6 +4,7 @@ export type UserData = {
   lastName: string;
   email: string;
   gender: string;
+  password: string;
 };
 
 export type TrustData = {

@@ -5,11 +5,20 @@ import EditIcon from "@/icons/EditIcon";
 import { dummyUsers } from "@/consts";
 import ReactPaginate from "react-paginate";
 import ArrowIcon from "@/icons/ArrowIcon";
+import { useUser } from "@/context/user";
 
 const ManageUser = () => {
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
+  const { getUserData } = useUser();
+
+  const getData = async () => {
+    const userData = await getUserData();
+    console.log(userData);
+  };
+
+  getData();
 
   const onPageChange = ({ selected }: any) => {
     setCurrentPage(selected);

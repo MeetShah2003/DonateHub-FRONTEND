@@ -29,8 +29,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [loading, setLoading] = useState<boolean>(true);
   const [forgotPasswordEmail, setForgotPasswordEmail] = useState<string>("");
 
-  const getUserData = () => {
-    // Implement logic to fetch user data
+  const getUserData = async () => {
+    const allUserData = await fetch("http://localhost:8090/admin/allUsers");
+    return allUserData;
   };
 
   const handleLogout = () => {
