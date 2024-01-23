@@ -9,6 +9,7 @@ import { CITY_AND_STATE, TRUST_CATAGORY_OPTIONS } from "@/consts";
 import { toast } from "react-toastify";
 import { v4 as uuidv4 } from "uuid";
 import Image from "next/image";
+import { TrustData } from "@/types/types";
 
 const TrustSignup = () => {
   const [file, setFile] = useState<File>();
@@ -19,25 +20,7 @@ const TrustSignup = () => {
     { label: "Select City", value: "" },
   ]);
   const [currentStep, setCurrentStep] = useState(1);
-  const initialValue: {
-    trustId: string;
-    trustname: string;
-    trustlogo: string;
-    trustemail: string;
-    founder: string;
-    creationdate: Date;
-    catagory: string;
-    contactno: number;
-    abouttrust: string;
-    password: string;
-    address: {
-      address: string;
-      city: string;
-      state: string;
-      pincode: number;
-    };
-    role: string;
-  } = {
+  const initialValue: TrustData = {
     trustId: trustId,
     trustname: "",
     trustemail: "",
