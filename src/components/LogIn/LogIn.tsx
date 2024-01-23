@@ -53,6 +53,8 @@ const LogIn = () => {
 
   const gLogin = useGoogleLogin({
     onSuccess: async (response) => {
+      console.log(response);
+
       const userData = Cookies.get("user_data");
       try {
         fetch("https://www.googleapis.com/oauth2/v1/userinfo", {

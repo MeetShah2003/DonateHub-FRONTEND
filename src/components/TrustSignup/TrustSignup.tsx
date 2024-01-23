@@ -12,7 +12,6 @@ import Image from "next/image";
 import { TrustData } from "@/types/types";
 
 const TrustSignup = () => {
-  const [file, setFile] = useState<File>();
   const [showPassword, setShowPassword] = useState(false);
   const [selectedState, setSelectedState] = useState("");
   const [trustId, setTrustId] = useState(uuidv4());
@@ -96,6 +95,112 @@ const TrustSignup = () => {
     setCities(selectedStateCities);
   };
 
+  const [file, setFile] = useState<File | null>(null);
+ let [trustImg,setTrustImg]=useState()
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files?.[0];
+    setFile(selectedFile || null); // Use null as fallback if selectedFile is undefined
+    
+    if (selectedFile) {
+      let formdata = new FormData();
+      formdata.append("trustImg", selectedFile);
+  
+      fetch('http://localhost:8090/trust/trustImg', {
+        method: "POST",
+        body: formdata
+      })
+      .then(response => response.json())
+      .then(res=>setTrustImg(res.img))
+      
+      .catch(error => {
+        // Handle error
+        console.error('Error uploading file:', error);
+      });
+    }
+  };
+  
+  
+  
+  
+  // const onSubmit = () => {
+  //   if (values && isValid) {
+  //     const formData = new FormData();
+  //     formData.append("file", file);
+
+  //     // Add other form fields to the FormData
+  //     Object.entries(values).forEach(([key, value]) => {
+  //       if (key !== "address") {
+  //         formData.append(key, value);
+  //       } else {
+  //         // Handle nested 'address' object
+  //         Object.entries(value).forEach(([addressKey, addressValue]) => {
+  //           formData.append(`address.${addressKey}`, addressValue);
+  //         });
+  //       }
+  //     });
+
+  //     // Replace 'http://localhost:3001/submitForm' with your server endpoint for form submission
+  //     fetch("http://localhost:3001/submitForm", {
+  //       method: "POST",
+  //       body: formData,
+  //     })
+  //       .then((response) => response.json())
+  //       .then((result) => {
+  //         // Handle success response if needed
+  //         console.log("Form submitted successfully:", result);
+  //       })
+  //       .catch((error) => {
+  //         console.error("Error submitting form:", error);
+  //       });
+  //   }
+  // };
+
+  const onSubmit = () => {
+    // if (values && isValid) {
+    //   const formData = new FormData();
+    //   if (file) {
+    //     formData.append("file", file);
+    //   }
+
+    //   // Add other form fields to the FormData
+    //   Object.entries(values).forEach(([key, value]) => {
+    //     if (key !== "address") {
+    //       formData.append(key, value.toString());
+    //     } else {
+    //       // Handle nested 'address' object
+    //       Object.entries(value).forEach(([addressKey, addressValue]) => {
+    //         formData.append(`address.${addressKey}`, addressValue.toString());
+    //       });
+    //     }
+    //   });
+
+    //   // Replace 'http://localhost:3001/submitForm' with your server endpoint for form submission
+    //   fetch("http://localhost:8090/trust/trustSignup", {
+    //     method: "POST",
+    //     body: formData,
+    //   })
+    //     .then((response) => response.json())
+    //     .then((result) => {
+    //       // Handle success response if needed
+    //       console.log("Form submitted successfully:", result);
+    //     })
+    //     .catch((error) => {
+    //       console.error("Error submitting form:", error);
+    //     });
+    // }
+
+
+    // let data={
+    //   trustImg,
+    //   name,
+    //   password,
+
+    // }
+
+
+
+  };
+
   const {
     handleSubmit,
     handleChange,
@@ -108,78 +213,13 @@ const TrustSignup = () => {
   } = useFormik({
     initialValues: initialValue,
     validationSchema: trustDetailSchema,
-    onSubmit: async () => {
-      if (values && isValid) {
-        // const formData = new FormData();
-        // formData.append("image", file);
-
-        // const result = await fetch("/api/images", formData, {
-        //   headers: { "Content-Type": "multipart/form-data" },
-        // });
-        // setImageName(result.data.imageName);
-        console.log("Submitted Values:", values);
-        successToast("Account Is Successfully Created");
-      } else {
-        errorToast("Please Check Form");
-      }
-    },
+    onSubmit,
+    // onSubmit: async () => {
+    //   if (values && isValid) {
+    //     // asd
+    //   }
+    // },
   });
-
-  // const handleFileChange = (event: ChangeEvent) => {
-  //   const file = event.target.files[0];
-  //   if (file) {
-  //     const reader = new FileReader();
-  //     reader.onloadend = () => {
-  //       setFieldValue("trustlogo", reader.result);
-  //     };
-  //     reader.readAsDataURL(file);
-  //     successToast("Image Uploaded Successfully");
-  //   }
-  // };
-
-  // const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const file = event.target.files?.[0];
-  //   if (file) {
-  //     const reader = new FileReader();
-  //     reader.onloadend = () => {
-  //       setFieldValue("trustlogo", reader.result);
-  //       console.log("imageUrl>>", reader.result);
-  //     };
-  //     reader.readAsDataURL(file);
-  //     successToast("Image Uploaded Successfully");
-  //   }
-  // };
-
-  // const handleFileChange = async (
-  //   event: React.ChangeEvent<HTMLInputElement>
-  // ) => {
-  //   const file = event.target?.files?.[0];
-  //   if (file) {
-  //     const formData = new FormData();
-  //     formData.append("trustlogo", file);
-
-  //     try {
-  //       const response = await fetch(
-  //         "http://localhost:8090/trust/trustSignup",
-  //         {
-  //           method: "POST",
-  //           body: formData,
-  //         }
-  //       );
-
-  //       if (response.ok) {
-  //         const result = await response.json();
-  //         setFieldValue("trustlogo", result.imageUrl);
-  //         successToast("Image Uploaded Successfully");
-  //       } else {
-  //         errorToast("Failed to upload image");
-  //       }
-  //     } catch (error) {
-  //       console.error("Error uploading image:", error);
-  //       errorToast("Error uploading image");
-  //     }
-  //   }
-  // };
 
   const handleFirstStep = () => {
     if (
@@ -215,9 +255,9 @@ const TrustSignup = () => {
     }
   };
 
-  const handleImgChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files?.[0];
-  };
+  // const handleImgChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const files = event.target.files?.[0];
+  // };
 
   const formSections: ReactNode[] = [
     <div key={1} className="mx-5 lg:mx-20 gap-10">
@@ -439,18 +479,6 @@ const TrustSignup = () => {
       <div className="mx-5 lg:mx-20 mb-10 flex flex-col justify-center items-center gap-8">
         {/* <div className="relative bottom-6">
           <div className="border-4 h-32 w-32 p-1 border-primary rounded-full overflow-hidden">
-            <img
-              className="rounded-full h-full w-full object-contain"
-              src="https://tse1.mm.bing.net/th?id=OIP.ZNqde0PLHfVg1j1I-2G9xQHaHa&pid=Api&P=0&h=180"
-              alt=""
-            />
-          </div>
-          <div className="absolute z-50  left-1/2 bottom-0 translate-x-1/2 ">
-            <CameraIcon />
-          </div>
-        </div> */}
-        <div className="relative bottom-6">
-          <div className="border-4 h-32 w-32 p-1 border-primary rounded-full overflow-hidden">
             <Image
               className="rounded-full h-full w-full object-contain"
               src={values.trustlogo}
@@ -472,7 +500,43 @@ const TrustSignup = () => {
               <CameraIcon />
             </label>
           </div>
+        </div> */}
+        <div className="relative bottom-6">
+          <div className="border-4 h-32 w-32 p-1 border-primary rounded-full overflow-hidden">
+            {file ? (
+              <Image
+                className="rounded-full h-full w-full object-contain"
+                src={URL.createObjectURL(file)}
+                alt="trustLogo"
+                width={128}
+                height={128}
+              />
+            ) : (
+              <Image
+                className="rounded-full h-full w-full object-contain"
+                src={values.trustlogo}
+                alt="trustLogo"
+                width={128}
+                height={128}
+              />
+            )}
+          </div>
+          <input
+            type="file"
+            id="imageUpload"
+            name="imageUpload"
+            accept="image/*"
+            className="hidden"
+            // onChange={(e) => setFile(e.target.files?.[0])}
+            onChange={(e) => handleFileChange(e)}
+          />
+          <div className="absolute z-50 left-1/2 bottom-0 translate-x-1/2">
+            <label htmlFor="imageUpload" className="cursor-pointer">
+              <CameraIcon />
+            </label>
+          </div>
         </div>
+
         <div className="w-full flex justify-around">
           <div
             className={`h-8 w-8 flex items-center hover:scale-125 transition-transform ease-in-out cursor-pointer justify-center font-bold rounded-full border ${
