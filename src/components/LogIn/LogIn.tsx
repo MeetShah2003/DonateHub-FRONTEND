@@ -78,7 +78,7 @@ const LogIn = () => {
                   }
                   if (data.message === "login sucessfull") {
                     successToast(`Welcome Back ${data.user.username}`);
-                    Cookies.set("user_data", JSON.stringify(data.user), {
+                    Cookies.set("user_data", data.user, {
                       expires: 7,
                       path: "/",
                     });
@@ -88,7 +88,7 @@ const LogIn = () => {
                   }
                   if (data.message === "account created sucessfull") {
                     successToast(`Welcome Back ${data.user.username}`);
-                    Cookies.set("user_data", JSON.stringify(data.user), {
+                    Cookies.set("user_data", data.user, {
                       expires: 7,
                       path: "/",
                     });
@@ -127,13 +127,13 @@ const LogIn = () => {
             .then((data) => {
               if (data.message == "login sucessfull") {
                 setUserData(data);
-                Cookies.set("user_data", JSON.stringify(data.user), {
+                Cookies.set("user_data", data.user, {
                   expires: 7,
                   path: "/",
                 });
                 if (data.user.role === "admin") {
                   setUserData(data);
-                  Cookies.set("user_data", JSON.stringify(data.user), {
+                  Cookies.set("user_data", data.user, {
                     expires: 7,
                     path: "/",
                   });

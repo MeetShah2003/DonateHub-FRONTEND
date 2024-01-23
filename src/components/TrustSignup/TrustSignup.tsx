@@ -95,33 +95,34 @@ const TrustSignup = () => {
     setCities(selectedStateCities);
   };
 
+  const [trustImg, setTrustImg] = useState();
   const [file, setFile] = useState<File | null>(null);
- let [trustImg,setTrustImg]=useState()
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
     setFile(selectedFile || null); // Use null as fallback if selectedFile is undefined
-    
+    setFieldValue("trustlogo", selectedFile);
+
     if (selectedFile) {
       let formdata = new FormData();
       formdata.append("trustImg", selectedFile);
-  
-      fetch('http://localhost:8090/trust/trustImg', {
+
+      fetch("http://localhost:8090/trust/trustImg", {
         method: "POST",
-        body: formdata
+        body: formdata,
       })
-      .then(response => response.json())
-      .then(res=>setTrustImg(res.img))
-      
-      .catch(error => {
-        // Handle error
-        console.error('Error uploading file:', error);
-      });
+        .then((response) => response.json())
+        .then((res) => {
+          setTrustImg(res.img);
+          console.log(res.img);
+        })
+
+        .catch((error) => {
+          // Handle error
+          console.error("Error uploading file:", error);
+        });
     }
   };
-  
-  
-  
-  
+
   // const onSubmit = () => {
   //   if (values && isValid) {
   //     const formData = new FormData();
@@ -155,51 +156,43 @@ const TrustSignup = () => {
   //   }
   // };
 
-  const onSubmit = () => {
-    // if (values && isValid) {
-    //   const formData = new FormData();
-    //   if (file) {
-    //     formData.append("file", file);
-    //   }
-
-    //   // Add other form fields to the FormData
-    //   Object.entries(values).forEach(([key, value]) => {
-    //     if (key !== "address") {
-    //       formData.append(key, value.toString());
-    //     } else {
-    //       // Handle nested 'address' object
-    //       Object.entries(value).forEach(([addressKey, addressValue]) => {
-    //         formData.append(`address.${addressKey}`, addressValue.toString());
-    //       });
-    //     }
-    //   });
-
-    //   // Replace 'http://localhost:3001/submitForm' with your server endpoint for form submission
-    //   fetch("http://localhost:8090/trust/trustSignup", {
-    //     method: "POST",
-    //     body: formData,
-    //   })
-    //     .then((response) => response.json())
-    //     .then((result) => {
-    //       // Handle success response if needed
-    //       console.log("Form submitted successfully:", result);
-    //     })
-    //     .catch((error) => {
-    //       console.error("Error submitting form:", error);
-    //     });
-    // }
-
-
-    // let data={
-    //   trustImg,
-    //   name,
-    //   password,
-
-    // }
-
-
-
-  };
+  // const onSubmit = () => {
+  // if (values && isValid) {
+  //   const formData = new FormData();
+  //   if (file) {
+  //     formData.append("file", file);
+  //   }
+  //   // Add other form fields to the FormData
+  //   Object.entries(values).forEach(([key, value]) => {
+  //     if (key !== "address") {
+  //       formData.append(key, value.toString());
+  //     } else {
+  //       // Handle nested 'address' object
+  //       Object.entries(value).forEach(([addressKey, addressValue]) => {
+  //         formData.append(`address.${addressKey}`, addressValue.toString());
+  //       });
+  //     }
+  //   });
+  //   // Replace 'http://localhost:3001/submitForm' with your server endpoint for form submission
+  //   fetch("http://localhost:8090/trust/trustSignup", {
+  //     method: "POST",
+  //     body: formData,
+  //   })
+  //     .then((response) => response.json())
+  //     .then((result) => {
+  //       // Handle success response if needed
+  //       console.log("Form submitted successfully:", result);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error submitting form:", error);
+  //     });
+  // }
+  // let data={
+  //   trustImg,
+  //   name,
+  //   password,
+  // }
+  // };
 
   const {
     handleSubmit,
@@ -213,12 +206,10 @@ const TrustSignup = () => {
   } = useFormik({
     initialValues: initialValue,
     validationSchema: trustDetailSchema,
-    onSubmit,
-    // onSubmit: async () => {
-    //   if (values && isValid) {
-    //     // asd
-    //   }
-    // },
+    onSubmit: () => {
+      console.log(errors);
+      console.log(values);
+    },
   });
 
   const handleFirstStep = () => {
@@ -233,6 +224,8 @@ const TrustSignup = () => {
       errorToast("Please fill all fields");
     }
   };
+
+  console.log(values);
 
   const handleSecondStep = () => {
     if (
