@@ -45,7 +45,7 @@ const LogIn = () => {
 
   const { data: session } = useSession();
 
-  // console.log(session?.user);
+  console.log(session?.user);
 
   const errorToast = (errorMessage: string) => toast.error(errorMessage);
   const successToast = (successMessage: string) =>
