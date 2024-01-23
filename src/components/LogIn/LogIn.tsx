@@ -125,28 +125,30 @@ const LogIn = () => {
           })
             .then((res) => res.json())
             .then((data) => {
+              console.log(data);
+
               if (data.message == "login sucessfull") {
                 setUserData(data);
-                Cookies.set("user_data", data.user, {
+                Cookies.set("user_data", data.token, {
                   expires: 7,
                   path: "/",
                 });
                 if (data.user.role === "admin") {
                   setUserData(data);
-                  Cookies.set("user_data", data.user, {
+                  Cookies.set("user_data", data.token, {
                     expires: 7,
                     path: "/",
                   });
-                  successToast(`Welcome back ${data.user.username}`);
-                  Cookies.set("access_token", data.token, {
-                    expires: 7,
-                    path: "/",
-                  });
+                  successToast(`Welcome back ${data.user.firstName}`);
+                  // Cookies.set("access_token", data.token, {
+                  //   expires: 7,
+                  //   path: "/",
+                  // });
                   setTimeout(() => {
                     router.push("/admin");
                   }, 3000);
                 } else {
-                  successToast(`Welcome back ${data.user.username}`);
+                  successToast(`Welcome back ${data.user.firstName}`);
                   Cookies.set("access_token", data.token, {
                     expires: 7,
                     path: "/",
