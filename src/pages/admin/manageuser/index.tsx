@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AdminFrame from "@/components/AdminFrame";
 import DeleteIcon from "@/icons/DeleteIcon";
 import EditIcon from "@/icons/EditIcon";
@@ -6,32 +6,48 @@ import { dummyUsers } from "@/consts";
 import ReactPaginate from "react-paginate";
 import ArrowIcon from "@/icons/ArrowIcon";
 import { useUser } from "@/context/user";
+import Cookies from "js-cookie";
+import { UserData } from "@/types/types";
 
 const ManageUser = () => {
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
-  const { getUserData } = useUser();
-
-  const getData = async () => {
-    const userData = await getUserData();
-    console.log(userData);
-  };
-
-  getData();
+  const [allUserData, setAllUserData] = useState<UserData[]>([]);
+  const access_token = Cookies.get("user_data");
 
   const onPageChange = ({ selected }: any) => {
     setCurrentPage(selected);
   };
 
+  const getAllUserData = () => {
+    fetch("http://localhost:8090/admin/allUsers", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setAllUserData(data["userRecords"]);
+      });
+  };
+
+  useEffect(() => {
+    getAllUserData();
+  }, []);
+
+  console.log(allUserData);
+
   const offset = currentPage * itemsPerPage;
-  const filteredUsers = dummyUsers[0].filter((user) =>
-    Object.values(user).some((value) =>
-      value.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredUsers = allUserData?.filter((user) =>
+    Object.values(user || {}).some((value) =>
+      String(value).toLowerCase().includes(searchQuery.toLowerCase())
     )
   );
-  const currentItems = filteredUsers.slice(offset, offset + itemsPerPage);
-
+  const currentItems = filteredUsers?.slice(offset, offset + itemsPerPage);
   return (
     <AdminFrame title="Manage Users">
       <div>
@@ -49,7 +65,7 @@ const ManageUser = () => {
             <table className="w-full">
               <thead>
                 <tr>
-                  <th className="py-3 px-6 text-left bg-gray-200">id</th>
+                  <th className="py-3 px-6 text-left bg-gray-200">No</th>
                   <th className="py-3 px-6 text-left bg-gray-200">
                     First Name
                   </th>
@@ -114,7 +130,7 @@ const ManageUser = () => {
         }
         breakLabel={<div className="px-4 py-2 border rounded">...</div>}
         breakClassName={"break-me"}
-        pageCount={Math.ceil(filteredUsers.length / itemsPerPage)}
+        pageCount={Math.ceil(filteredUsers?.length / itemsPerPage)}
         marginPagesDisplayed={5}
         pageRangeDisplayed={5}
         onPageChange={onPageChange}

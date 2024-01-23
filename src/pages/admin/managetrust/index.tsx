@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AdminFrame from "@/components/AdminFrame";
 import DeleteIcon from "@/icons/DeleteIcon";
 import EditIcon from "@/icons/EditIcon";
@@ -6,23 +6,44 @@ import { dummyUsers } from "@/consts";
 import ReactPaginate from "react-paginate";
 import ArrowIcon from "@/icons/ArrowIcon";
 import { trustData } from "@/consts";
+import Cookies from "js-cookie";
+import { TrustData } from "@/types/types";
 
 const ManageTrust = () => {
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
+  const [allTrustData, setAllTrustData] = useState<TrustData[]>([]);
+  const access_token = Cookies.get("user_data");
 
   const onPageChange = ({ selected }: any) => {
     setCurrentPage(selected);
   };
 
+  useEffect(() => {
+    fetch("http://localhost:8090/admin/allTrusts", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data["allTrusts"]);
+        setAllTrustData(data["allTrusts"]);
+      });
+  }, []);
+
+  console.log(allTrustData);
+
   const offset = currentPage * itemsPerPage;
-  const filteredUsers = trustData.filter((user) =>
+  const filteredUsers = allTrustData.filter((user) =>
     Object.values(user).some((value) =>
-      value.toLowerCase().includes(searchQuery.toLowerCase())
+      value.toString().toLowerCase().includes(searchQuery.toLowerCase())
     )
   );
-  const currentItems = filteredUsers.slice(offset, offset + itemsPerPage);
+  const currentItems = filteredUsers?.slice(offset, offset + itemsPerPage);
 
   return (
     <AdminFrame title="Manage Trusts">
@@ -41,7 +62,7 @@ const ManageTrust = () => {
             <table className="w-full">
               <thead>
                 <tr>
-                  <th className="py-3 px-6 text-left bg-gray-200">id</th>
+                  <th className="py-3 px-6 text-left bg-gray-200">No</th>
                   <th className="py-3 px-6 text-left bg-gray-200">
                     Trust Name
                   </th>
@@ -59,20 +80,17 @@ const ManageTrust = () => {
               <tbody className="bg-white rounded-b-lg">
                 {currentItems &&
                   currentItems.length > 0 &&
-                  currentItems.map(
-                    (
-                      { id, categoty, conatctNo, trustEmail, trustName },
-                      index
-                    ) => {
+                  currentItems?.map(
+                    ({ id, category, contactNo, email, trustName }, index) => {
                       return (
                         <tr className="hover:bg-gray-100 transition" key={id}>
                           <td className="py-4 px-6 border-b">
                             {index + 1 + currentPage * itemsPerPage}
                           </td>
                           <td className="py-4 px-6 border-b">{trustName}</td>
-                          <td className="py-4 px-6 border-b">{conatctNo}</td>
-                          <td className="py-4 px-6 border-b">{trustEmail}</td>
-                          <td className="py-4 px-6 border-b">{categoty}</td>
+                          <td className="py-4 px-6 border-b">{contactNo}</td>
+                          <td className="py-4 px-6 border-b">{email}</td>
+                          <td className="py-4 px-6 border-b">{category}</td>
                           <td className="py-4 px-2 border-b">
                             <div className="flex">
                               <div className="flex w-full flex-row items-center justify-center border-r border-dark-150">

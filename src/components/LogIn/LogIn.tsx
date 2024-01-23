@@ -41,7 +41,7 @@ const LogIn = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const token = Cookies.get("access_token");
-  const { setUserData } = useUser();
+  const { setUserData, setAccessToken } = useUser();
 
   const { data: session } = useSession();
 
@@ -133,6 +133,7 @@ const LogIn = () => {
                   expires: 7,
                   path: "/",
                 });
+                setAccessToken(data.token);
                 if (data.user.role === "admin") {
                   setUserData(data);
                   Cookies.set("user_data", data.token, {
@@ -149,7 +150,7 @@ const LogIn = () => {
                   }, 3000);
                 } else {
                   successToast(`Welcome back ${data.user.firstName}`);
-                  Cookies.set("access_token", data.token, {
+                  Cookies.set("user_data", data.token, {
                     expires: 7,
                     path: "/",
                   });

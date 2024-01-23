@@ -12,6 +12,8 @@ import HamburgerIcon from "@/icons/HamburgurIcon";
 import ProfileIcon from "@/icons/ProfileIcon";
 import DashboardIcon from "@/icons/DashboardIcon";
 import ApproveIcon from "@/icons/ApproveIcon";
+import { useUser } from "@/context/user";
+import Cookies from "js-cookie";
 
 const ADMIN_MENUS: {
   id: number;
@@ -64,6 +66,7 @@ const AdminFrame: React.FC<{
 }> = ({ title, children }) => {
   const router = useRouter();
   const [sideBarIsOpen, setSideBarIsOpen] = useState(false);
+  const { handleLogout } = useUser();
 
   return (
     <div className="max-w-full w-full flex">
@@ -91,7 +94,11 @@ const AdminFrame: React.FC<{
                   <div className="h-5">{icon}</div>
                   <li
                     onClick={() => {
-                      router.push(path);
+                      if (menu === "Logout") {
+                        handleLogout();
+                      } else {
+                        router.push(path);
+                      }
                     }}
                   >
                     {menu}

@@ -1,4 +1,6 @@
 import React, { createContext, useContext, useState } from "react";
+import Cookies from "js-cookie";
+import { useRouter } from "next/router";
 
 type UserData = {
   email: string;
@@ -17,6 +19,7 @@ type AuthType = {
   loading: boolean;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   setForgotPasswordEmail: React.Dispatch<React.SetStateAction<string>>;
+  setAccessToken: React.Dispatch<React.SetStateAction<string>>;
 };
 
 const AuthContext = createContext<AuthType | undefined>(undefined);
@@ -28,14 +31,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [userData, setUserData] = useState<UserData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [forgotPasswordEmail, setForgotPasswordEmail] = useState<string>("");
-
-  const getUserData = async () => {
-    const allUserData = await fetch("http://localhost:8090/admin/allUsers");
-    return allUserData;
-  };
+  const access_token = Cookies.get("user_data");
+  const router = useRouter();
+  const getUserData = async () => {};
 
   const handleLogout = () => {
-    // Implement logic to handle logout
+    if (access_token) {
+      Cookies.remove("user_data");
+      router.push("/login");
+    }
   };
 
   return (
@@ -44,6 +48,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         accessToken,
         userData,
         setUserData,
+        setAccessToken,
         getUserData,
         handleLogout,
         setForgotPasswordEmail,
