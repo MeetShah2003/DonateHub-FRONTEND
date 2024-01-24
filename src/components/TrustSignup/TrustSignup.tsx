@@ -20,14 +20,14 @@ const TrustSignup = () => {
   ]);
   const [currentStep, setCurrentStep] = useState(1);
   const initialValue: TrustData = {
-    trustId: trustId,
-    trustname: "",
-    trustemail: "",
+    id: trustId,
+    trustName: "",
+    email: "",
     trustlogo: "",
     founder: "",
     creationdate: new Date(2023, 0, 1),
-    catagory: "",
-    contactno: 0,
+    category: "",
+    contactNo: 0,
     abouttrust: "",
     password: "",
     role: "trust",
@@ -214,8 +214,8 @@ const TrustSignup = () => {
 
   const handleFirstStep = () => {
     if (
-      values.trustname &&
-      values.trustemail &&
+      values.trustName &&
+      values.email &&
       values.password &&
       values.abouttrust
     ) {
@@ -229,18 +229,18 @@ const TrustSignup = () => {
 
   const handleSecondStep = () => {
     if (
-      values.trustname &&
-      values.trustemail &&
+      values.trustName &&
+      values.email &&
       values.password &&
       values.abouttrust &&
-      values.catagory &&
+      values.category &&
       values.creationdate &&
       values.founder &&
-      values.contactno
+      values.contactNo
     ) {
       setCurrentStep((prevStep) => prevStep + 1);
     } else {
-      if (!values.catagory) {
+      if (!values.category) {
         errorToast("Please Select Catagory");
       } else {
         errorToast("Please fill all fields");
@@ -264,10 +264,10 @@ const TrustSignup = () => {
           placeholder="The Education Trust"
           onChange={handleChange}
           onBlur={handleBlur}
-          value={values.trustname}
+          value={values.trustName}
         />
-        {touched.trustname && errors.trustname && (
-          <span className="text-sm text-red-600">{errors.trustname}</span>
+        {touched.trustName && errors.trustName && (
+          <span className="text-sm text-red-600">{errors.trustName}</span>
         )}
       </div>
       <div className="flex flex-col border-2 px-2 py-1 border-t-transparent focus-within:border-primary">
@@ -280,10 +280,10 @@ const TrustSignup = () => {
           placeholder="education@donation.com"
           onChange={handleChange}
           onBlur={handleBlur}
-          value={values.trustemail}
+          value={values.email}
         />
-        {touched.trustemail && errors.trustemail && (
-          <span className="text-sm text-red-600">{errors.trustemail}</span>
+        {touched.email && errors.email && (
+          <span className="text-sm text-red-600">{errors.email}</span>
         )}
       </div>
       <div className="flex flex-col border-t-transparent border-2 px-2 py-1 focus-within:border-primary">
@@ -384,10 +384,10 @@ const TrustSignup = () => {
           placeholder="+91 0000000000"
           onChange={handleChange}
           onBlur={handleBlur}
-          value={values.contactno}
+          value={values.contactNo}
         />
-        {touched.contactno && errors.contactno && (
-          <span className="text-sm text-red-600">{errors.contactno}</span>
+        {touched.contactNo && errors.contactNo && (
+          <span className="text-sm text-red-600">{errors.contactNo}</span>
         )}
       </div>
     </div>,
@@ -557,8 +557,8 @@ const TrustSignup = () => {
             }`}
             onClick={() => {
               if (
-                values.trustname &&
-                values.trustemail &&
+                values.trustName &&
+                values.email &&
                 values.password &&
                 values.abouttrust
               ) {

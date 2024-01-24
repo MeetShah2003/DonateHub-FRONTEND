@@ -8,14 +8,14 @@ export type UserData = {
 };
 
 export type TrustData = {
-  trustId: string;
-  trustname: string;
+  id: string;
+  trustName: string;
   trustlogo: string;
-  trustemail: string;
+  email: string;
   founder: string;
   creationdate: Date;
-  catagory: string;
-  contactno: number;
+  category: string;
+  contactNo: number;
   abouttrust: string;
   password: string;
   address: {
