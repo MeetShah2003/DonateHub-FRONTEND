@@ -1,7 +1,7 @@
 import { useFormik } from "formik";
 import Link from "next/link";
 import Cookies from "js-cookie";
-import WelcomePage from "../WelcomePage";
+import WelcomePage from "@/components/WelcomePage/WelcomePage";
 import GoogleIcon from "@/icons/GoogleIcon";
 import GithubIcon from "@/icons/GithubIcon";
 import * as Yup from "yup";
@@ -37,7 +37,7 @@ const loginSchema = Yup.object().shape({
     .required("Password is required"),
 });
 
-const LogIn = () => {
+const TrustLogin = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const token = Cookies.get("access_token");
@@ -51,64 +51,64 @@ const LogIn = () => {
   const successToast = (successMessage: string) =>
     toast.success(successMessage);
 
-  const gLogin = useGoogleLogin({
-    onSuccess: async (response) => {
-      console.log(response);
+  //   const gLogin = useGoogleLogin({
+  //     onSuccess: async (response) => {
+  //       console.log(response);
 
-      const userData = Cookies.get("user_data");
-      try {
-        fetch("https://www.googleapis.com/oauth2/v1/userinfo", {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${(response.access_token, userData)}`,
-          },
-        })
-          .then((response) => response.json())
-          .then((userInfo) => {
-            if (userInfo) {
-              fetch(`http://localhost:8090/api/googleData`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(userInfo),
-              })
-                .then((res) => res.json())
-                .then((data) => {
-                  if (!data) {
-                    errorToast("Something went wrong");
-                  }
-                  if (data.message === "login sucessfull") {
-                    successToast(`Welcome Back ${data.user.username}`);
-                    Cookies.set("user_data", data.user, {
-                      expires: 7,
-                      path: "/",
-                    });
-                    setTimeout(() => {
-                      router.push("/dashboard");
-                    }, 3000);
-                  }
-                  if (data.message === "account created sucessfull") {
-                    successToast(`Welcome Back ${data.user.username}`);
-                    Cookies.set("user_data", data.user, {
-                      expires: 7,
-                      path: "/",
-                    });
-                    setTimeout(() => {
-                      router.push("/dashboard");
-                    }, 3000);
-                  }
-                });
-            } else {
-              errorToast("something went wrong");
-            }
-          })
-          .catch((error) => {
-            console.error("Error fetching user information:", error);
-          });
-      } catch (err) {
-        console.log(err);
-      }
-    },
-  });
+  //       const userData = Cookies.get("user_data");
+  //       try {
+  //         fetch("https://www.googleapis.com/oauth2/v1/userinfo", {
+  //           method: "GET",
+  //           headers: {
+  //             Authorization: `Bearer ${(response.access_token, userData)}`,
+  //           },
+  //         })
+  //           .then((response) => response.json())
+  //           .then((userInfo) => {
+  //             if (userInfo) {
+  //               fetch(`http://localhost:8090/api/googleData`, {
+  //                 method: "POST",
+  //                 headers: { "Content-Type": "application/json" },
+  //                 body: JSON.stringify(userInfo),
+  //               })
+  //                 .then((res) => res.json())
+  //                 .then((data) => {
+  //                   if (!data) {
+  //                     errorToast("Something went wrong");
+  //                   }
+  //                   if (data.message === "login sucessfull") {
+  //                     successToast(`Welcome Back ${data.user.username}`);
+  //                     Cookies.set("user_data", data.user, {
+  //                       expires: 7,
+  //                       path: "/",
+  //                     });
+  //                     setTimeout(() => {
+  //                       router.push("/dashboard");
+  //                     }, 3000);
+  //                   }
+  //                   if (data.message === "account created sucessfull") {
+  //                     successToast(`Welcome Back ${data.user.username}`);
+  //                     Cookies.set("user_data", data.user, {
+  //                       expires: 7,
+  //                       path: "/",
+  //                     });
+  //                     setTimeout(() => {
+  //                       router.push("/dashboard");
+  //                     }, 3000);
+  //                   }
+  //                 });
+  //             } else {
+  //               errorToast("something went wrong");
+  //             }
+  //           })
+  //           .catch((error) => {
+  //             console.error("Error fetching user information:", error);
+  //           });
+  //       } catch (err) {
+  //         console.log(err);
+  //       }
+  //     },
+  //   });
   const { handleChange, handleSubmit, handleBlur, errors, touched } = useFormik(
     {
       initialValues: initialValue,
@@ -175,13 +175,13 @@ const LogIn = () => {
     }
   );
   return (
-    <WelcomePage title="Welcome To" secondTitle="DonateHub">
+    <WelcomePage title="Trust" secondTitle="Management">
       <form className="mx-5 lg:mx-20 gap-10" onSubmit={handleSubmit}>
         <h3 className="font-inter text-3xl drop-shadow-2xl tracking-wider font-bold mb-8">
           Sign in
         </h3>
         <div className="flex flex-col border-2 px-2 py-1 rounded-t-lg focus-within:border-primary">
-          <label className="pb-1 text-sm font-medium">Email</label>
+          <label className="pb-1 text-sm font-medium">Trust Email</label>
           <input
             id="email"
             name="email"
@@ -189,7 +189,7 @@ const LogIn = () => {
             onChange={handleChange}
             onBlur={handleBlur}
             className="outline-none tracking-wider"
-            placeholder="johndoe@gmail.com"
+            placeholder="education@donation.com"
           />
           {touched.email && errors.email && (
             <span className="text-sm text-red-600">{errors.email}</span>
@@ -231,7 +231,7 @@ const LogIn = () => {
           </button>
         </div>
 
-        <div className="flex flex-col border-2 mt-4 shadow-sm rounded-lg px-2 py-2">
+        {/* <div className="flex flex-col border-2 mt-4 shadow-sm rounded-lg px-2 py-2">
           <button
             type="button"
             onClick={() => {
@@ -259,12 +259,12 @@ const LogIn = () => {
             </span>
             Continue with GitHub
           </button>
-        </div>
-        <div className="my-3 flex justify-center ">
+        </div> */}
+        <div className="my-3 flex justify-center">
           <p>
             Not a registered user yet?
             <span className="text-primary pl-1 underline-offset-2 underline">
-              <Link href={"/"}>SignUp</Link>
+              <Link href={"/trustsignup"}>SignUp</Link>
             </span>
           </p>
         </div>
@@ -273,6 +273,4 @@ const LogIn = () => {
   );
 };
 
-export const getServerSideProps = getAuthenticatedRouteCheck;
-
-export default LogIn;
+export default TrustLogin;
