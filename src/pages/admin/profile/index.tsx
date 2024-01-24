@@ -14,13 +14,10 @@ const AdminProfile = () => {
 
   const profileSchema = Yup.object().shape({
     username: Yup.string().required("Username is required"),
-    password: Yup.string()
-      .min(8, "Password must be at least 8 characters")
-      .matches(
-        /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).*$/,
-        "Password must contain at least one uppercase letter, one lowercase letter, and one number"
-      )
-      .required("Password is required"),
+    email: Yup.string()
+      .trim()
+      .email("Invalid email")
+      .required("Email is required"),
   });
 
   const {
@@ -54,7 +51,7 @@ const AdminProfile = () => {
 
   return (
     <AdminFrame title="Profile">
-      <form className="mx-5  gap-10" onSubmit={handleSubmit}>
+      <form className="mx-auto w-full max-w-md gap-10" onSubmit={handleSubmit}>
         <div className="flex items-center justify-center relative bottom-6">
           <div className="border-4 h-32 w-32 p-1 border-primary rounded-full overflow-hidden">
             <Image
@@ -97,7 +94,7 @@ const AdminProfile = () => {
           )}
         </div>
 
-        <div className="flex flex-col border-2 mt-3 px-2 py-1 rounded-b-lg focus-within:border-primary">
+        <div className="flex flex-col border-2 border-t-transparent px-2 py-1 rounded-b-lg focus-within:border-primary">
           <label className="pb-1 text-sm font-medium">Email</label>
           <input
             id="email"
@@ -107,7 +104,7 @@ const AdminProfile = () => {
             onChange={handleChange}
             onBlur={handleBlur}
             className="outline-none tracking-wider"
-            placeholder="********"
+            placeholder="johndoe@gmail.com"
           />
           {touched.email && errors.email && (
             <span className="text-sm text-red-600">{errors.email}</span>

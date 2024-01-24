@@ -1,13 +1,12 @@
 import SignUp from "@/components/SignUp";
+import Visitor from "@/components/Visitor";
+import UserFrame from "@/components/Visitor";
 import WelcomePage from "@/components/WelcomePage";
 
 const home = () => {
   return (
     <div>
-      {/* <WelcomePage /> */}
-      <SignUp />
-      {/* trust
-      <AddTrust /> */}
+      <Visitor />
     </div>
   );
 };

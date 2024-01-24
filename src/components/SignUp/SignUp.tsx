@@ -17,7 +17,8 @@ const SignUp = () => {
     toast.success(successMessage);
 
   const SignupSchema = Yup.object().shape({
-    username: Yup.string().trim().required("Username is required"),
+    firstName: Yup.string().trim().required("FirstName is required"),
+    lastName: Yup.string().trim().required("LastName is required"),
     email: Yup.string()
       .trim()
       .email("Invalid email")
@@ -29,22 +30,27 @@ const SignUp = () => {
         "Password must contain at least one uppercase letter, one lowercase letter, and one number"
       )
       .required("Password is required"),
+    gender: Yup.string().required("Please select a gender"),
     confirmPassword: Yup.string()
       .oneOf([Yup.ref("password")], "Passwords must match")
       .required("Confirm Password is required"),
   });
 
   const initialValue: {
-    username: string;
+    firstName: string;
+    lastName: string;
     email: string;
     password: string;
     confirmPassword: string;
+    gender: string;
     role: string;
   } = {
-    username: "",
+    firstName: "",
+    lastName: "",
     password: "",
     confirmPassword: "",
     email: "",
+    gender: "",
     role: "user",
   };
 
@@ -62,7 +68,7 @@ const SignUp = () => {
           })
             .then((res) => res.json())
             .then((data) => {
-              if (data.message == "user already exist") {
+              if (data && data.message == "user already exist") {
                 errorToast("user already exists");
                 setTimeout(() => {
                   router.push("/login");
@@ -85,22 +91,41 @@ const SignUp = () => {
         <h3 className="font-inter text-3xl drop-shadow-2xl tracking-wider font-bold mb-8">
           Sign Up
         </h3>
-        <div className="flex flex-col border-2 px-2 py-1 rounded-t-lg focus-within:border-primary">
-          <label className="pb-1 text-sm font-medium">Username</label>
-          <input
-            id="username"
-            name="username"
-            type="text"
-            className="outline-none tracking-wider"
-            placeholder="John Doe"
-            onChange={handleChange}
-            onBlur={handleBlur}
-            value={values.username}
-          />
-          {touched.username && errors.username && (
-            <span className="text-sm text-red-600">{errors.username}</span>
-          )}
+        <div className="flex w-full">
+          <div className="flex w-1/2 flex-col border-2 px-2 py-1 rounded-tl-lg focus-within:border-primary">
+            <label className="pb-1 text-sm font-medium">First Name</label>
+            <input
+              id="firstName"
+              name="firstName"
+              type="text"
+              className="outline-none tracking-wider"
+              placeholder="John"
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.firstName}
+            />
+            {touched.firstName && errors.firstName && (
+              <span className="text-sm text-red-600">{errors.firstName}</span>
+            )}
+          </div>
+          <div className="flex w-1/2 flex-col border-2 border-l-transparent px-2 py-1 rounded-tr-lg focus-within:border-primary">
+            <label className="pb-1 text-sm font-medium">Last Name</label>
+            <input
+              id="lastName"
+              name="lastName"
+              type="text"
+              className="outline-none tracking-wider"
+              placeholder="Doe"
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.lastName}
+            />
+            {touched.lastName && errors.lastName && (
+              <span className="text-sm text-red-600">{errors.lastName}</span>
+            )}
+          </div>
         </div>
+
         <div className="flex flex-col border-t-transparent border-2 px-2 py-1 focus-within:border-primary">
           <label className="pb-1 text-sm font-medium">Email</label>
           <input
@@ -114,6 +139,43 @@ const SignUp = () => {
           />
           {touched.email && errors.email && (
             <span className="text-sm text-red-600">{errors.email}</span>
+          )}
+        </div>
+        <div className="flex flex-col border-t-transparent border-2 px-2 py-1 focus-within:border-primary">
+          <label className="pb-1 text-sm font-medium">Gender</label>
+          <div className="flex space-x-4">
+            <div className="flex items-center">
+              <input
+                type="radio"
+                id="male"
+                name="gender"
+                value="male"
+                checked={values.gender === "male"}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+              <label htmlFor="male" className="ml-2">
+                Male
+              </label>
+            </div>
+            <div className="flex items-center">
+              <input
+                type="radio"
+                id="female"
+                name="gender"
+                value="female"
+                checked={values.gender === "female"}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+              <label htmlFor="female" className="ml-2">
+                Female
+              </label>
+            </div>
+            {/* Add more gender options if needed */}
+          </div>
+          {touched.gender && errors.gender && (
+            <span className="text-sm text-red-600">{errors.gender}</span>
           )}
         </div>
         <div className="flex flex-col border-t-transparent border-2 px-2 py-1 focus-within:border-primary">
