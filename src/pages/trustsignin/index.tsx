@@ -13,7 +13,7 @@ import { toast } from "react-toastify";
 import { getAuthenticatedRouteCheck } from "@/authguard/authguard";
 import { useGoogleLogin } from "@react-oauth/google";
 import { useSession, signIn, signOut } from "next-auth/react";
-import { useUser } from "@/context/user";
+// import { useUser } from "@/context/user";
 
 const initialValue: {
   email: string;
@@ -41,7 +41,7 @@ const TrustLogin = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const token = Cookies.get("access_token");
-  const { setUserData, setAccessToken } = useUser();
+  // const { setUserData, setAccessToken } = useUser();
 
   const { data: session } = useSession();
 
@@ -128,14 +128,14 @@ const TrustLogin = () => {
               console.log(data);
 
               if (data.message == "login sucessfull") {
-                setUserData(data);
+                // setUserData(data);
                 Cookies.set("user_data", data.token, {
                   expires: 7,
                   path: "/",
                 });
-                setAccessToken(data.token);
+                // setAccessToken(data.token);
                 if (data.user.role === "admin") {
-                  setUserData(data);
+                  // setUserData(data);
                   Cookies.set("user_data", data.token, {
                     expires: 7,
                     path: "/",

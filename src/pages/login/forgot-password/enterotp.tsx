@@ -5,7 +5,7 @@ import OtpInput from "react-otp-input";
 import * as Yup from "yup";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
-import { useUser } from "@/context/user";
+// import { useUser } from "@/context/user";
 
 const errorToast = (errorMessage: string) => toast.error(errorMessage);
 const successToast = (successMessage: string) => toast.success(successMessage);
@@ -14,9 +14,9 @@ const EnterOtp = () => {
   const [resendTimer, setResendTimer] = useState(2);
   const [submitted, setSubmitted] = useState(false);
   const router = useRouter();
-  const { forgotPasswordEmail } = useUser();
+  // const { forgotPasswordEmail } = useUser();
 
-  console.log("otpEmail>>", forgotPasswordEmail);
+  // console.log("otpEmail>>", forgotPasswordEmail);
 
   const validationSchema = Yup.object().shape({
     otp: Yup.string()

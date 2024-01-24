@@ -1,9 +1,9 @@
 import { getAuthenticatedRouteCheck } from "@/authguard/authguard";
 import AdminFrame from "@/components/AdminFrame";
-import { useUser } from "@/context/user";
+// import { useUser } from "@/context/user";
 
 const Admin = () => {
-  const { userData } = useUser();
+  // const { userData } = useUser();
   // console.log("adminUser", userData?.user.username);
 
   return (

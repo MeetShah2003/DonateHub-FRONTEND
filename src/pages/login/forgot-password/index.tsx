@@ -4,7 +4,7 @@ import { useFormik } from "formik";
 import { useRouter } from "next/router";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
-import { useUser } from "@/context/user";
+// import { useUser } from "@/context/user";
 import { useEffect } from "react";
 
 const errorToast = (errorMessage: string) => toast.error(errorMessage);
@@ -19,7 +19,7 @@ const forgotPasswordSchema = Yup.object().shape({
 
 const ForgotPassword = () => {
   const router = useRouter();
-  const { forgotPasswordEmail, setForgotPasswordEmail } = useUser();
+  // const { forgotPasswordEmail, setForgotPasswordEmail } = useUser();
   const { handleChange, handleSubmit, handleBlur, touched, errors } = useFormik(
     {
       initialValues: {

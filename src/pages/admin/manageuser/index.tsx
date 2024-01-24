@@ -5,7 +5,7 @@ import EditIcon from "@/icons/EditIcon";
 import { dummyUsers } from "@/consts";
 import ReactPaginate from "react-paginate";
 import ArrowIcon from "@/icons/ArrowIcon";
-import { useUser } from "@/context/user";
+// import { useUser } from "@/context/user";
 import Cookies from "js-cookie";
 import { UserData } from "@/types/types";
 
