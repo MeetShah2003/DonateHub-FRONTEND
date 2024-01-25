@@ -43,7 +43,7 @@ const LogIn = () => {
   const [showPassword, setShowPassword] = useState(false);
   const token = Cookies.get("access_token");
   // const { setUserData, setAccessToken } = useUser();
-  const { login, isAuthenticated, logout, user } = useAuth();
+  const { login, isAuthenticated, user } = useAuth();
 
   const { data: session } = useSession();
 
@@ -111,7 +111,6 @@ const LogIn = () => {
   });
 
   useEffect(() => {
-    // This effect will run whenever the isAuthenticated state changes
     if (isAuthenticated && user && !user.isBlocked) {
       console.log("Login successful!", isAuthenticated);
       if (user.role === "admin") {

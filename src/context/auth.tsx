@@ -11,7 +11,7 @@ import { toast } from "react-toastify";
 
 interface AuthContextType {
   isAuthenticated: boolean;
-  user: any; // Replace 'any' with the actual type of your user object
+  user: any;
   token: string | null;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
@@ -25,7 +25,11 @@ const successToast = (successMessage: string) => toast.success(successMessage);
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [authState, setAuthState] = useState({
+  const [authState, setAuthState] = useState<{
+    isAuthenticated: boolean;
+    user: any;
+    token: string | null;
+  }>({
     isAuthenticated: false,
     user: null,
     token: null,
@@ -50,7 +54,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          email, // Change 'username' to 'email' here
+          email,
           password,
         }),
       });
@@ -62,7 +66,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       const { user, token, message } = await response.json();
       return { user, token, message };
     } catch (error) {
-      console.error("Login failed:", error.message);
+      console.error("Login failed:", error);
       throw new Error("Login failed");
     }
   };
