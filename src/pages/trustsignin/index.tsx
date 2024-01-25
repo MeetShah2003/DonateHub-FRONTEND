@@ -7,13 +7,13 @@ import GithubIcon from "@/icons/GithubIcon";
 import * as Yup from "yup";
 import HidePasswordIcon from "@/icons/HidePasswordIcon";
 import ShowPasswordIcon from "@/icons/ShowPasswordIcon";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import { getAuthenticatedRouteCheck } from "@/authguard/authguard";
 import { useGoogleLogin } from "@react-oauth/google";
 import { useSession, signIn, signOut } from "next-auth/react";
-// import { useUser } from "@/context/user";
+import { useAuth } from "@/context/auth";
 
 const initialValue: {
   email: string;
@@ -41,7 +41,7 @@ const TrustLogin = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const token = Cookies.get("access_token");
-  // const { setUserData, setAccessToken } = useUser();
+  const { isAuthenticated, login, user } = useAuth();
 
   const { data: session } = useSession();
 
@@ -109,65 +109,86 @@ const TrustLogin = () => {
   //       }
   //     },
   //   });
+
+  useEffect(() => {
+    if (isAuthenticated && user && !user.isBlocked) {
+      console.log("Login successful!", isAuthenticated);
+      if (user.role === "admin") {
+        router.push("/admin");
+      } else {
+        router.push("/dashboard");
+      }
+      successToast(`Welcome ${user.firstName} ${user.lastName}`);
+    } else {
+      if (user?.isBlocked) {
+        errorToast("You Are Blocked");
+      }
+    }
+  }, [isAuthenticated, user]);
   const { handleChange, handleSubmit, handleBlur, errors, touched } = useFormik(
     {
       initialValues: initialValue,
       validationSchema: loginSchema,
       onSubmit: async (values) => {
-        try {
-          fetch("http://localhost:8090/api/login", {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(values),
-          })
-            .then((res) => res.json())
-            .then((data) => {
-              console.log(data);
+        // try {
+        //   fetch("http://localhost:8090/api/login", {
+        //     method: "POST",
+        //     headers: {
+        //       Authorization: `Bearer ${token}`,
+        //       "Content-Type": "application/json",
+        //     },
+        //     body: JSON.stringify(values),
+        //   })
+        //     .then((res) => res.json())
+        //     .then((data) => {
+        //       console.log(data);
 
-              if (data.message == "login sucessfull") {
-                // setUserData(data);
-                Cookies.set("user_data", data.token, {
-                  expires: 7,
-                  path: "/",
-                });
-                // setAccessToken(data.token);
-                if (data.user.role === "admin") {
-                  // setUserData(data);
-                  Cookies.set("user_data", data.token, {
-                    expires: 7,
-                    path: "/",
-                  });
-                  successToast(`Welcome back ${data.user.firstName}`);
-                  // Cookies.set("access_token", data.token, {
-                  //   expires: 7,
-                  //   path: "/",
-                  // });
-                  setTimeout(() => {
-                    router.push("/admin");
-                  }, 3000);
-                } else {
-                  successToast(`Welcome back ${data.user.firstName}`);
-                  Cookies.set("user_data", data.token, {
-                    expires: 7,
-                    path: "/",
-                  });
-                  setTimeout(() => {
-                    router.push("/dashboard");
-                  }, 3000);
-                }
-              } else {
-                if (data.message == "user not found") {
-                  errorToast("Email not found");
-                } else if (data.message == "invalid password") {
-                  errorToast("Invalid password");
-                } else {
-                  errorToast("Login failed");
-                }
-              }
-            });
+        //       if (data.message == "login sucessfull") {
+        //         // setUserData(data);
+        //         Cookies.set("user_data", data.token, {
+        //           expires: 7,
+        //           path: "/",
+        //         });
+        //         // setAccessToken(data.token);
+        //         if (data.user.role === "admin") {
+        //           // setUserData(data);
+        //           Cookies.set("user_data", data.token, {
+        //             expires: 7,
+        //             path: "/",
+        //           });
+        //           successToast(`Welcome back ${data.user.firstName}`);
+        //           // Cookies.set("access_token", data.token, {
+        //           //   expires: 7,
+        //           //   path: "/",
+        //           // });
+        //           setTimeout(() => {
+        //             router.push("/admin");
+        //           }, 3000);
+        //         } else {
+        //           successToast(`Welcome back ${data.user.firstName}`);
+        //           Cookies.set("user_data", data.token, {
+        //             expires: 7,
+        //             path: "/",
+        //           });
+        //           setTimeout(() => {
+        //             router.push("/dashboard");
+        //           }, 3000);
+        //         }
+        //       } else {
+        //         if (data.message == "user not found") {
+        //           errorToast("Email not found");
+        //         } else if (data.message == "invalid password") {
+        //           errorToast("Invalid password");
+        //         } else {
+        //           errorToast("Login failed");
+        //         }
+        //       }
+        //     });
+        // } catch (error) {
+        //   console.log(error);
+        // }
+        try {
+          await login(values.email, values.password);
         } catch (error) {
           console.log(error);
         }

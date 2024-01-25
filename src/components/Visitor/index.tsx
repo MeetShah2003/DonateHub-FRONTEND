@@ -42,30 +42,30 @@ const NAV_MENUES: {
     path: "/aboutus",
     icon: <AboutUsIcon />,
   },
-  {
-    id: 5,
-    menu: "Logout",
-    path: "/aboutus",
-    icon: <LogoutIcon />,
-  },
+  // {
+  //   id: 5,
+  //   menu: "Logout",
+  //   path: "/aboutus",
+  //   icon: <LogoutIcon />,
+  // },
 ];
 
 const Visitor = () => {
   // const { isLogin } = useUser();
-  const [isLogin, setIsLogin] = useState(false);
+  // const [isLogin, setIsLogin] = useState(false);
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
   const router = useRouter();
   const { logout, isAuthenticated } = useAuth();
-  useEffect(() => {
-    const userDataToken = Cookies.get("user_data");
-    if (userDataToken) {
-      setIsLogin(true);
-    } else {
-      setIsLogin(false);
-    }
-  }, []);
+  // useEffect(() => {
+  //   const userDataToken = Cookies.get("user_data");
+  //   if (userDataToken) {
+  //     setIsLogin(true);
+  //   } else {
+  //     setIsLogin(false);
+  //   }
+  // }, []);
 
-  console.log(isLogin);
+  // console.log(isLogin);
 
   return (
     <div>
@@ -81,10 +81,11 @@ const Visitor = () => {
           </div>
 
           <div className="font-bold text-3xl text-primary">DH</div>
+
           <div className="hidden sm:flex">
             <ul className="gap-5 lg:gap-7 sm:flex">
               {NAV_MENUES.map(({ id, menu, path }) => {
-                if (menu === "Profile" && !isLogin) {
+                if (menu === "Profile" && !isAuthenticated) {
                   return null;
                 }
                 return (
@@ -101,13 +102,14 @@ const Visitor = () => {
               })}
             </ul>
           </div>
+
           {!isAuthenticated ? (
             <div className="hidden sm:flex gap-5">
               <button
                 onClick={() => {
                   router.push("/login");
                 }}
-                className=" rounded-md text-black border-2 py-2 px-5 font-semibold"
+                className="rounded-md text-black border-2 py-2 px-5 font-semibold"
               >
                 Sign in
               </button>
@@ -126,7 +128,7 @@ const Visitor = () => {
                 onClick={() => {
                   logout();
                 }}
-                className=" rounded-md text-black border-2 py-2 px-5 font-semibold"
+                className="rounded-md text-black border-2 py-2 px-5 font-semibold"
               >
                 Logout
               </button>
@@ -134,6 +136,7 @@ const Visitor = () => {
           )}
         </nav>
       </div>
+
       <div className="relative w-full sm:hidden">
         <div
           className={`absolute bg-white border ${
@@ -144,6 +147,9 @@ const Visitor = () => {
         >
           <ul className="flex flex-col justify-center">
             {NAV_MENUES.map(({ id, menu, path, icon }) => {
+              if (menu === "Profile" && !isAuthenticated) {
+                return null;
+              }
               return (
                 <li
                   key={id}
@@ -154,8 +160,20 @@ const Visitor = () => {
                 </li>
               );
             })}
+
+            <li
+              onClick={() => {
+                logout();
+                console.log(isAuthenticated);
+              }}
+              className="text-base px-5 py-4 font-medium flex gap-3"
+            >
+              <div>
+                <LogoutIcon />
+              </div>
+              <p>Logout</p>
+            </li>
           </ul>
-          {/* <button className="px-5">signin</button> */}
         </div>
       </div>
     </div>
