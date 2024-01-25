@@ -1,8 +1,8 @@
 import { getAuthenticatedRouteCheck } from "@/authguard/authguard";
-import UserFrame from "@/components/Visitor";
+import Visitor from "@/components/Visitor";
 
 const Dashboard = () => {
-  return <UserFrame />;
+  return <Visitor />;
 };
 
 export const getServerSideProps = getAuthenticatedRouteCheck;
