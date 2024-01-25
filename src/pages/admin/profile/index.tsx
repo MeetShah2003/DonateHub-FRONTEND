@@ -5,15 +5,32 @@ import Image from "next/image";
 import AdminFrame from "@/components/AdminFrame";
 import { getAuthenticatedRouteCheck } from "@/authguard/authguard";
 import * as Yup from "yup";
-import React, { useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import Cookies from "js-cookie";
+import { useAuth } from "@/context/auth";
 
 const AdminProfile = () => {
   //   const { userData } = useUser();
   const [file, setFile] = useState<File | null>(null);
+  const [userData, setUserData] = useState({});
+  const { user } = useAuth();
+
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
+
+  setUserData(user);
+  console.log(userData);
 
   const profileSchema = Yup.object().shape({
     username: Yup.string().required("Username is required"),
+    password: Yup.string()
+      .min(8, "Password must be at least 8 characters")
+      .matches(
+        /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).*$/,
+        "Password must contain at least one uppercase letter, one lowercase letter, and one number"
+      )
+      .required("Password is required"),
     email: Yup.string()
       .trim()
       .email("Invalid email")
@@ -31,6 +48,7 @@ const AdminProfile = () => {
   } = useFormik({
     initialValues: {
       username: "",
+      password: "",
       email: "",
     },
     validationSchema: profileSchema,
@@ -93,6 +111,22 @@ const AdminProfile = () => {
             <span className="text-sm text-red-600">{errors.username}</span>
           )}
         </div>
+        <div className="flex flex-col border-2 px-2 py-1 border-t-transparent focus-within:border-primary">
+          <label className="pb-1 text-sm font-medium">Password</label>
+          <input
+            id="password"
+            name="password"
+            type="text"
+            value={values.password}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            className="outline-none tracking-wider"
+            placeholder="Your Username"
+          />
+          {touched.password && errors.password && (
+            <span className="text-sm text-red-600">{errors.password}</span>
+          )}
+        </div>
 
         <div className="flex flex-col border-2 border-t-transparent px-2 py-1 rounded-b-lg focus-within:border-primary">
           <label className="pb-1 text-sm font-medium">Email</label>
@@ -100,6 +134,7 @@ const AdminProfile = () => {
             id="email"
             name="email"
             type="email"
+            disabled
             value={values.email}
             onChange={handleChange}
             onBlur={handleBlur}
