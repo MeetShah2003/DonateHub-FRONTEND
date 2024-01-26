@@ -14,7 +14,7 @@ const ManageUser = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
   const [allUserData, setAllUserData] = useState<UserData[]>([]);
-  const access_token = Cookies.get("user_data");
+  const access_token = Cookies.get("access_token");
 
   const onPageChange = ({ selected }: any) => {
     setCurrentPage(selected);

@@ -9,6 +9,8 @@ import ContactUsIcon from "@/icons/ContactUsIcon";
 import AboutUsIcon from "@/icons/AboutUsIcon";
 import LogoutIcon from "@/icons/LogoutIcon";
 import ProfileIcon from "@/icons/ProfileIcon";
+import HeaderBgImage from "@/../public/images/headerBgImage.png";
+import Image from "next/image";
 
 import CloseHamburgerIcon from "@/icons/CloseHamburgerIcon";
 import { useAuth } from "@/context/auth";
@@ -175,6 +177,10 @@ const Visitor = () => {
             </li>
           </ul>
         </div>
+      </div>
+
+      <div className="h-screen">
+        <Image src={HeaderBgImage} alt="headerImage" />
       </div>
     </div>
   );

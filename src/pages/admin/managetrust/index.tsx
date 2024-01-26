@@ -14,14 +14,14 @@ const ManageTrust = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
   const [allTrustData, setAllTrustData] = useState<TrustData[]>([]);
-  const access_token = Cookies.get("user_data");
+  const access_token = Cookies.get("access_token");
 
   const onPageChange = ({ selected }: any) => {
     setCurrentPage(selected);
   };
 
   useEffect(() => {
-    fetch("http://localhost:8090/admin/allTrusts", {
+    fetch("http://localhost:8090/admin/allTrustsV", {
       method: "GET",
       headers: {
         Authorization: `Bearer ${access_token}`,
@@ -30,15 +30,15 @@ const ManageTrust = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data["allTrusts"]);
-        setAllTrustData(data["allTrusts"]);
+        console.log(data["verifiedTrusts"]);
+        setAllTrustData(data["verifiedTrusts"]);
       });
   }, []);
 
   console.log(allTrustData);
 
   const offset = currentPage * itemsPerPage;
-  const filteredUsers = allTrustData.filter((user) =>
+  const filteredUsers = allTrustData?.filter((user) =>
     Object.values(user).some((value) =>
       value.toString().toLowerCase().includes(searchQuery.toLowerCase())
     )
@@ -129,7 +129,7 @@ const ManageTrust = () => {
         }
         breakLabel={<div className="px-4 py-2 border rounded">...</div>}
         breakClassName={"break-me"}
-        pageCount={Math.ceil(filteredUsers.length / itemsPerPage)}
+        pageCount={Math.ceil(filteredUsers?.length / itemsPerPage)}
         marginPagesDisplayed={5}
         pageRangeDisplayed={5}
         onPageChange={onPageChange}
