@@ -13,14 +13,31 @@ const AdminProfile = () => {
   //   const { userData } = useUser();
   const [file, setFile] = useState<File | null>(null);
   const [userData, setUserData] = useState({});
-  const { user } = useAuth();
+  const { user, isAuthenticated, token } = useAuth();
 
+  const getAdminProfile = () => {
+    fetch("http://localhost:8090/admin/adminProfile", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        // console.log(data["myProfile"]);
+        setUserData(data["myProfile"]);
+      });
+  };
+
+  //
   useEffect(() => {
-    console.log(user);
-  }, [user]);
+    getAdminProfile();
+  }, []);
 
-  setUserData(user);
-  console.log(userData);
+  // console.log(userData);
 
   const profileSchema = Yup.object().shape({
     username: Yup.string().required("Username is required"),

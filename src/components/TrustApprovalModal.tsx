@@ -1,17 +1,30 @@
-const TrustApprovalModal = () => {
+import { useRouter } from "next/router";
+const TrustApprovalModal: React.FC<{
+  title: string;
+  description: string;
+  trustImage: string;
+  onVerify: () => void;
+}> = ({ description, title, trustImage, onVerify }, index) => {
+  console.log(title);
   return (
-    <div className="w-full border rounded-md flex">
-      <div className="m-2">
-        <img
-          className="rounded-md"
-          src="https://tse1.mm.bing.net/th?id=OIP.roeJGz3eeyhxK3XRQ0LxpQHaFj&pid=Api&rs=1&c=1&qlt=95&w=129&h=97"
-        ></img>
+    <div
+      key={index}
+      className="w-full border-2 shadow-sm rounded-md flex justify-between items-center pr-5"
+    >
+      <div className="flex">
+        <div className="m-2">
+          <img className="rounded-md h-14 w-fit" src={trustImage}></img>
+        </div>
+        <div className="flex flex-col m-2">
+          <p className="text-2xl font-semibold text-gray-600">{title}</p>
+          <p className="text-base font-semibold text-gray-600">{description}</p>
+        </div>
       </div>
-      <div className="flex flex-col m-2">
-        <p className="text-2xl font-semibold text-gray-600">Test trust</p>
-        <p className="text-base font-semibold text-gray-600">Description</p>
+      <div className="bg-primary text-white py-2 px-5 rounded-sm">
+        <button onClick={onVerify} className="font-medium">
+          Verify
+        </button>
       </div>
-      <div></div>
     </div>
   );
 };
