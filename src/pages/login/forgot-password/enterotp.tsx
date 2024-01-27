@@ -5,6 +5,7 @@ import OtpInput from "react-otp-input";
 import * as Yup from "yup";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
+import { BACKEND_BASE_URL } from "@/consts";
 // import { useUser } from "@/context/user";
 
 const errorToast = (errorMessage: string) => toast.error(errorMessage);
@@ -33,7 +34,7 @@ const EnterOtp = () => {
     onSubmit: (values) => {
       try {
         setSubmitted(true);
-        fetch(`http://localhost:8090/api/verify`, {
+        fetch(`${BACKEND_BASE_URL}/api/verify`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(values),
@@ -71,7 +72,7 @@ const EnterOtp = () => {
 
   const handleResendOtp = () => {
     setResendTimer(2);
-    fetch(`http://localhost:8090/api/resendEmail`, {
+    fetch(`${BACKEND_BASE_URL}/api/resendEmail`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${forgotPasswordEmail}`,

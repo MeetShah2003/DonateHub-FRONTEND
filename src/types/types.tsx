@@ -1,10 +1,12 @@
 export type UserData = {
-  id: string;
+  _id: string;
   firstName: string;
   lastName: string;
   email: string;
   gender: string;
   password: string;
+  isBlocked: boolean;
+  role: "user";
 };
 
 export type TrustData = {
@@ -18,11 +20,9 @@ export type TrustData = {
   contactNo: number;
   abouttrust: string;
   password: string;
-  address: {
-    address: string;
-    city: string;
-    state: string;
-    pincode: number;
-  };
-  role: string;
+  address: string;
+  city: string;
+  state: string;
+  pincode: number;
+  role: "trust";
 };

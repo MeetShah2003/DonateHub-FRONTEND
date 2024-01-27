@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import AdminFrame from "@/components/AdminFrame";
 import BlockIcon from "@/icons/BlockIcon";
 import EditIcon from "@/icons/EditIcon";
-import { dummyUsers } from "@/consts";
+import { BACKEND_BASE_URL, dummyUsers } from "@/consts";
 import ReactPaginate from "react-paginate";
 import ArrowIcon from "@/icons/ArrowIcon";
 import { trustData } from "@/consts";
@@ -20,7 +20,7 @@ const ManageTrust = () => {
     setCurrentPage(selected);
   };
   useEffect(() => {
-    fetch("http://localhost:8090/admin/allTrustsV", {
+    fetch(`${BACKEND_BASE_URL}/admin/allTrustsV`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${access_token}`,
@@ -35,6 +35,48 @@ const ManageTrust = () => {
   }, []);
 
   console.log(allTrustData);
+
+  const handleBlock = async (_id: string) => {
+    try {
+      const response = await fetch(
+        `${BACKEND_BASE_URL}/admin/blockTrust/${_id}`,
+        {
+          method: "PATCH",
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.ok) {
+        // getAllUserData();
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  const handleUnblock = async (_id: string) => {
+    try {
+      const response = await fetch(
+        `${BACKEND_BASE_URL}/admin/unBlockUser/${_id}`,
+        {
+          method: "PATCH",
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.ok) {
+        // getAllUserData();
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   const offset = currentPage * itemsPerPage;
   const filteredUsers = allTrustData?.filter((user) =>
@@ -99,7 +141,7 @@ const ManageTrust = () => {
                                     Edit
                                   </span>
                                 </button>
-                              </div>
+                              </div>{}
                               <div className="flex w-full flex-row items-center justify-center">
                                 <button className="flex flex-row items-center justify-center gap-1 rounded-md text-base font-normal leading-5 text-danger-100">
                                   <BlockIcon />

@@ -5,6 +5,7 @@ import { useFormik } from "formik";
 import { useState } from "react";
 import * as Yup from "yup";
 import { useRouter } from "next/router";
+import { BACKEND_BASE_URL } from "@/consts";
 // import { useUser } from "@/context/user";
 
 const validationSchema = Yup.object().shape({
@@ -29,7 +30,7 @@ const Password = () => {
       validationSchema: validationSchema,
       onSubmit: (formData) => {
         const { confirmPassword, ...passwordData } = formData;
-        fetch(`http://localhost:8090/api/updatePassword`, {
+        fetch(`${BACKEND_BASE_URL}/api/updatePassword`, {
           method: "PATCH",
           headers: {
             // Authorization: `Bearer ${forgotPasswordEmail}`,

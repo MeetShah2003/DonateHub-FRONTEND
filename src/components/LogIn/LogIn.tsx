@@ -14,6 +14,7 @@ import { getAuthenticatedRouteCheck } from "@/authguard/authguard";
 import { useGoogleLogin } from "@react-oauth/google";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useAuth } from "@/context/auth";
+import { BACKEND_BASE_URL } from "@/consts";
 // import { useUser } from "@/context/user";
 
 const initialValue: {
@@ -66,7 +67,7 @@ const LogIn = () => {
           .then((response) => response.json())
           .then((userInfo) => {
             if (userInfo) {
-              fetch(`http://localhost:8090/api/googleData`, {
+              fetch(`${BACKEND_BASE_URL}/api/googleData`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(userInfo),
@@ -188,7 +189,7 @@ const LogIn = () => {
         //         }
         //       }
         //     });
-        // } catch (error) {
+        // } catch (error) {a
         //   console.log(error);
         // }
         try {

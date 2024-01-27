@@ -8,6 +8,7 @@ import * as Yup from "yup";
 import React, { use, useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { useAuth } from "@/context/auth";
+import { BACKEND_BASE_URL } from "@/consts";
 
 const AdminProfile = () => {
   //   const { userData } = useUser();
@@ -16,7 +17,7 @@ const AdminProfile = () => {
   const { user, isAuthenticated, token } = useAuth();
 
   const getAdminProfile = () => {
-    fetch("http://localhost:8090/admin/adminProfile", {
+    fetch(`${BACKEND_BASE_URL}/admin/adminProfile`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

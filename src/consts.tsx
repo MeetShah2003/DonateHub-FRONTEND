@@ -4,10 +4,11 @@ export const TRUST_CATAGORY_OPTIONS: {
 }[] = [
   { id: 1, option: { label: "Select Catagory", value: "" } },
   { id: 2, option: { label: "Education", value: "education" } },
-  { id: 3, option: { label: "HealthCare", value: "healthcare" } },
-  { id: 4, option: { label: "technology", value: "Technology" } },
-  { id: 5, option: { label: "food", value: "Food" } },
-  { id: 6, option: { label: "financial", value: "Financial" } },
+  { id: 3, option: { label: "healthcare", value: "healthcare" } },
+  { id: 4, option: { label: "technology", value: "technology" } },
+  { id: 5, option: { label: "food", value: "food" } },
+  { id: 6, option: { label: "financial", value: "financial" } },
+  { id: 6, option: { label: "clothing", value: "clothing" } },
 ];
 
 // export const CITY: {
@@ -305,3 +306,6 @@ export const trustData = [
     id: "10",
   },
 ];
+
+export const FRONTEND_BASE_URL = "http://localhost:3000";
+export const BACKEND_BASE_URL = "http://localhost:8090";

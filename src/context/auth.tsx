@@ -8,6 +8,7 @@ import React, {
 } from "react";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
+import { BACKEND_BASE_URL } from "@/consts";
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -38,45 +39,17 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   useEffect(() => {
     const storedToken = Cookies.get("access_token");
     if (storedToken) {
-      // If a token is found, initiate a request to get user data
-      const fetchUser = async () => {
-        try {
-          const response = await fetch("http://localhost:8090/api/myProfile", {
-            headers: {
-              Authorization: `Bearer ${storedToken}`,
-            },
-          });
-
-          if (response.ok) {
-            // If the request is successful, update the authentication state
-            const user = await response.json();
-            setAuthState({
-              isAuthenticated: true,
-              user,
-              token: storedToken,
-            });
-          } else {
-            // Handle error if the request fails
-            throw new Error("Failed to fetch user data");
-          }
-        } catch (error) {
-          // Log error and update authentication state accordingly
-          console.error("Error fetching user data:", error);
-          setAuthState({
-            isAuthenticated: false,
-            user: null,
-            token: null,
-          });
-        }
-      };
-
-      fetchUser(); // Trigger the fetchUser function
+      setAuthState({
+        isAuthenticated: true,
+        user: null,
+        token: storedToken,
+      });
     }
   }, [Cookies.get("access_token")]);
 
   const apiLogin = async (email: string, password: string) => {
     try {
-      const response = await fetch("http://localhost:8090/api/login", {
+      const response = await fetch(`${BACKEND_BASE_URL}/api/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
