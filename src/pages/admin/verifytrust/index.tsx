@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/context/auth";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
+import { BACKEND_BASE_URL } from "@/consts";
 
 const VerifyTrust = () => {
   const { isAuthenticated, token } = useAuth();
@@ -15,7 +16,7 @@ const VerifyTrust = () => {
 
   const getPendingTrust = async () => {
     try {
-      const response = await fetch("http://localhost:8090/admin/allTrustsU", {
+      const response = await fetch(`${BACKEND_BASE_URL}/admin/allTrustsU`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,

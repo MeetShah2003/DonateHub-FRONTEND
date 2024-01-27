@@ -7,6 +7,7 @@ import HidePasswordIcon from "@/icons/HidePasswordIcon";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
+import { BACKEND_BASE_URL } from "@/consts";
 
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -61,7 +62,7 @@ const SignUp = () => {
       onSubmit: async (values) => {
         const { confirmPassword, ...data } = values;
         try {
-          fetch(`http://localhost:8090/api/signup`, {
+          fetch(`${BACKEND_BASE_URL}/api/signup`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data),

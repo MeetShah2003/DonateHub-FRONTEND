@@ -1,4 +1,5 @@
 import AdminFrame from "@/components/AdminFrame";
+import { BACKEND_BASE_URL } from "@/consts";
 import { useAuth } from "@/context/auth";
 import { useRouter } from "next/router";
 
@@ -7,7 +8,7 @@ const SingleTrust = () => {
   const { token } = useAuth();
 
   const onAccept = async () => {
-    fetch(`http://localhost:8090/admin/acceptStatus/${query.trustId}`, {
+    fetch(`${BACKEND_BASE_URL}/admin/acceptStatus/${query.trustId}`, {
       method: "PATCH",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -22,7 +23,7 @@ const SingleTrust = () => {
       });
   };
   const onReject = () => {
-    fetch(`http://localhost:8090/admin/rejectStatus/${query.trustId}`, {
+    fetch(`${BACKEND_BASE_URL}/admin/rejectStatus/${query.trustId}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,

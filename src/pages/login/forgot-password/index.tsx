@@ -6,6 +6,7 @@ import * as Yup from "yup";
 import { toast } from "react-toastify";
 // import { useUser } from "@/context/user";
 import { useEffect } from "react";
+import { BACKEND_BASE_URL } from "@/consts";
 
 const errorToast = (errorMessage: string) => toast.error(errorMessage);
 const successToast = (successMessage: string) => toast.success(successMessage);
@@ -28,7 +29,7 @@ const ForgotPassword = () => {
       validationSchema: forgotPasswordSchema,
       onSubmit: (values) => {
         try {
-          fetch(`http://localhost:8090/api/userEmail`, {
+          fetch(`${BACKEND_BASE_URL}/api/userEmail`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(values),

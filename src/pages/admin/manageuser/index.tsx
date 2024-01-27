@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import AdminFrame from "@/components/AdminFrame";
 import BlockIcon from "@/icons/BlockIcon";
 import EditIcon from "@/icons/EditIcon";
-import { dummyUsers } from "@/consts";
+import { BACKEND_BASE_URL, dummyUsers } from "@/consts";
 import ReactPaginate from "react-paginate";
 import ArrowIcon from "@/icons/ArrowIcon";
 // import { useUser } from "@/context/user";
@@ -20,8 +20,50 @@ const ManageUser = () => {
     setCurrentPage(selected);
   };
 
+  const handleBlock = async (_id: string) => {
+    try {
+      const response = await fetch(
+        `${BACKEND_BASE_URL}/admin/blockUser/${_id}`,
+        {
+          method: "PATCH",
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.ok) {
+        getAllUserData();
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  const handleUnblock = async (_id: string) => {
+    try {
+      const response = await fetch(
+        `${BACKEND_BASE_URL}/admin/unBlockUser/${_id}`,
+        {
+          method: "PATCH",
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.ok) {
+        getAllUserData();
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
   const getAllUserData = () => {
-    fetch("http://localhost:8090/admin/allUsers", {
+    fetch(`${BACKEND_BASE_URL}/admin/allUsers`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${access_token}`,
@@ -79,7 +121,10 @@ const ManageUser = () => {
                 {currentItems &&
                   currentItems.length > 0 &&
                   currentItems.map(
-                    ({ firstName, email, gender, lastName }, index) => {
+                    (
+                      { firstName, email, gender, lastName, isBlocked, _id },
+                      index
+                    ) => {
                       return (
                         <tr
                           className="hover:bg-gray-100 transition"
@@ -102,14 +147,35 @@ const ManageUser = () => {
                                   </span>
                                 </button>
                               </div>
-                              <div className="flex w-full flex-row items-center justify-center">
-                                <button className="flex flex-row items-center justify-center gap-1 rounded-md text-base font-normal leading-5 text-danger-100">
-                                  <BlockIcon />
-                                  <span className="hidden text-[#C80707] font-inter text-base font-normal leading-5 text-danger-100 sm:block">
-                                    Block
-                                  </span>
-                                </button>
-                              </div>
+                              {isBlocked ? (
+                                <div
+                                  onClick={() => {
+                                    handleUnblock(_id);
+                                  }}
+                                  className="flex w-full flex-row items-center justify-center"
+                                >
+                                  <button className="flex flex-row items-center justify-center gap-1 rounded-md text-base font-normal leading-5 text-danger-100">
+                                    <BlockIcon />
+                                    <span className="hidden text-[#C80707] font-inter text-base font-normal leading-5 text-danger-100 sm:block">
+                                      Unblock
+                                    </span>
+                                  </button>
+                                </div>
+                              ) : (
+                                <div className="flex w-full flex-row items-center justify-center">
+                                  <button
+                                    onClick={() => {
+                                      handleBlock(_id);
+                                    }}
+                                    className="flex flex-row items-center justify-center gap-1 rounded-md text-base font-normal leading-5 text-danger-100"
+                                  >
+                                    <BlockIcon />
+                                    <span className="hidden text-[#C80707] font-inter text-base font-normal leading-5 text-danger-100 sm:block">
+                                      Block
+                                    </span>
+                                  </button>
+                                </div>
+                              )}
                             </div>
                           </td>
                         </tr>

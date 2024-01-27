@@ -5,19 +5,47 @@ import * as Yup from "yup";
 import HidePasswordIcon from "@/icons/HidePasswordIcon";
 import ShowPasswordIcon from "@/icons/ShowPasswordIcon";
 import React, { ChangeEvent, ReactNode, useState } from "react";
-import { CITY_AND_STATE, TRUST_CATAGORY_OPTIONS } from "@/consts";
+import {
+  BACKEND_BASE_URL,
+  CITY_AND_STATE,
+  TRUST_CATAGORY_OPTIONS,
+} from "@/consts";
 import { toast } from "react-toastify";
-import { v4 as uuidv4 } from "uuid";
+import { v4 as uuidv4, v4 } from "uuid";
 import Image from "next/image";
 import { TrustData } from "@/types/types";
+import { storage } from "../../firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const TrustSignup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [selectedState, setSelectedState] = useState("");
+  const [image, setImage] = useState(null);
   const [trustId, setTrustId] = useState(uuidv4());
   const [cities, setCities] = useState<{ label: string; value: string }[]>([
     { label: "Select City", value: "" },
   ]);
+
+  const handleOnChange = async (e: any) => {
+    if (e.target.files[0]) {
+      const uploadedImage = e.target.files[0];
+      const imageRef = ref(storage, `trust_logos/${v4()}`);
+
+      try {
+        await uploadBytes(imageRef, uploadedImage);
+        const imageUrl = await getDownloadURL(imageRef);
+
+        if (imageUrl) {
+          console.log(imageUrl);
+          successToast("Image Upload Successfully");
+          setFieldValue("trustlogo", imageUrl);
+        }
+      } catch (error) {
+        errorToast("Image Upload Failed");
+      }
+    }
+  };
+
   const [currentStep, setCurrentStep] = useState(1);
   const initialValue: TrustData = {
     id: trustId,
@@ -31,18 +59,16 @@ const TrustSignup = () => {
     abouttrust: "",
     password: "",
     role: "trust",
-    address: {
-      address: "",
-      city: "",
-      pincode: 0,
-      state: "",
-    },
+    address: "",
+    city: "",
+    pincode: 0,
+    state: "",
   };
 
   const trustDetailSchema = Yup.object().shape({
-    trustname: Yup.string().trim().required("Trust Name is required"),
+    trustName: Yup.string().trim().required("Trust Name is required"),
     trustlogo: Yup.string().trim().required("Trust Logo is required"),
-    trustemail: Yup.string()
+    email: Yup.string()
       .trim()
       .email("Invalid email")
       .required("Email is required"),
@@ -50,8 +76,8 @@ const TrustSignup = () => {
     creationdate: Yup.date()
       .required("Creation Date is required")
       .max(new Date(), "Creation Date must be in the past"),
-    catagory: Yup.string().trim().required("Category is required"),
-    contactno: Yup.number().required("Contact Number is required"),
+    category: Yup.string().trim().required("Category is required"),
+    contactNo: Yup.number().required("Contact Number is required"),
     abouttrust: Yup.string().trim().required("About Trust is required"),
     password: Yup.string()
       .min(8, "Password must be at least 8 characters")
@@ -64,16 +90,14 @@ const TrustSignup = () => {
       .trim()
       .oneOf(["trust"], "Invalid Role")
       .required("Role is required"),
-    address: Yup.object().shape({
-      address: Yup.string().trim().required("Address is required"),
-      city: Yup.string().trim().required("City is required"),
-      state: Yup.string().trim().required("State is required"),
-      pincode: Yup.number()
-        .required("Pincode is required")
-        .test("is-six-digits", "Pincode must be exactly 6 digits", (value) =>
-          value ? /^\d{6}$/.test(value.toString()) : true
-        ),
-    }),
+    address: Yup.string().trim().required("Address is required"),
+    city: Yup.string().trim().required("City is required"),
+    state: Yup.string().trim().required("State is required"),
+    pincode: Yup.number()
+      .required("Pincode is required")
+      .test("is-six-digits", "Pincode must be exactly 6 digits", (value) =>
+        value ? /^\d{6}$/.test(value.toString()) : true
+      ),
   });
 
   const errorToast = (errorMessage: string) => toast.error(errorMessage);
@@ -81,7 +105,7 @@ const TrustSignup = () => {
     toast.success(successMessage);
 
   const handleStateChange = (selectedState: string) => {
-    values.address.state = selectedState;
+    values.state = selectedState;
     setSelectedState(selectedState);
 
     const selectedStateObject = CITY_AND_STATE.find(
@@ -95,105 +119,6 @@ const TrustSignup = () => {
     setCities(selectedStateCities);
   };
 
-  const [trustImg, setTrustImg] = useState();
-  const [file, setFile] = useState<File | null>(null);
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = e.target.files?.[0];
-    setFile(selectedFile || null); // Use null as fallback if selectedFile is undefined
-    setFieldValue("trustlogo", selectedFile);
-
-    if (selectedFile) {
-      let formdata = new FormData();
-      formdata.append("trustImg", selectedFile);
-
-      fetch("http://localhost:8090/trust/trustImg", {
-        method: "POST",
-        body: formdata,
-      })
-        .then((response) => response.json())
-        .then((res) => {
-          setTrustImg(res.img);
-          console.log(res.img);
-        })
-
-        .catch((error) => {
-          // Handle error
-          console.error("Error uploading file:", error);
-        });
-    }
-  };
-
-  // const onSubmit = () => {
-  //   if (values && isValid) {
-  //     const formData = new FormData();
-  //     formData.append("file", file);
-
-  //     // Add other form fields to the FormData
-  //     Object.entries(values).forEach(([key, value]) => {
-  //       if (key !== "address") {
-  //         formData.append(key, value);
-  //       } else {
-  //         // Handle nested 'address' object
-  //         Object.entries(value).forEach(([addressKey, addressValue]) => {
-  //           formData.append(`address.${addressKey}`, addressValue);
-  //         });
-  //       }
-  //     });
-
-  //     // Replace 'http://localhost:3001/submitForm' with your server endpoint for form submission
-  //     fetch("http://localhost:3001/submitForm", {
-  //       method: "POST",
-  //       body: formData,
-  //     })
-  //       .then((response) => response.json())
-  //       .then((result) => {
-  //         // Handle success response if needed
-  //         console.log("Form submitted successfully:", result);
-  //       })
-  //       .catch((error) => {
-  //         console.error("Error submitting form:", error);
-  //       });
-  //   }
-  // };
-
-  // const onSubmit = () => {
-  // if (values && isValid) {
-  //   const formData = new FormData();
-  //   if (file) {
-  //     formData.append("file", file);
-  //   }
-  //   // Add other form fields to the FormData
-  //   Object.entries(values).forEach(([key, value]) => {
-  //     if (key !== "address") {
-  //       formData.append(key, value.toString());
-  //     } else {
-  //       // Handle nested 'address' object
-  //       Object.entries(value).forEach(([addressKey, addressValue]) => {
-  //         formData.append(`address.${addressKey}`, addressValue.toString());
-  //       });
-  //     }
-  //   });
-  //   // Replace 'http://localhost:3001/submitForm' with your server endpoint for form submission
-  //   fetch("http://localhost:8090/trust/trustSignup", {
-  //     method: "POST",
-  //     body: formData,
-  //   })
-  //     .then((response) => response.json())
-  //     .then((result) => {
-  //       // Handle success response if needed
-  //       console.log("Form submitted successfully:", result);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error submitting form:", error);
-  //     });
-  // }
-  // let data={
-  //   trustImg,
-  //   name,
-  //   password,
-  // }
-  // };
-
   const {
     handleSubmit,
     handleChange,
@@ -206,11 +131,20 @@ const TrustSignup = () => {
   } = useFormik({
     initialValues: initialValue,
     validationSchema: trustDetailSchema,
-    onSubmit: () => {
-      console.log(errors);
-      console.log(values);
+    onSubmit: (value) => {
+      if (value && isValid) {
+        fetch(`${BACKEND_BASE_URL}/trust/trustSignup`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(value),
+        }).then((res) => {
+          console.log(res);
+        });
+      }
     },
   });
+
+  console.log(values);
 
   const handleFirstStep = () => {
     if (
@@ -224,8 +158,6 @@ const TrustSignup = () => {
       errorToast("Please fill all fields");
     }
   };
-
-  console.log(values);
 
   const handleSecondStep = () => {
     if (
@@ -248,17 +180,13 @@ const TrustSignup = () => {
     }
   };
 
-  // const handleImgChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const files = event.target.files?.[0];
-  // };
-
   const formSections: ReactNode[] = [
     <div key={1} className="mx-5 lg:mx-20 gap-10">
       <div className="flex flex-col border-2 px-2 py-1 rounded-t-lg focus-within:border-primary">
         <label className="pb-1 text-sm font-medium">Trust Name</label>
         <input
-          id="trustname"
-          name="trustname"
+          id="trustName"
+          name="trustName"
           type="text"
           className="outline-none tracking-wider"
           placeholder="The Education Trust"
@@ -273,8 +201,8 @@ const TrustSignup = () => {
       <div className="flex flex-col border-2 px-2 py-1 border-t-transparent focus-within:border-primary">
         <label className="pb-1 text-sm font-medium">Trust Email</label>
         <input
-          id="trustemail"
-          name="trustemail"
+          id="email"
+          name="email"
           type="text"
           className="outline-none tracking-wider"
           placeholder="education@donation.com"
@@ -333,8 +261,8 @@ const TrustSignup = () => {
         <label className="pb-1 text-sm font-medium">Category</label>
         <select
           className="outline-none tracking-wider"
-          id="catagory"
-          name="catagory"
+          id="category"
+          name="category"
           onChange={handleChange}
           onBlur={handleBlur}
         >
@@ -377,8 +305,8 @@ const TrustSignup = () => {
       <div className="flex flex-col border-t-transparent rounded-b-lg border-2 px-2 py-1 focus-within:border-primary">
         <label className="pb-1 text-sm font-medium">Contact No</label>
         <input
-          id="contactno"
-          name="contactno"
+          id="contactNo"
+          name="contactNo"
           type="number"
           className="outline-none tracking-wider"
           placeholder="+91 0000000000"
@@ -395,27 +323,25 @@ const TrustSignup = () => {
       <div className="flex flex-col border-2 px-2 py-1 rounded-t-lg focus-within:border-primary">
         <label className="pb-1 text-sm font-medium">Address</label>
         <input
-          id="address.address"
-          name="address.address"
+          id="address"
+          name="address"
           type="text"
           className="outline-none tracking-wider"
           placeholder="A-50 , Dollar Colony"
           onChange={handleChange}
           onBlur={handleBlur}
-          value={values.address.address}
+          value={values.address}
         />
-        {touched.address?.address && errors.address?.address && (
-          <span className="text-sm text-red-600">
-            {errors.address?.address}
-          </span>
+        {touched.address && errors.address && (
+          <span className="text-sm text-red-600">{errors.address}</span>
         )}
       </div>
       <div className="flex flex-col border-2 px-2 py-1 border-t-transparent focus-within:border-primary">
         <label className="pb-1 text-sm font-medium">State</label>
         <select
           className="outline-none tracking-wider"
-          id="address.state"
-          name="address.state"
+          id="state"
+          name="state"
           onChange={(e) => handleStateChange(e.target.value)}
           onBlur={handleBlur}
         >
@@ -424,8 +350,8 @@ const TrustSignup = () => {
               {state.label}
             </option>
           ))}
-          {touched.address?.city && errors.address?.city && (
-            <span className="text-sm text-red-600">{errors.address.state}</span>
+          {touched.state && errors.state && (
+            <span className="text-sm text-red-600">{errors.state}</span>
           )}
         </select>
       </div>
@@ -433,10 +359,10 @@ const TrustSignup = () => {
         <label className="pb-1 text-sm font-medium">City</label>
         <select
           className="outline-none tracking-wider"
-          id="address.city"
-          name="address.city"
+          id="city"
+          name="city"
           onChange={handleChange}
-          value={values.address.city}
+          value={values.city}
           onBlur={handleBlur}
         >
           {cities.map(({ label, value }) => (
@@ -449,19 +375,17 @@ const TrustSignup = () => {
       <div className="flex flex-col border-t-transparent rounded-b-lg border-2 px-2 py-1 focus-within:border-primary">
         <label className="pb-1 text-sm font-medium">Pincode</label>
         <input
-          id="address.pincode"
-          name="address.pincode"
+          id="pincode"
+          name="pincode"
           type="number"
           className="outline-none tracking-wider"
           placeholder="395004"
           onChange={handleChange}
           onBlur={handleBlur}
-          value={values.address.pincode}
+          value={values.pincode}
         />
-        {touched.address?.pincode && errors.address?.pincode && (
-          <span className="text-sm text-red-600">
-            {errors.address?.pincode}
-          </span>
+        {touched.pincode && errors.pincode && (
+          <span className="text-sm text-red-600">{errors.pincode}</span>
         )}
       </div>
     </div>,
@@ -496,23 +420,10 @@ const TrustSignup = () => {
         </div> */}
         <div className="relative bottom-6">
           <div className="border-4 h-32 w-32 p-1 border-primary rounded-full overflow-hidden">
-            {file ? (
-              <Image
-                className="rounded-full h-full w-full object-contain"
-                src={URL.createObjectURL(file)}
-                alt="trustLogo"
-                width={128}
-                height={128}
-              />
-            ) : (
-              <Image
-                className="rounded-full h-full w-full object-contain"
-                src={values.trustlogo}
-                alt="trustLogo"
-                width={128}
-                height={128}
-              />
-            )}
+            <img
+              src={values.trustlogo}
+              className="rounded-full h-full w-full object-contain"
+            ></img>
           </div>
           <input
             type="file"
@@ -520,8 +431,7 @@ const TrustSignup = () => {
             name="imageUpload"
             accept="image/*"
             className="hidden"
-            // onChange={(e) => setFile(e.target.files?.[0])}
-            onChange={(e) => handleFileChange(e)}
+            onChange={handleOnChange}
           />
           <div className="absolute z-50 left-1/2 bottom-0 translate-x-1/2">
             <label htmlFor="imageUpload" className="cursor-pointer">
