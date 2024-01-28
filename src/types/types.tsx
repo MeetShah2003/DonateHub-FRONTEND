@@ -10,19 +10,21 @@ export type UserData = {
 };
 
 export type TrustData = {
-  id: string;
+  _id: string;
   trustName: string;
   trustlogo: string;
   email: string;
   founder: string;
-  creationdate: Date;
+  creationDate: Date;
   category: string;
   contactNo: number;
-  abouttrust: string;
+  description: string;
   password: string;
   address: string;
   city: string;
   state: string;
   pincode: number;
   role: "trust";
+  isBlocked: boolean;
+  isVerified: boolean;
 };
