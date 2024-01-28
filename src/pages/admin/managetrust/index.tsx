@@ -8,6 +8,8 @@ import ArrowIcon from "@/icons/ArrowIcon";
 import { trustData } from "@/consts";
 import Cookies from "js-cookie";
 import { TrustData } from "@/types/types";
+import UnBlockIcon from "@/icons/UnBlockIcon";
+import NoData from "@/components/NoData";
 
 const ManageTrust = () => {
   const itemsPerPage = 10;
@@ -19,7 +21,8 @@ const ManageTrust = () => {
   const onPageChange = ({ selected }: any) => {
     setCurrentPage(selected);
   };
-  useEffect(() => {
+
+  const getAllTrust = () => {
     fetch(`${BACKEND_BASE_URL}/admin/allTrustsV`, {
       method: "GET",
       headers: {
@@ -32,7 +35,7 @@ const ManageTrust = () => {
         console.log(data["verifiedTrusts"]);
         setAllTrustData(data["verifiedTrusts"]);
       });
-  }, []);
+  };
 
   console.log(allTrustData);
 
@@ -50,7 +53,7 @@ const ManageTrust = () => {
       );
 
       if (response.ok) {
-        // getAllUserData();
+        getAllTrust();
       }
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -60,7 +63,7 @@ const ManageTrust = () => {
   const handleUnblock = async (_id: string) => {
     try {
       const response = await fetch(
-        `${BACKEND_BASE_URL}/admin/unBlockUser/${_id}`,
+        `${BACKEND_BASE_URL}/admin/unBlockTrust/${_id}`,
         {
           method: "PATCH",
           headers: {
@@ -71,12 +74,16 @@ const ManageTrust = () => {
       );
 
       if (response.ok) {
-        // getAllUserData();
+        getAllTrust();
       }
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
+
+  useEffect(() => {
+    getAllTrust();
+  }, []);
 
   const offset = currentPage * itemsPerPage;
   const filteredUsers = allTrustData?.filter((user) =>
@@ -122,9 +129,13 @@ const ManageTrust = () => {
                 {currentItems &&
                   currentItems.length > 0 &&
                   currentItems?.map(
-                    ({ id, category, contactNo, email, trustName }, index) => {
+                    (
+                      { _id, category, contactNo, email, trustName, isBlocked },
+                      index
+                    ) => {
+                      console.log(_id);
                       return (
-                        <tr className="hover:bg-gray-100 transition" key={id}>
+                        <tr className="hover:bg-gray-100 transition" key={_id}>
                           <td className="py-4 px-6 border-b">
                             {index + 1 + currentPage * itemsPerPage}
                           </td>
@@ -141,15 +152,37 @@ const ManageTrust = () => {
                                     Edit
                                   </span>
                                 </button>
-                              </div>{}
-                              <div className="flex w-full flex-row items-center justify-center">
-                                <button className="flex flex-row items-center justify-center gap-1 rounded-md text-base font-normal leading-5 text-danger-100">
-                                  <BlockIcon />
-                                  <span className="hidden text-[#C80707] font-inter text-base font-normal leading-5 text-danger-100 sm:block">
-                                    Block
-                                  </span>
-                                </button>
                               </div>
+                              {isBlocked ? (
+                                <div className="flex w-full flex-row items-center justify-center">
+                                  <button
+                                    onClick={() => {
+                                      handleUnblock(_id);
+                                    }}
+                                    className="flex flex-row items-center justify-center gap-1 rounded-md text-base font-normal leading-5 text-danger-100"
+                                  >
+                                    <UnBlockIcon />
+                                    <span className="hidden text-blue-600 font-inter text-base font-normal leading-5 text-danger-100 sm:block">
+                                      Unblock
+                                    </span>
+                                  </button>
+                                </div>
+                              ) : (
+                                <div className="flex w-full flex-row items-center justify-center">
+                                  <button
+                                    onClick={() => {
+                                      handleBlock(_id);
+                                    }}
+                                    className="flex flex-row items-center justify-center gap-1 rounded-md text-base font-normal leading-5 text-danger-100"
+                                  >
+                                    <BlockIcon />
+                                    <span className="hidden text-[#C80707] font-inter text-base font-normal leading-5 text-danger-100 sm:block">
+                                      Block
+                                    </span>
+                                  </button>
+                                </div>
+                              )}
+                              {currentItems?.length <= 0 && <NoData />}
                             </div>
                           </td>
                         </tr>

@@ -9,6 +9,8 @@ import React, { use, useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { useAuth } from "@/context/auth";
 import { BACKEND_BASE_URL } from "@/consts";
+import { get } from "http";
+import { toast } from "react-toastify";
 
 const AdminProfile = () => {
   //   const { userData } = useUser();
@@ -16,32 +18,58 @@ const AdminProfile = () => {
   const [userData, setUserData] = useState({});
   const { user, isAuthenticated, token } = useAuth();
 
-  const getAdminProfile = () => {
-    fetch(`${BACKEND_BASE_URL}/admin/adminProfile`, {
-      method: "GET",
+  const errorToast = (errorMessage: string) => toast.error(errorMessage);
+  const successToast = (successMessage: string) =>
+    toast.success(successMessage);
+
+  // const getAdminProfile = () => {
+  //   fetch(`${BACKEND_BASE_URL}/admin/adminProfile`, {
+  //     method: "GET",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Authorization: `Bearer ${token}`,
+  //     },
+  //   })
+  //     .then((res) => {
+  //       return res.json();
+  //     })
+  //     .then((data) => {
+  //       // console.log(data["myProfile"]);
+  //       setUserData(data["myProfile"]);
+  //     });
+  // };
+
+  const getUpdateAdminProfile = (data: any) => {
+    fetch(`${BACKEND_BASE_URL}/admin/updateProfile`, {
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
+      body: JSON.stringify(data),
     })
       .then((res) => {
-        return res.json();
+        if (res.status === 200) {
+          return res.json();
+        }
       })
       .then((data) => {
-        // console.log(data["myProfile"]);
-        setUserData(data["myProfile"]);
+        if (data) {
+          successToast("Profile Update Successfully");
+        }
       });
   };
 
   //
   useEffect(() => {
-    getAdminProfile();
+    // getAdminProfile();
   }, []);
 
   // console.log(userData);
 
   const profileSchema = Yup.object().shape({
-    username: Yup.string().required("Username is required"),
+    firstName: Yup.string().required("FirstName is required"),
+    lastName: Yup.string().required("LastName is required"),
     password: Yup.string()
       .min(8, "Password must be at least 8 characters")
       .matches(
@@ -49,10 +77,8 @@ const AdminProfile = () => {
         "Password must contain at least one uppercase letter, one lowercase letter, and one number"
       )
       .required("Password is required"),
-    email: Yup.string()
-      .trim()
-      .email("Invalid email")
-      .required("Email is required"),
+    gender: Yup.string().required("Please select a gender"),
+    email: Yup.string().trim().email("Invalid email"),
   });
 
   const {
@@ -65,14 +91,16 @@ const AdminProfile = () => {
     setFieldValue,
   } = useFormik({
     initialValues: {
-      username: "",
+      firstName: "",
+      lastName: "",
       password: "",
+      // userlogo: "",
       email: "",
+      gender: "",
     },
     validationSchema: profileSchema,
     onSubmit: async (formValues) => {
-      // Handle form submission logic
-      console.log(formValues);
+      getUpdateAdminProfile(formValues);
     },
   });
 
@@ -93,42 +121,61 @@ const AdminProfile = () => {
             <Image
               className="rounded-full h-full w-full object-contain"
               src={"/placeholder-image.jpg"}
-              alt="trustLogo"
+              alt="userlogo"
               width={128}
               height={128}
             />
           </div>
           <input
             type="file"
-            id="imageUpload"
-            name="imageUpload"
+            id="userlogo"
+            name="userlogo"
             accept="image/*"
             className="hidden"
             onChange={handleImgChange}
           />
           <div className="absolute  left-1/2 bottom-0 translate-x-1/2">
-            <label htmlFor="imageUpload" className="cursor-pointer">
+            <label htmlFor="userlogo" className="cursor-pointer">
               <CameraIcon />
             </label>
           </div>
         </div>
 
-        <div className="flex flex-col border-2 px-2 py-1 rounded-t-lg focus-within:border-primary">
-          <label className="pb-1 text-sm font-medium">Username</label>
-          <input
-            id="username"
-            name="username"
-            type="text"
-            value={values.username}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            className="outline-none tracking-wider"
-            placeholder="Your Username"
-          />
-          {touched.username && errors.username && (
-            <span className="text-sm text-red-600">{errors.username}</span>
-          )}
+        <div className="flex w-full">
+          <div className="flex w-1/2 flex-col border-2 px-2 py-1 rounded-tl-lg focus-within:border-primary">
+            <label className="pb-1 text-sm font-medium">First Name</label>
+            <input
+              id="firstName"
+              name="firstName"
+              type="text"
+              className="outline-none tracking-wider"
+              placeholder="John"
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.firstName}
+            />
+            {touched.firstName && errors.firstName && (
+              <span className="text-sm text-red-600">{errors.firstName}</span>
+            )}
+          </div>
+          <div className="flex w-1/2 flex-col border-2 border-l-transparent px-2 py-1 rounded-tr-lg focus-within:border-primary">
+            <label className="pb-1 text-sm font-medium">Last Name</label>
+            <input
+              id="lastName"
+              name="lastName"
+              type="text"
+              className="outline-none tracking-wider"
+              placeholder="Doe"
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.lastName}
+            />
+            {touched.lastName && errors.lastName && (
+              <span className="text-sm text-red-600">{errors.lastName}</span>
+            )}
+          </div>
         </div>
+
         <div className="flex flex-col border-2 px-2 py-1 border-t-transparent focus-within:border-primary">
           <label className="pb-1 text-sm font-medium">Password</label>
           <input
@@ -143,6 +190,44 @@ const AdminProfile = () => {
           />
           {touched.password && errors.password && (
             <span className="text-sm text-red-600">{errors.password}</span>
+          )}
+        </div>
+
+        <div className="flex flex-col border-t-transparent border-2 px-2 py-1 focus-within:border-primary">
+          <label className="pb-1 text-sm font-medium">Gender</label>
+          <div className="flex space-x-4">
+            <div className="flex items-center">
+              <input
+                type="radio"
+                id="male"
+                name="gender"
+                value="male"
+                checked={values.gender === "male"}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+              <label htmlFor="male" className="ml-2">
+                Male
+              </label>
+            </div>
+            <div className="flex items-center">
+              <input
+                type="radio"
+                id="female"
+                name="gender"
+                value="female"
+                checked={values.gender === "female"}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+              <label htmlFor="female" className="ml-2">
+                Female
+              </label>
+            </div>
+            {/* Add more gender options if needed */}
+          </div>
+          {touched.gender && errors.gender && (
+            <span className="text-sm text-red-600">{errors.gender}</span>
           )}
         </div>
 

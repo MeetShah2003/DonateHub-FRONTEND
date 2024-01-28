@@ -8,6 +8,8 @@ import ArrowIcon from "@/icons/ArrowIcon";
 // import { useUser } from "@/context/user";
 import Cookies from "js-cookie";
 import { UserData } from "@/types/types";
+import UnBlockIcon from "@/icons/UnBlockIcon";
+import NoData from "@/components/NoData";
 
 const ManageUser = () => {
   const itemsPerPage = 10;
@@ -40,6 +42,8 @@ const ManageUser = () => {
       console.error("Error fetching data:", error);
     }
   };
+
+  console.log(allUserData);
 
   const handleUnblock = async (_id: string) => {
     try {
@@ -102,113 +106,125 @@ const ManageUser = () => {
         />
       </div>
       <div className="border rounded-t-lg rounded-b-lg shadow-sm overflow-x-auto">
-        <div className="bg-gray-200 rounded-t-lg">
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr>
-                  <th className="py-3 px-6 text-left bg-gray-200">No</th>
-                  <th className="py-3 px-6 text-left bg-gray-200">
-                    First Name
-                  </th>
-                  <th className="py-3 px-6 text-left bg-gray-200">Last Name</th>
-                  <th className="py-3 px-6 text-left bg-gray-200">Email</th>
-                  <th className="py-3 px-6 text-left bg-gray-200">Gender</th>
-                  <th className="py-3 px-6 text-center bg-gray-200">Action</th>
-                </tr>
-              </thead>
-              <tbody className="bg-white rounded-b-lg">
-                {currentItems &&
-                  currentItems.length > 0 &&
-                  currentItems.map(
-                    (
-                      { firstName, email, gender, lastName, isBlocked, _id },
-                      index
-                    ) => {
-                      return (
-                        <tr
-                          className="hover:bg-gray-100 transition"
-                          key={index}
-                        >
-                          <td className="py-4 px-6 border-b">
-                            {index + 1 + currentPage * itemsPerPage}
-                          </td>
-                          <td className="py-4 px-6 border-b">{firstName}</td>
-                          <td className="py-4 px-6 border-b">{lastName}</td>
-                          <td className="py-4 px-6 border-b">{email}</td>
-                          <td className="py-4 px-6 border-b">{gender}</td>
-                          <td className="py-4 px-2 border-b">
-                            <div className="flex">
-                              <div className="flex w-full flex-row items-center justify-center border-r border-dark-150">
-                                <button className="flex flex-row items-center justify-center gap-1 rounded-md text-base font-normal leading-5 text-gray-1000">
-                                  <EditIcon />
-                                  <span className="hidden text-blue-600 font-inter text-base font-normal leading-5 text-gray-1000 sm:block">
-                                    Edit
-                                  </span>
-                                </button>
+        {currentItems.length <= 0 ? (
+          <NoData />
+        ) : (
+          <div className="bg-gray-200 rounded-t-lg">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr>
+                    <th className="py-3 px-6 text-left bg-gray-200">No</th>
+                    <th className="py-3 px-6 text-left bg-gray-200">
+                      First Name
+                    </th>
+                    <th className="py-3 px-6 text-left bg-gray-200">
+                      Last Name
+                    </th>
+                    <th className="py-3 px-6 text-left bg-gray-200">Email</th>
+                    <th className="py-3 px-6 text-left bg-gray-200">Gender</th>
+                    <th className="py-3 px-6 text-center bg-gray-200">
+                      Action
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white rounded-b-lg">
+                  {currentItems &&
+                    currentItems.length > 0 &&
+                    currentItems.map(
+                      (
+                        { firstName, email, gender, lastName, isBlocked, _id },
+                        index
+                      ) => {
+                        return (
+                          <tr
+                            className="hover:bg-gray-100 transition"
+                            key={index}
+                          >
+                            <td className="py-4 px-6 border-b">
+                              {index + 1 + currentPage * itemsPerPage}
+                            </td>
+                            <td className="py-4 px-6 border-b">{firstName}</td>
+                            <td className="py-4 px-6 border-b">{lastName}</td>
+                            <td className="py-4 px-6 border-b">{email}</td>
+                            <td className="py-4 px-6 border-b">{gender}</td>
+                            <td className="py-4 px-2 border-b">
+                              <div className="flex">
+                                <div className="flex w-full flex-row items-center justify-center border-r border-dark-150">
+                                  <button className="flex flex-row items-center justify-center gap-1 rounded-md text-base font-normal leading-5 text-gray-1000">
+                                    <EditIcon />
+                                    <span className="hidden text-blue-600 font-inter text-base font-normal leading-5 text-gray-1000 sm:block">
+                                      Edit
+                                    </span>
+                                  </button>
+                                </div>
+                                {isBlocked ? (
+                                  <div className="flex w-full flex-row items-center justify-center">
+                                    <button
+                                      onClick={() => {
+                                        handleUnblock(_id);
+                                      }}
+                                      className="flex flex-row items-center justify-center gap-1 rounded-md text-base font-normal leading-5 text-danger-100"
+                                    >
+                                      <UnBlockIcon />
+                                      <span className="hidden text-blue-600 font-inter text-base font-normal leading-5 text-danger-100 sm:block">
+                                        Unblock
+                                      </span>
+                                    </button>
+                                  </div>
+                                ) : (
+                                  <div className="flex w-full flex-row items-center justify-center">
+                                    <button
+                                      onClick={() => {
+                                        handleBlock(_id);
+                                      }}
+                                      className="flex flex-row items-center justify-center gap-1 rounded-md text-base font-normal leading-5 text-danger-100"
+                                    >
+                                      <BlockIcon />
+                                      <span className="hidden text-[#C80707] font-inter text-base font-normal leading-5 text-danger-100 sm:block">
+                                        Block
+                                      </span>
+                                    </button>
+                                  </div>
+                                )}
                               </div>
-                              {isBlocked ? (
-                                <div
-                                  onClick={() => {
-                                    handleUnblock(_id);
-                                  }}
-                                  className="flex w-full flex-row items-center justify-center"
-                                >
-                                  <button className="flex flex-row items-center justify-center gap-1 rounded-md text-base font-normal leading-5 text-danger-100">
-                                    <BlockIcon />
-                                    <span className="hidden text-[#C80707] font-inter text-base font-normal leading-5 text-danger-100 sm:block">
-                                      Unblock
-                                    </span>
-                                  </button>
-                                </div>
-                              ) : (
-                                <div className="flex w-full flex-row items-center justify-center">
-                                  <button
-                                    onClick={() => {
-                                      handleBlock(_id);
-                                    }}
-                                    className="flex flex-row items-center justify-center gap-1 rounded-md text-base font-normal leading-5 text-danger-100"
-                                  >
-                                    <BlockIcon />
-                                    <span className="hidden text-[#C80707] font-inter text-base font-normal leading-5 text-danger-100 sm:block">
-                                      Block
-                                    </span>
-                                  </button>
-                                </div>
-                              )}
-                            </div>
-                          </td>
-                        </tr>
-                      );
-                    }
-                  )}
-              </tbody>
-            </table>
+                            </td>
+                          </tr>
+                        );
+                      }
+                    )}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
+        )}
       </div>
-      <ReactPaginate
-        previousLabel={<ArrowIcon />}
-        nextLabel={
-          <div className="rotate-180">
-            <ArrowIcon />
-          </div>
-        }
-        breakLabel={<div className="px-4 py-2 border rounded">...</div>}
-        breakClassName={"break-me"}
-        pageCount={Math.ceil(filteredUsers?.length / itemsPerPage)}
-        marginPagesDisplayed={5}
-        pageRangeDisplayed={5}
-        onPageChange={onPageChange}
-        containerClassName={"pagination flex justify-center mt-4"}
-        activeClassName={"text-primary border border-primary"}
-        previousClassName={"px-4 py-2 border rounded"}
-        nextClassName={"px-4 py-2 border rounded"}
-        pageClassName={"px-4 py-2 border rounded"}
-        pageLinkClassName={"cursor-pointer"}
-        activeLinkClassName={"text-primary  border-primary"}
-        disabledClassName={"opacity-50 cursor-not-allowed"}
-      />
+      {currentItems.length <= 0 ? (
+        ""
+      ) : (
+        <ReactPaginate
+          previousLabel={<ArrowIcon />}
+          nextLabel={
+            <div className="rotate-180">
+              <ArrowIcon />
+            </div>
+          }
+          breakLabel={<div className="px-4 py-2 border rounded">...</div>}
+          breakClassName={"break-me"}
+          pageCount={Math.ceil(filteredUsers?.length / itemsPerPage)}
+          marginPagesDisplayed={5}
+          pageRangeDisplayed={5}
+          onPageChange={onPageChange}
+          containerClassName={"pagination flex justify-center mt-4"}
+          activeClassName={"text-primary border border-primary"}
+          previousClassName={"px-4 py-2 border rounded"}
+          nextClassName={"px-4 py-2 border rounded"}
+          pageClassName={"px-4 py-2 border rounded"}
+          pageLinkClassName={"cursor-pointer"}
+          activeLinkClassName={"text-primary  border-primary"}
+          disabledClassName={"opacity-50 cursor-not-allowed"}
+        />
+      )}
     </AdminFrame>
   );
 };

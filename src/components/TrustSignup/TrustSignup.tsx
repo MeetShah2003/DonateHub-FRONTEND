@@ -48,21 +48,23 @@ const TrustSignup = () => {
 
   const [currentStep, setCurrentStep] = useState(1);
   const initialValue: TrustData = {
-    id: trustId,
+    _id: trustId,
     trustName: "",
     email: "",
     trustlogo: "",
     founder: "",
-    creationdate: new Date(2023, 0, 1),
+    creationDate: new Date(2023, 0, 1),
     category: "",
     contactNo: 0,
-    abouttrust: "",
+    description: "",
     password: "",
     role: "trust",
     address: "",
     city: "",
     pincode: 0,
     state: "",
+    isBlocked: false,
+    isVerified: false,
   };
 
   const trustDetailSchema = Yup.object().shape({
@@ -73,12 +75,12 @@ const TrustSignup = () => {
       .email("Invalid email")
       .required("Email is required"),
     founder: Yup.string().trim().required("Founder is required"),
-    creationdate: Yup.date()
+    creationDate: Yup.date()
       .required("Creation Date is required")
       .max(new Date(), "Creation Date must be in the past"),
     category: Yup.string().trim().required("Category is required"),
     contactNo: Yup.number().required("Contact Number is required"),
-    abouttrust: Yup.string().trim().required("About Trust is required"),
+    description: Yup.string().trim().required("About Trust is required"),
     password: Yup.string()
       .min(8, "Password must be at least 8 characters")
       .matches(
@@ -151,7 +153,7 @@ const TrustSignup = () => {
       values.trustName &&
       values.email &&
       values.password &&
-      values.abouttrust
+      values.description
     ) {
       setCurrentStep((prevStep) => prevStep + 1);
     } else {
@@ -164,9 +166,9 @@ const TrustSignup = () => {
       values.trustName &&
       values.email &&
       values.password &&
-      values.abouttrust &&
+      values.description &&
       values.category &&
-      values.creationdate &&
+      values.creationDate &&
       values.founder &&
       values.contactNo
     ) {
@@ -241,18 +243,18 @@ const TrustSignup = () => {
       <div className="flex flex-col border-2 px-2 py-1 border-t-transparent rounded-b-lg focus-within:border-primary">
         <label className="pb-1 text-sm font-medium">About Trust</label>
         <textarea
-          id="abouttrust"
-          name="abouttrust"
+          id="description"
+          name="description"
           className="outline-none tracking-wider resize-none"
           rows={4}
           cols={30}
           placeholder="Type Here About Trust"
           onChange={handleChange}
           onBlur={handleBlur}
-          value={values.abouttrust}
+          value={values.description}
         />
-        {touched.abouttrust && errors.abouttrust && (
-          <span className="text-sm text-red-600">{errors.abouttrust}</span>
+        {touched.description && errors.description && (
+          <span className="text-sm text-red-600">{errors.description}</span>
         )}
       </div>
     </div>,
@@ -276,8 +278,8 @@ const TrustSignup = () => {
       <div className="flex flex-col border-t-transparent border-2 px-2 py-1 focus-within:border-primary">
         <label className="pb-1 text-sm font-medium">Creation Date</label>
         <input
-          id="creationdate"
-          name="creationdate"
+          id="creationDate"
+          name="creationDate"
           type="date"
           className="outline-none select-none tracking-wider"
           placeholder="John Doe"
@@ -470,7 +472,7 @@ const TrustSignup = () => {
                 values.trustName &&
                 values.email &&
                 values.password &&
-                values.abouttrust
+                values.description
               ) {
                 setCurrentStep(2);
               } else {

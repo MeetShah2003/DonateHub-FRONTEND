@@ -5,6 +5,7 @@ import { useAuth } from "@/context/auth";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
 import { BACKEND_BASE_URL } from "@/consts";
+import NoData from "@/components/NoData";
 
 const VerifyTrust = () => {
   const { isAuthenticated, token } = useAuth();
@@ -19,12 +20,12 @@ const VerifyTrust = () => {
       const response = await fetch(`${BACKEND_BASE_URL}/admin/allTrustsU`, {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${access_token}`,
           "Content-Type": "application/json",
         },
       });
 
-      console.log(response);
+      console.log(unVerifiedTrusts);
 
       const data = await response.json();
       console.log(data["unverifiedTrusts"]);
@@ -34,31 +35,48 @@ const VerifyTrust = () => {
     }
   };
 
+  console.log(unVerifiedTrusts);
+
   useEffect(() => {
     getPendingTrust();
-  }, [token]);
+  }, [access_token]);
 
   return (
     <AdminFrame title="Verify Trust">
       {unVerifiedTrusts &&
         unVerifiedTrusts?.length > 0 &&
-        unVerifiedTrusts?.map(({ trustName, description, _id }) => {
-          console.log(_id);
-          return (
-            <div className="my-2">
-              <TrustApprovalModal
-                description={description}
-                title={trustName}
-                trustImage={
-                  "https://www.pixelstalk.net/wp-content/uploads/2016/07/Wallpapers-pexels-photo.jpg"
-                }
-                onVerify={() => {
-                  router.push(`/admin/verifytrust/${_id}`);
-                }}
-              />
-            </div>
-          );
-        })}
+        unVerifiedTrusts?.map(
+          ({
+            trustName,
+            description,
+            _id,
+            trustlogo,
+            founder,
+            creationDate,
+          }) => {
+            const date = new Date(creationDate);
+            const formattedDate = date.toLocaleDateString("en-GB", {
+              day: "numeric",
+              month: "short",
+              year: "numeric",
+            });
+            return (
+              <div className="my-2">
+                <TrustApprovalModal
+                  description={description}
+                  title={trustName}
+                  creationDate={formattedDate}
+                  founder={founder}
+                  trustImage={trustlogo}
+                  onVerify={() => {
+                    router.push(`/admin/verifytrust/${_id}`);
+                  }}
+                />
+              </div>
+            );
+          }
+        )}
+      {unVerifiedTrusts?.length <= 0 && <NoData />}
     </AdminFrame>
   );
 };
