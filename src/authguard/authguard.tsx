@@ -3,8 +3,7 @@ import type { GetServerSideProps } from "next";
 export const getNotAuthenticatedRouteCheck: GetServerSideProps = async (
   context
 ) => {
-  const accessToken =
-    context.req.cookies?.access_token || context.req.cookies?.user_data;
+  const accessToken = context.req.cookies?.access_token;
 
   if (accessToken) {
     return {
@@ -21,10 +20,7 @@ export const getNotAuthenticatedRouteCheck: GetServerSideProps = async (
 export const getAuthenticatedRouteCheck: GetServerSideProps = async (
   context
 ) => {
-  const accessToken =
-    context?.req?.cookies?.access_token ||
-    context?.req?.cookies?.user_data ||
-    "";
+  const accessToken = context?.req?.cookies?.access_token;
 
   if (!accessToken) {
     return {

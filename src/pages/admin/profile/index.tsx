@@ -16,7 +16,8 @@ const AdminProfile = () => {
   //   const { userData } = useUser();
   const [file, setFile] = useState<File | null>(null);
   const [userData, setUserData] = useState({});
-  const { user, isAuthenticated, token } = useAuth();
+  const { user, isAuthenticated } = useAuth();
+  const access_token = Cookies.get("access_token");
 
   const errorToast = (errorMessage: string) => toast.error(errorMessage);
   const successToast = (successMessage: string) =>
@@ -44,7 +45,7 @@ const AdminProfile = () => {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${access_token}`,
       },
       body: JSON.stringify(data),
     })

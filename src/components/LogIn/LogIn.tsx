@@ -43,73 +43,75 @@ const LogIn = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const token = Cookies.get("access_token");
-  // const { setUserData, setAccessToken } = useUser();
-  const { login, isAuthenticated, user } = useAuth();
+  // const { setUserData, setAccessa } = useUser();
+  const { isAuthenticated, user } = useAuth();
 
   const { data: session } = useSession();
+
+  console.log(session);
 
   const errorToast = (errorMessage: string) => toast.error(errorMessage);
   const successToast = (successMessage: string) =>
     toast.success(successMessage);
 
-  const gLogin = useGoogleLogin({
-    onSuccess: async (response) => {
-      console.log(response);
+  // const gLogin = useGoogleLogin({
+  //   onSuccess: async (response) => {
+  //     console.log(response);
 
-      const userData = Cookies.get("user_data");
-      try {
-        fetch("https://www.googleapis.com/oauth2/v1/userinfo", {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${(response.access_token, userData)}`,
-          },
-        })
-          .then((response) => response.json())
-          .then((userInfo) => {
-            if (userInfo) {
-              fetch(`${BACKEND_BASE_URL}/api/googleData`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(userInfo),
-              })
-                .then((res) => res.json())
-                .then((data) => {
-                  if (!data) {
-                    errorToast("Something went wrong");
-                  }
-                  if (data.message === "login sucessfull") {
-                    successToast(`Welcome Back ${data.user.username}`);
-                    Cookies.set("user_data", data.user, {
-                      expires: 7,
-                      path: "/",
-                    });
-                    setTimeout(() => {
-                      router.push("/dashboard");
-                    }, 3000);
-                  }
-                  if (data.message === "account created sucessfull") {
-                    successToast(`Welcome Back ${data.user.username}`);
-                    Cookies.set("user_data", data.user, {
-                      expires: 7,
-                      path: "/",
-                    });
-                    setTimeout(() => {
-                      router.push("/dashboard");
-                    }, 3000);
-                  }
-                });
-            } else {
-              errorToast("something went wrong");
-            }
-          })
-          .catch((error) => {
-            console.error("Error fetching user information:", error);
-          });
-      } catch (err) {
-        console.log(err);
-      }
-    },
-  });
+  //     const userData = Cookies.get("user_data");
+  //     // try {
+  //     //   fetch("https://www.googleapis.com/oauth2/v1/userinfo", {
+  //     //     method: "GET",
+  //     //     headers: {
+  //     //       Authorization: `Bearer ${(response.access_token, userData)}`,
+  //     //     },
+  //     //   })
+  //     //     .then((response) => response.json())
+  //     //     .then((userInfo) => {
+  //     //       if (userInfo) {
+  //     //         fetch(`${BACKEND_BASE_URL}/api/googleData`, {
+  //     //           method: "POST",
+  //     //           headers: { "Content-Type": "application/json" },
+  //     //           body: JSON.stringify(userInfo),
+  //     //         })
+  //     //           .then((res) => res.json())
+  //     //           .then((data) => {
+  //     //             if (!data) {
+  //     //               errorToast("Something went wrong");
+  //     //             }
+  //     //             if (data.message === "login sucessfull") {
+  //     //               successToast(`Welcome Back ${data.user.username}`);
+  //     //               Cookies.set("user_data", data.user, {
+  //     //                 expires: 7,
+  //     //                 path: "/",
+  //     //               });
+  //     //               setTimeout(() => {
+  //     //                 router.push("/dashboard");
+  //     //               }, 3000);
+  //     //             }
+  //     //             if (data.message === "account created sucessfull") {
+  //     //               successToast(`Welcome Back ${data.user.username}`);
+  //     //               Cookies.set("user_data", data.user, {
+  //     //                 expires: 7,
+  //     //                 path: "/",
+  //     //               });
+  //     //               setTimeout(() => {
+  //     //                 router.push("/dashboard");
+  //     //               }, 3000);
+  //     //             }
+  //     //           });
+  //     //       } else {
+  //     //         errorToast("something went wrong");
+  //     //       }
+  //     //     })
+  //     //     .catch((error) => {
+  //     //       console.error("Error fetching user information:", error);
+  //     //     });
+  //     // } catch (err) {
+  //     //   console.log(err);
+  //     // }
+  //   },
+  // });
 
   useEffect(() => {
     if (isAuthenticated && user && !user.isBlocked) {
@@ -192,14 +194,31 @@ const LogIn = () => {
         // } catch (error) {a
         //   console.log(error);
         // }
-        try {
-          await login(values.email, values.password);
-        } catch (error) {
-          console.log(error);
-        }
+        // try {
+        //   await login(values.email, values.password);
+        // } catch (error) {
+        //   console.log(error);
+        // }
+
+        fetch(`${BACKEND_BASE_URL}/api/login`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(values),
+        })
+          .then((res) => {
+            if (res && res.ok) {
+              return res.json();
+            }
+          })
+          .then((data) => {
+            Cookies.set("access_token", data.token);
+          });
       },
     }
   );
+  // signOut();
   return (
     <WelcomePage title="Welcome To" secondTitle="DonateHub">
       <form className="mx-5 lg:mx-20 gap-10" onSubmit={handleSubmit}>
@@ -261,7 +280,7 @@ const LogIn = () => {
           <button
             type="button"
             onClick={() => {
-              gLogin();
+              signIn("google", { callbackUrl: "http://localhost:3000" });
             }}
             className="outline-none flex justify-center gap-3 text-black font-inter font-medium"
           >

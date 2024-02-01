@@ -11,6 +11,7 @@ import AnalyticsIcon from "@/icons/AnalyticsIcon";
 import LogoutIcon from "@/icons/LogoutIcon";
 import ProfileIcon from "@/icons/ProfileIcon";
 import CloseHamburgerIcon from "@/icons/CloseHamburgerIcon";
+import Logo from "@/icons/Logo";
 
 const ADMIN_MENUS: {
   id: number;
@@ -67,7 +68,7 @@ const AdminFrame: React.FC<{
   return (
     <>
       <div className="border-b">
-        <nav className="max-w-full w-90% py-4 mx-auto flex items-center justify-between">
+        <nav className="max-w-full w-90%  mx-auto flex items-center justify-between">
           <div
             onClick={() => {
               setSideBarIsOpen(!sideBarIsOpen);
@@ -76,7 +77,9 @@ const AdminFrame: React.FC<{
           >
             {!sideBarIsOpen ? <CloseHamburgerIcon /> : <HamburgerIcon />}
           </div>
-          <div className="font-bold text-3xl text-primary">DH</div>
+          <div className="font-bold text-3xl text-primary">
+            <Logo />
+          </div>
         </nav>
       </div>
       <div className="flex">

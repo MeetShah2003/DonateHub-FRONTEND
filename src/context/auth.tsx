@@ -1,125 +1,79 @@
-// AuthProvider.js
-import React, {
-  createContext,
-  useContext,
+import { BACKEND_BASE_URL } from "@/consts";
+import Cookies from "js-cookie";
+import {
   useState,
+  useContext,
   useEffect,
+  createContext,
   ReactNode,
 } from "react";
-import Cookies from "js-cookie";
-import { toast } from "react-toastify";
-import { BACKEND_BASE_URL } from "@/consts";
 
 interface AuthContextType {
   isAuthenticated: boolean;
   user: any;
-  token: string | null;
-  login: (email: string, password: string) => Promise<void>;
   logout: () => void;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
-const errorToast = (errorMessage: string) => toast.error(errorMessage);
-const successToast = (successMessage: string) => toast.success(successMessage);
+export const AuthContext = createContext<AuthContextType | undefined>(
+  undefined
+);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
+  const access_token = Cookies.get("access_token");
   const [authState, setAuthState] = useState<{
     isAuthenticated: boolean;
     user: any;
-    token: string | null;
   }>({
     isAuthenticated: false,
     user: null,
-    token: null,
   });
 
-  useEffect(() => {
-    const storedToken = Cookies.get("access_token");
-    if (storedToken) {
-      setAuthState({
-        isAuthenticated: true,
-        user: null,
-        token: storedToken,
-      });
-    }
-  }, [Cookies.get("access_token")]);
-
-  const apiLogin = async (email: string, password: string) => {
-    try {
-      const response = await fetch(`${BACKEND_BASE_URL}/api/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Something Went Wrong");
-      }
-
-      const { user, token, message } = await response.json();
-      return { user, token, message };
-    } catch (error) {
-      console.error("Login failed:", error);
-      throw new Error("Login failed");
-    }
-  };
-
-  const login = async (email: string, password: string) => {
-    try {
-      const { user, token, message } = await apiLogin(email, password);
-
-      if (message === "login sucessfull") {
-        setAuthState({
-          isAuthenticated: true,
-          user,
-          token,
-        });
-        Cookies.set("access_token", token, { expires: 7 });
-
-        // successToast(`Welcome back, ${user.username}!`);
-      } else {
-        if (message === "user not found") {
-          errorToast("Email not found");
-        } else if (message === "invalid password") {
-          errorToast("Invalid password");
-        } else {
-          errorToast("Login failed");
+  const authMe = () => {
+    fetch(`${BACKEND_BASE_URL}/api/authMe`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data: any) => {
+        if (data) {
+          setAuthState({
+            isAuthenticated: true,
+            user: data.userAuth,
+          });
         }
-      }
-    } catch (error) {
-      console.error("Login failed:", error);
-      errorToast("Login failed");
-      throw new Error("Login failed");
-    }
+      })
+      .catch((error: any) => {
+        console.log(error);
+      });
   };
 
   const logout = () => {
+    Cookies.remove("access_token");
     setAuthState({
       isAuthenticated: false,
       user: null,
-      token: null,
     });
-    Cookies.remove("access_token");
   };
 
-  const authContextValue: AuthContextType = {
+  useEffect(() => {
+    authMe();
+  }, [access_token]);
+
+  const authMeDataValue: AuthContextType = {
     isAuthenticated: authState.isAuthenticated,
     user: authState.user,
-    token: authState.token,
-    login,
-    logout,
+    logout: logout,
   };
 
   return (
-    <AuthContext.Provider value={authContextValue}>
+    <AuthContext.Provider value={authMeDataValue}>
       {children}
     </AuthContext.Provider>
   );
