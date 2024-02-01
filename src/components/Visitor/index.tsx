@@ -11,9 +11,11 @@ import LogoutIcon from "@/icons/LogoutIcon";
 import ProfileIcon from "@/icons/ProfileIcon";
 import HeaderBgImage from "@/../public/images/headerBgImage.png";
 import Image from "next/image";
+import { useSession, signIn, signOut } from "next-auth/react";
 
 import CloseHamburgerIcon from "@/icons/CloseHamburgerIcon";
 import { useAuth } from "@/context/auth";
+import Logo from "@/icons/Logo";
 const NAV_MENUES: {
   id: number;
   menu: string;
@@ -57,7 +59,7 @@ const Visitor = () => {
   // const [isLogin, setIsLogin] = useState(false);
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
   const router = useRouter();
-  const { logout, isAuthenticated } = useAuth();
+  const { isAuthenticated, logout, user } = useAuth();
   // useEffect(() => {
   //   const userDataToken = Cookies.get("user_data");
   //   if (userDataToken) {
@@ -72,7 +74,7 @@ const Visitor = () => {
   return (
     <div>
       <div className="bg-white border shadow-sm">
-        <nav className="max-w-full w-90% py-4 mx-auto flex items-center justify-between">
+        <nav className="max-w-full w-90% my-2 mx-auto flex items-center justify-between">
           <div
             onClick={() => {
               setIsHamburgerOpen(!isHamburgerOpen);
@@ -82,7 +84,9 @@ const Visitor = () => {
             {isHamburgerOpen ? <CloseHamburgerIcon /> : <HamburgerIcon />}
           </div>
 
-          <div className="font-bold text-3xl text-primary">DH</div>
+          <div className="font-bold text-3xl text-primary">
+            <Logo />
+          </div>
 
           <div className="hidden sm:flex">
             <ul className="gap-5 lg:gap-7 sm:flex">
@@ -165,8 +169,8 @@ const Visitor = () => {
 
             <li
               onClick={() => {
-                logout();
-                console.log(isAuthenticated);
+                // logout();
+                // console.log(isAuthenticated);
               }}
               className="text-base px-5 py-4 font-medium flex gap-3"
             >
