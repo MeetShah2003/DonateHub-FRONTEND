@@ -6,7 +6,8 @@ import { useState } from "react";
 import * as Yup from "yup";
 import { useRouter } from "next/router";
 import { BACKEND_BASE_URL } from "@/consts";
-// import { useUser } from "@/context/user";
+import { useAuth } from "@/context/auth";
+import Spinner from "@/components/Spinner";
 
 const validationSchema = Yup.object().shape({
   password: Yup.string()
@@ -20,20 +21,20 @@ const validationSchema = Yup.object().shape({
 
 const Password = () => {
   const router = useRouter();
-  // const { forgotPasswordEmail } = useUser();
-  // console.log(forgotPasswordEmail);
-
+  const { forgotPasswordEmail } = useAuth();
+  const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const { handleSubmit, handleChange, handleBlur, errors, touched, values } =
-    useFormik({
+  const { handleSubmit, handleChange, handleBlur, errors, touched } = useFormik(
+    {
       initialValues: { password: "", confirmPassword: "" },
       validationSchema: validationSchema,
       onSubmit: (formData) => {
+        setLoading(true);
         const { confirmPassword, ...passwordData } = formData;
         fetch(`${BACKEND_BASE_URL}/api/updatePassword`, {
           method: "PATCH",
           headers: {
-            // Authorization: `Bearer ${forgotPasswordEmail}`,
+            Authorization: `Bearer ${forgotPasswordEmail}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify(passwordData),
@@ -42,13 +43,18 @@ const Password = () => {
           .then((data) => {
             console.log(data);
             console.log(passwordData);
+          })
+          .finally(() => {
+            setLoading(false);
           });
         router.push("/login/forgot-password/change-success");
         console.log(passwordData);
       },
-    });
+    }
+  );
   return (
     <WelcomePage title="Reset" secondTitle="Password">
+      {loading && <Spinner />}
       <form className="mx-5 lg:mx-20 py-10 gap-20" onSubmit={handleSubmit}>
         <h3 className="font-inter text-3xl drop-shadow-2xl tracking-wider font-bold mb-8">
           Enter New Password

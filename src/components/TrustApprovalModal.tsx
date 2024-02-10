@@ -1,3 +1,4 @@
+import Image from "next/image";
 const TrustApprovalModal: React.FC<{
   title: string;
   description: string;
@@ -19,7 +20,13 @@ const TrustApprovalModal: React.FC<{
     >
       <div className="flex flex-col sm:flex-row w-full">
         <div className="m-2 flex sm:flex-shrink-0">
-          <img className="rounded-md sm:h-14 w-full " src={trustImage}></img>
+          <Image
+            alt="trustImage"
+            className="rounded-md sm:h-14 w-full "
+            src={trustImage}
+            width={100}
+            height={100}
+          ></Image>
         </div>
         <div className="flex flex-col m-2">
           <p className="text-base font-semibold font-inter">{title}</p>
@@ -47,7 +54,7 @@ const TrustApprovalModal: React.FC<{
           <p className="text-gray-500 text-sm">{creationDate}</p>
         </div>
       </div>
-      <div className="flex justify-center w-full sm:w-fit p-2 text-white  ">
+      <div className="flex justify-center my-5 w-full sm:w-fit p-2 text-white  ">
         <button
           onClick={onVerify}
           className="font-medium w-full bg-primary py-2 px-5 rounded-sm"

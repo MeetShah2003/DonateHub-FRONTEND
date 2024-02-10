@@ -6,16 +6,19 @@ import Cookies from "js-cookie";
 import { useRouter } from "next/router";
 import { BACKEND_BASE_URL } from "@/consts";
 import NoData from "@/components/NoData";
+import AdminRoute from "@/components/AdminRoute";
+import Spinner from "@/components/Spinner";
 
 const VerifyTrust = () => {
-  const { isAuthenticated, token } = useAuth();
   const [unVerifiedTrusts, setUnVerifiedTrusts] = useState([]);
   const access_token = Cookies.get("access_token");
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   console.log(unVerifiedTrusts);
 
   const getPendingTrust = async () => {
+    setLoading(true);
     try {
       const response = await fetch(`${BACKEND_BASE_URL}/admin/allTrustsU`, {
         method: "GET",
@@ -30,6 +33,7 @@ const VerifyTrust = () => {
       const data = await response.json();
       console.log(data["unverifiedTrusts"]);
       setUnVerifiedTrusts(data["unverifiedTrusts"]);
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -43,6 +47,7 @@ const VerifyTrust = () => {
 
   return (
     <AdminFrame title="Verify Trust">
+      {loading && <Spinner />}
       {unVerifiedTrusts &&
         unVerifiedTrusts?.length > 0 &&
         unVerifiedTrusts?.map(
@@ -61,7 +66,7 @@ const VerifyTrust = () => {
               year: "numeric",
             });
             return (
-              <div className="my-2">
+              <div key={_id} className="my-2">
                 <TrustApprovalModal
                   description={description}
                   title={trustName}
@@ -76,9 +81,9 @@ const VerifyTrust = () => {
             );
           }
         )}
-      {unVerifiedTrusts?.length <= 0 && <NoData />}
+      {!unVerifiedTrusts?.length && <NoData />}
     </AdminFrame>
   );
 };
 
-export default VerifyTrust;
+export default AdminRoute(VerifyTrust);

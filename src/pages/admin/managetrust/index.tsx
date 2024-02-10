@@ -10,11 +10,14 @@ import Cookies from "js-cookie";
 import { TrustData } from "@/types/types";
 import UnBlockIcon from "@/icons/UnBlockIcon";
 import NoData from "@/components/NoData";
+import AdminRoute from "@/components/AdminRoute";
+import Spinner from "@/components/Spinner";
 
 const ManageTrust = () => {
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
+  const [loading, setLoading] = useState(false);
   const [allTrustData, setAllTrustData] = useState<TrustData[]>([]);
   const access_token = Cookies.get("access_token");
 
@@ -23,6 +26,7 @@ const ManageTrust = () => {
   };
 
   const getAllTrust = () => {
+    setLoading(true);
     fetch(`${BACKEND_BASE_URL}/admin/allTrustsV`, {
       method: "GET",
       headers: {
@@ -34,12 +38,16 @@ const ManageTrust = () => {
       .then((data) => {
         console.log(data["verifiedTrusts"]);
         setAllTrustData(data["verifiedTrusts"]);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
   console.log(allTrustData);
 
   const handleBlock = async (_id: string) => {
+    setLoading(true);
     try {
       const response = await fetch(
         `${BACKEND_BASE_URL}/admin/blockTrust/${_id}`,
@@ -55,12 +63,14 @@ const ManageTrust = () => {
       if (response.ok) {
         getAllTrust();
       }
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
   const handleUnblock = async (_id: string) => {
+    setLoading(true);
     try {
       const response = await fetch(
         `${BACKEND_BASE_URL}/admin/unBlockTrust/${_id}`,
@@ -76,6 +86,7 @@ const ManageTrust = () => {
       if (response.ok) {
         getAllTrust();
       }
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -95,6 +106,7 @@ const ManageTrust = () => {
 
   return (
     <AdminFrame title="Manage Trusts">
+      {loading && <Spinner />}
       <div>
         <input
           type="text"
@@ -107,92 +119,108 @@ const ManageTrust = () => {
       <div className="border rounded-t-lg rounded-b-lg shadow-sm overflow-x-auto">
         <div className="bg-gray-200 rounded-t-lg">
           <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr>
-                  <th className="py-3 px-6 text-left bg-gray-200">No</th>
-                  <th className="py-3 px-6 text-left bg-gray-200">
-                    Trust Name
-                  </th>
-                  <th className="py-3 px-6 text-left bg-gray-200">
-                    Contact No
-                  </th>
-                  <th className="py-3 px-6 text-left bg-gray-200">
-                    Trust Email
-                  </th>
-                  <th className="py-3 px-6 text-left bg-gray-200">Catagory</th>
+            {currentItems && (
+              <table className="w-full">
+                <thead>
+                  <tr>
+                    <th className="py-3 px-6 text-left bg-gray-200">No</th>
+                    <th className="py-3 px-6 text-left bg-gray-200">
+                      Trust Name
+                    </th>
+                    <th className="py-3 px-6 text-left bg-gray-200">
+                      Contact No
+                    </th>
+                    <th className="py-3 px-6 text-left bg-gray-200">
+                      Trust Email
+                    </th>
+                    <th className="py-3 px-6 text-left bg-gray-200">
+                      Catagory
+                    </th>
 
-                  <th className="py-3 px-6 text-center bg-gray-200">Action</th>
-                </tr>
-              </thead>
-              <tbody className="bg-white rounded-b-lg">
-                {currentItems &&
-                  currentItems.length > 0 &&
-                  currentItems?.map(
-                    (
-                      { _id, category, contactNo, email, trustName, isBlocked },
-                      index
-                    ) => {
-                      console.log(_id);
-                      return (
-                        <tr className="hover:bg-gray-100 transition" key={_id}>
-                          <td className="py-4 px-6 border-b">
-                            {index + 1 + currentPage * itemsPerPage}
-                          </td>
-                          <td className="py-4 px-6 border-b">{trustName}</td>
-                          <td className="py-4 px-6 border-b">{contactNo}</td>
-                          <td className="py-4 px-6 border-b">{email}</td>
-                          <td className="py-4 px-6 border-b">{category}</td>
-                          <td className="py-4 px-2 border-b">
-                            <div className="flex">
-                              <div className="flex w-full flex-row items-center justify-center border-r border-dark-150">
-                                <button className="flex flex-row items-center justify-center gap-1 rounded-md text-base font-normal leading-5 text-gray-1000">
-                                  <EditIcon />
-                                  <span className="hidden text-blue-600 font-inter text-base font-normal leading-5 text-gray-1000 sm:block">
-                                    Edit
-                                  </span>
-                                </button>
+                    <th className="py-3 px-6 text-center bg-gray-200">
+                      Action
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white rounded-b-lg">
+                  {currentItems &&
+                    currentItems.length > 0 &&
+                    currentItems?.map(
+                      (
+                        {
+                          _id,
+                          category,
+                          contactNo,
+                          email,
+                          trustName,
+                          isBlocked,
+                        },
+                        index
+                      ) => {
+                        console.log(_id);
+                        return (
+                          <tr
+                            className="hover:bg-gray-100 transition"
+                            key={_id}
+                          >
+                            <td className="py-4 px-6 border-b">
+                              {index + 1 + currentPage * itemsPerPage}
+                            </td>
+                            <td className="py-4 px-6 border-b">{trustName}</td>
+                            <td className="py-4 px-6 border-b">{contactNo}</td>
+                            <td className="py-4 px-6 border-b">{email}</td>
+                            <td className="py-4 px-6 border-b">{category}</td>
+                            <td className="py-4 px-2 border-b">
+                              <div className="flex">
+                                <div className="flex w-full flex-row items-center justify-center border-r border-dark-150">
+                                  <button className="flex flex-row items-center justify-center gap-1 rounded-md text-base font-normal leading-5 text-gray-1000">
+                                    <EditIcon />
+                                    <span className="hidden text-blue-600 font-inter text-base font-normal leading-5 text-gray-1000 sm:block">
+                                      Edit
+                                    </span>
+                                  </button>
+                                </div>
+                                {isBlocked ? (
+                                  <div className="flex w-full flex-row items-center justify-center">
+                                    <button
+                                      onClick={() => {
+                                        handleUnblock(_id);
+                                      }}
+                                      className="flex flex-row items-center justify-center gap-1 rounded-md text-base font-normal leading-5 text-danger-100"
+                                    >
+                                      <UnBlockIcon />
+                                      <span className="hidden text-blue-600 font-inter text-base font-normal leading-5 text-danger-100 sm:block">
+                                        Unblock
+                                      </span>
+                                    </button>
+                                  </div>
+                                ) : (
+                                  <div className="flex w-full flex-row items-center justify-center">
+                                    <button
+                                      onClick={() => {
+                                        handleBlock(_id);
+                                      }}
+                                      className="flex flex-row items-center justify-center gap-1 rounded-md text-base font-normal leading-5 text-danger-100"
+                                    >
+                                      <BlockIcon />
+                                      <span className="hidden text-[#C80707] font-inter text-base font-normal leading-5 text-danger-100 sm:block">
+                                        Block
+                                      </span>
+                                    </button>
+                                  </div>
+                                )}
                               </div>
-                              {isBlocked ? (
-                                <div className="flex w-full flex-row items-center justify-center">
-                                  <button
-                                    onClick={() => {
-                                      handleUnblock(_id);
-                                    }}
-                                    className="flex flex-row items-center justify-center gap-1 rounded-md text-base font-normal leading-5 text-danger-100"
-                                  >
-                                    <UnBlockIcon />
-                                    <span className="hidden text-blue-600 font-inter text-base font-normal leading-5 text-danger-100 sm:block">
-                                      Unblock
-                                    </span>
-                                  </button>
-                                </div>
-                              ) : (
-                                <div className="flex w-full flex-row items-center justify-center">
-                                  <button
-                                    onClick={() => {
-                                      handleBlock(_id);
-                                    }}
-                                    className="flex flex-row items-center justify-center gap-1 rounded-md text-base font-normal leading-5 text-danger-100"
-                                  >
-                                    <BlockIcon />
-                                    <span className="hidden text-[#C80707] font-inter text-base font-normal leading-5 text-danger-100 sm:block">
-                                      Block
-                                    </span>
-                                  </button>
-                                </div>
-                              )}
-                              {currentItems?.length <= 0 && <NoData />}
-                            </div>
-                          </td>
-                        </tr>
-                      );
-                    }
-                  )}
-              </tbody>
-            </table>
+                            </td>
+                          </tr>
+                        );
+                      }
+                    )}
+                </tbody>
+              </table>
+            )}
           </div>
         </div>
+        {!currentItems?.length && <NoData />}
       </div>
       <ReactPaginate
         previousLabel={<ArrowIcon />}
@@ -220,4 +248,4 @@ const ManageTrust = () => {
   );
 };
 
-export default ManageTrust;
+export default AdminRoute(ManageTrust);

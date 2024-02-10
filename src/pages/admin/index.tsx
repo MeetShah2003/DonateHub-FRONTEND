@@ -1,6 +1,8 @@
 import { getAuthenticatedRouteCheck } from "@/authguard/authguard";
 import AdminFrame from "@/components/AdminFrame";
-// import { useUser } from "@/context/user";
+import AdminRoute from "@/components/AdminRoute";
+import { useAuth } from "@/context/auth";
+import React from "react";
 
 const Admin = () => {
   // const { userData } = useUser();
@@ -15,4 +17,4 @@ const Admin = () => {
 
 export const getServerSideProps = getAuthenticatedRouteCheck;
 
-export default Admin;
+export default AdminRoute(Admin);

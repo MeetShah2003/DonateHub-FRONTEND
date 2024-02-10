@@ -41,7 +41,7 @@ const TrustLogin = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const token = Cookies.get("access_token");
-  const { isAuthenticated, login, user } = useAuth();
+  const { isAuthenticated, user } = useAuth();
 
   const { data: session } = useSession();
 
@@ -118,7 +118,6 @@ const TrustLogin = () => {
       } else {
         router.push("/dashboard");
       }
-      successToast(`Welcome ${user.firstName} ${user.lastName}`);
     } else {
       if (user?.isBlocked) {
         errorToast("You Are Blocked");
@@ -142,7 +141,6 @@ const TrustLogin = () => {
         //     .then((res) => res.json())
         //     .then((data) => {
         //       console.log(data);
-
         //       if (data.message == "login sucessfull") {
         //         // setUserData(data);
         //         Cookies.set("user_data", data.token, {
@@ -187,11 +185,11 @@ const TrustLogin = () => {
         // } catch (error) {
         //   console.log(error);
         // }
-        try {
-          await login(values.email, values.password);
-        } catch (error) {
-          console.log(error);
-        }
+        // try {
+        //   await login(values.email, values.password);
+        // } catch (error) {
+        //   console.log(error);
+        // }
       },
     }
   );

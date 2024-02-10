@@ -1,15 +1,20 @@
 import AdminFrame from "@/components/AdminFrame";
+import AdminRoute from "@/components/AdminRoute";
 import { BACKEND_BASE_URL, trustData } from "@/consts";
 import { useAuth } from "@/context/auth";
 import { TrustData } from "@/types/types";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import Cookies from "js-cookie";
+import Spinner from "@/components/Spinner";
+import Image from "next/image";
 
 const SingleTrust = () => {
   const { query, push } = useRouter();
-  const { token } = useAuth();
   const [singleData, setSingleData] = useState<TrustData>();
+  const [loading, setLoading] = useState(false);
+  const access_token = Cookies.get("access_token");
   const formattedDate = singleData
     ? new Intl.DateTimeFormat("en-GB", {
         year: "numeric",
@@ -22,10 +27,11 @@ const SingleTrust = () => {
     toast.success(successMessage);
 
   const getSingleTrustData = (id: string) => {
+    setLoading(true);
     fetch(`${BACKEND_BASE_URL}/admin/singleTrust/${id}`, {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${access_token}`,
         "Content-Type": "application/json",
       },
     })
@@ -38,20 +44,24 @@ const SingleTrust = () => {
         if (data) {
           setSingleData(data["singlePageTrust"]);
         }
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
   useEffect(() => {
-    getSingleTrustData(query.trustId);
-  }, [query.trustId, token]);
+    getSingleTrustData(query.trustId as string);
+  }, [query.trustId, access_token]);
 
   console.log(singleData);
 
   const onAccept = async () => {
+    setLoading(true);
     fetch(`${BACKEND_BASE_URL}/admin/acceptStatus/${query.trustId}`, {
       method: "PATCH",
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${access_token}`,
         "Content-Type": "application/json",
       },
     })
@@ -63,13 +73,17 @@ const SingleTrust = () => {
           successToast("Trust Request Accepted");
           push("/admin/verifytrust");
         }
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
   const onReject = () => {
+    setLoading(true);
     fetch(`${BACKEND_BASE_URL}/admin/rejectStatus/${query.trustId}`, {
       method: "DELETE",
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${access_token}`,
         "Content-Type": "application/json",
       },
     })
@@ -81,19 +95,25 @@ const SingleTrust = () => {
           errorToast("Trust Request Rejected");
           push("/admin/verifytrust");
         }
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
   return (
     <AdminFrame title="Trust Details">
+      {loading && <Spinner />}
       <div className="flex flex-col gap-5 w-full">
         <div className="flex flex-col sm:flex-row w-full gap-8">
-          <div className="w-full sm:w-1/3 border-2 rounded-sm">
-            <img
-              src={singleData?.trustlogo}
-              className="flex w-full h-full object-cover"
-              alt=""
-            ></img>
+          <div className="w-full sm:w-1/3 border-2 rounded-lg">
+            <Image
+              src={singleData?.trustlogo as string}
+              className="flex w-full h-full object-cover rounded-lg"
+              alt="trustlogo"
+              width={300}
+              height={200}
+            ></Image>
           </div>
           <div className="w-2/2 flex flex-col gap-5">
             <div className="flex sm:flex-col gap-5 justify-around">
@@ -189,4 +209,4 @@ const SingleTrust = () => {
   );
 };
 
-export default SingleTrust;
+export default AdminRoute(SingleTrust);

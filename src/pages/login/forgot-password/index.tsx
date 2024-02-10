@@ -4,9 +4,10 @@ import { useFormik } from "formik";
 import { useRouter } from "next/router";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
-// import { useUser } from "@/context/user";
-import { useEffect } from "react";
 import { BACKEND_BASE_URL } from "@/consts";
+import { useAuth } from "@/context/auth";
+import Spinner from "@/components/Spinner";
+import { useState } from "react";
 
 const errorToast = (errorMessage: string) => toast.error(errorMessage);
 const successToast = (successMessage: string) => toast.success(successMessage);
@@ -20,7 +21,8 @@ const forgotPasswordSchema = Yup.object().shape({
 
 const ForgotPassword = () => {
   const router = useRouter();
-  // const { forgotPasswordEmail, setForgotPasswordEmail } = useUser();
+  const [loading, setLoading] = useState(false);
+  const { forgotPasswordEmail, setForgotPasswordEmail } = useAuth();
   const { handleChange, handleSubmit, handleBlur, touched, errors } = useFormik(
     {
       initialValues: {
@@ -28,28 +30,28 @@ const ForgotPassword = () => {
       },
       validationSchema: forgotPasswordSchema,
       onSubmit: (values) => {
-        try {
-          fetch(`${BACKEND_BASE_URL}/api/userEmail`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(values),
+        setLoading(true);
+        fetch(`${BACKEND_BASE_URL}/api/userEmail`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(values),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.message === "user not found") {
+              errorToast("User not found");
+            } else {
+              setForgotPasswordEmail(data.email);
+              successToast("Otp sent sucessfully");
+              setTimeout(() => {
+                router.push("/login/forgot-password/enterotp");
+              }, 3000);
+            }
           })
-            .then((res) => res.json())
-            .then((data) => {
-              if (data.message === "user not found") {
-                errorToast("User not found");
-              } else {
-                setForgotPasswordEmail(data.email);
-                successToast("Otp sent sucessfully");
-                setTimeout(() => {
-                  router.push("/login/forgot-password/enterotp");
-                }, 3000);
-              }
-            });
-          console.log("forgotPasswordEmail", forgotPasswordEmail);
-        } catch (error) {
-          console.log(error);
-        }
+          .finally(() => {
+            setLoading(false);
+          });
+        console.log("forgotPasswordEmail", forgotPasswordEmail);
       },
     }
   );
@@ -59,6 +61,7 @@ const ForgotPassword = () => {
   // }, [forgotPasswordEmail]);
   return (
     <WelcomePage title="Reset" secondTitle="Password">
+      {loading && <Spinner />}
       <form className="mx-5 lg:mx-20 py-10 gap-20" onSubmit={handleSubmit}>
         <h3 className="font-inter text-3xl drop-shadow-2xl tracking-wider font-bold mb-8">
           Reset Password
