@@ -6,7 +6,8 @@ import WelcomePage from "@/components/WelcomePage";
 const home = () => {
   return (
     <div>
-      <Visitor />
+      {/* <Visitor /> */}
+      <SignUp />
     </div>
   );
 };

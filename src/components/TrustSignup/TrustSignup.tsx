@@ -16,12 +16,14 @@ import Image from "next/image";
 import { TrustData } from "@/types/types";
 import { storage } from "../../firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import Spinner from "../Spinner";
 
 const TrustSignup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [selectedState, setSelectedState] = useState("");
   const [image, setImage] = useState(null);
   const [trustId, setTrustId] = useState(uuidv4());
+  const [loading, setLoading] = useState(false);
   const [cities, setCities] = useState<{ label: string; value: string }[]>([
     { label: "Select City", value: "" },
   ]);
@@ -134,14 +136,19 @@ const TrustSignup = () => {
     initialValues: initialValue,
     validationSchema: trustDetailSchema,
     onSubmit: (value) => {
+      setLoading(true);
       if (value && isValid) {
         fetch(`${BACKEND_BASE_URL}/trust/trustSignup`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(value),
-        }).then((res) => {
-          console.log(res);
-        });
+        })
+          .then((res) => {
+            console.log(res);
+          })
+          .finally(() => {
+            setLoading(false);
+          });
       }
     },
   });
@@ -395,6 +402,7 @@ const TrustSignup = () => {
 
   return (
     <WelcomePage title="Welcome To" secondTitle="DonateHub">
+      {loading && <Spinner />}
       <div className="mx-5 lg:mx-20 mb-10 flex flex-col justify-center items-center gap-8">
         {/* <div className="relative bottom-6">
           <div className="border-4 h-32 w-32 p-1 border-primary rounded-full overflow-hidden">
@@ -422,10 +430,13 @@ const TrustSignup = () => {
         </div> */}
         <div className="relative bottom-6">
           <div className="border-4 h-32 w-32 p-1 border-primary rounded-full overflow-hidden">
-            <img
+            <Image
+              alt="trustlogo"
               src={values.trustlogo}
               className="rounded-full h-full w-full object-contain"
-            ></img>
+              width={300}
+              height={200}
+            ></Image>
           </div>
           <input
             type="file"

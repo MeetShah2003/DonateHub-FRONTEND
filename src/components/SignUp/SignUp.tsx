@@ -8,9 +8,11 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import { BACKEND_BASE_URL } from "@/consts";
+import Spinner from "../Spinner";
 
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const errorToast = (errorMessage: string) => toast.error(errorMessage);
@@ -60,6 +62,7 @@ const SignUp = () => {
       initialValues: initialValue,
       validationSchema: SignupSchema,
       onSubmit: async (values) => {
+        setLoading(true);
         const { confirmPassword, ...data } = values;
         try {
           fetch(`${BACKEND_BASE_URL}/api/signup`, {
@@ -80,6 +83,12 @@ const SignUp = () => {
                   router.push("/login");
                 }, 3000);
               }
+            })
+            .catch((error) => {
+              console.log(error);
+            })
+            .finally(() => {
+              setLoading(false);
             });
         } catch (error) {
           console.log(error);
@@ -87,160 +96,163 @@ const SignUp = () => {
       },
     });
   return (
-    <WelcomePage title="Welcome To" secondTitle="DonateHub">
-      <form className="mx-5 lg:mx-20 gap-10" onSubmit={handleSubmit}>
-        <h3 className="font-inter text-3xl drop-shadow-2xl tracking-wider font-bold mb-8">
-          Sign Up
-        </h3>
-        <div className="flex w-full">
-          <div className="flex w-1/2 flex-col border-2 px-2 py-1 rounded-tl-lg focus-within:border-primary">
-            <label className="pb-1 text-sm font-medium">First Name</label>
-            <input
-              id="firstName"
-              name="firstName"
-              type="text"
-              className="outline-none tracking-wider"
-              placeholder="John"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.firstName}
-            />
-            {touched.firstName && errors.firstName && (
-              <span className="text-sm text-red-600">{errors.firstName}</span>
-            )}
+    <>
+      <WelcomePage title="Welcome To" secondTitle="DonateHub">
+        {loading && <Spinner />}
+        <form className="mx-5 lg:mx-20 gap-10" onSubmit={handleSubmit}>
+          <h3 className="font-inter text-3xl drop-shadow-2xl tracking-wider font-bold mb-8">
+            Sign Up
+          </h3>
+          <div className="flex w-full">
+            <div className="flex w-1/2 flex-col border-2 px-2 py-1 rounded-tl-lg focus-within:border-primary">
+              <label className="pb-1 text-sm font-medium">First Name</label>
+              <input
+                id="firstName"
+                name="firstName"
+                type="text"
+                className="outline-none tracking-wider"
+                placeholder="John"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.firstName}
+              />
+              {touched.firstName && errors.firstName && (
+                <span className="text-sm text-red-600">{errors.firstName}</span>
+              )}
+            </div>
+            <div className="flex w-1/2 flex-col border-2 border-l-transparent px-2 py-1 rounded-tr-lg focus-within:border-primary">
+              <label className="pb-1 text-sm font-medium">Last Name</label>
+              <input
+                id="lastName"
+                name="lastName"
+                type="text"
+                className="outline-none tracking-wider"
+                placeholder="Doe"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.lastName}
+              />
+              {touched.lastName && errors.lastName && (
+                <span className="text-sm text-red-600">{errors.lastName}</span>
+              )}
+            </div>
           </div>
-          <div className="flex w-1/2 flex-col border-2 border-l-transparent px-2 py-1 rounded-tr-lg focus-within:border-primary">
-            <label className="pb-1 text-sm font-medium">Last Name</label>
-            <input
-              id="lastName"
-              name="lastName"
-              type="text"
-              className="outline-none tracking-wider"
-              placeholder="Doe"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.lastName}
-            />
-            {touched.lastName && errors.lastName && (
-              <span className="text-sm text-red-600">{errors.lastName}</span>
-            )}
-          </div>
-        </div>
 
-        <div className="flex flex-col border-t-transparent border-2 px-2 py-1 focus-within:border-primary">
-          <label className="pb-1 text-sm font-medium">Email</label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            onChange={handleChange}
-            onBlur={handleBlur}
-            className="outline-none tracking-wider"
-            placeholder="johndoe@gmail.com"
-          />
-          {touched.email && errors.email && (
-            <span className="text-sm text-red-600">{errors.email}</span>
-          )}
-        </div>
-        <div className="flex flex-col border-t-transparent border-2 px-2 py-1 focus-within:border-primary">
-          <label className="pb-1 text-sm font-medium">Gender</label>
-          <div className="flex space-x-4">
-            <div className="flex items-center">
-              <input
-                type="radio"
-                id="male"
-                name="gender"
-                value="male"
-                checked={values.gender === "male"}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-              <label htmlFor="male" className="ml-2">
-                Male
-              </label>
-            </div>
-            <div className="flex items-center">
-              <input
-                type="radio"
-                id="female"
-                name="gender"
-                value="female"
-                checked={values.gender === "female"}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-              <label htmlFor="female" className="ml-2">
-                Female
-              </label>
-            </div>
-            {/* Add more gender options if needed */}
-          </div>
-          {touched.gender && errors.gender && (
-            <span className="text-sm text-red-600">{errors.gender}</span>
-          )}
-        </div>
-        <div className="flex flex-col border-t-transparent border-2 px-2 py-1 focus-within:border-primary">
-          <label className="pb-1 text-sm font-medium">Password</label>
-          <div className="flex justify-between">
+          <div className="flex flex-col border-t-transparent border-2 px-2 py-1 focus-within:border-primary">
+            <label className="pb-1 text-sm font-medium">Email</label>
             <input
-              id="password"
-              name="password"
-              type={showPassword ? "text" : "password"}
+              id="email"
+              name="email"
+              type="email"
               onChange={handleChange}
               onBlur={handleBlur}
-              className="outline-none tracking-wider w-full"
+              className="outline-none tracking-wider"
+              placeholder="johndoe@gmail.com"
+            />
+            {touched.email && errors.email && (
+              <span className="text-sm text-red-600">{errors.email}</span>
+            )}
+          </div>
+          <div className="flex flex-col border-t-transparent border-2 px-2 py-1 focus-within:border-primary">
+            <label className="pb-1 text-sm font-medium">Gender</label>
+            <div className="flex space-x-4">
+              <div className="flex items-center">
+                <input
+                  type="radio"
+                  id="male"
+                  name="gender"
+                  value="male"
+                  checked={values.gender === "male"}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                <label htmlFor="male" className="ml-2">
+                  Male
+                </label>
+              </div>
+              <div className="flex items-center">
+                <input
+                  type="radio"
+                  id="female"
+                  name="gender"
+                  value="female"
+                  checked={values.gender === "female"}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                <label htmlFor="female" className="ml-2">
+                  Female
+                </label>
+              </div>
+              {/* Add more gender options if needed */}
+            </div>
+            {touched.gender && errors.gender && (
+              <span className="text-sm text-red-600">{errors.gender}</span>
+            )}
+          </div>
+          <div className="flex flex-col border-t-transparent border-2 px-2 py-1 focus-within:border-primary">
+            <label className="pb-1 text-sm font-medium">Password</label>
+            <div className="flex justify-between">
+              <input
+                id="password"
+                name="password"
+                type={showPassword ? "text" : "password"}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                className="outline-none tracking-wider w-full"
+                placeholder="••••••••"
+              />
+              <div
+                onClick={() => {
+                  setShowPassword(!showPassword);
+                }}
+              >
+                {showPassword ? <HidePasswordIcon /> : <ShowPasswordIcon />}
+              </div>
+            </div>
+            {touched.password && errors.password && (
+              <span className="text-sm text-red-600">{errors.password}</span>
+            )}
+          </div>
+          <div className="flex flex-col border-t-transparent border-2 rounded-b-lg px-2 py-1 focus-within:border-primary">
+            <label className="pb-1 text-sm font-medium">Confirm Password</label>
+            <input
+              id="confirmPassword"
+              name="confirmPassword"
+              type="text"
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className="outline-none tracking-wider"
               placeholder="••••••••"
             />
-            <div
-              onClick={() => {
-                setShowPassword(!showPassword);
-              }}
-            >
-              {showPassword ? <HidePasswordIcon /> : <ShowPasswordIcon />}
-            </div>
+            {touched.confirmPassword && errors.confirmPassword && (
+              <span className="text-sm text-red-600">
+                {errors.confirmPassword}
+              </span>
+            )}
           </div>
-          {touched.password && errors.password && (
-            <span className="text-sm text-red-600">{errors.password}</span>
-          )}
-        </div>
-        <div className="flex flex-col border-t-transparent border-2 rounded-b-lg px-2 py-1 focus-within:border-primary">
-          <label className="pb-1 text-sm font-medium">Confirm Password</label>
-          <input
-            id="confirmPassword"
-            name="confirmPassword"
-            type="text"
-            onChange={handleChange}
-            onBlur={handleBlur}
-            className="outline-none tracking-wider"
-            placeholder="••••••••"
-          />
-          {touched.confirmPassword && errors.confirmPassword && (
-            <span className="text-sm text-red-600">
-              {errors.confirmPassword}
-            </span>
-          )}
-        </div>
-        <div className="my-3 text-primary underline-offset-2 underline">
-          <Link href={"/trustsignup"}>As a trust?</Link>
-        </div>
-        <div className="flex flex-col border-2 mt-2 bg-primary shadow-sm rounded-lg px-2 py-2">
-          <button
-            type="submit"
-            className="outline-none text-white font-inter font-medium"
-          >
-            Sign Up
-          </button>
-        </div>
-        <div className="my-3 flex justify-center ">
-          <p>
-            Already have an account?
-            <span className="text-primary underline-offset-2 underline">
-              <Link href={"/login"}>Login</Link>
-            </span>
-          </p>
-        </div>
-      </form>
-    </WelcomePage>
+          <div className="my-3 text-primary underline-offset-2 underline">
+            <Link href={"/trustsignup"}>As a trust?</Link>
+          </div>
+          <div className="flex flex-col border-2 mt-2 bg-primary shadow-sm rounded-lg px-2 py-2">
+            <button
+              type="submit"
+              className="outline-none text-white font-inter font-medium"
+            >
+              Sign Up
+            </button>
+          </div>
+          <div className="my-3 flex justify-center ">
+            <p>
+              Already have an account?
+              <span className="text-primary underline-offset-2 underline">
+                <Link href={"/login"}>Login</Link>
+              </span>
+            </p>
+          </div>
+        </form>
+      </WelcomePage>
+    </>
   );
 };
 

@@ -12,6 +12,7 @@ import LogoutIcon from "@/icons/LogoutIcon";
 import ProfileIcon from "@/icons/ProfileIcon";
 import CloseHamburgerIcon from "@/icons/CloseHamburgerIcon";
 import Logo from "@/icons/Logo";
+import { useAuth } from "@/context/auth";
 
 const ADMIN_MENUS: {
   id: number;
@@ -64,122 +65,91 @@ const AdminFrame: React.FC<{
 }> = ({ title, children }) => {
   const router = useRouter();
   const [sideBarIsOpen, setSideBarIsOpen] = useState(false);
+  const { logout } = useAuth();
 
   return (
     <>
-      <div className="border-b">
-        <nav className="max-w-full w-90%  mx-auto flex items-center justify-between">
-          <div
-            onClick={() => {
-              setSideBarIsOpen(!sideBarIsOpen);
-            }}
-            className="sm:hidden"
-          >
-            {!sideBarIsOpen ? <CloseHamburgerIcon /> : <HamburgerIcon />}
-          </div>
-          <div className="font-bold text-3xl text-primary">
-            <Logo />
-          </div>
-        </nav>
-      </div>
-      <div className="flex">
-        <nav className="h-5"></nav>
+      <div className="flex h-screen overflow-hidden">
         {/* Sidebar for large screens */}
-        <div className="hidden sm:block md:w-[30%] z-50 border border-t-transparent shadow-sm  overflow-y-auto sticky top-0 h-screen">
-          {/* <div className="flex flex-col border rounded-lg justify-center items-center py-5">
-            <div className="rounded-full h-24 w-24 border-4 border-primary">
-              <Image alt="" src={""} />
-            </div>
-            <div className="pt-2">
-              <p className="text-steelGray font-bold">Admin</p>
-            </div>
-            <div>
-              <p className="text-lightGray ">admin@gmail.com</p>
-            </div>
-          </div> */}
+        <div className="hidden sm:block sm:w-1/2 md:w-[30%] z-50 border border-t-transparent shadow-sm bg-primary rounded-tr-md rounded-tb-md overflow-y-auto">
           <ul className="my-5">
-            {ADMIN_MENUS &&
-              ADMIN_MENUS.length > 0 &&
-              ADMIN_MENUS.map(({ icon, id, menu, path }) => (
-                <div
-                  key={id}
-                  className="flex items-center cursor-pointer gap-5 py-4 px-5"
-                  onClick={() => {
-                    if (menu === "Logout") {
-                      // handleLogout();
-                    } else {
-                      router.push(path);
-                    }
-                  }}
-                >
-                  <div className="h-5">{icon}</div>
-                  <li>{menu}</li>
-                </div>
-              ))}
+            {ADMIN_MENUS.map(({ icon, id, menu, path }) => (
+              <div
+                key={id}
+                className="flex items-center cursor-pointer gap-5 py-4 px-5"
+                onClick={() => {
+                  if (menu === "Logout") {
+                    logout();
+                  } else {
+                    router.push(path);
+                  }
+                }}
+              >
+                <div className="h-5">{icon}</div>
+                <li className="text-white">{menu}</li>
+              </div>
+            ))}
           </ul>
         </div>
 
-        {/* Hamburger Sidebar for small screens */}
         <div
-          className={`w-[70%] bg-white fixed z-50 sm:hidden border ${
+          className={`sm:hidden w-2/3 absolute top-[60px] border border-t-transparent shadow-sm ${
             sideBarIsOpen
-              ? "transition-all ease-in-out duration-500 -left-[2000px]"
-              : "transition-all ease-in-out duration-500 left-0"
-          } shadow-sm rounded-lg h-screen`}
+              ? "-translate-x-0 transition-all duration-500 ease-in-out"
+              : "-translate-x-[2000px] transition-all duration-1000 ease-in-out"
+          } bg-primary rounded-tr-md rounded-tb-md overflow-y-auto`}
         >
-          <div className="flex flex-col border bg-white rounded-lg justify-center items-center py-5">
-            {/* <button
-              onClick={() => {
-                setSideBarIsOpen(!sideBarIsOpen);
-              }}
-              className="flex justify-end w-full px-2"
-            >
-              <CloseIcon />
-            </button> */}
-            <div className="rounded-full h-24 w-24 border-4 border-primary">
-              <Image alt="" src={""} />
-            </div>
-            <div className="pt-2">
-              <p className="text-steelGray font-bold">Admin</p>
-            </div>
-            <div>
-              <p className="text-lightGray">admin@gmail.com</p>
-            </div>
-          </div>
-          <ul>
-            {ADMIN_MENUS &&
-              ADMIN_MENUS.length > 0 &&
-              ADMIN_MENUS.map(({ icon, id, menu, path }) => (
-                <div
-                  key={id}
-                  className="flex items-center bg-white cursor-pointer gap-5 py-4 px-5"
-                >
-                  <div className="h-5">{icon}</div>
-                  <li
-                    onClick={() => {
-                      router.push(path);
-                    }}
-                  >
-                    {menu}
-                  </li>
-                </div>
-              ))}
+          <ul className="my-5">
+            {ADMIN_MENUS.map(({ icon, id, menu, path }) => (
+              <div
+                key={id}
+                className="flex items-center cursor-pointer gap-5 py-4 px-5"
+                onClick={() => {
+                  if (menu === "Logout") {
+                    logout();
+                  } else {
+                    router.push(path);
+                  }
+                }}
+              >
+                <div className="h-5">{icon}</div>
+                <li className="text-white">{menu}</li>
+              </div>
+            ))}
           </ul>
         </div>
 
-        {/* Main Content */}
-        <div className="w-full h-full p-5">
-          <div className="flex sm:hidden  p-5 items-center gap-3">
-            <p className="font-inter font-semibold text-steelGray text-xl sm:text-2xl">
-              {title}
-            </p>
+        <div className="flex flex-col w-full">
+          <div className="border-b-2 sticky top-0 bg-white z-50">
+            <nav className="max-w-full mx-auto flex items-center justify-between">
+              <div
+                onClick={() => {
+                  setSideBarIsOpen(!sideBarIsOpen);
+                }}
+                className="sm:hidden"
+              >
+                {sideBarIsOpen ? <CloseHamburgerIcon /> : <HamburgerIcon />}
+              </div>
+              <div className="font-bold text-3xl text-primary">
+                <Logo />
+              </div>
+            </nav>
           </div>
 
-          {/* Main Content for small and large screens */}
-          <p className="hidden sm:block p-5 font-inter font-semibold text-steelGray text-xl sm:text-2xl">
-            {title}
-          </p>
-          <div className="px-5">{children}</div>
+          <div className="flex-grow overflow-y-auto">
+            <div className="px-5">
+              <div className="flex sm:hidden p-5 items-center gap-3">
+                <p className="font-inter font-semibold text-steelGray text-xl sm:text-2xl">
+                  {title}
+                </p>
+              </div>
+
+              <p className="hidden sm:block p-5 font-inter font-semibold text-steelGray text-xl sm:text-2xl">
+                {title}
+              </p>
+              {children}
+            </div>
+          </div>
         </div>
       </div>
     </>

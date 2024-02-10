@@ -6,7 +6,8 @@ import * as Yup from "yup";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import { BACKEND_BASE_URL } from "@/consts";
-// import { useUser } from "@/context/user";
+import { useAuth } from "@/context/auth";
+import Spinner from "@/components/Spinner";
 
 const errorToast = (errorMessage: string) => toast.error(errorMessage);
 const successToast = (successMessage: string) => toast.success(successMessage);
@@ -14,10 +15,11 @@ const successToast = (successMessage: string) => toast.success(successMessage);
 const EnterOtp = () => {
   const [resendTimer, setResendTimer] = useState(2);
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
-  // const { forgotPasswordEmail } = useUser();
+  const { forgotPasswordEmail } = useAuth();
 
-  // console.log("otpEmail>>", forgotPasswordEmail);
+  console.log("otpEmail>>", forgotPasswordEmail);
 
   const validationSchema = Yup.object().shape({
     otp: Yup.string()
@@ -32,29 +34,29 @@ const EnterOtp = () => {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      try {
-        setSubmitted(true);
-        fetch(`${BACKEND_BASE_URL}/api/verify`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(values),
+      setLoading(true);
+      setSubmitted(true);
+      fetch(`${BACKEND_BASE_URL}/api/verify`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.message === "Correct OTP") {
+            successToast("Otp verified");
+            setTimeout(() => {
+              router.push("/login/forgot-password/newpassword");
+            }, 3000);
+          } else if (data.message === "In-Correct OTP") {
+            errorToast("Wrong Otp");
+          } else {
+            errorToast("Something went wrong");
+          }
         })
-          .then((res) => res.json())
-          .then((data) => {
-            if (data.message === "Correct OTP") {
-              successToast("Otp verified");
-              setTimeout(() => {
-                router.push("/login/forgot-password/newpassword");
-              }, 3000);
-            } else if (data.message === "In-Correct OTP") {
-              errorToast("Wrong Otp");
-            } else {
-              errorToast("Something went wrong");
-            }
-          });
-      } catch (error) {
-        console.log(error);
-      }
+        .finally(() => {
+          setLoading(false);
+        });
     },
   });
 
@@ -71,6 +73,7 @@ const EnterOtp = () => {
   }, [resendTimer]);
 
   const handleResendOtp = () => {
+    setLoading(true);
     setResendTimer(2);
     fetch(`${BACKEND_BASE_URL}/api/resendEmail`, {
       method: "POST",
@@ -79,11 +82,14 @@ const EnterOtp = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ email: forgotPasswordEmail }),
+    }).finally(() => {
+      setLoading(false);
     });
   };
 
   return (
     <WelcomePage title="Reset" secondTitle="Password">
+      {loading && <Spinner />}
       <form className="mx-5 lg:mx-20 py-10 gap-20" onSubmit={handleSubmit}>
         <h3 className="font-inter text-3xl drop-shadow-2xl tracking-wider font-bold mb-1">
           Enter Otp

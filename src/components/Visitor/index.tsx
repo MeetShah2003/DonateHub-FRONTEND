@@ -16,6 +16,7 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import CloseHamburgerIcon from "@/icons/CloseHamburgerIcon";
 import { useAuth } from "@/context/auth";
 import Logo from "@/icons/Logo";
+import Spinner from "../Spinner";
 const NAV_MENUES: {
   id: number;
   menu: string;
@@ -25,7 +26,7 @@ const NAV_MENUES: {
   {
     id: 1,
     menu: "Home",
-    path: "/",
+    path: "/dashboard",
     icon: <HomeIcon />,
   },
   {
@@ -73,6 +74,7 @@ const Visitor = () => {
 
   return (
     <div>
+      {/* <Spinner /> */}
       <div className="bg-white border shadow-sm">
         <nav className="max-w-full w-90% my-2 mx-auto flex items-center justify-between">
           <div
@@ -151,7 +153,7 @@ const Visitor = () => {
               : "transition-all ease-in-out duration-300 -left-[2000px]"
           } rounded-sm h-screen w-1/2`}
         >
-          <ul className="flex flex-col justify-center">
+          <ul className="flex  flex-col justify-center">
             {NAV_MENUES.map(({ id, menu, path, icon }) => {
               if (menu === "Profile" && !isAuthenticated) {
                 return null;
@@ -169,7 +171,7 @@ const Visitor = () => {
 
             <li
               onClick={() => {
-                // logout();
+                logout();
                 // console.log(isAuthenticated);
               }}
               className="text-base px-5 py-4 font-medium flex gap-3"
@@ -183,9 +185,9 @@ const Visitor = () => {
         </div>
       </div>
 
-      <div className="h-screen">
+      {/* <div className="h-screen">
         <Image src={HeaderBgImage} alt="headerImage" />
-      </div>
+      </div> */}
     </div>
   );
 };

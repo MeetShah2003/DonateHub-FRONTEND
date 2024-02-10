@@ -10,11 +10,14 @@ import Cookies from "js-cookie";
 import { UserData } from "@/types/types";
 import UnBlockIcon from "@/icons/UnBlockIcon";
 import NoData from "@/components/NoData";
+import AdminRoute from "@/components/AdminRoute";
+import Spinner from "@/components/Spinner";
 
 const ManageUser = () => {
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
+  const [loading, setLoading] = useState(false);
   const [allUserData, setAllUserData] = useState<UserData[]>([]);
   const access_token = Cookies.get("access_token");
 
@@ -23,6 +26,7 @@ const ManageUser = () => {
   };
 
   const handleBlock = async (_id: string) => {
+    setLoading(true);
     try {
       const response = await fetch(
         `${BACKEND_BASE_URL}/admin/blockUser/${_id}`,
@@ -38,6 +42,7 @@ const ManageUser = () => {
       if (response.ok) {
         getAllUserData();
       }
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -46,6 +51,7 @@ const ManageUser = () => {
   console.log(allUserData);
 
   const handleUnblock = async (_id: string) => {
+    setLoading(false);
     try {
       const response = await fetch(
         `${BACKEND_BASE_URL}/admin/unBlockUser/${_id}`,
@@ -61,12 +67,14 @@ const ManageUser = () => {
       if (response.ok) {
         getAllUserData();
       }
+      setLoading(true);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
   const getAllUserData = () => {
+    setLoading(true);
     fetch(`${BACKEND_BASE_URL}/admin/allUsers`, {
       method: "GET",
       headers: {
@@ -78,6 +86,9 @@ const ManageUser = () => {
       .then((data) => {
         console.log(data);
         setAllUserData(data["userRecords"]);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
@@ -96,6 +107,7 @@ const ManageUser = () => {
   const currentItems = filteredUsers?.slice(offset, offset + itemsPerPage);
   return (
     <AdminFrame title="Manage Users">
+      {loading && <Spinner />}
       <div>
         <input
           type="text"
@@ -106,7 +118,7 @@ const ManageUser = () => {
         />
       </div>
       <div className="border rounded-t-lg rounded-b-lg shadow-sm overflow-x-auto">
-        {currentItems.length <= 0 ? (
+        {!currentItems ? (
           <NoData />
         ) : (
           <div className="bg-gray-200 rounded-t-lg">
@@ -199,7 +211,7 @@ const ManageUser = () => {
           </div>
         )}
       </div>
-      {currentItems.length <= 0 ? (
+      {!currentItems?.length ? (
         ""
       ) : (
         <ReactPaginate
@@ -229,4 +241,4 @@ const ManageUser = () => {
   );
 };
 
-export default ManageUser;
+export default AdminRoute(ManageUser);

@@ -11,12 +11,15 @@ import { useAuth } from "@/context/auth";
 import { BACKEND_BASE_URL } from "@/consts";
 import { get } from "http";
 import { toast } from "react-toastify";
+import AdminRoute from "@/components/AdminRoute";
+import Spinner from "@/components/Spinner";
 
 const AdminProfile = () => {
   //   const { userData } = useUser();
   const [file, setFile] = useState<File | null>(null);
   const [userData, setUserData] = useState({});
   const { user, isAuthenticated } = useAuth();
+  const [loading, setLoading] = useState(false);
   const access_token = Cookies.get("access_token");
 
   const errorToast = (errorMessage: string) => toast.error(errorMessage);
@@ -41,6 +44,7 @@ const AdminProfile = () => {
   // };
 
   const getUpdateAdminProfile = (data: any) => {
+    setLoading(true);
     fetch(`${BACKEND_BASE_URL}/admin/updateProfile`, {
       method: "PATCH",
       headers: {
@@ -58,15 +62,11 @@ const AdminProfile = () => {
         if (data) {
           successToast("Profile Update Successfully");
         }
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
-
-  //
-  useEffect(() => {
-    // getAdminProfile();
-  }, []);
-
-  // console.log(userData);
 
   const profileSchema = Yup.object().shape({
     firstName: Yup.string().required("FirstName is required"),
@@ -116,6 +116,7 @@ const AdminProfile = () => {
 
   return (
     <AdminFrame title="Profile">
+      {loading && <Spinner />}
       <form className="mx-auto w-full max-w-md gap-10" onSubmit={handleSubmit}>
         <div className="flex items-center justify-center relative bottom-6">
           <div className="border-4 h-32 w-32 p-1 border-primary rounded-full overflow-hidden">
@@ -153,7 +154,7 @@ const AdminProfile = () => {
               placeholder="John"
               onChange={handleChange}
               onBlur={handleBlur}
-              value={values.firstName}
+              value={values.firstName || user?.firstName}
             />
             {touched.firstName && errors.firstName && (
               <span className="text-sm text-red-600">{errors.firstName}</span>
@@ -169,7 +170,7 @@ const AdminProfile = () => {
               placeholder="Doe"
               onChange={handleChange}
               onBlur={handleBlur}
-              value={values.lastName}
+              value={values.lastName || user?.lastName}
             />
             {touched.lastName && errors.lastName && (
               <span className="text-sm text-red-600">{errors.lastName}</span>
@@ -177,13 +178,13 @@ const AdminProfile = () => {
           </div>
         </div>
 
-        <div className="flex flex-col border-2 px-2 py-1 border-t-transparent focus-within:border-primary">
+        {/* <div className="flex flex-col border-2 px-2 py-1 border-t-transparent focus-within:border-primary">
           <label className="pb-1 text-sm font-medium">Password</label>
           <input
             id="password"
             name="password"
             type="text"
-            value={values.password}
+            value={values.password || user?.password}
             onChange={handleChange}
             onBlur={handleBlur}
             className="outline-none tracking-wider"
@@ -192,7 +193,7 @@ const AdminProfile = () => {
           {touched.password && errors.password && (
             <span className="text-sm text-red-600">{errors.password}</span>
           )}
-        </div>
+        </div> */}
 
         <div className="flex flex-col border-t-transparent border-2 px-2 py-1 focus-within:border-primary">
           <label className="pb-1 text-sm font-medium">Gender</label>
@@ -265,4 +266,4 @@ const AdminProfile = () => {
 
 export const getServerSideProps = getAuthenticatedRouteCheck;
 
-export default AdminProfile;
+export default AdminRoute(AdminProfile);
