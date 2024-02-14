@@ -41,6 +41,7 @@ const Dashboard = () => {
             trusts.map(({ trustName, trustlogo, _id }) => {
               return (
                 <TrustModel
+                  key={_id}
                   title={trustName}
                   trustlogo={trustlogo}
                   trustId={_id}
