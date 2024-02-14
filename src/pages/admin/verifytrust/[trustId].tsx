@@ -172,7 +172,7 @@ const SingleTrust = () => {
             </div>
             <div className="flex flex-col gap-2 sm:flex-row w-full">
               <div className="flex w-1/2 flex-col">
-                <p className="text-base font-semibold font-inter">City</p>
+                <p className="text-base font-semiboldmt font-inter">City</p>
                 <p className="text-gray-500 text-lg">{singleData?.city}</p>
               </div>
               <div className="flex w-1/2 flex-col">
