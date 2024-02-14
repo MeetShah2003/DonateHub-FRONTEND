@@ -12,6 +12,13 @@ const TrustDetails = () => {
   const [singleData, setSingleData] = useState<TrustData | null>(null);
   const { query } = useRouter();
   const access_token = Cookies.get("access_token");
+  const formattedDate = singleData
+    ? new Intl.DateTimeFormat("en-GB", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      }).format(new Date(singleData.creationDate))
+    : "";
 
   const getSingleTrustData = (id: string) => {
     setLoading(true);
@@ -71,9 +78,7 @@ const TrustDetails = () => {
           <div className="flex sm:flex-col gap-5 justify-around">
             <div className="flex flex-col">
               <p className="text-lg font-semibold font-inter">Creation Date</p>
-              <p className="text-gray-500 text-lg">
-                {singleData?.creationDate}
-              </p>
+              <p className="text-gray-500 text-lg">{formattedDate}</p>
             </div>
             <div className="flex flex-col">
               <p className="text-lg font-semibold font-inter">Founder</p>
