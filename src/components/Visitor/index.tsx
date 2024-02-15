@@ -74,7 +74,6 @@ const Visitor = () => {
 
   return (
     <div>
-      {/* <Spinner /> */}
       <div className="bg-white border shadow-sm">
         <nav className="max-w-full w-90% my-2 mx-auto flex items-center justify-between">
           <div
