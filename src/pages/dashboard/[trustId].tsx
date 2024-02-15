@@ -3,22 +3,54 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 import { TrustData } from "@/types/types";
-import { BACKEND_BASE_URL } from "@/consts";
+import { BACKEND_BASE_URL, trustData } from "@/consts";
 import Spinner from "@/components/Spinner";
 import UserRoute from "@/components/UserRoute/UserRoute";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import handlePayment from "@/razorpay";
 
 const TrustDetails = () => {
+  const amountValidationSchema = Yup.object().shape({
+    amount: Yup.number().required("Amount is required"),
+  });
+
   const [loading, setLoading] = useState(false);
   const [singleData, setSingleData] = useState<TrustData | null>(null);
+  const { handleBlur, handleChange, handleSubmit, touched, errors, values } =
+    useFormik({
+      initialValues: {
+        amount: null,
+      },
+      validationSchema: amountValidationSchema,
+      onSubmit: (value) => {
+        handlePayment(value.amount);
+
+        // setLoading(true);
+        // fetch(`${BACKEND_BASE_URL}/api/trustDonate`, {
+        //   method: "POST",
+        //   headers: {
+        //     "Content-type": "application/json",
+        //     Authorization: `Bearer ${access_token}`,
+        //   },
+        // })
+        //   .then((res) => {
+        //     return res.json();
+        //   })
+        //   .then((data) => {
+        //     console.log(data);
+        //   });
+      },
+    });
   const { query } = useRouter();
   const access_token = Cookies.get("access_token");
-  const formattedDate = singleData
-    ? new Intl.DateTimeFormat("en-GB", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-      }).format(new Date(singleData.creationDate))
-    : "";
+  // const formattedDate = singleData
+  //   ? new Intl.DateTimeFormat("en-GB", {
+  //       year: "numeric",
+  //       month: "short",
+  //       day: "numeric",
+  //     }).format(new Date(singleData.creationDate))
+  //   : "";
 
   const getSingleTrustData = (id: string) => {
     setLoading(true);
@@ -53,7 +85,7 @@ const TrustDetails = () => {
   }
 
   return (
-    <div className="flex flex-col gap-5 w-full">
+    <div className="flex flex-col gap-5 my-5 w-full">
       <div className="flex flex-col sm:flex-row w-full gap-8">
         <div className="w-full sm:w-1/3 border-2 rounded-lg">
           <Image
@@ -78,7 +110,7 @@ const TrustDetails = () => {
           <div className="flex sm:flex-col gap-5 justify-around">
             <div className="flex flex-col">
               <p className="text-lg font-semibold font-inter">Creation Date</p>
-              <p className="text-gray-500 text-lg">{formattedDate}</p>
+              {/* <p className="text-gray-500 text-lg">{formattedDate}</p> */}
             </div>
             <div className="flex flex-col">
               <p className="text-lg font-semibold font-inter">Founder</p>
@@ -128,18 +160,30 @@ const TrustDetails = () => {
             </div>
           </div>
         </div>
-        <div className="flex justify-center mt-10 gap-5">
-          <div>
-            <button
-              onClick={() => {
-                // onAccept();
-              }}
-              className="bg-green-700 hover:bg-green-600 rounded-md text-white py-2 px-6"
-            >
-              Accept
-            </button>
+        <form onSubmit={handleSubmit}>
+          <div className="flex justify-center mt-10 gap-5">
+            <div className="border border-primary rounded-md">
+              <input
+                type="number"
+                id="amount"
+                value={values.amount}
+                placeholder="Enter Amount"
+                name="amount"
+                className="h-full w-full outline-none px-2 rounded-md"
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+            </div>
+            <div>
+              <button
+                type="submit"
+                className="bg-primary rounded-md text-white py-2 px-6"
+              >
+                Donate
+              </button>
+            </div>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   );
