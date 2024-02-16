@@ -8,9 +8,15 @@ import Spinner from "@/components/Spinner";
 import UserRoute from "@/components/UserRoute/UserRoute";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import handlePayment from "@/razorpay";
+import { Razorpay } from "razorpay-checkout";
+import { useAuth } from "@/context/auth";
 
 const TrustDetails = () => {
+  const [orderId, setOrderId] = useState("");
+  console.log(useAuth().user);
+  const { user } = useAuth();
+  const access_token = Cookies.get("access_token");
+
   const amountValidationSchema = Yup.object().shape({
     amount: Yup.number().required("Amount is required"),
   });
@@ -24,26 +30,52 @@ const TrustDetails = () => {
       },
       validationSchema: amountValidationSchema,
       onSubmit: (value) => {
-        handlePayment(value.amount);
-
-        // setLoading(true);
-        // fetch(`${BACKEND_BASE_URL}/api/trustDonate`, {
-        //   method: "POST",
-        //   headers: {
-        //     "Content-type": "application/json",
-        //     Authorization: `Bearer ${access_token}`,
-        //   },
-        // })
-        //   .then((res) => {
-        //     return res.json();
-        //   })
-        //   .then((data) => {
-        //     console.log(data);
-        //   });
+        fetch(`${BACKEND_BASE_URL}/api/trustDonate`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            amount: value.amount,
+            trustId: query.trustId,
+          }),
+        })
+          .then((res) => {
+            if (res && res.status === 200) {
+              return res.json();
+            }
+          })
+          .then((data) => {
+            console.log(user);
+            if (data && typeof window !== "undefined") {
+              const rzp = new Razorpay({
+                key: "rzp_test_zfmhrR9Z3TReMH",
+                amount: data.order.amount,
+                currency: "INR",
+                name: "DonateHub",
+                description: "Donation",
+                order_id: data.order.id,
+                handler: function (response) {
+                  console.log("Payment successful:", response);
+                },
+                prefill: {
+                  name: `${user.firstName} ${user.lastName}`,
+                  email: user.email,
+                },
+                theme: {
+                  color: "#674CC4",
+                },
+              });
+              rzp.open();
+            }
+          })
+          .catch((errors) => {
+            console.log(errors);
+          });
       },
     });
   const { query } = useRouter();
-  const access_token = Cookies.get("access_token");
   // const formattedDate = singleData
   //   ? new Intl.DateTimeFormat("en-GB", {
   //       year: "numeric",

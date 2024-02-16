@@ -80,7 +80,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     if (access_token) {
       authMe();
     }
-  }, [access_token,]);
+  }, [access_token]);
 
   // Ensure authState is initialized before rendering children
   const initialized = access_token ? authState.isAuthenticated : true;
