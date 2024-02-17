@@ -3,17 +3,17 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 import { TrustData } from "@/types/types";
-import { BACKEND_BASE_URL, trustData } from "@/consts";
+import { BACKEND_BASE_URL } from "@/consts";
 import Spinner from "@/components/Spinner";
 import UserRoute from "@/components/UserRoute/UserRoute";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { Razorpay } from "razorpay-checkout";
 import { useAuth } from "@/context/auth";
+// import { Razorpay } from "razorpay-checkout"; // Import Razorpay
 
 const TrustDetails = () => {
-  const [orderId, setOrderId] = useState("");
-  console.log(useAuth().user);
+  const [singleData, setSingleData] = useState<TrustData | null>(null);
+  const { query } = useRouter();
   const { user } = useAuth();
   const access_token = Cookies.get("access_token");
 
@@ -21,101 +21,102 @@ const TrustDetails = () => {
     amount: Yup.number().required("Amount is required"),
   });
 
-  const [loading, setLoading] = useState(false);
-  const [singleData, setSingleData] = useState<TrustData | null>(null);
-  const { handleBlur, handleChange, handleSubmit, touched, errors, values } =
-    useFormik({
-      initialValues: {
-        amount: null,
-      },
-      validationSchema: amountValidationSchema,
-      onSubmit: (value) => {
-        fetch(`${BACKEND_BASE_URL}/api/trustDonate`, {
-          method: "POST",
+  const { handleSubmit, handleChange, values, errors, touched } = useFormik({
+    initialValues: {
+      amount: null,
+    },
+    validationSchema: amountValidationSchema,
+    onSubmit: async (values) => {
+      const data = {
+        amount: values.amount,
+        curruncy: "INR",
+      };
+      const response = await fetch(`${BACKEND_BASE_URL}/api/trustDonate`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      const order = await response.json();
+
+      console.log(order.order.id);
+      //   {
+      //     "id": "order_NbfUJFFXjQvgBB",
+      //     "entity": "order",
+      //     "amount": 5500,
+      //     "amount_paid": 0,
+      //     "amount_due": 5500,
+      //     "currency": "INR",
+      //     "receipt": null,
+      //     "offer_id": null,
+      //     "status": "created",
+      //     "attempts": 0,
+      //     "notes": [],
+      //     "created_at": 1708112082
+      // }
+      var options = {
+        key: "rzp_test_zfmhrR9Z3TReMH", // Enter the Key ID generated from the Dashboard
+        amount: data.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+        currency: data.curruncy,
+        name: "DonateHub", //your business name
+        description: "Test Transaction",
+        image: "https://example.com/your_logo",
+        order_id: order.order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+        handler: function (response) {
+          console.log(response);
+        },
+        prefill: {
+          //We recommend using the prefill parameter to auto-fill customer's contact information, especially their phone number
+          name: `${user.firstName} ${user.lastName}`, //your customer's name
+          email: user.email,
+          contact: "9000090000", //Provide the customer's phone number for better conversion rates
+        },
+        notes: {
+          address: "Razorpay Corporate Office",
+        },
+        theme: {
+          color: "#3399cc",
+        },
+      };
+      var rzp1 = new window.Razorpay(options);
+      rzp1.on("payment.failed", function (response) {
+        console.log(response);
+      });
+
+      rzp1.open();
+    },
+  });
+
+  useEffect(() => {
+    // Fetch trust details
+    const getSingleTrustData = async (id: string) => {
+      try {
+        const res = await fetch(`${BACKEND_BASE_URL}/api/singleTrust/${id}`, {
+          method: "GET",
           headers: {
             Authorization: `Bearer ${access_token}`,
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            amount: value.amount,
-            trustId: query.trustId,
-          }),
-        })
-          .then((res) => {
-            if (res && res.status === 200) {
-              return res.json();
-            }
-          })
-          .then((data) => {
-            console.log(user);
-            if (data && typeof window !== "undefined") {
-              const rzp = new Razorpay({
-                key: "rzp_test_zfmhrR9Z3TReMH",
-                amount: data.order.amount,
-                currency: "INR",
-                name: "DonateHub",
-                description: "Donation",
-                order_id: data.order.id,
-                handler: function (response) {
-                  console.log("Payment successful:", response);
-                },
-                prefill: {
-                  name: `${user.firstName} ${user.lastName}`,
-                  email: user.email,
-                },
-                theme: {
-                  color: "#674CC4",
-                },
-              });
-              rzp.open();
-            }
-          })
-          .catch((errors) => {
-            console.log(errors);
-          });
-      },
-    });
-  const { query } = useRouter();
-  // const formattedDate = singleData
-  //   ? new Intl.DateTimeFormat("en-GB", {
-  //       year: "numeric",
-  //       month: "short",
-  //       day: "numeric",
-  //     }).format(new Date(singleData.creationDate))
-  //   : "";
-
-  const getSingleTrustData = (id: string) => {
-    setLoading(true);
-    fetch(`${BACKEND_BASE_URL}/api/singleTrust/${id}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => {
-        if (res.status === 200) {
-          return res.json();
-        }
-      })
-      .then((data) => {
-        if (data) {
+        });
+        if (res.ok) {
+          const data = await res.json();
           setSingleData(data["singlePageTrust"]);
         }
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  };
+      } catch (error) {
+        console.error("Error fetching trust details:", error);
+      }
+    };
 
-  useEffect(() => {
-    getSingleTrustData(query.trustId as string);
+    if (query.trustId) {
+      getSingleTrustData(query.trustId as string);
+    }
   }, [query.trustId, access_token]);
 
-  if (loading) {
+  if (!singleData) {
     return <Spinner />;
   }
-
   return (
     <div className="flex flex-col gap-5 my-5 w-full">
       <div className="flex flex-col sm:flex-row w-full gap-8">
@@ -203,7 +204,7 @@ const TrustDetails = () => {
                 name="amount"
                 className="h-full w-full outline-none px-2 rounded-md"
                 onChange={handleChange}
-                onBlur={handleBlur}
+                // onBlur={handleBlur}
               />
             </div>
             <div>
