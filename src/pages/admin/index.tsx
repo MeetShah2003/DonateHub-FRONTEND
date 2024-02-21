@@ -10,7 +10,9 @@ const Admin = () => {
 
   return (
     <AdminFrame title="Dashboard">
-      <></>
+      <div>
+        <div></div>
+      </div>
     </AdminFrame>
   );
 };

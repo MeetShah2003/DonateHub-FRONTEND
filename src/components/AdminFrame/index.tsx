@@ -13,6 +13,7 @@ import ProfileIcon from "@/icons/ProfileIcon";
 import CloseHamburgerIcon from "@/icons/CloseHamburgerIcon";
 import Logo from "@/icons/Logo";
 import { useAuth } from "@/context/auth";
+import TransactionIcon from "@/icons/TransactionIcon";
 
 const ADMIN_MENUS: {
   id: number;
@@ -41,9 +42,9 @@ const ADMIN_MENUS: {
   },
   {
     id: 5,
-    menu: "Analytics",
-    path: "/admin/analytics",
-    icon: <AnalyticsIcon />,
+    menu: "Manage Transaction",
+    path: "/admin/managetransaction",
+    icon: <TransactionIcon />,
   },
   {
     id: 6,
