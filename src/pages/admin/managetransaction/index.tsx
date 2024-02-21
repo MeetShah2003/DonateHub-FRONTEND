@@ -6,12 +6,14 @@ import { BACKEND_BASE_URL } from "@/consts";
 import Cookies from "js-cookie";
 import TransactionTrustsModel from "@/components/TransactionTrustsModel";
 import Spinner from "@/components/Spinner";
+import { useRouter } from "next/router";
 
 const ManageTransaction = () => {
   const access_token = Cookies.get("access_token");
   const [trustWiseTransaction, setTrustWiseTransaction] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const router = useRouter();
 
   useEffect(() => {
     const getTrustByTransactions = async () => {
@@ -30,9 +32,9 @@ const ManageTransaction = () => {
           throw new Error("Failed to fetch data");
         }
         const data = await response.json();
-        setTrustWiseTransaction(data.allTrust);
+        setTrustWiseTransaction(data.allTrusts);
         setLoading(false);
-      } catch (error) {
+      } catch (error: any) {
         setError(error);
         setLoading(false);
       }
@@ -41,26 +43,51 @@ const ManageTransaction = () => {
     getTrustByTransactions();
   }, [access_token]);
 
+  console.log(trustWiseTransaction);
+
   return (
     <AdminFrame title="Manage Transaction">
       {loading ? (
         <Spinner />
       ) : error ? (
-        <p>Error: {error.message}</p>
+        <p>Error: {error}</p>
       ) : (
-        trustWiseTransaction.map((data) => (
-          <TransactionTrustsModel
-            key={data.tId}
-            title={data.tId.trustName}
-            description={"Test"}
-            trustImage={
-              "https://firebasestorage.googleapis.com/v0/b/donatehub-d09f5.appspot.com/o/trust_logos%2F11325a42-3455-4974-bc4d-eb667fceb597?alt=media&token=29042ef1-0fd0-47bd-8570-94c91e14be36"
-            }
-            founder={"Test"}
-            creationDate={"Test"}
-            amount="5000"
-          />
-        ))
+        <div className="flex flex-col gap-2">
+          {trustWiseTransaction &&
+            trustWiseTransaction.length &&
+            trustWiseTransaction.map((data: any) => {
+              return (
+                <TransactionTrustsModel
+                  key={data?.tId}
+                  title={data?.trustName}
+                  description={data?.description}
+                  trustImage={data?.trustlogo}
+                  founder={data?.founder}
+                  creationDate={data?.creationDate}
+                  amount="2154c"
+                  onShowTransaction={() => {
+                    console.log(data?._id);
+                    router.push(`/admin/managetransaction/${data?._id}`);
+                  }}
+                />
+              );
+            })}
+          {/* {trustWiseTransaction.map((data: any) => (
+            <TransactionTrustsModel
+              key={data?.tId}
+              title={data?.tId.trustName}
+              description={data?.tId.description}
+              trustImage={data?.tId.trustlogo}
+              founder={data?.tId.founder}
+              creationDate={data?.tId.creationDate}
+              amount={data?.amount}
+              onShowTransaction={() => {
+                console.log(data?.tId._id);
+                router.push(`/admin/managetransaction/${data?.tId._id}`);
+              }}
+            />
+          ))} */}
+        </div>
       )}
     </AdminFrame>
   );
