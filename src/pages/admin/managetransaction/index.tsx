@@ -63,7 +63,7 @@ const ManageTransaction = () => {
                   trustImage={data?.trustlogo}
                   founder={data?.founder}
                   creationDate={data?.creationDate}
-                  amount="2154c"
+                  amount="2154"
                   onShowTransaction={() => {
                     console.log(data?._id);
                     router.push(`/admin/managetransaction/${data?._id}`);

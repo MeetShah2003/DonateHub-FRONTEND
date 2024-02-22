@@ -145,7 +145,15 @@ const LogIn = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log("Token===>>", data);
+        // console.log("userdata", data?.token);
+        Cookies.set("access_token", data?.token);
+        Cookies.set("role", data?.user?.role);
+        console.log("data", data.user);
+        if (data?.user?.role === "admin") {
+          router.push("/admin");
+        } else {
+          router.push("/dashboard");
+        }
       });
   };
 
