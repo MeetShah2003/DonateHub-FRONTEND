@@ -15,13 +15,13 @@ const SingleTrust = () => {
   const [singleData, setSingleData] = useState<TrustData>();
   const [loading, setLoading] = useState(false);
   const access_token = Cookies.get("access_token");
-  // const formattedDate = singleData
-  //   ? new Intl.DateTimeFormat("en-GB", {
-  //       year: "numeric",
-  //       month: "short",
-  //       day: "numeric",
-  //     }).format(new Date(singleData?.creationDate))
-  //   : "";
+  const formattedDate = singleData
+    ? new Intl.DateTimeFormat("en-GB", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      }).format(new Date(singleData?.creationDate))
+    : "";
 
   console.log(singleData?.creationDate);
   const errorToast = (errorMessage: string) => toast.error(errorMessage);
@@ -133,9 +133,7 @@ const SingleTrust = () => {
                 <p className="text-lg font-semibold font-inter">
                   Creation Date
                 </p>
-                <p className="text-gray-500 text-lg">
-                  {singleData?.creationDate.toDateString()}
-                </p>
+                <p className="text-gray-500 text-lg">{formattedDate}</p>
               </div>
               <div className="flex flex-col">
                 <p className="text-lg font-semibold font-inter">Founder</p>
