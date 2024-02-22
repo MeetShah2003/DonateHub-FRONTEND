@@ -1,16 +1,12 @@
 import HamburgerIcon from "@/icons/HamburgurIcon";
 import Link from "next/link";
-// import { useUser } from "@/context/user";
 import { ReactNode, useEffect, useState } from "react";
-import Cookies from "js-cookie";
 import { useRouter } from "next/router";
 import HomeIcon from "@/icons/HomeIcon";
 import ContactUsIcon from "@/icons/ContactUsIcon";
 import AboutUsIcon from "@/icons/AboutUsIcon";
 import LogoutIcon from "@/icons/LogoutIcon";
 import ProfileIcon from "@/icons/ProfileIcon";
-import HeaderBgImage from "@/../public/images/headerBgImage.png";
-import Image from "next/image";
 import { useSession, signIn, signOut } from "next-auth/react";
 
 import CloseHamburgerIcon from "@/icons/CloseHamburgerIcon";
@@ -171,7 +167,6 @@ const Visitor = () => {
             <li
               onClick={() => {
                 logout();
-                // console.log(isAuthenticated);
               }}
               className="text-base px-5 py-4 font-medium flex gap-3"
             >

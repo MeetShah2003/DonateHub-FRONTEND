@@ -1,7 +1,6 @@
 import AdminFrame from "@/components/AdminFrame";
 import AdminRoute from "@/components/AdminRoute";
 import { BACKEND_BASE_URL, trustData } from "@/consts";
-import { useAuth } from "@/context/auth";
 import { TrustData } from "@/types/types";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";

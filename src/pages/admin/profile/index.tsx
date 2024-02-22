@@ -1,21 +1,18 @@
 import { useFormik } from "formik";
 import CameraIcon from "@/icons/CameraIcon";
 import Image from "next/image";
-// import { useUser } from "@/context/user";
 import AdminFrame from "@/components/AdminFrame";
 import { getAuthenticatedRouteCheck } from "@/authguard/authguard";
 import * as Yup from "yup";
-import React, { use, useEffect, useState } from "react";
+import React, { useState } from "react";
 import Cookies from "js-cookie";
 import { useAuth } from "@/context/auth";
 import { BACKEND_BASE_URL } from "@/consts";
-import { get } from "http";
 import { toast } from "react-toastify";
 import AdminRoute from "@/components/AdminRoute";
 import Spinner from "@/components/Spinner";
 
 const AdminProfile = () => {
-  //   const { userData } = useUser();
   const [file, setFile] = useState<File | null>(null);
   const [userData, setUserData] = useState({});
   const { user, isAuthenticated } = useAuth();
@@ -38,7 +35,6 @@ const AdminProfile = () => {
   //       return res.json();
   //     })
   //     .then((data) => {
-  //       // console.log(data["myProfile"]);
   //       setUserData(data["myProfile"]);
   //     });
   // };

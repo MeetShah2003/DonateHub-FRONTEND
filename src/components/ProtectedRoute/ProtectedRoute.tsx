@@ -1,4 +1,3 @@
-// ProtectedRoute.js
 import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 import { useAuth } from "../../context/auth";

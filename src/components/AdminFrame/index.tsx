@@ -1,13 +1,10 @@
-import Image from "next/image";
 import React, { ReactNode, useState } from "react";
 import { useRouter } from "next/router";
-import CloseIcon from "@/icons/CloseIcon";
 import HamburgerIcon from "@/icons/HamburgurIcon";
 import DashboardIcon from "@/icons/DashboardIcon";
 import ApproveIcon from "@/icons/ApproveIcon";
 import ManageTrustIcon from "@/icons/ManageTrustIcon";
 import ManageUserIcon from "@/icons/ManageUserIcon";
-import AnalyticsIcon from "@/icons/AnalyticsIcon";
 import LogoutIcon from "@/icons/LogoutIcon";
 import ProfileIcon from "@/icons/ProfileIcon";
 import CloseHamburgerIcon from "@/icons/CloseHamburgerIcon";

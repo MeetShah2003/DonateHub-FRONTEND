@@ -5,7 +5,6 @@ import EditIcon from "@/icons/EditIcon";
 import { BACKEND_BASE_URL, dummyUsers } from "@/consts";
 import ReactPaginate from "react-paginate";
 import ArrowIcon from "@/icons/ArrowIcon";
-// import { useUser } from "@/context/user";
 import Cookies from "js-cookie";
 import { UserData } from "@/types/types";
 import UnBlockIcon from "@/icons/UnBlockIcon";
@@ -84,7 +83,6 @@ const ManageUser = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         setAllUserData(data["userRecords"]);
       })
       .finally(() => {

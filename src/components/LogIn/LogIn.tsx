@@ -16,7 +16,6 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import { useAuth } from "@/context/auth";
 import { BACKEND_BASE_URL } from "@/consts";
 import Spinner from "../Spinner";
-// import { useUser } from "@/context/user";
 
 const initialValue: {
   email: string;
@@ -44,12 +43,9 @@ const LogIn = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  // const { setUserData, setAccessa } = useUser();
   const { isAuthenticated, user } = useAuth();
 
   const { data: session } = useSession();
-
-  console.log(session);
 
   const errorToast = (errorMessage: string) => toast.error(errorMessage);
   const successToast = (successMessage: string) =>
@@ -152,7 +148,6 @@ const LogIn = () => {
               Cookies.set("access_token", data?.token);
               Cookies.set("role", data?.user?.role);
               if (data?.user?.role === "admin") {
-                console.log(data.user);
                 router.push("/admin");
               } else {
                 router.push("/dashboard");

@@ -2,10 +2,9 @@ import React, { useEffect, useState } from "react";
 import AdminFrame from "@/components/AdminFrame";
 import BlockIcon from "@/icons/BlockIcon";
 import EditIcon from "@/icons/EditIcon";
-import { BACKEND_BASE_URL, dummyUsers } from "@/consts";
+import { BACKEND_BASE_URL } from "@/consts";
 import ReactPaginate from "react-paginate";
 import ArrowIcon from "@/icons/ArrowIcon";
-import { trustData } from "@/consts";
 import Cookies from "js-cookie";
 import { TrustData } from "@/types/types";
 import UnBlockIcon from "@/icons/UnBlockIcon";
@@ -36,7 +35,6 @@ const ManageTrust = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data["verifiedTrusts"]);
         setAllTrustData(data["verifiedTrusts"]);
       })
       .finally(() => {

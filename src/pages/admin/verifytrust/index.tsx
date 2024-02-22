@@ -1,7 +1,6 @@
 import AdminFrame from "@/components/AdminFrame";
 import TrustApprovalModal from "@/components/TrustApprovalModal";
 import { useEffect, useState } from "react";
-import { useAuth } from "@/context/auth";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
 import { BACKEND_BASE_URL } from "@/consts";
@@ -38,8 +37,6 @@ const VerifyTrust = () => {
       console.error("Error fetching data:", error);
     }
   };
-
-  console.log(unVerifiedTrusts);
 
   useEffect(() => {
     getPendingTrust();

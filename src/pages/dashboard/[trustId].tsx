@@ -41,8 +41,6 @@ const TrustDetails = () => {
         body: JSON.stringify(data),
       });
       const order = await response.json();
-
-      console.log(order.order.id);
       //   {
       //     "id": "order_NbfUJFFXjQvgBB",
       //     "entity": "order",
@@ -65,14 +63,13 @@ const TrustDetails = () => {
         description: "Test Transaction",
         image: "https://example.com/your_logo",
         order_id: order.order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-        handler: function (response) {
+        handler: (response) => {
           console.log(response);
         },
         prefill: {
-          //We recommend using the prefill parameter to auto-fill customer's contact information, especially their phone number
-          name: `${user.firstName} ${user.lastName}`, //your customer's name
+          name: `${user.firstName} ${user.lastName}`,
           email: user.email,
-          contact: "9000090000", //Provide the customer's phone number for better conversion rates
+          contact: "9000090000",
         },
         notes: {
           address: "Razorpay Corporate Office",

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import AdminFrame from "@/components/AdminFrame";
 import AdminRoute from "@/components/AdminRoute";
-import TrustApprovalModal from "@/components/TrustApprovalModal";
 import { BACKEND_BASE_URL } from "@/consts";
 import Cookies from "js-cookie";
 import TransactionTrustsModel from "@/components/TransactionTrustsModel";
