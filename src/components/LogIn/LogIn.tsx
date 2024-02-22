@@ -11,11 +11,16 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import { getAuthenticatedRouteCheck } from "@/authguard/authguard";
-import { useGoogleLogin } from "@react-oauth/google";
-import { useSession, signIn, signOut } from "next-auth/react";
+import { useSession, signIn } from "next-auth/react";
 import { useAuth } from "@/context/auth";
 import { BACKEND_BASE_URL } from "@/consts";
 import Spinner from "../Spinner";
+import { auth, authProvider } from "../../firebase";
+import {
+  UserCredential,
+  getAdditionalUserInfo,
+  signInWithPopup,
+} from "firebase/auth";
 
 const initialValue: {
   email: string;
@@ -41,6 +46,7 @@ const loginSchema = Yup.object().shape({
 
 const LogIn = () => {
   const router = useRouter();
+  const [value, setValue] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const { isAuthenticated, user } = useAuth();
@@ -50,65 +56,6 @@ const LogIn = () => {
   const errorToast = (errorMessage: string) => toast.error(errorMessage);
   const successToast = (successMessage: string) =>
     toast.success(successMessage);
-
-  // const gLogin = useGoogleLogin({
-  //   onSuccess: async (response) => {
-  //     console.log(response);
-
-  //     const userData = Cookies.get("user_data");
-  //     // try {
-  //     //   fetch("https://www.googleapis.com/oauth2/v1/userinfo", {
-  //     //     method: "GET",
-  //     //     headers: {
-  //     //       Authorization: `Bearer ${(response.access_token, userData)}`,
-  //     //     },
-  //     //   })
-  //     //     .then((response) => response.json())
-  //     //     .then((userInfo) => {
-  //     //       if (userInfo) {
-  //     //         fetch(`${BACKEND_BASE_URL}/api/googleData`, {
-  //     //           method: "POST",
-  //     //           headers: { "Content-Type": "application/json" },
-  //     //           body: JSON.stringify(userInfo),
-  //     //         })
-  //     //           .then((res) => res.json())
-  //     //           .then((data) => {
-  //     //             if (!data) {
-  //     //               errorToast("Something went wrong");
-  //     //             }
-  //     //             if (data.message === "login sucessfull") {
-  //     //               successToast(`Welcome Back ${data.user.username}`);
-  //     //               Cookies.set("user_data", data.user, {
-  //     //                 expires: 7,
-  //     //                 path: "/",
-  //     //               });
-  //     //               setTimeout(() => {
-  //     //                 router.push("/dashboard");
-  //     //               }, 3000);
-  //     //             }
-  //     //             if (data.message === "account created sucessfull") {
-  //     //               successToast(`Welcome Back ${data.user.username}`);
-  //     //               Cookies.set("user_data", data.user, {
-  //     //                 expires: 7,
-  //     //                 path: "/",
-  //     //               });
-  //     //               setTimeout(() => {
-  //     //                 router.push("/dashboard");
-  //     //               }, 3000);
-  //     //             }
-  //     //           });
-  //     //       } else {
-  //     //         errorToast("something went wrong");
-  //     //       }
-  //     //     })
-  //     //     .catch((error) => {
-  //     //       console.error("Error fetching user information:", error);
-  //     //     });
-  //     // } catch (err) {
-  //     //   console.log(err);
-  //     // }
-  //   },
-  // });
 
   useEffect(() => {
     if (isAuthenticated && user && !user.isBlocked) {
@@ -163,6 +110,45 @@ const LogIn = () => {
       },
     }
   );
+
+  const handleClick = async () => {
+    try {
+      const data: UserCredential = await signInWithPopup(auth, authProvider);
+
+      const additionalUserInfo = getAdditionalUserInfo(data);
+
+      if (additionalUserInfo && additionalUserInfo.profile) {
+        const { given_name, family_name, picture, email } =
+          additionalUserInfo.profile;
+
+        userData({
+          firstName: given_name,
+          lastName: family_name,
+          email,
+          userlogo: picture,
+        });
+
+        setValue(data.user?.email as any);
+      } else {
+        console.error("Additional user info not available");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const userData = (data: any) => {
+    fetch(`${BACKEND_BASE_URL}/api/googleSignup`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("Token===>>", data);
+      });
+  };
+
   // signOut();
   return (
     <div className="flex justify-center h-full">
@@ -226,9 +212,10 @@ const LogIn = () => {
           <div className="flex flex-col border-2 mt-4 shadow-sm rounded-lg px-2 py-2">
             <button
               type="button"
-              onClick={() => {
-                signIn("google", { callbackUrl: "http://localhost:3000" });
-              }}
+              // onClick={() => {
+              //   signIn("google", { callbackUrl: "http://localhost:3000" });
+              // }}
+              onClick={handleClick}
               className="outline-none flex justify-center gap-3 text-black font-inter font-medium"
             >
               <span>

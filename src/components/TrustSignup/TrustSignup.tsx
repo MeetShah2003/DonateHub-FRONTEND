@@ -38,7 +38,6 @@ const TrustSignup = () => {
         const imageUrl = await getDownloadURL(imageRef);
 
         if (imageUrl) {
-          console.log(imageUrl);
           successToast("Image Upload Successfully");
           setFieldValue("trustlogo", imageUrl);
         }
@@ -152,8 +151,6 @@ const TrustSignup = () => {
       }
     },
   });
-
-  console.log(values);
 
   const handleFirstStep = () => {
     if (
