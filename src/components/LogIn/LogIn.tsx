@@ -111,7 +111,7 @@ const LogIn = () => {
     }
   );
 
-  const handleClick = async () => {
+  const handleGoogleLogin = async () => {
     try {
       const data: UserCredential = await signInWithPopup(auth, authProvider);
 
@@ -121,7 +121,7 @@ const LogIn = () => {
         const { given_name, family_name, picture, email } =
           additionalUserInfo.profile;
 
-        userData({
+        googleUserData({
           firstName: given_name,
           lastName: family_name,
           email,
@@ -137,7 +137,7 @@ const LogIn = () => {
     }
   };
 
-  const userData = (data: any) => {
+  const googleUserData = (data: any) => {
     fetch(`${BACKEND_BASE_URL}/api/googleSignup`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -149,6 +149,42 @@ const LogIn = () => {
       });
   };
 
+  const handleGithubLogin = async () => {
+    try {
+      const data: UserCredential = await signInWithPopup(auth, authProvider);
+
+      console.log("Github Data log===>>", data);
+
+      const additionalUserInfo = getAdditionalUserInfo(data);
+
+      if (additionalUserInfo && additionalUserInfo.profile) {
+        const { email } = additionalUserInfo.profile;
+
+        githubUserData({
+          email,
+          userlogo: data.user?.photoURL,
+        });
+
+        setValue(data.user?.email as any);
+      } else {
+        console.error("Additional user info not available");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const githubUserData = (data: any) => {
+    fetch(`${BACKEND_BASE_URL}/api/githubSignup`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("Token===>>", data);
+      });
+  };
   // signOut();
   return (
     <div className="flex justify-center h-full">
@@ -212,10 +248,7 @@ const LogIn = () => {
           <div className="flex flex-col border-2 mt-4 shadow-sm rounded-lg px-2 py-2">
             <button
               type="button"
-              // onClick={() => {
-              //   signIn("google", { callbackUrl: "http://localhost:3000" });
-              // }}
-              onClick={handleClick}
+              onClick={handleGoogleLogin}
               className="outline-none flex justify-center gap-3 text-black font-inter font-medium"
             >
               <span>
@@ -228,9 +261,7 @@ const LogIn = () => {
           <div className="flex flex-col border-2 mt-4 shadow-sm rounded-lg px-2 py-2">
             <button
               type="button"
-              onClick={() => {
-                signIn("github");
-              }}
+              onClick={handleGithubLogin}
               className="outline-none flex justify-center gap-3 text-black font-inter font-medium"
             >
               <span>
