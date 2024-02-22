@@ -1,3 +1,4 @@
+import AdminRoute from "@/components/AdminRoute";
 import { useRouter } from "next/router";
 
 const SingleTrustTransaction = () => {
@@ -5,4 +6,4 @@ const SingleTrustTransaction = () => {
   return <div>{router.query.trustId}</div>;
 };
 
-export default SingleTrustTransaction;
+export default AdminRoute(SingleTrustTransaction);

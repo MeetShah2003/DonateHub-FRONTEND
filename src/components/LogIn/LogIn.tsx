@@ -145,11 +145,18 @@ const LogIn = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log("Token===>>", data);
+        // console.log("userdata", data?.token);
+        Cookies.set("access_token", data?.token);
+        Cookies.set("role", data?.user?.role);
+        console.log("data", data.user);
+        if (data?.user?.role === "admin") {
+          router.push("/admin");
+        } else {
+          router.push("/dashboard");
+        }
       });
   };
 
-  // signOut();
   return (
     <div className="flex justify-center h-full">
       <WelcomePage title="Welcome To" secondTitle="DonateHub">
@@ -212,9 +219,6 @@ const LogIn = () => {
           <div className="flex flex-col border-2 mt-4 shadow-sm rounded-lg px-2 py-2">
             <button
               type="button"
-              // onClick={() => {
-              //   signIn("google", { callbackUrl: "http://localhost:3000" });
-              // }}
               onClick={handleClick}
               className="outline-none flex justify-center gap-3 text-black font-inter font-medium"
             >
