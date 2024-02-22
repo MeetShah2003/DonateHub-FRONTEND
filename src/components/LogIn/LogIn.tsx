@@ -256,11 +256,7 @@ const LogIn = () => {
           <div className="flex flex-col border-2 mt-4 shadow-sm rounded-lg px-2 py-2">
             <button
               type="button"
-<<<<<<< HEAD
-              onClick={handleClick}
-=======
               onClick={handleGoogleLogin}
->>>>>>> 57c9ca39f470b09ae4fdc1201cd0b0d0ccf59478
               className="outline-none flex justify-center gap-3 text-black font-inter font-medium"
             >
               <span>
