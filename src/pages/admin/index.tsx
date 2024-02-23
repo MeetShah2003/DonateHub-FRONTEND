@@ -80,7 +80,7 @@ const Admin = () => {
           <div className="flex flex-col py-5 justify-center items-center bg-primary w-full rounded-md text-white">
             <h1 className="font-inter flex items-center justify-center gap-2 font-bold text-2xl">
               <span>
-                <ProfileIcon />
+                <ProfileIcon color="#FFFFFF" />
               </span>
               {totalSuppoters}
             </h1>
