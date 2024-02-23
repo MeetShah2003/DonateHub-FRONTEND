@@ -30,7 +30,7 @@ const NAV_MENUES: {
   {
     id: 2,
     menu: "Profile",
-    path: "/profile",
+    path: "/dashboard/profile",
     icon: <ProfileIcon color="#FFFFFF" />,
   },
   {
@@ -179,7 +179,7 @@ const Visitor = () => {
               className="text-base px-5 py-4 font-medium flex gap-3"
             >
               <div>
-                <LogoutIcon />
+                <LogoutIcon color="" />
               </div>
               <p>Logout</p>
             </li>

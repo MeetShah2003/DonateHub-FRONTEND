@@ -8,6 +8,8 @@ import { useRouter } from "next/router";
 import { BACKEND_BASE_URL } from "@/consts";
 import { useAuth } from "@/context/auth";
 import Spinner from "@/components/Spinner";
+import Cookies from "js-cookie";
+import { toast } from "react-toastify";
 
 const validationSchema = Yup.object().shape({
   password: Yup.string()
@@ -20,8 +22,11 @@ const validationSchema = Yup.object().shape({
 });
 
 const Password = () => {
+  const successToast = (message: string) => toast.success(message);
+  const errorToast = (message: string) => toast.error(message);
   const router = useRouter();
-  const { forgotPasswordEmail } = useAuth();
+  // const { forgotPasswordEmail } = useAuth();
+  const forgotPasswordEmail = Cookies.get("forgotPasswordEmail");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const { handleSubmit, handleChange, handleBlur, errors, touched } = useFormik(
@@ -39,10 +44,19 @@ const Password = () => {
           },
           body: JSON.stringify(passwordData),
         })
-          .then((res) => res.json())
+          .then((res) => {
+            if (res && res.status === 200) {
+              return res.json();
+            }
+          })
           .then((data) => {
-            console.log(data);
-            console.log(passwordData);
+            Cookies.remove("forgotPasswordEmail");
+            console.log("forgotdata", data.updatedPassword);
+            if (data.updatedPassword) {
+              successToast("Password Change Successfully");
+            } else {
+              errorToast("Something went wrong");
+            }
           })
           .finally(() => {
             setLoading(false);

@@ -120,7 +120,7 @@ const AdminFrame: React.FC<{
 
         <div className="flex flex-col w-full">
           <div className="border-b-2 sticky top-0 bg-white z-50">
-            <nav className="max-w-full mx-auto flex items-center justify-between">
+            <nav className="max-w-full px-7 mx-auto flex items-center justify-between">
               <div
                 onClick={() => {
                   setSideBarIsOpen(!sideBarIsOpen);

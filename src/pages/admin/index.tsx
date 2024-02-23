@@ -6,12 +6,13 @@ import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import ProfileIcon from "@/icons/ProfileIcon";
 import ManageTrustIcon from "@/icons/ManageTrustIcon";
-import { number } from "yup";
+import { useRouter } from "next/router";
 
 const Admin = () => {
   const [totalSuppoters, setTotalSuppoters] = useState<number>();
   const [totalUnverifiedTrusts, setTotalUnverifiedTrusts] = useState<number>();
   const [totalTrusts, setTotalTrusts] = useState<number>();
+  const router = useRouter();
   const access_token = Cookies.get("access_token");
   const getAllUsersCount = () => {
     fetch(`${BACKEND_BASE_URL}/admin/countUser`, {
@@ -77,7 +78,12 @@ const Admin = () => {
     <AdminFrame title="Dashboard">
       <div className="flex flex-col">
         <div className="grid grid-cols-2 justify-between gap-5">
-          <div className="flex flex-col py-5 justify-center items-center bg-primary w-full rounded-md text-white">
+          <div
+            onClick={() => {
+              router.push("/admin/manageuser");
+            }}
+            className="flex flex-col py-5 justify-center hover:scale-105 cursor-pointer hover:transition-all hover:duration-400 hover:ease-out items-center bg-primary w-full rounded-md text-white"
+          >
             <h1 className="font-inter flex items-center justify-center gap-2 font-bold text-2xl">
               <span>
                 <ProfileIcon color="#FFFFFF" />
@@ -86,7 +92,12 @@ const Admin = () => {
             </h1>
             <p className="text-base font-medium">Suppoters</p>
           </div>
-          <div className="flex flex-col py-5 justify-center items-center bg-secondary w-full rounded-md text-white">
+          <div
+            onClick={() => {
+              router.push("/admin/managetrust");
+            }}
+            className="flex flex-col py-5 justify-center hover:scale-105 cursor-pointer hover:transition-all hover:duration-400 hover:ease-out items-center bg-secondary w-full rounded-md text-white"
+          >
             <h1 className="font-inter flex items-center justify-center gap-2 font-bold text-2xl">
               <span>
                 <ManageTrustIcon />
@@ -95,13 +106,18 @@ const Admin = () => {
             </h1>
             <p className="text-base font-medium">Verified Trusts</p>
           </div>
-          <div className="flex flex-col py-5 justify-center items-center bg-secondary w-full rounded-md text-white">
+          <div className="flex flex-col py-5 justify-center hover:scale-105 cursor-pointer hover:transition-all hover:duration-400 hover:ease-out items-center bg-secondary w-full rounded-md text-white">
             <h1 className="font-inter font-bold text-2xl">
               <span className="font-normal">₹</span> 55555
             </h1>
             <p className="text-base font-medium">Collection</p>
           </div>
-          <div className="flex flex-col py-5 justify-center items-center bg-primary w-full rounded-md text-white">
+          <div
+            onClick={() => {
+              router.push("/admin/verifytrust");
+            }}
+            className="flex flex-col py-5 justify-center hover:scale-105 cursor-pointer hover:transition-all hover:duration-400 hover:ease-out items-center bg-primary w-full rounded-md text-white"
+          >
             <h1 className="font-inter flex items-center justify-center gap-2 font-bold text-2xl">
               <span>
                 <ManageTrustIcon />

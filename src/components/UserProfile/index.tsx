@@ -41,10 +41,10 @@ const UserProfile = () => {
           />
         </button>
         <div className="flex flex-col">
-          <h1 className="font-medium">
+          <h1 className="font-bold">
             {user.firstName} {user.lastName}
           </h1>
-          <p className="font-normal text-gray-400">{user?.email}</p>
+          <p className="font-normal text-sm text-gray-400">{user?.email}</p>
         </div>
       </div>
 
@@ -61,6 +61,7 @@ const UserProfile = () => {
               ITEMS.map(({ id, menu, icon }) => {
                 return (
                   <div
+                    key={id}
                     onClick={() => {
                       if (menu === "My Profile") {
                         router.push("");

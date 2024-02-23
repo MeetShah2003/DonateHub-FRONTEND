@@ -37,7 +37,7 @@ const SignUp = () => {
     confirmPassword: Yup.string()
       .oneOf([Yup.ref("password")], "Passwords must match")
       .required("Confirm Password is required"),
-    mobileno: Yup.string()
+    mono: Yup.string()
       .matches(
         /^[+]?[0-9]+$/,
         "Mobile number must contain only digits and can optionally start with a '+'"
@@ -53,7 +53,7 @@ const SignUp = () => {
     email: string;
     password: string;
     confirmPassword: string;
-    mobileno: string;
+    mono: string;
     gender: string;
     role: string;
   } = {
@@ -62,7 +62,7 @@ const SignUp = () => {
     password: "",
     confirmPassword: "",
     email: "",
-    mobileno: "",
+    mono: "",
     gender: "",
     role: "user",
   };
@@ -74,6 +74,7 @@ const SignUp = () => {
       onSubmit: async (values) => {
         setLoading(true);
         const { confirmPassword, ...data } = values;
+        console.log(data);
         try {
           fetch(`${BACKEND_BASE_URL}/api/signup`, {
             method: "POST",
@@ -167,16 +168,17 @@ const SignUp = () => {
           <div className="flex flex-col border-t-transparent border-2 px-2 py-1 focus-within:border-primary">
             <label className="pb-1 text-sm font-medium">Mobile No</label>
             <input
-              id="mobileno"
-              name="mobileno"
+              id="mono"
+              name="mono"
               type="text"
               onChange={handleChange}
               onBlur={handleBlur}
+              maxLength={10}
               className="outline-none tracking-wider"
               placeholder="+91 9858888454"
             />
-            {touched.mobileno && errors.mobileno && (
-              <span className="text-sm text-red-600">{errors.mobileno}</span>
+            {touched.mono && errors.mono && (
+              <span className="text-sm text-red-600">{errors.mono}</span>
             )}
           </div>
           <div className="flex flex-col border-t-transparent border-2 px-2 py-1 focus-within:border-primary">
