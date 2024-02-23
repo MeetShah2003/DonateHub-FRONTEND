@@ -8,11 +8,13 @@ import AboutUsIcon from "@/icons/AboutUsIcon";
 import LogoutIcon from "@/icons/LogoutIcon";
 import ProfileIcon from "@/icons/ProfileIcon";
 import { useSession, signIn, signOut } from "next-auth/react";
+import Image from "next/image";
 
 import CloseHamburgerIcon from "@/icons/CloseHamburgerIcon";
 import { useAuth } from "@/context/auth";
 import Logo from "@/icons/Logo";
 import Spinner from "../Spinner";
+import UserProfile from "../UserProfile";
 const NAV_MENUES: {
   id: number;
   menu: string;
@@ -29,7 +31,7 @@ const NAV_MENUES: {
     id: 2,
     menu: "Profile",
     path: "/profile",
-    icon: <ProfileIcon />,
+    icon: <ProfileIcon color="#FFFFFF" />,
   },
   {
     id: 3,
@@ -52,21 +54,9 @@ const NAV_MENUES: {
 ];
 
 const Visitor = () => {
-  // const { isLogin } = useUser();
-  // const [isLogin, setIsLogin] = useState(false);
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
   const router = useRouter();
   const { isAuthenticated, logout, user } = useAuth();
-  // useEffect(() => {
-  //   const userDataToken = Cookies.get("user_data");
-  //   if (userDataToken) {
-  //     setIsLogin(true);
-  //   } else {
-  //     setIsLogin(false);
-  //   }
-  // }, []);
-
-  // console.log(isLogin);
 
   return (
     <div>
@@ -127,14 +117,32 @@ const Visitor = () => {
             </div>
           ) : (
             <div className="hidden sm:flex gap-5">
-              <button
+              {/* <button
                 onClick={() => {
                   logout();
                 }}
                 className="rounded-md text-black border-2 py-2 px-5 font-semibold"
               >
                 Logout
-              </button>
+              </button> */}
+
+              {/* <div className="relative rounded-full p-1 border">
+                <Image
+                  alt="profileImage"
+                  className="rounded-full h-12 w-12 object-cover"
+                  src={
+                    "https://firebasestorage.googleapis.com/v0/b/donatehub-d09f5.appspot.com/o/trust_logos%2F11325a42-3455-4974-bc4d-eb667fceb597?alt=media&token=29042ef1-0fd0-47bd-8570-94c91e14be36"
+                  }
+                  height={60}
+                  width={60}
+                />
+              </div>
+              <div className="absolute bg-primary rounded-md text-white top-20 right-10">
+                <ul className="py-10 px-10 gap-5 ">
+                  <li cl>My Profile</li>
+                </ul>
+              </div> */}
+              <UserProfile />
             </div>
           )}
         </nav>

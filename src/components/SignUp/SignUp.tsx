@@ -37,6 +37,14 @@ const SignUp = () => {
     confirmPassword: Yup.string()
       .oneOf([Yup.ref("password")], "Passwords must match")
       .required("Confirm Password is required"),
+    mobileno: Yup.string()
+      .matches(
+        /^[+]?[0-9]+$/,
+        "Mobile number must contain only digits and can optionally start with a '+'"
+      )
+      .min(10, "Mobile number must be at least 10 digits")
+      .max(15, "Mobile number can't exceed 15 digits")
+      .required("Mobile Number is required"),
   });
 
   const initialValue: {
@@ -45,6 +53,7 @@ const SignUp = () => {
     email: string;
     password: string;
     confirmPassword: string;
+    mobileno: string;
     gender: string;
     role: string;
   } = {
@@ -53,6 +62,7 @@ const SignUp = () => {
     password: "",
     confirmPassword: "",
     email: "",
+    mobileno: "",
     gender: "",
     role: "user",
   };
@@ -151,6 +161,22 @@ const SignUp = () => {
             />
             {touched.email && errors.email && (
               <span className="text-sm text-red-600">{errors.email}</span>
+            )}
+          </div>
+
+          <div className="flex flex-col border-t-transparent border-2 px-2 py-1 focus-within:border-primary">
+            <label className="pb-1 text-sm font-medium">Mobile No</label>
+            <input
+              id="mobileno"
+              name="mobileno"
+              type="text"
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className="outline-none tracking-wider"
+              placeholder="+91 9858888454"
+            />
+            {touched.mobileno && errors.mobileno && (
+              <span className="text-sm text-red-600">{errors.mobileno}</span>
             )}
           </div>
           <div className="flex flex-col border-t-transparent border-2 px-2 py-1 focus-within:border-primary">

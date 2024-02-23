@@ -11,6 +11,7 @@ import CloseHamburgerIcon from "@/icons/CloseHamburgerIcon";
 import Logo from "@/icons/Logo";
 import { useAuth } from "@/context/auth";
 import TransactionIcon from "@/icons/TransactionIcon";
+import UserProfile from "../UserProfile";
 
 const ADMIN_MENUS: {
   id: number;
@@ -43,17 +44,17 @@ const ADMIN_MENUS: {
     path: "/admin/managetransaction",
     icon: <TransactionIcon />,
   },
+  // {
+  //   id: 6,
+  //   menu: "Profile",
+  //   path: "/admin/profile",
+  //   icon: <ProfileIcon color="#FFFFFF" />,
+  // },
   {
     id: 6,
-    menu: "Profile",
-    path: "/admin/profile",
-    icon: <ProfileIcon />,
-  },
-  {
-    id: 7,
     menu: "Logout",
     path: "/login",
-    icon: <LogoutIcon />,
+    icon: <LogoutIcon color="#FFFFFF" />,
   },
 ];
 
@@ -131,6 +132,7 @@ const AdminFrame: React.FC<{
               <div className="font-bold text-3xl text-primary">
                 <Logo />
               </div>
+              <UserProfile />
             </nav>
           </div>
 
