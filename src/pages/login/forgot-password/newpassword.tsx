@@ -36,13 +36,16 @@ const Password = () => {
       onSubmit: (formData) => {
         setLoading(true);
         const { confirmPassword, ...passwordData } = formData;
+        const newData: { forgotPasswordEmail: string; newPassword: string } = {
+          forgotPasswordEmail: forgotPasswordEmail as string,
+          newPassword: passwordData.password,
+        };
         fetch(`${BACKEND_BASE_URL}/api/updatePassword`, {
           method: "PATCH",
           headers: {
-            Authorization: `Bearer ${forgotPasswordEmail}`,
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(passwordData),
+          body: JSON.stringify(newData),
         })
           .then((res) => {
             if (res && res.status === 200) {

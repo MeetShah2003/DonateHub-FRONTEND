@@ -9,6 +9,11 @@ import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import { BACKEND_BASE_URL } from "@/consts";
 import Spinner from "../Spinner";
+import Image from "next/image";
+import CameraIcon from "@/icons/CameraIcon";
+import { uploadBytes, ref, getDownloadURL } from "firebase/storage";
+import { storage } from "@/firebase";
+import { v4 } from "uuid";
 
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -56,6 +61,7 @@ const SignUp = () => {
     mono: string;
     gender: string;
     role: string;
+    userlogo: string;
   } = {
     firstName: "",
     lastName: "",
@@ -65,220 +71,280 @@ const SignUp = () => {
     mono: "",
     gender: "",
     role: "user",
+    userlogo: "",
   };
 
-  const { handleSubmit, handleChange, handleBlur, touched, errors, values } =
-    useFormik({
-      initialValues: initialValue,
-      validationSchema: SignupSchema,
-      onSubmit: async (values) => {
-        setLoading(true);
-        const { confirmPassword, ...data } = values;
-        console.log(data);
-        try {
-          fetch(`${BACKEND_BASE_URL}/api/signup`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data),
+  const {
+    handleSubmit,
+    handleChange,
+    handleBlur,
+    setFieldValue,
+    touched,
+    errors,
+    values,
+  } = useFormik({
+    initialValues: initialValue,
+    validationSchema: SignupSchema,
+    onSubmit: async (values) => {
+      setLoading(true);
+      const { confirmPassword, ...data } = values;
+      console.log(data);
+      try {
+        fetch(`${BACKEND_BASE_URL}/api/signup`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data && data.message == "user already exist") {
+              errorToast("user already exists");
+              setTimeout(() => {
+                router.push("/login");
+              }, 3000);
+            } else {
+              successToast("Account created successfully");
+              setTimeout(() => {
+                router.push("/login");
+              }, 3000);
+            }
           })
-            .then((res) => res.json())
-            .then((data) => {
-              if (data && data.message == "user already exist") {
-                errorToast("user already exists");
-                setTimeout(() => {
-                  router.push("/login");
-                }, 3000);
-              } else {
-                successToast("Account created successfully");
-                setTimeout(() => {
-                  router.push("/login");
-                }, 3000);
-              }
-            })
-            .catch((error) => {
-              console.log(error);
-            })
-            .finally(() => {
-              setLoading(false);
-            });
-        } catch (error) {
-          console.log(error);
+          .catch((error) => {
+            console.log(error);
+          })
+          .finally(() => {
+            setLoading(false);
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  });
+
+  const handleOnChange = async (e: any) => {
+    if (e.target.files[0]) {
+      const uploadedImage = e.target.files[0];
+      const imageRef = ref(storage, `user_profile_image/${v4()}`);
+
+      try {
+        await uploadBytes(imageRef, uploadedImage);
+        const imageUrl = await getDownloadURL(imageRef);
+
+        if (imageUrl) {
+          successToast("Image Upload Successfully");
+          setFieldValue("userlogo", imageUrl);
         }
-      },
-    });
+      } catch (error) {
+        errorToast("Image Upload Failed");
+      }
+    }
+  };
   return (
     <>
       <WelcomePage title="Welcome To" secondTitle="DonateHub">
         {loading && <Spinner />}
-        <form className="mx-5 lg:mx-20 gap-10" onSubmit={handleSubmit}>
-          <h3 className="font-inter text-3xl drop-shadow-2xl tracking-wider font-bold mb-8">
-            Sign Up
-          </h3>
-          <div className="flex w-full">
-            <div className="flex w-1/2 flex-col border-2 px-2 py-1 rounded-tl-lg focus-within:border-primary">
-              <label className="pb-1 text-sm font-medium">First Name</label>
+        <div className="h-screen overflow-y-auto py-16">
+          <form className="mx-5 lg:mx-20 gap-10" onSubmit={handleSubmit}>
+            <div className="flex justify-center relative bottom-6">
+              <div className="border-4 h-32 w-32 p-1 border-primary rounded-full overflow-hidden">
+                <Image
+                  alt="trustlogo"
+                  src={values.userlogo}
+                  className="rounded-full h-full w-full object-contain"
+                  width={300}
+                  height={200}
+                ></Image>
+              </div>
               <input
-                id="firstName"
-                name="firstName"
-                type="text"
-                className="outline-none tracking-wider"
-                placeholder="John"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.firstName}
+                type="file"
+                id="imageUpload"
+                name="imageUpload"
+                accept="image/*"
+                className="hidden"
+                onChange={handleOnChange}
               />
-              {touched.firstName && errors.firstName && (
-                <span className="text-sm text-red-600">{errors.firstName}</span>
-              )}
-            </div>
-            <div className="flex w-1/2 flex-col border-2 border-l-transparent px-2 py-1 rounded-tr-lg focus-within:border-primary">
-              <label className="pb-1 text-sm font-medium">Last Name</label>
-              <input
-                id="lastName"
-                name="lastName"
-                type="text"
-                className="outline-none tracking-wider"
-                placeholder="Doe"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.lastName}
-              />
-              {touched.lastName && errors.lastName && (
-                <span className="text-sm text-red-600">{errors.lastName}</span>
-              )}
-            </div>
-          </div>
-
-          <div className="flex flex-col border-t-transparent border-2 px-2 py-1 focus-within:border-primary">
-            <label className="pb-1 text-sm font-medium">Email</label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              className="outline-none tracking-wider"
-              placeholder="johndoe@gmail.com"
-            />
-            {touched.email && errors.email && (
-              <span className="text-sm text-red-600">{errors.email}</span>
-            )}
-          </div>
-
-          <div className="flex flex-col border-t-transparent border-2 px-2 py-1 focus-within:border-primary">
-            <label className="pb-1 text-sm font-medium">Mobile No</label>
-            <input
-              id="mono"
-              name="mono"
-              type="text"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              maxLength={10}
-              className="outline-none tracking-wider"
-              placeholder="+91 9858888454"
-            />
-            {touched.mono && errors.mono && (
-              <span className="text-sm text-red-600">{errors.mono}</span>
-            )}
-          </div>
-          <div className="flex flex-col border-t-transparent border-2 px-2 py-1 focus-within:border-primary">
-            <label className="pb-1 text-sm font-medium">Gender</label>
-            <div className="flex space-x-4">
-              <div className="flex items-center">
-                <input
-                  type="radio"
-                  id="male"
-                  name="gender"
-                  value="male"
-                  checked={values.gender === "male"}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                <label htmlFor="male" className="ml-2">
-                  Male
+              <div className="absolute z-50 left-1/2 bottom-0 translate-x-1/2">
+                <label htmlFor="imageUpload" className="cursor-pointer">
+                  <CameraIcon />
                 </label>
               </div>
-              <div className="flex items-center">
+            </div>
+            <h3 className="font-inter text-3xl drop-shadow-2xl tracking-wider font-bold mb-8">
+              Sign Up
+            </h3>
+
+            <div className="flex w-full">
+              <div className="flex w-1/2 flex-col border-2 px-2 py-1 rounded-tl-lg focus-within:border-primary">
+                <label className="pb-1 text-sm font-medium">First Name</label>
                 <input
-                  type="radio"
-                  id="female"
-                  name="gender"
-                  value="female"
-                  checked={values.gender === "female"}
+                  id="firstName"
+                  name="firstName"
+                  type="text"
+                  className="outline-none tracking-wider"
+                  placeholder="John"
                   onChange={handleChange}
                   onBlur={handleBlur}
+                  value={values.firstName}
                 />
-                <label htmlFor="female" className="ml-2">
-                  Female
-                </label>
+                {touched.firstName && errors.firstName && (
+                  <span className="text-sm text-red-600">
+                    {errors.firstName}
+                  </span>
+                )}
               </div>
-              {/* Add more gender options if needed */}
+              <div className="flex w-1/2 flex-col border-2 border-l-transparent px-2 py-1 rounded-tr-lg focus-within:border-primary">
+                <label className="pb-1 text-sm font-medium">Last Name</label>
+                <input
+                  id="lastName"
+                  name="lastName"
+                  type="text"
+                  className="outline-none tracking-wider"
+                  placeholder="Doe"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.lastName}
+                />
+                {touched.lastName && errors.lastName && (
+                  <span className="text-sm text-red-600">
+                    {errors.lastName}
+                  </span>
+                )}
+              </div>
             </div>
-            {touched.gender && errors.gender && (
-              <span className="text-sm text-red-600">{errors.gender}</span>
-            )}
-          </div>
-          <div className="flex flex-col border-t-transparent border-2 px-2 py-1 focus-within:border-primary">
-            <label className="pb-1 text-sm font-medium">Password</label>
-            <div className="flex justify-between">
+
+            <div className="flex flex-col border-t-transparent border-2 px-2 py-1 focus-within:border-primary">
+              <label className="pb-1 text-sm font-medium">Email</label>
               <input
-                id="password"
-                name="password"
-                type={showPassword ? "text" : "password"}
+                id="email"
+                name="email"
+                type="email"
                 onChange={handleChange}
                 onBlur={handleBlur}
-                className="outline-none tracking-wider w-full"
+                className="outline-none tracking-wider"
+                placeholder="johndoe@gmail.com"
+              />
+              {touched.email && errors.email && (
+                <span className="text-sm text-red-600">{errors.email}</span>
+              )}
+            </div>
+
+            <div className="flex flex-col border-t-transparent border-2 px-2 py-1 focus-within:border-primary">
+              <label className="pb-1 text-sm font-medium">Mobile No</label>
+              <input
+                id="mono"
+                name="mono"
+                type="text"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                maxLength={10}
+                className="outline-none tracking-wider"
+                placeholder="+91 9858888454"
+              />
+              {touched.mono && errors.mono && (
+                <span className="text-sm text-red-600">{errors.mono}</span>
+              )}
+            </div>
+            <div className="flex flex-col border-t-transparent border-2 px-2 py-1 focus-within:border-primary">
+              <label className="pb-1 text-sm font-medium">Gender</label>
+              <div className="flex space-x-4">
+                <div className="flex items-center">
+                  <input
+                    type="radio"
+                    id="male"
+                    name="gender"
+                    value="male"
+                    checked={values.gender === "male"}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                  <label htmlFor="male" className="ml-2">
+                    Male
+                  </label>
+                </div>
+                <div className="flex items-center">
+                  <input
+                    type="radio"
+                    id="female"
+                    name="gender"
+                    value="female"
+                    checked={values.gender === "female"}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                  <label htmlFor="female" className="ml-2">
+                    Female
+                  </label>
+                </div>
+                {/* Add more gender options if needed */}
+              </div>
+              {touched.gender && errors.gender && (
+                <span className="text-sm text-red-600">{errors.gender}</span>
+              )}
+            </div>
+            <div className="flex flex-col border-t-transparent border-2 px-2 py-1 focus-within:border-primary">
+              <label className="pb-1 text-sm font-medium">Password</label>
+              <div className="flex justify-between">
+                <input
+                  id="password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  className="outline-none tracking-wider w-full"
+                  placeholder="••••••••"
+                />
+                <div
+                  onClick={() => {
+                    setShowPassword(!showPassword);
+                  }}
+                >
+                  {showPassword ? <HidePasswordIcon /> : <ShowPasswordIcon />}
+                </div>
+              </div>
+              {touched.password && errors.password && (
+                <span className="text-sm text-red-600">{errors.password}</span>
+              )}
+            </div>
+            <div className="flex flex-col border-t-transparent border-2 rounded-b-lg px-2 py-1 focus-within:border-primary">
+              <label className="pb-1 text-sm font-medium">
+                Confirm Password
+              </label>
+              <input
+                id="confirmPassword"
+                name="confirmPassword"
+                type="text"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                className="outline-none tracking-wider"
                 placeholder="••••••••"
               />
-              <div
-                onClick={() => {
-                  setShowPassword(!showPassword);
-                }}
-              >
-                {showPassword ? <HidePasswordIcon /> : <ShowPasswordIcon />}
-              </div>
+              {touched.confirmPassword && errors.confirmPassword && (
+                <span className="text-sm text-red-600">
+                  {errors.confirmPassword}
+                </span>
+              )}
             </div>
-            {touched.password && errors.password && (
-              <span className="text-sm text-red-600">{errors.password}</span>
-            )}
-          </div>
-          <div className="flex flex-col border-t-transparent border-2 rounded-b-lg px-2 py-1 focus-within:border-primary">
-            <label className="pb-1 text-sm font-medium">Confirm Password</label>
-            <input
-              id="confirmPassword"
-              name="confirmPassword"
-              type="text"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              className="outline-none tracking-wider"
-              placeholder="••••••••"
-            />
-            {touched.confirmPassword && errors.confirmPassword && (
-              <span className="text-sm text-red-600">
-                {errors.confirmPassword}
-              </span>
-            )}
-          </div>
-          <div className="my-3 text-primary underline-offset-2 underline">
-            <Link href={"/trustsignup"}>As a trust?</Link>
-          </div>
-          <div className="flex flex-col border-2 mt-2 bg-primary shadow-sm rounded-lg px-2 py-2">
-            <button
-              type="submit"
-              className="outline-none text-white font-inter font-medium"
-            >
-              Sign Up
-            </button>
-          </div>
-          <div className="my-3 flex justify-center ">
-            <p>
-              Already have an account?
-              <span className="text-primary underline-offset-2 underline">
-                <Link href={"/login"}>Login</Link>
-              </span>
-            </p>
-          </div>
-        </form>
+            <div className="my-3 text-primary underline-offset-2 underline">
+              <Link href={"/trustsignup"}>As a trust?</Link>
+            </div>
+            <div className="flex flex-col border-2 mt-2 bg-primary shadow-sm rounded-lg px-2 py-2">
+              <button
+                type="submit"
+                className="outline-none text-white font-inter font-medium"
+              >
+                Sign Up
+              </button>
+            </div>
+            <div className="my-3 flex justify-center ">
+              <p>
+                Already have an account?
+                <span className="text-primary underline-offset-2 underline">
+                  <Link href={"/login"}>Login</Link>
+                </span>
+              </p>
+            </div>
+          </form>
+        </div>
       </WelcomePage>
     </>
   );

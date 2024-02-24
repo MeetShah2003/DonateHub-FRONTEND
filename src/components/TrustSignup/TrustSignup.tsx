@@ -109,7 +109,6 @@ const TrustSignup = () => {
 
   const handleStateChange = (selectedState: string) => {
     values.state = selectedState;
-    setSelectedState(selectedState);
 
     const selectedStateObject = CITY_AND_STATE.find(
       (stateObj) => stateObj.state.value === selectedState
