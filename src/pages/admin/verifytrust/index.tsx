@@ -78,7 +78,7 @@ const VerifyTrust = () => {
             );
           }
         )}
-      {!unVerifiedTrusts?.length && <NoData />}
+      {!unVerifiedTrusts?.length && !loading && <NoData />}
     </AdminFrame>
   );
 };

@@ -8,6 +8,7 @@ import { BACKEND_BASE_URL } from "@/consts";
 import { useAuth } from "@/context/auth";
 import Spinner from "@/components/Spinner";
 import { useState } from "react";
+import Cookies from "js-cookie";
 
 const errorToast = (errorMessage: string) => toast.error(errorMessage);
 const successToast = (successMessage: string) => toast.success(successMessage);
@@ -36,7 +37,11 @@ const ForgotPassword = () => {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(values),
         })
-          .then((res) => res.json())
+          .then((res) => {
+            if (res && res.status === 200) {
+              return res.json();
+            }
+          })
           .then((data) => {
             if (data.message === "user not found") {
               errorToast("User not found");
@@ -46,6 +51,8 @@ const ForgotPassword = () => {
               setTimeout(() => {
                 router.push("/login/forgot-password/enterotp");
               }, 3000);
+              console.log(values.email);
+              Cookies.set("forgotPasswordEmail", values.email);
             }
           })
           .finally(() => {

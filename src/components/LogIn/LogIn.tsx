@@ -21,6 +21,7 @@ import {
   getAdditionalUserInfo,
   signInWithPopup,
 } from "firebase/auth";
+import Logo from "@/icons/Logo";
 
 const initialValue: {
   email: string;
@@ -203,8 +204,9 @@ const LogIn = () => {
   return (
     <div className="flex justify-center h-full">
       <WelcomePage title="Welcome To" secondTitle="DonateHub">
+       
         {loading && <Spinner />}
-        <form className="mx-5 lg:mx-20 gap-10 pb-8" onSubmit={handleSubmit}>
+        <form className="mx-5 lg:mx-20 gap-20 pb-8" onSubmit={handleSubmit}>
           <h3 className="font-inter text-3xl drop-shadow-2xl tracking-wider font-bold mb-8">
             Sign in
           </h3>

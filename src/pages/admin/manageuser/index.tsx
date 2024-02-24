@@ -235,6 +235,7 @@ const ManageUser = () => {
           disabledClassName={"opacity-50 cursor-not-allowed"}
         />
       )}
+      {!currentItems?.length && !loading && <NoData />}
     </AdminFrame>
   );
 };

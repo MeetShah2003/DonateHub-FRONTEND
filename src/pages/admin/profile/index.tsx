@@ -256,6 +256,7 @@ const AdminProfile = () => {
           </button>
         </div>
       </form>
+      
     </AdminFrame>
   );
 };
