@@ -14,35 +14,33 @@ const ManageTransaction = () => {
   const [error, setError] = useState(null);
   const router = useRouter();
 
-  useEffect(() => {
-    const getTrustByTransactions = async () => {
-      try {
-        const response = await fetch(
-          `${BACKEND_BASE_URL}/admin/trustTransaction`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${access_token}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        if (!response.ok) {
-          throw new Error("Failed to fetch data");
+  const getTrustByTransactions = async () => {
+    try {
+      const response = await fetch(
+        `${BACKEND_BASE_URL}/admin/trustTransaction`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+            "Content-Type": "application/json",
+          },
         }
-        const data = await response.json();
-        setTrustWiseTransaction(data.allTrusts);
-        setLoading(false);
-      } catch (error: any) {
-        setError(error);
-        setLoading(false);
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
       }
-    };
+      const data = await response.json();
+      setTrustWiseTransaction(data.Tdata);
+      setLoading(false);
+    } catch (error: any) {
+      setError(error);
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     getTrustByTransactions();
   }, [access_token]);
-
-  console.log(trustWiseTransaction);
 
   return (
     <AdminFrame title="Manage Transaction">
@@ -51,7 +49,25 @@ const ManageTransaction = () => {
       ) : error ? (
         <p>Error: {error}</p>
       ) : (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-10">
+          <div className="w-full flex flex-col md:flex-row justify-between items-center bg-gray-100 rounded-lg p-6">
+            <div className="flex flex-col w-1/2 items-center justify-center mb-4 md:mb-0">
+              <h2 className="font-semibold flex-wrap text-xl md:text-2xl">
+                Total Collection
+              </h2>
+              <p className="text-2xl md:text-3xl font-bold text-primary">
+                ₹5000
+              </p>
+            </div>
+            <div className="w-1/2 border-t border-gray-300 md:border-none my-4 md:my-0"></div>
+            <div className="flex flex-col w-1/2 items-center justify-center mb-4 md:mb-0">
+              <h2 className="font-semibold flex-wrap text-xl md:text-2xl">
+                Total Supporter
+              </h2>
+              <p className="text-2xl md:text-3xl font-bold text-primary">5</p>
+            </div>
+          </div>
+
           {trustWiseTransaction &&
             trustWiseTransaction.length &&
             trustWiseTransaction.map((data: any) => {
@@ -63,7 +79,7 @@ const ManageTransaction = () => {
                   trustImage={data?.trustlogo}
                   founder={data?.founder}
                   creationDate={data?.creationDate}
-                  amount="2154"
+                  amount={data?.TotalAmount}
                   onShowTransaction={() => {
                     console.log(data?._id);
                     router.push(`/admin/managetransaction/${data?._id}`);
