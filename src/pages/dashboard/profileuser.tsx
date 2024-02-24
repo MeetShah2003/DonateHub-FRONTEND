@@ -1,7 +1,6 @@
 import { useFormik } from "formik";
 import CameraIcon from "@/icons/CameraIcon";
 import Image from "next/image";
-import AdminFrame from "@/components/AdminFrame";
 import { getAuthenticatedRouteCheck } from "@/authguard/authguard";
 import * as Yup from "yup";
 import React, { useState } from "react";
@@ -9,7 +8,6 @@ import Cookies from "js-cookie";
 import { useAuth } from "@/context/auth";
 import { BACKEND_BASE_URL } from "@/consts";
 import { toast } from "react-toastify";
-import AdminRoute from "@/components/AdminRoute";
 import Spinner from "@/components/Spinner";
 import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
 import { storage } from "@/firebase";
@@ -125,8 +123,6 @@ const ProfileUser = () => {
       }
     }
   };
-
-  console.log(user);
 
   return (
     <div>

@@ -10,7 +10,6 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useAuth } from "@/context/auth";
 import Visitor from "@/components/Visitor";
-// import { Razorpay } from "razorpay-checkout"; // Import Razorpay
 
 const TrustDetails = () => {
   const [singleData, setSingleData] = useState<TrustData | null>(null);
@@ -57,14 +56,14 @@ const TrustDetails = () => {
       //     "created_at": 1708112082
       // }
       var options = {
-        key: "rzp_test_zfmhrR9Z3TReMH", // Enter the Key ID generated from the Dashboard
-        amount: data.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+        key: "rzp_test_zfmhrR9Z3TReMH",
+        amount: data.amount,
         currency: data.curruncy,
-        name: "DonateHub", //your business name
+        name: "DonateHub",
         description: "Test Transaction",
         image: "https://example.com/your_logo",
-        order_id: order.order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-        handler: (response) => {
+        order_id: order.order.id,
+        handler: (response: any) => {
           console.log(response);
         },
         prefill: {
@@ -80,7 +79,7 @@ const TrustDetails = () => {
         },
       };
       var rzp1 = new window.Razorpay(options);
-      rzp1.on("payment.failed", function (response) {
+      rzp1.on("payment.failed", function (response: any) {
         console.log(response);
       });
 

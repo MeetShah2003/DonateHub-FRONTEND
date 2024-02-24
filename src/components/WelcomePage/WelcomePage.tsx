@@ -1,4 +1,3 @@
-import FacebookIcon from "@/icons/FacebookIcon";
 import Logo from "@/icons/Logo";
 import { ReactNode } from "react";
 import { Typewriter } from "react-simple-typewriter";

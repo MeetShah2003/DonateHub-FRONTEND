@@ -48,17 +48,15 @@ const ForgotPassword = () => {
             } else {
               setForgotPasswordEmail(data.email);
               successToast("Otp sent sucessfully");
+              Cookies.set("forgotPasswordEmail", values.email);
               setTimeout(() => {
                 router.push("/login/forgot-password/enterotp");
               }, 3000);
-              console.log(values.email);
-              Cookies.set("forgotPasswordEmail", values.email);
             }
           })
           .finally(() => {
             setLoading(false);
           });
-        console.log("forgotPasswordEmail", forgotPasswordEmail);
       },
     }
   );

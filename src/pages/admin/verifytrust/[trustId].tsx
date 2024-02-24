@@ -1,6 +1,6 @@
 import AdminFrame from "@/components/AdminFrame";
 import AdminRoute from "@/components/AdminRoute";
-import { BACKEND_BASE_URL, trustData } from "@/consts";
+import { BACKEND_BASE_URL } from "@/consts";
 import { TrustData } from "@/types/types";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -55,8 +55,6 @@ const SingleTrust = () => {
     getSingleTrustData(query.trustId as string);
   }, [query.trustId, access_token]);
 
-  console.log(singleData);
-
   const onAccept = async () => {
     setLoading(true);
     fetch(`${BACKEND_BASE_URL}/admin/acceptStatus/${query.trustId}`, {
@@ -72,7 +70,9 @@ const SingleTrust = () => {
       .then((data) => {
         if (data) {
           successToast("Trust Request Accepted");
-          push("/admin/verifytrust");
+          setTimeout(() => {
+            push("/admin/verifytrust");
+          }, 2000);
         }
       })
       .finally(() => {
@@ -94,7 +94,9 @@ const SingleTrust = () => {
       .then((data) => {
         if (data) {
           errorToast("Trust Request Rejected");
-          push("/admin/verifytrust");
+          setTimeout(() => {
+            push("/admin/verifytrust");
+          }, 2000);
         }
       })
       .finally(() => {

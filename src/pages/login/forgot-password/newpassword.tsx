@@ -6,7 +6,6 @@ import { useState } from "react";
 import * as Yup from "yup";
 import { useRouter } from "next/router";
 import { BACKEND_BASE_URL } from "@/consts";
-import { useAuth } from "@/context/auth";
 import Spinner from "@/components/Spinner";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
@@ -25,7 +24,6 @@ const Password = () => {
   const successToast = (message: string) => toast.success(message);
   const errorToast = (message: string) => toast.error(message);
   const router = useRouter();
-  // const { forgotPasswordEmail } = useAuth();
   const forgotPasswordEmail = Cookies.get("forgotPasswordEmail");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -54,7 +52,6 @@ const Password = () => {
           })
           .then((data) => {
             Cookies.remove("forgotPasswordEmail");
-            console.log("forgotdata", data.updatedPassword);
             if (data.updatedPassword) {
               successToast("Password Change Successfully");
             } else {
@@ -64,8 +61,9 @@ const Password = () => {
           .finally(() => {
             setLoading(false);
           });
-        router.push("/login/forgot-password/change-success");
-        console.log(passwordData);
+        setTimeout(() => {
+          router.push("/login/forgot-password/change-success");
+        }, 2000);
       },
     }
   );

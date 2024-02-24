@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import AdminFrame from "@/components/AdminFrame";
 import BlockIcon from "@/icons/BlockIcon";
 import EditIcon from "@/icons/EditIcon";
-import { BACKEND_BASE_URL, dummyUsers } from "@/consts";
+import { BACKEND_BASE_URL } from "@/consts";
 import ReactPaginate from "react-paginate";
 import ArrowIcon from "@/icons/ArrowIcon";
 import Cookies from "js-cookie";
@@ -46,8 +46,6 @@ const ManageUser = () => {
       console.error("Error fetching data:", error);
     }
   };
-
-  console.log(allUserData);
 
   const handleUnblock = async (_id: string) => {
     setLoading(false);
@@ -93,8 +91,6 @@ const ManageUser = () => {
   useEffect(() => {
     getAllUserData();
   }, []);
-
-  console.log(allUserData);
 
   const offset = currentPage * itemsPerPage;
   const filteredUsers = allUserData?.filter((user) =>

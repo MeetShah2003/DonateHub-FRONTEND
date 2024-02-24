@@ -42,8 +42,6 @@ const ManageTrust = () => {
       });
   };
 
-  console.log(allTrustData);
-
   const handleBlock = async (_id: string) => {
     setLoading(true);
     try {
@@ -155,7 +153,6 @@ const ManageTrust = () => {
                         },
                         index
                       ) => {
-                        console.log(_id);
                         return (
                           <tr
                             className="hover:bg-gray-100 transition"

@@ -29,7 +29,6 @@ const Admin = () => {
       })
       .then((data) => {
         setTotalSuppoters(data.totalUsers);
-        console.log(data.totalUsers);
       });
   };
 

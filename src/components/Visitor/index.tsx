@@ -1,14 +1,12 @@
 import HamburgerIcon from "@/icons/HamburgurIcon";
 import Link from "next/link";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useState } from "react";
 import { useRouter } from "next/router";
 import HomeIcon from "@/icons/HomeIcon";
 import ContactUsIcon from "@/icons/ContactUsIcon";
 import AboutUsIcon from "@/icons/AboutUsIcon";
 import LogoutIcon from "@/icons/LogoutIcon";
 import ProfileIcon from "@/icons/ProfileIcon";
-import { useSession, signIn, signOut } from "next-auth/react";
-import Image from "next/image";
 
 import CloseHamburgerIcon from "@/icons/CloseHamburgerIcon";
 import { useAuth } from "@/context/auth";
@@ -45,12 +43,6 @@ const NAV_MENUES: {
     path: "/aboutus",
     icon: <AboutUsIcon />,
   },
-  // {
-  //   id: 5,
-  //   menu: "Logout",
-  //   path: "/aboutus",
-  //   icon: <LogoutIcon />,
-  // },
 ];
 
 const Visitor = () => {
@@ -100,7 +92,9 @@ const Visitor = () => {
             <div className="hidden sm:flex gap-5">
               <button
                 onClick={() => {
-                  router.push("/login");
+                  setTimeout(() => {
+                    router.push("/login");
+                  }, 1000);
                 }}
                 className="rounded-md text-black border-2 py-2 px-5 font-semibold"
               >
@@ -108,7 +102,9 @@ const Visitor = () => {
               </button>
               <button
                 onClick={() => {
-                  router.push("/signup");
+                  setTimeout(() => {
+                    router.push("/signup");
+                  }, 1000);
                 }}
                 className="bg-primary rounded-md text-white py-2 px-5 font-semibold"
               >

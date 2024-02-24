@@ -88,7 +88,6 @@ const SignUp = () => {
     onSubmit: async (values) => {
       setLoading(true);
       const { confirmPassword, ...data } = values;
-      console.log(data);
       try {
         fetch(`${BACKEND_BASE_URL}/api/signup`, {
           method: "POST",
@@ -101,12 +100,12 @@ const SignUp = () => {
               errorToast("user already exists");
               setTimeout(() => {
                 router.push("/login");
-              }, 3000);
+              }, 2000);
             } else {
               successToast("Account created successfully");
               setTimeout(() => {
                 router.push("/login");
-              }, 3000);
+              }, 2000);
             }
           })
           .catch((error) => {
@@ -275,7 +274,6 @@ const SignUp = () => {
                     Female
                   </label>
                 </div>
-                {/* Add more gender options if needed */}
               </div>
               {touched.gender && errors.gender && (
                 <span className="text-sm text-red-600">{errors.gender}</span>

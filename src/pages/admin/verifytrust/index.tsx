@@ -14,8 +14,6 @@ const VerifyTrust = () => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  console.log(unVerifiedTrusts);
-
   const getPendingTrust = async () => {
     setLoading(true);
     try {
@@ -27,10 +25,7 @@ const VerifyTrust = () => {
         },
       });
 
-      console.log(unVerifiedTrusts);
-
       const data = await response.json();
-      console.log(data["unverifiedTrusts"]);
       setUnVerifiedTrusts(data["unverifiedTrusts"]);
       setLoading(false);
     } catch (error) {

@@ -1,6 +1,5 @@
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
-import { GoogleOAuthProvider } from "@react-oauth/google";
 import { SessionProvider } from "next-auth/react";
 import ToastMessage from "../components/ToastMessage";
 import { AuthProvider } from "@/context/auth";

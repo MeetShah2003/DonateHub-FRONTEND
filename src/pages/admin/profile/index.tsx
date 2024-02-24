@@ -100,7 +100,6 @@ const AdminProfile = () => {
     },
     validationSchema: profileSchema,
     onSubmit: async (formValues) => {
-      console.log("clicked");
       getUpdateAdminProfile(formValues);
     },
   });
@@ -123,8 +122,6 @@ const AdminProfile = () => {
       }
     }
   };
-
-  console.log(user);
 
   return (
     <AdminFrame title="Profile">

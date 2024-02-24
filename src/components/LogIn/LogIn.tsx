@@ -21,7 +21,6 @@ import {
   getAdditionalUserInfo,
   signInWithPopup,
 } from "firebase/auth";
-import Logo from "@/icons/Logo";
 
 const initialValue: {
   email: string;
@@ -47,7 +46,6 @@ const loginSchema = Yup.object().shape({
 
 const LogIn = () => {
   const router = useRouter();
-  const [value, setValue] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const { isAuthenticated, user } = useAuth();
@@ -96,9 +94,19 @@ const LogIn = () => {
               Cookies.set("access_token", data?.token);
               Cookies.set("role", data?.user?.role);
               if (data?.user?.role === "admin") {
-                router.push("/admin");
+                successToast(
+                  `welcome ${data.user.firstName} ${data.user.lastName}`
+                );
+                setTimeout(() => {
+                  router.push("/admin");
+                }, 2000);
               } else {
-                router.push("/dashboard");
+                successToast(
+                  `welcome ${data.user.firstName} ${data.user.lastName}`
+                );
+                setTimeout(() => {
+                  router.push("/dashboard");
+                }, 2000);
               }
             }
           })
@@ -128,8 +136,6 @@ const LogIn = () => {
           email,
           userlogo: picture,
         });
-
-        setValue(data.user?.email as any);
       } else {
         console.error("Additional user info not available");
       }
@@ -145,14 +151,20 @@ const LogIn = () => {
       body: JSON.stringify(data),
     })
       .then((res) => res.json())
-      .then((data) => {
+      .then((data: any) => {
         Cookies.set("access_token", data?.token);
         Cookies.set("role", data?.user?.role);
         console.log("data", data.user);
         if (data?.user?.role === "admin") {
-          router.push("/admin");
+          successToast(`welcome ${data.user.firstName} ${data.user.lastName}`);
+          setTimeout(() => {
+            router.push("/admin");
+          }, 2000);
         } else {
-          router.push("/dashboard");
+          successToast(`welcome back`);
+          setTimeout(() => {
+            router.push("/dashboard");
+          }, 2000);
         }
       });
   };
@@ -160,8 +172,6 @@ const LogIn = () => {
   const handleGithubLogin = async () => {
     try {
       const data: UserCredential = await signInWithPopup(auth, authProvider);
-
-      console.log("Github Data log===>>", data);
 
       const additionalUserInfo = getAdditionalUserInfo(data);
 
@@ -172,8 +182,6 @@ const LogIn = () => {
           email,
           userlogo: data.user?.photoURL,
         });
-
-        setValue(data.user?.email as any);
       } else {
         console.error("Additional user info not available");
       }
@@ -192,7 +200,6 @@ const LogIn = () => {
       .then((data) => {
         Cookies.set("access_token", data?.token);
         Cookies.set("role", data?.user?.role);
-        console.log("data", data.user);
         if (data?.user?.role === "admin") {
           router.push("/admin");
         } else {
@@ -200,11 +207,9 @@ const LogIn = () => {
         }
       });
   };
-  // signOut();
   return (
     <div className="flex justify-center h-full">
       <WelcomePage title="Welcome To" secondTitle="DonateHub">
-       
         {loading && <Spinner />}
         <form className="mx-5 lg:mx-20 gap-20 pb-8" onSubmit={handleSubmit}>
           <h3 className="font-inter text-3xl drop-shadow-2xl tracking-wider font-bold mb-8">

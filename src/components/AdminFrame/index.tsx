@@ -6,7 +6,6 @@ import ApproveIcon from "@/icons/ApproveIcon";
 import ManageTrustIcon from "@/icons/ManageTrustIcon";
 import ManageUserIcon from "@/icons/ManageUserIcon";
 import LogoutIcon from "@/icons/LogoutIcon";
-import ProfileIcon from "@/icons/ProfileIcon";
 import CloseHamburgerIcon from "@/icons/CloseHamburgerIcon";
 import Logo from "@/icons/Logo";
 import { useAuth } from "@/context/auth";
@@ -44,12 +43,6 @@ const ADMIN_MENUS: {
     path: "/admin/managetransaction",
     icon: <TransactionIcon />,
   },
-  // {
-  //   id: 6,
-  //   menu: "Profile",
-  //   path: "/admin/profile",
-  //   icon: <ProfileIcon color="#FFFFFF" />,
-  // },
   {
     id: 6,
     menu: "Logout",

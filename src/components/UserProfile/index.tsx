@@ -9,10 +9,6 @@ const UserProfile = () => {
   const { user, logout } = useAuth();
   const router = useRouter();
 
-  console.log(user.firstName);
-  console.log(user.lastName);
-  console.log(user.userlogo);
-
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
@@ -66,9 +62,13 @@ const UserProfile = () => {
                     onClick={() => {
                       if (menu === "My Profile") {
                         if (user?.role === "admin") {
-                          router.push("/admin/profile");
+                          setTimeout(() => {
+                            router.push("/admin/profile");
+                          }, 2000);
                         } else {
-                          router.push("/dashboard/profileuser");
+                          setTimeout(() => {
+                            router.push("/dashboard/profileuser");
+                          }, 1000);
                         }
                       } else {
                         logout();

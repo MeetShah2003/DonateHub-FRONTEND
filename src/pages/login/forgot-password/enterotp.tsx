@@ -19,8 +19,6 @@ const EnterOtp = () => {
   const router = useRouter();
   const { forgotPasswordEmail } = useAuth();
 
-  console.log("otpEmail>>", forgotPasswordEmail);
-
   const validationSchema = Yup.object().shape({
     otp: Yup.string()
       .length(4, "OTP must be exactly 4 characters")
