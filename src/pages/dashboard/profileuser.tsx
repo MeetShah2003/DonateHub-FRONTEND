@@ -14,8 +14,10 @@ import Spinner from "@/components/Spinner";
 import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
 import { storage } from "@/firebase";
 import { v4 } from "uuid";
+import UserRoute from "@/components/UserRoute/UserRoute";
+import Visitor from "@/components/Visitor";
 
-const AdminProfile = () => {
+const ProfileUser = () => {
   const { user } = useAuth();
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
   const [loading, setLoading] = useState(false);
@@ -43,7 +45,7 @@ const AdminProfile = () => {
 
   const getUpdateAdminProfile = (data: any) => {
     setLoading(true);
-    fetch(`${BACKEND_BASE_URL}/admin/updateProfile`, {
+    fetch(`${BACKEND_BASE_URL}/api/updMyProfile`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -108,7 +110,7 @@ const AdminProfile = () => {
   const handleOnChange = async (e: any) => {
     if (e.target.files[0]) {
       const uploadedImage = e.target.files[0];
-      const imageRef = ref(storage, `admin_logo/${v4()}`);
+      const imageRef = ref(storage, `user_profile_image/${v4()}`);
 
       try {
         await uploadBytes(imageRef, uploadedImage);
@@ -127,9 +129,15 @@ const AdminProfile = () => {
   console.log(user);
 
   return (
-    <AdminFrame title="Profile">
+    <div>
+      <div>
+        <Visitor />
+      </div>
       {loading && <Spinner />}
-      <form className="mx-auto w-full max-w-md gap-10" onSubmit={handleSubmit}>
+      <form
+        className="mx-auto w-full max-w-md gap-10 py-24"
+        onSubmit={handleSubmit}
+      >
         <div className="flex items-center justify-center relative bottom-6">
           <div className="border-4 h-32 w-32 p-1 border-primary rounded-full overflow-hidden">
             <Image
@@ -276,10 +284,10 @@ const AdminProfile = () => {
           </button>
         </div>
       </form>
-    </AdminFrame>
+    </div>
   );
 };
 
 export const getServerSideProps = getAuthenticatedRouteCheck;
 
-export default AdminRoute(AdminProfile);
+export default UserRoute(ProfileUser);

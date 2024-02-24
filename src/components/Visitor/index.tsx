@@ -148,7 +148,7 @@ const Visitor = () => {
         </nav>
       </div>
 
-      <div className="relative w-full sm:hidden">
+      <div className="relative z-50 w-full sm:hidden">
         <div
           className={`absolute bg-white border ${
             isHamburgerOpen

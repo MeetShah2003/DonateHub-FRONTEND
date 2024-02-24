@@ -11,6 +11,7 @@ const UserProfile = () => {
 
   console.log(user.firstName);
   console.log(user.lastName);
+  console.log(user.userlogo);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -36,7 +37,7 @@ const UserProfile = () => {
         >
           <img
             className="h-10 w-10 rounded-full"
-            src="https://via.placeholder.com/50"
+            src={user.userlogo}
             alt="User avatar"
           />
         </button>
@@ -64,7 +65,11 @@ const UserProfile = () => {
                     key={id}
                     onClick={() => {
                       if (menu === "My Profile") {
-                        router.push("");
+                        if (user?.role === "admin") {
+                          router.push("/admin/profile");
+                        } else {
+                          router.push("/dashboard/profileuser");
+                        }
                       } else {
                         logout();
                       }

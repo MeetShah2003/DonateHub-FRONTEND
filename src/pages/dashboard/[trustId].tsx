@@ -9,6 +9,7 @@ import UserRoute from "@/components/UserRoute/UserRoute";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useAuth } from "@/context/auth";
+import Visitor from "@/components/Visitor";
 // import { Razorpay } from "razorpay-checkout"; // Import Razorpay
 
 const TrustDetails = () => {
@@ -116,107 +117,112 @@ const TrustDetails = () => {
     return <Spinner />;
   }
   return (
-    <div className="flex flex-col gap-5 my-5 w-full">
-      <div className="flex flex-col sm:flex-row w-full gap-8">
-        <div className="w-full sm:w-1/3 border-2 rounded-lg">
-          <Image
-            src={singleData?.trustlogo as string}
-            className="flex w-full h-full object-cover rounded-lg"
-            alt="trustlogo"
-            width={300}
-            height={200}
-          ></Image>
+    <>
+      <Visitor />
+      <div className="flex flex-col gap-5 my-5 w-full">
+        <div className="flex flex-col sm:flex-row w-full gap-8">
+          <div className="w-full sm:w-1/3 border-2 rounded-lg">
+            <Image
+              src={singleData?.trustlogo as string}
+              className="flex w-full h-full object-cover rounded-lg"
+              alt="trustlogo"
+              width={300}
+              height={200}
+            ></Image>
+          </div>
+          <div className="w-2/2 flex flex-col gap-5">
+            <div className="flex sm:flex-col gap-5 justify-around">
+              <div className="flex flex-col">
+                <p className="text-lg font-semibold font-inter">Trust Name</p>
+                <p className="text-gray-500 text-lg">{singleData?.trustName}</p>
+              </div>
+              <div className="flex flex-col">
+                <p className="text-lg font-semibold font-inter">Category</p>
+                <p className="text-gray-500 text-lg">{singleData?.category}</p>
+              </div>
+            </div>
+            <div className="flex sm:flex-col gap-5 justify-around">
+              <div className="flex flex-col">
+                <p className="text-lg font-semibold font-inter">
+                  Creation Date
+                </p>
+                {/* <p className="text-gray-500 text-lg">{formattedDate}</p> */}
+              </div>
+              <div className="flex flex-col">
+                <p className="text-lg font-semibold font-inter">Founder</p>
+                <p className="text-gray-500 text-lg">{singleData?.founder}</p>
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="w-2/2 flex flex-col gap-5">
-          <div className="flex sm:flex-col gap-5 justify-around">
-            <div className="flex flex-col">
-              <p className="text-lg font-semibold font-inter">Trust Name</p>
-              <p className="text-gray-500 text-lg">{singleData?.trustName}</p>
-            </div>
-            <div className="flex flex-col">
-              <p className="text-lg font-semibold font-inter">Category</p>
-              <p className="text-gray-500 text-lg">{singleData?.category}</p>
+        <div className="flex w-full flex-col">
+          <div className="flex flex-col mt-6">
+            <p className="text-2xl font-semibold font-inter">About Trust</p>
+            <p className="text-gray-500 text-lg">{singleData?.description}</p>
+          </div>
+          <div className="flex flex-col gap-6 mt-5 mb-5">
+            <p className="text-2xl font-semibold font-inter">Contact Details</p>
+            <div className="flex flex-col sm:flex-row gap-3 w-full">
+              <div className="flex w-1/2 flex-col">
+                <p className="text-base font-semibold font-inter">Phone No</p>
+                <p className="text-gray-500 text-lg">{singleData?.contactNo}</p>
+              </div>
+              <div className="flex w-1/2 flex-col">
+                <p className="text-base font-semibold font-inter">Email</p>
+                <p className="text-gray-500 text-lg">{singleData?.email}</p>
+              </div>
             </div>
           </div>
-          <div className="flex sm:flex-col gap-5 justify-around">
-            <div className="flex flex-col">
-              <p className="text-lg font-semibold font-inter">Creation Date</p>
-              {/* <p className="text-gray-500 text-lg">{formattedDate}</p> */}
+          <div className="flex flex-col gap-3 mt-5">
+            <p className="text-2xl font-semibold font-inter">Address</p>
+            <div className="flex flex-col gap-2 sm:flex-row w-full">
+              <div className="flex w-full sm:w-1/2  flex-col">
+                <p className="text-base font-semibold font-inter">Address</p>
+                <p className="text-gray-500 text-lg">{singleData?.address}</p>
+              </div>
+              <div className="flex w-1/2 flex-col">
+                <p className="text-base font-semibold font-inter">State</p>
+                <p className="text-gray-500 text-lg">{singleData?.state}</p>
+              </div>
             </div>
-            <div className="flex flex-col">
-              <p className="text-lg font-semibold font-inter">Founder</p>
-              <p className="text-gray-500 text-lg">{singleData?.founder}</p>
+            <div className="flex flex-col gap-2 sm:flex-row w-full">
+              <div className="flex w-1/2 flex-col">
+                <p className="text-base font-semiboldmt font-inter">City</p>
+                <p className="text-gray-500 text-lg">{singleData?.city}</p>
+              </div>
+              <div className="flex w-1/2 flex-col">
+                <p className="text-base font-semibold font-inter">Pincode</p>
+                <p className="text-gray-500 text-lg">{singleData?.pincode}</p>
+              </div>
             </div>
           </div>
+          <form onSubmit={handleSubmit}>
+            <div className="flex justify-center mt-10 gap-5">
+              <div className="border border-primary rounded-md">
+                <input
+                  type="number"
+                  id="amount"
+                  value={values.amount}
+                  placeholder="Enter Amount"
+                  name="amount"
+                  className="h-full w-full outline-none px-2 rounded-md"
+                  onChange={handleChange}
+                  // onBlur={handleBlur}
+                />
+              </div>
+              <div>
+                <button
+                  type="submit"
+                  className="bg-primary rounded-md text-white py-2 px-6"
+                >
+                  Donate
+                </button>
+              </div>
+            </div>
+          </form>
         </div>
       </div>
-      <div className="flex w-full flex-col">
-        <div className="flex flex-col mt-6">
-          <p className="text-2xl font-semibold font-inter">About Trust</p>
-          <p className="text-gray-500 text-lg">{singleData?.description}</p>
-        </div>
-        <div className="flex flex-col gap-6 mt-5 mb-5">
-          <p className="text-2xl font-semibold font-inter">Contact Details</p>
-          <div className="flex flex-col sm:flex-row gap-3 w-full">
-            <div className="flex w-1/2 flex-col">
-              <p className="text-base font-semibold font-inter">Phone No</p>
-              <p className="text-gray-500 text-lg">{singleData?.contactNo}</p>
-            </div>
-            <div className="flex w-1/2 flex-col">
-              <p className="text-base font-semibold font-inter">Email</p>
-              <p className="text-gray-500 text-lg">{singleData?.email}</p>
-            </div>
-          </div>
-        </div>
-        <div className="flex flex-col gap-3 mt-5">
-          <p className="text-2xl font-semibold font-inter">Address</p>
-          <div className="flex flex-col gap-2 sm:flex-row w-full">
-            <div className="flex w-full sm:w-1/2  flex-col">
-              <p className="text-base font-semibold font-inter">Address</p>
-              <p className="text-gray-500 text-lg">{singleData?.address}</p>
-            </div>
-            <div className="flex w-1/2 flex-col">
-              <p className="text-base font-semibold font-inter">State</p>
-              <p className="text-gray-500 text-lg">{singleData?.state}</p>
-            </div>
-          </div>
-          <div className="flex flex-col gap-2 sm:flex-row w-full">
-            <div className="flex w-1/2 flex-col">
-              <p className="text-base font-semiboldmt font-inter">City</p>
-              <p className="text-gray-500 text-lg">{singleData?.city}</p>
-            </div>
-            <div className="flex w-1/2 flex-col">
-              <p className="text-base font-semibold font-inter">Pincode</p>
-              <p className="text-gray-500 text-lg">{singleData?.pincode}</p>
-            </div>
-          </div>
-        </div>
-        <form onSubmit={handleSubmit}>
-          <div className="flex justify-center mt-10 gap-5">
-            <div className="border border-primary rounded-md">
-              <input
-                type="number"
-                id="amount"
-                value={values.amount}
-                placeholder="Enter Amount"
-                name="amount"
-                className="h-full w-full outline-none px-2 rounded-md"
-                onChange={handleChange}
-                // onBlur={handleBlur}
-              />
-            </div>
-            <div>
-              <button
-                type="submit"
-                className="bg-primary rounded-md text-white py-2 px-6"
-              >
-                Donate
-              </button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
+    </>
   );
 };
 

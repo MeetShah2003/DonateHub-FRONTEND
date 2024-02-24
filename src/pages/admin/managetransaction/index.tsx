@@ -72,21 +72,6 @@ const ManageTransaction = () => {
                 />
               );
             })}
-          {/* {trustWiseTransaction.map((data: any) => (
-            <TransactionTrustsModel
-              key={data?.tId}
-              title={data?.tId.trustName}
-              description={data?.tId.description}
-              trustImage={data?.tId.trustlogo}
-              founder={data?.tId.founder}
-              creationDate={data?.tId.creationDate}
-              amount={data?.amount}
-              onShowTransaction={() => {
-                console.log(data?.tId._id);
-                router.push(`/admin/managetransaction/${data?.tId._id}`);
-              }}
-            />
-          ))} */}
         </div>
       )}
     </AdminFrame>

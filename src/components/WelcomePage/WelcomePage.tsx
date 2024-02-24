@@ -20,9 +20,6 @@ const WelcomePage: React.FC<{
   return (
     <div className="max-w-full w-full h-screen flex">
       <div className="hidden md:flex md:flex-col md:justify-center w-3/5 gap-5 bg-primary z-50 p-20 justify-start items-start">
-        <div className="bg-white rounded-full">
-          <Logo />
-        </div>
         <div className="text-white font-bold flex flex-col text-6xl leading-snug font-josefinSans">
           <p className="drop-shadow-2xl">{title}</p>
           <p className="drop-shadow-2xl">{secondTitle}</p>
@@ -32,8 +29,9 @@ const WelcomePage: React.FC<{
           <Typewriter loop={false} cursor words={DISPLAY_WORDS} />
         </div>
       </div>
-      <div className="w-full h-full flex flex-col justify-center gap-10 md:w-2/5">
-        <div className="flex items-center justify-center">
+      <div className="w-full h-full flex flex-col justify-center overflow-auto gap-10 md:w-2/5 overflow-y-auto">
+        {/* Added overflow-y-auto for scrolling */}
+        <div className="flex md:hidden items-center justify-center">
           <Logo />
         </div>
         {children}

@@ -102,7 +102,7 @@ const Admin = () => {
               <span>
                 <ManageTrustIcon />
               </span>
-              {totalSuppoters}
+              {totalTrusts}
             </h1>
             <p className="text-base font-medium">Verified Trusts</p>
           </div>
