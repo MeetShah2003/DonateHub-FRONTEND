@@ -33,7 +33,7 @@ const UserProfile = () => {
         >
           <img
             className="h-10 w-10 rounded-full"
-            src={user.userlogo}
+            src={user?.userlogo}
             alt="User avatar"
           />
         </button>

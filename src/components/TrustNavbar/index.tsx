@@ -1,54 +1,55 @@
-import HamburgerIcon from "@/icons/HamburgurIcon";
-import Link from "next/link";
-import { ReactNode, useState } from "react";
-import { useRouter } from "next/router";
-import HomeIcon from "@/icons/HomeIcon";
-import ContactUsIcon from "@/icons/ContactUsIcon";
-import AboutUsIcon from "@/icons/AboutUsIcon";
-import LogoutIcon from "@/icons/LogoutIcon";
-import ProfileIcon from "@/icons/ProfileIcon";
-
-import CloseHamburgerIcon from "@/icons/CloseHamburgerIcon";
 import { useAuth } from "@/context/auth";
+import AboutUsIcon from "@/icons/AboutUsIcon";
+import CloseHamburgerIcon from "@/icons/CloseHamburgerIcon";
+import ContactUsIcon from "@/icons/ContactUsIcon";
+import HamburgerIcon from "@/icons/HamburgurIcon";
+import HomeIcon from "@/icons/HomeIcon";
 import Logo from "@/icons/Logo";
+import ProfileIcon from "@/icons/ProfileIcon";
+import { useRouter } from "next/router";
+import { ReactNode, useState } from "react";
 import UserProfile from "../UserProfile";
-const NAV_MENUES: {
-  id: number;
-  menu: string;
-  path: string;
-  icon: ReactNode;
-}[] = [
-  {
-    id: 1,
-    menu: "Home",
-    path: "/dashboard",
-    icon: <HomeIcon />,
-  },
-  {
-    id: 2,
-    menu: "Profile",
-    path: "/dashboard/profile",
-    icon: <ProfileIcon color="#FFFFFF" />,
-  },
-  {
-    id: 3,
-    menu: "Contact Us",
-    path: "/contactus",
-    icon: <ContactUsIcon />,
-  },
-  {
-    id: 4,
-    menu: "About Us",
-    path: "/aboutus",
-    icon: <AboutUsIcon />,
-  },
-];
+import Link from "next/link";
+import LogoutIcon from "@/icons/LogoutIcon";
 
-const Visitor = () => {
+const TrustNavbar = () => {
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
-  const router = useRouter();
-  const { isAuthenticated, logout, user } = useAuth();
 
+  const { isAuthenticated, logout } = useAuth();
+
+  const router = useRouter();
+
+  const NAV_MENUES: {
+    id: number;
+    menu: string;
+    path: string;
+    icon: ReactNode;
+  }[] = [
+    {
+      id: 1,
+      menu: "Home",
+      path: "/dashboard",
+      icon: <HomeIcon />,
+    },
+    {
+      id: 2,
+      menu: "Profile",
+      path: "/dashboard/profile",
+      icon: <ProfileIcon color="#FFFFFF" />,
+    },
+    {
+      id: 3,
+      menu: "Contact Us",
+      path: "/contactus",
+      icon: <ContactUsIcon />,
+    },
+    {
+      id: 4,
+      menu: "About Us",
+      path: "/aboutus",
+      icon: <AboutUsIcon />,
+    },
+  ];
   return (
     <div>
       <div className="bg-white border shadow-sm">
@@ -158,10 +159,10 @@ const Visitor = () => {
       </div>
 
       {/* <div className="h-screen">
-        <Image src={HeaderBgImage} alt="headerImage" />
-      </div> */}
+    <Image src={HeaderBgImage} alt="headerImage" />
+  </div> */}
     </div>
   );
 };
 
-export default Visitor;
+export default TrustNavbar;
