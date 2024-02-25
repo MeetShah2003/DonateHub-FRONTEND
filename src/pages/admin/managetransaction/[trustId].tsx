@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import TransactionInfo from "@/components/TransactionInfo";
+import NoData from "@/components/NoData";
 
 const SingleTrustTransaction = () => {
   const router = useRouter();
@@ -40,6 +41,7 @@ const SingleTrustTransaction = () => {
   return (
     <>
       <AdminFrame title="Transactions">
+        {!transactions?.length && <NoData />}
         <div className="flex flex-col gap-2">
           {transactions &&
             transactions.length &&
