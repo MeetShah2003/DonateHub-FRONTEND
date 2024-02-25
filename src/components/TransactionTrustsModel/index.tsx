@@ -12,6 +12,10 @@ interface TransactionTrustsModelProps {
   onShowTransaction: () => void;
 }
 
+const formatAmount = (amount) => {
+  return new Intl.NumberFormat("en-IN").format(amount);
+};
+
 const TransactionTrustsModel: React.FC<TransactionTrustsModelProps> = ({
   amount,
   creationDate,

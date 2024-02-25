@@ -31,6 +31,7 @@ const SignUp = () => {
       .trim()
       .email("Invalid email")
       .required("Email is required"),
+    userlogo: Yup.string().required("Please Upload Profile Image"),
     password: Yup.string()
       .min(8, "Password must be at least 8 characters")
       .matches(
@@ -162,17 +163,18 @@ const SignUp = () => {
               </div>
               <input
                 type="file"
-                id="imageUpload"
-                name="imageUpload"
+                id="userlogo"
+                name="userlogo"
                 accept="image/*"
                 className="hidden"
                 onChange={handleOnChange}
               />
               <div className="absolute z-50 left-1/2 bottom-0 translate-x-1/2">
-                <label htmlFor="imageUpload" className="cursor-pointer">
+                <label htmlFor="userlogo" className="cursor-pointer">
                   <CameraIcon />
                 </label>
               </div>
+              {errors.userlogo && errorToast(errors.userlogo)}
             </div>
             <h3 className="font-inter text-3xl drop-shadow-2xl tracking-wider font-bold mb-8">
               Sign Up

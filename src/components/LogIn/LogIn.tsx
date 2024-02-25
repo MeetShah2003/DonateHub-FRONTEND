@@ -21,6 +21,8 @@ import {
   getAdditionalUserInfo,
   signInWithPopup,
 } from "firebase/auth";
+import BlockedTrustIcon from "@/icons/BlockedTrustIcon";
+import TrustNotLoginPopup from "../TrustNotLoginPopup.tsx";
 
 const initialValue: {
   email: string;
@@ -49,6 +51,8 @@ const LogIn = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const { isAuthenticated, user } = useAuth();
+  const [isOpen, setIsOpen] = useState(false);
+  const [reason, setReason] = useState<"blocked" | "pending">();
 
   const { data: session } = useSession();
 
@@ -91,22 +95,42 @@ const LogIn = () => {
           })
           .then((data) => {
             if (data && data?.token) {
-              Cookies.set("access_token", data?.token);
+              // Cookies.set("access_token", data?.token);
               Cookies.set("role", data?.user?.role);
               if (data?.user?.role === "admin") {
+                Cookies.set("access_token", data?.token);
+
                 successToast(
-                  `welcome ${data.user.firstName} ${data.user.lastName}`
+                  `Welcome ${data.user.firstName} ${data.user.lastName}`
                 );
                 setTimeout(() => {
                   router.push("/admin");
                 }, 3000);
-              } else {
+              } else if (data?.user?.role === "user") {
+                Cookies.set("access_token", data?.token);
                 successToast(
-                  `welcome ${data.user.firstName} ${data.user.lastName}`
+                  `Welcome ${data.user.firstName} ${data.user.lastName}`
                 );
                 setTimeout(() => {
                   router.push("/dashboard");
                 }, 3000);
+              } else {
+                Cookies.set("role", data?.trust?.role);
+                if (data && data.trust.isVerified && !data.trust.isBlocked) {
+                  Cookies.set("access_token", data?.token);
+                  successToast(`Welcome ${data.trust.trustName}`);
+                  setTimeout(() => {
+                    router.push("/trust");
+                  }, 3000);
+                } else {
+                  if (!data.trust.isVerified) {
+                    setReason("pending");
+                    setIsOpen(true);
+                  } else if (data.trust.isBlocked) {
+                    setReason("blocked");
+                    setIsOpen(true);
+                  }
+                }
               }
             }
           })
@@ -215,6 +239,12 @@ const LogIn = () => {
     <div className="flex justify-center h-full">
       <WelcomePage title="Welcome To" secondTitle="DonateHub">
         {loading && <Spinner />}
+        <TrustNotLoginPopup
+          reason="pending"
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+        />
+        ;
         <form className="mx-5 lg:mx-20 gap-20 pb-8" onSubmit={handleSubmit}>
           <h3 className="font-inter text-3xl drop-shadow-2xl tracking-wider font-bold mb-8">
             Sign in

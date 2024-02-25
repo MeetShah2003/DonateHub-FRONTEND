@@ -10,38 +10,62 @@ import NoData from "@/components/NoData";
 
 const ManageTransaction = () => {
   const access_token = Cookies.get("access_token");
+  const [totalCollection, setTotalCollection] = useState();
   const [trustWiseTransaction, setTrustWiseTransaction] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const router = useRouter();
 
-  const getTrustByTransactions = async () => {
-    try {
-      const response = await fetch(
-        `${BACKEND_BASE_URL}/admin/trustTransaction`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${access_token}`,
-            "Content-Type": "application/json",
-          },
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `${BACKEND_BASE_URL}/admin/trustTransaction`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${access_token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch data");
         }
-      );
-      if (!response.ok) {
-        throw new Error("Failed to fetch data");
+        const data = await response.json();
+        setTrustWiseTransaction(data.Tdata);
+        setLoading(false);
+      } catch (error: any) {
+        setError(error);
+        setLoading(false);
       }
-      const data = await response.json();
-      setTrustWiseTransaction(data.Tdata);
-      setLoading(false);
-    } catch (error: any) {
-      setError(error);
-      setLoading(false);
+    };
+
+    fetchData(); // Call the function to fetch data
+  }, [access_token]);
+
+  useEffect(() => {
+    allGetCollection();
+  }, [trustWiseTransaction]);
+
+  const allGetCollection = () => {
+    if (trustWiseTransaction && trustWiseTransaction.length > 0) {
+      const totalAmountSum = trustWiseTransaction.reduce(
+        (accumulator, currentValue) => {
+          return accumulator + currentValue.TotalAmount;
+        },
+        0
+      );
+
+      setTotalCollection(formatAmount(totalAmountSum)); // Format with commas
+      console.log("Total Amount Sum:", totalAmountSum);
+      return totalAmountSum;
     }
   };
 
-  useEffect(() => {
-    getTrustByTransactions();
-  }, [access_token]);
+  const formatAmount = (amount) => {
+    return new Intl.NumberFormat("en-IN").format(amount);
+  };
 
   return (
     <AdminFrame title="Manage Transaction">
@@ -60,7 +84,7 @@ const ManageTransaction = () => {
                   Total Collection
                 </h2>
                 <p className="text-2xl md:text-3xl font-bold text-primary">
-                  ₹5000
+                  ₹{totalCollection}
                 </p>
               </div>
               <div className="w-1/2 border-t border-gray-300 md:border-none my-4 md:my-0"></div>
@@ -84,7 +108,7 @@ const ManageTransaction = () => {
                   trustImage={data?.trustlogo}
                   founder={data?.founder}
                   creationDate={data?.creationDate}
-                  amount={data?.TotalAmount}
+                  amount={formatAmount(data?.TotalAmount)}
                   onShowTransaction={() => {
                     console.log(data?._id);
                     router.push(`/admin/managetransaction/${data?._id}`);

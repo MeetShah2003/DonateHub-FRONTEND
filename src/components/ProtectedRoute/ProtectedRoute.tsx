@@ -10,16 +10,19 @@ const ProtectedRoute = (Component: any, allowedRoles: any) => {
     useEffect(() => {
       if (!isAuthenticated) {
         router.push("/login");
-      } else if (!allowedRoles.includes(user.role)) {
-        if (user.role === "admin") {
+      } else if (user && allowedRoles && !allowedRoles.includes(user?.role)) {
+        if (user?.role === "admin") {
           router.push("/admin");
         } else {
           router.push("/dashboard");
         }
       }
-    }, [isAuthenticated, user, router]);
+    }, [isAuthenticated, user, router, allowedRoles]);
 
-    return isAuthenticated && allowedRoles.includes(user.role) ? (
+    return isAuthenticated &&
+      user &&
+      allowedRoles &&
+      allowedRoles.includes(user?.role) ? (
       <Component {...props} />
     ) : null;
   };

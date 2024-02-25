@@ -17,13 +17,13 @@ export type TrustData = {
   founder: string;
   creationDate: Date;
   category: string;
-  contactNo: number;
+  contactNo: string;
   description: string;
   password: string;
   address: string;
   city: string;
   state: string;
-  pincode: number;
+  pincode: string;
   role: "trust";
   isBlocked: boolean;
   isVerified: boolean;

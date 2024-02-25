@@ -38,6 +38,10 @@ const SingleTrustTransaction = () => {
     getAllTransaction(router.query.trustId);
   }, [access_token]);
 
+  const formatAmount = (amount) => {
+    return new Intl.NumberFormat("en-IN").format(amount);
+  };
+
   return (
     <>
       <AdminFrame title="Transactions">
@@ -45,13 +49,13 @@ const SingleTrustTransaction = () => {
         <div className="flex flex-col gap-2">
           {transactions &&
             transactions.length &&
-            transactions.map(({ _id, uId, amount }) => {
+            transactions.map(({ _id, uId, amount, creationDate, orderId }) => {
               return (
                 <TransactionInfo
                   key={_id}
-                  transactionDate="12/12/2004"
-                  amount={amount}
-                  paymentId="pay_hkjjnjhbh"
+                  transactionDate={creationDate}
+                  amount={formatAmount(amount)}
+                  paymentId={orderId}
                   userImage={uId?.userlogo}
                   userName={`${uId?.firstName} ${uId?.lastName}`}
                 />
