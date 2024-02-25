@@ -4,7 +4,7 @@ import CameraIcon from "@/icons/CameraIcon";
 import * as Yup from "yup";
 import HidePasswordIcon from "@/icons/HidePasswordIcon";
 import ShowPasswordIcon from "@/icons/ShowPasswordIcon";
-import React, { ChangeEvent, ReactNode, useState } from "react";
+import React, { ReactNode, useState } from "react";
 import {
   BACKEND_BASE_URL,
   CITY_AND_STATE,
@@ -17,6 +17,7 @@ import { TrustData } from "@/types/types";
 import { storage } from "../../firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import Spinner from "../Spinner";
+import { useRouter } from "next/router";
 
 const TrustSignup = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -24,6 +25,7 @@ const TrustSignup = () => {
   const [image, setImage] = useState(null);
   const [trustId, setTrustId] = useState(uuidv4());
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
   const [cities, setCities] = useState<{ label: string; value: string }[]>([
     { label: "Select City", value: "" },
   ]);
@@ -141,8 +143,27 @@ const TrustSignup = () => {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(value),
         })
-          .then((res) => {
-            console.log(res);
+          .then((res) => res.json())
+          .then((data) => {
+            if (data && data.message == "user already exist") {
+              errorToast(`${data.user.email} already in use`);
+              setTimeout(() => {
+                router.push("/login");
+              }, 2000);
+            }
+            if (data && data.message == "trust already exist") {
+              errorToast(`${data.trust.email} already in use`);
+              setTimeout(() => {
+                router.push("/login");
+              }, 2000);
+            } else {
+              successToast(
+                `Account created successfully ${data.trust.firstName}`
+              );
+              setTimeout(() => {
+                router.push("/login");
+              }, 2000);
+            }
           })
           .finally(() => {
             setLoading(false);

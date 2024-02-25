@@ -97,7 +97,13 @@ const SignUp = () => {
           .then((res) => res.json())
           .then((data) => {
             if (data && data.message == "user already exist") {
-              errorToast("user already exists");
+              errorToast(`${data.user.email} already in use`);
+              setTimeout(() => {
+                router.push("/login");
+              }, 2000);
+            }
+            if (data && data.message == "trust already exist") {
+              errorToast(`${data.trust.email} already in use`);
               setTimeout(() => {
                 router.push("/login");
               }, 2000);
@@ -115,7 +121,7 @@ const SignUp = () => {
             setLoading(false);
           });
       } catch (error) {
-        console.log(error);
+        errorToast("something went wrong");
       }
     },
   });

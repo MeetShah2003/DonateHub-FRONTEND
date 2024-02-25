@@ -1,6 +1,5 @@
 import AdminFrame from "@/components/AdminFrame";
 import AdminRoute from "@/components/AdminRoute";
-import Visitor from "@/components/Visitor";
 import { BACKEND_BASE_URL } from "@/consts";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
