@@ -99,14 +99,14 @@ const LogIn = () => {
                 );
                 setTimeout(() => {
                   router.push("/admin");
-                }, 2000);
+                }, 3000);
               } else {
                 successToast(
                   `welcome ${data.user.firstName} ${data.user.lastName}`
                 );
                 setTimeout(() => {
                   router.push("/dashboard");
-                }, 2000);
+                }, 3000);
               }
             }
           })
@@ -127,14 +127,12 @@ const LogIn = () => {
       const additionalUserInfo = getAdditionalUserInfo(data);
 
       if (additionalUserInfo && additionalUserInfo.profile) {
-        const { given_name, family_name, picture, email } =
-          additionalUserInfo.profile;
+        const { given_name, family_name, email } = additionalUserInfo.profile;
 
         googleUserData({
           firstName: given_name,
           lastName: family_name,
           email,
-          userlogo: picture,
         });
       } else {
         console.error("Additional user info not available");
@@ -154,17 +152,18 @@ const LogIn = () => {
       .then((data: any) => {
         Cookies.set("access_token", data?.token);
         Cookies.set("role", data?.user?.role);
-        console.log("data", data.user);
         if (data?.user?.role === "admin") {
           successToast(`welcome ${data.user.firstName} ${data.user.lastName}`);
           setTimeout(() => {
             router.push("/admin");
-          }, 2000);
+          }, 3000);
         } else {
-          successToast(`welcome back`);
+          successToast(
+            `welcome back ${data.user.firstName} ${data.user.lastName}`
+          );
           setTimeout(() => {
             router.push("/dashboard");
-          }, 2000);
+          }, 3000);
         }
       });
   };
@@ -180,7 +179,6 @@ const LogIn = () => {
 
         githubUserData({
           email,
-          userlogo: data.user?.photoURL,
         });
       } else {
         console.error("Additional user info not available");
@@ -201,9 +199,15 @@ const LogIn = () => {
         Cookies.set("access_token", data?.token);
         Cookies.set("role", data?.user?.role);
         if (data?.user?.role === "admin") {
-          router.push("/admin");
+          successToast(`welcome back ${data.user.email}`);
+          setTimeout(() => {
+            router.push("/admin");
+          }, 3000);
         } else {
-          router.push("/dashboard");
+          successToast(`welcome back ${data.user.email}`);
+          setTimeout(() => {
+            router.push("/dashboard");
+          }, 3000);
         }
       });
   };

@@ -100,18 +100,18 @@ const SignUp = () => {
               errorToast(`${data.user.email} already in use`);
               setTimeout(() => {
                 router.push("/login");
-              }, 2000);
+              }, 3000);
             }
             if (data && data.message == "trust already exist") {
               errorToast(`${data.trust.email} already in use`);
               setTimeout(() => {
                 router.push("/login");
-              }, 2000);
+              }, 3000);
             } else {
               successToast("Account created successfully");
               setTimeout(() => {
                 router.push("/login");
-              }, 2000);
+              }, 3000);
             }
           })
           .catch((error) => {
