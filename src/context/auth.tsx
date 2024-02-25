@@ -57,7 +57,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
           setAuthState({
             isAuthenticated: true,
             user: data.userAuth,
-            isAdmin: data.userAuth.role === "admin",
+            isAdmin: data.userAuth?.role === "admin",
           });
         }
       })

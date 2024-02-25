@@ -38,7 +38,7 @@ const UserProfile = () => {
           />
         </button>
         <div className="flex flex-col">
-          <h1 className="font-bold">
+          <h1 className="font-semibold">
             {user.firstName} {user.lastName}
           </h1>
           <p className="font-normal text-sm text-gray-400">{user?.email}</p>

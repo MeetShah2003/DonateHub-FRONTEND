@@ -58,13 +58,13 @@ const TrustSignup = () => {
     founder: "",
     creationDate: new Date(2023, 0, 1),
     category: "",
-    contactNo: 0,
+    contactNo: "",
     description: "",
     password: "",
     role: "trust",
     address: "",
     city: "",
-    pincode: 0,
+    pincode: "",
     state: "",
     isBlocked: false,
     isVerified: false,
@@ -82,7 +82,7 @@ const TrustSignup = () => {
       .required("Creation Date is required")
       .max(new Date(), "Creation Date must be in the past"),
     category: Yup.string().trim().required("Category is required"),
-    contactNo: Yup.number().required("Contact Number is required"),
+    contactNo: Yup.string().required("Contact Number is required"),
     description: Yup.string().trim().required("About Trust is required"),
     password: Yup.string()
       .min(8, "Password must be at least 8 characters")
@@ -98,7 +98,7 @@ const TrustSignup = () => {
     address: Yup.string().trim().required("Address is required"),
     city: Yup.string().trim().required("City is required"),
     state: Yup.string().trim().required("State is required"),
-    pincode: Yup.number()
+    pincode: Yup.string()
       .required("Pincode is required")
       .test("is-six-digits", "Pincode must be exactly 6 digits", (value) =>
         value ? /^\d{6}$/.test(value.toString()) : true
@@ -157,9 +157,7 @@ const TrustSignup = () => {
                 router.push("/login");
               }, 3000);
             } else {
-              successToast(
-                `Account created successfully ${data.trust.firstName}`
-              );
+              successToast(`Account created successfully ${data.trustName}`);
               setTimeout(() => {
                 router.push("/login");
               }, 3000);
@@ -333,9 +331,10 @@ const TrustSignup = () => {
         <input
           id="contactNo"
           name="contactNo"
-          type="number"
+          type="text"
           className="outline-none tracking-wider"
           placeholder="+91 0000000000"
+          maxLength={10}
           onChange={handleChange}
           onBlur={handleBlur}
           value={values.contactNo}
@@ -403,9 +402,10 @@ const TrustSignup = () => {
         <input
           id="pincode"
           name="pincode"
-          type="number"
+          type="text"
           className="outline-none tracking-wider"
           placeholder="395004"
+          maxLength={6}
           onChange={handleChange}
           onBlur={handleBlur}
           value={values.pincode}
