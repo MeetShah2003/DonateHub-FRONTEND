@@ -5,6 +5,8 @@ import { useAuth } from "../../context/auth";
 const ProtectedRoute = (Component: any, allowedRoles: any) => {
   const ProtectedRouteWrapper = (props: any) => {
     const { isAuthenticated, user } = useAuth();
+    console.log("trustuser", user);
+
     const router = useRouter();
 
     useEffect(() => {
@@ -13,6 +15,8 @@ const ProtectedRoute = (Component: any, allowedRoles: any) => {
       } else if (user && allowedRoles && !allowedRoles.includes(user?.role)) {
         if (user?.role === "admin") {
           router.push("/admin");
+        } else if (user?.role === "trust") {
+          router.push("/trust");
         } else {
           router.push("/dashboard");
         }

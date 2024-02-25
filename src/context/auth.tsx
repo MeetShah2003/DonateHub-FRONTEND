@@ -52,11 +52,17 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         return res.json();
       })
       .then((data: any) => {
-        if (data) {
+        if (data && data.userAuth) {
           setAuthState({
             isAuthenticated: true,
             user: data.userAuth,
             isAdmin: data.userAuth?.role === "admin",
+          });
+        } else {
+          setAuthState({
+            isAuthenticated: true,
+            user: data.trustAuth,
+            isAdmin: data.trustAuth?.role === "admin",
           });
         }
       })

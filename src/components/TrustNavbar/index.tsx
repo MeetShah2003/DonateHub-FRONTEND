@@ -11,6 +11,7 @@ import { ReactNode, useState } from "react";
 import UserProfile from "../UserProfile";
 import Link from "next/link";
 import LogoutIcon from "@/icons/LogoutIcon";
+import TrustProfile from "../TrustProfile";
 
 const TrustNavbar = () => {
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
@@ -28,13 +29,13 @@ const TrustNavbar = () => {
     {
       id: 1,
       menu: "Home",
-      path: "/dashboard",
+      path: "/trust",
       icon: <HomeIcon />,
     },
     {
       id: 2,
       menu: "Profile",
-      path: "/dashboard/profile",
+      path: "/trust/profile",
       icon: <ProfileIcon color="#FFFFFF" />,
     },
     {
@@ -113,7 +114,7 @@ const TrustNavbar = () => {
             </div>
           ) : (
             <div className="hidden sm:flex gap-5">
-              <UserProfile />
+              <TrustProfile />
             </div>
           )}
         </nav>

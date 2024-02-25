@@ -1,10 +1,35 @@
 import { Razorpay } from "razorpay-checkout";
 
 const handlePayment = async (amount: number) => {
-  const options = {
+  const options: {
+    key: string;
+    amount: number;
+    currency: string;
+    name?: string;
+    description?: string;
+    image?: string;
+    order_id?: string;
+    prefill?: {
+      name?: string;
+      email?: string;
+      contact?: string;
+    };
+    notes?: {
+      [key: string]: string;
+    };
+    theme?: {
+      color?: string;
+    };
+    handler?: (response: RazorpayPaymentResponse) => void;
+    modal?: {
+      ondismiss?: () => void;
+    };
+    readonly?: boolean;
+  } = {
     key: "rzp_test_IsJsix4K1puY6N",
-    amount: amount * 100, // Amount in paise
+    amount: amount * 100,
     currency: "INR",
+
     name: "DonateHub",
     description: "Make Payment And Help Other",
     image: "donatehublogo.png",
@@ -20,6 +45,7 @@ const handlePayment = async (amount: number) => {
     theme: {
       color: "#674CC4",
     },
+    order_id: "pay_123",
   };
 
   const rzp = new Razorpay(options);
