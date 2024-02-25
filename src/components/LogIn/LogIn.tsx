@@ -126,7 +126,7 @@ const LogIn = () => {
                   if (!data.trust.isVerified) {
                     setReason("pending");
                     setIsOpen(true);
-                  } else if (data.trust.isBlocked) {
+                  } else {
                     setReason("blocked");
                     setIsOpen(true);
                   }
@@ -240,11 +240,11 @@ const LogIn = () => {
       <WelcomePage title="Welcome To" secondTitle="DonateHub">
         {loading && <Spinner />}
         <TrustNotLoginPopup
-          reason="pending"
+          reason={reason}
           isOpen={isOpen}
           setIsOpen={setIsOpen}
         />
-        ;
+
         <form className="mx-5 lg:mx-20 gap-20 pb-8" onSubmit={handleSubmit}>
           <h3 className="font-inter text-3xl drop-shadow-2xl tracking-wider font-bold mb-8">
             Sign in
