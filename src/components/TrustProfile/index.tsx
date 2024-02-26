@@ -59,13 +59,9 @@ const TrustProfile = () => {
                     key={id}
                     onClick={() => {
                       if (menu === "My Profile") {
-                        if (user?.role === "admin") {
+                        if (user?.role === "trust") {
                           setTimeout(() => {
-                            router.push("/admin/profile");
-                          }, 2000);
-                        } else {
-                          setTimeout(() => {
-                            router.push("/dashboard/profileuser");
+                            router.push("/trust/profile");
                           }, 1000);
                         }
                       } else {

@@ -23,15 +23,9 @@ const SingleTrustTransaction = () => {
         "Content-Type": "application/json",
       },
     })
-      .then((res) => {
-        if (res && res.status === 200) {
-          return res.json();
-        }
-      })
+      .then((res) => res.json())
       .then((data) => {
         if (data) {
-          console.log(data);
-
           setTotalCollection(data.allTransactions[0].tId.TotalAmount);
           setTotalSupporter(data.totalSupporters);
           setTransactions(data.allTransactions);
@@ -42,7 +36,7 @@ const SingleTrustTransaction = () => {
     getAllTransaction(router.query.trustId);
   }, [access_token]);
 
-  const formatAmount = (amount) => {
+  const formatAmount = (amount: any) => {
     return new Intl.NumberFormat("en-IN").format(amount);
   };
 

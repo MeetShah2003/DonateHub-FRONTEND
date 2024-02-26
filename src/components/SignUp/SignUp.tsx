@@ -14,10 +14,6 @@ import CameraIcon from "@/icons/CameraIcon";
 import { uploadBytes, ref, getDownloadURL } from "firebase/storage";
 import { storage } from "@/firebase";
 import { v4 } from "uuid";
-import {
-  getAuthenticatedRouteCheck,
-  getNotAuthenticatedRouteCheck,
-} from "@/authguard/authguard";
 
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);

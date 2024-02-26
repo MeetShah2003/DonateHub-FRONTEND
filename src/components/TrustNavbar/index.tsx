@@ -8,7 +8,6 @@ import Logo from "@/icons/Logo";
 import ProfileIcon from "@/icons/ProfileIcon";
 import { useRouter } from "next/router";
 import { ReactNode, useState } from "react";
-import UserProfile from "../UserProfile";
 import Link from "next/link";
 import LogoutIcon from "@/icons/LogoutIcon";
 import TrustProfile from "../TrustProfile";

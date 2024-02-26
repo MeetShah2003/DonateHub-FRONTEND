@@ -12,7 +12,7 @@ interface TransactionTrustsModelProps {
   onShowTransaction: () => void;
 }
 
-const formatAmount = (amount) => {
+const formatAmount = (amount: any) => {
   return new Intl.NumberFormat("en-IN").format(amount);
 };
 

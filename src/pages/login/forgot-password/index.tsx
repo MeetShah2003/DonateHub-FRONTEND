@@ -37,11 +37,7 @@ const ForgotPassword = () => {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(values),
         })
-          .then((res) => {
-            if (res && res.status === 200) {
-              return res.json();
-            }
-          })
+          .then((res) => res.json())
           .then((data) => {
             if (data.message === "user not found") {
               errorToast("User not found");
