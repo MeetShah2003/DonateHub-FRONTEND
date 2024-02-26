@@ -11,6 +11,7 @@ import { useRouter } from "next/router";
 const Admin = () => {
   const [totalSuppoters, setTotalSuppoters] = useState<number>();
   const [totalUnverifiedTrusts, setTotalUnverifiedTrusts] = useState<number>();
+  const [totalCollection, setTotalCollection] = useState();
   const [totalTrusts, setTotalTrusts] = useState<number>();
   const router = useRouter();
   const access_token = Cookies.get("access_token");
@@ -68,10 +69,34 @@ const Admin = () => {
       });
   };
 
+  const getTotalCollection = async () => {
+    try {
+      const response = await fetch(
+        `${BACKEND_BASE_URL}/admin/trustTransaction`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+      const data = await response.json();
+      console.log(data);
+      setTotalCollection(data.TotalAmount);
+    } catch (error: any) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     getAllUsersCount();
     getAllTrustCount();
     getAllUnverifedTrustCount();
+    getTotalCollection();
   }, [totalSuppoters, totalTrusts]);
   return (
     <AdminFrame title="Dashboard">
@@ -105,9 +130,14 @@ const Admin = () => {
             </h1>
             <p className="text-base font-medium">Verified Trusts</p>
           </div>
-          <div className="flex flex-col py-5 justify-center hover:scale-105 cursor-pointer hover:transition-all hover:duration-400 hover:ease-out items-center bg-secondary w-full rounded-md text-white">
+          <div
+            onClick={() => {
+              router.push("/admin/managetransaction");
+            }}
+            className="flex flex-col py-5 justify-center hover:scale-105 cursor-pointer hover:transition-all hover:duration-400 hover:ease-out items-center bg-secondary w-full rounded-md text-white"
+          >
             <h1 className="font-inter font-bold text-2xl">
-              <span className="font-normal">₹</span> 55555
+              <span className="font-normal">₹</span> {totalCollection}
             </h1>
             <p className="text-base font-medium">Collection</p>
           </div>

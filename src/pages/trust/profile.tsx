@@ -207,7 +207,7 @@ const ProfileTrust = () => {
               name="trustName"
               type="text"
               className="outline-none tracking-wider"
-              placeholder="Trust Name"
+              placeholder="The Education Trust"
               onChange={handleChange}
               onBlur={handleBlur}
               value={values.trustName || ""}
@@ -358,9 +358,9 @@ const ProfileTrust = () => {
             onBlur={handleBlur}
             value={values.state}
           >
-            {CITY_AND_STATE?.map(({ state, id }) => (
+            {CITY_AND_STATE?.map(({ state }) => (
               <option
-                key={id}
+                key={state.value}
                 value={state.value}
                 selected={state.value === values.state}
               >
@@ -379,8 +379,8 @@ const ProfileTrust = () => {
             value={values.city}
             onBlur={handleBlur}
           >
-            {cities.map(({ label, value }, id) => (
-              <option key={id} value={value}>
+            {cities.map(({ label, value }) => (
+              <option key={value} value={value}>
                 {label}
               </option>
             ))}
