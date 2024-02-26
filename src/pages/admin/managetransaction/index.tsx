@@ -7,11 +7,13 @@ import TransactionTrustsModel from "@/components/TransactionTrustsModel";
 import Spinner from "@/components/Spinner";
 import { useRouter } from "next/router";
 import NoData from "@/components/NoData";
+import { TrustData } from "@/types/types";
 
 const ManageTransaction = () => {
   const access_token = Cookies.get("access_token");
   const [totalCollection, setTotalCollection] = useState();
-  const [trustWiseTransaction, setTrustWiseTransaction] = useState([]);
+  const [totalSupporter, setTotalSupporter] = useState();
+  const [trustWiseTransaction, setTrustWiseTransaction] = useState();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const router = useRouter();
@@ -33,6 +35,9 @@ const ManageTransaction = () => {
           throw new Error("Failed to fetch data");
         }
         const data = await response.json();
+        console.log(data);
+        setTotalCollection(data.TotalAmount);
+        setTotalSupporter(data.totalSupporters);
         setTrustWiseTransaction(data.Tdata);
         setLoading(false);
       } catch (error: any) {
@@ -44,26 +49,7 @@ const ManageTransaction = () => {
     fetchData(); // Call the function to fetch data
   }, [access_token]);
 
-  useEffect(() => {
-    allGetCollection();
-  }, [trustWiseTransaction]);
-
-  const allGetCollection = () => {
-    if (trustWiseTransaction && trustWiseTransaction.length > 0) {
-      const totalAmountSum = trustWiseTransaction.reduce(
-        (accumulator, currentValue) => {
-          return accumulator + currentValue.TotalAmount;
-        },
-        0
-      );
-
-      setTotalCollection(formatAmount(totalAmountSum)); // Format with commas
-      console.log("Total Amount Sum:", totalAmountSum);
-      return totalAmountSum;
-    }
-  };
-
-  const formatAmount = (amount) => {
+  const formatAmount = (amount: any) => {
     return new Intl.NumberFormat("en-IN").format(amount);
   };
 
@@ -84,7 +70,7 @@ const ManageTransaction = () => {
                   Total Collection
                 </h2>
                 <p className="text-2xl md:text-3xl font-bold text-primary">
-                  ₹{totalCollection}
+                  ₹{formatAmount(totalCollection)}
                 </p>
               </div>
               <div className="w-1/2 border-t border-gray-300 md:border-none my-4 md:my-0"></div>
@@ -92,7 +78,9 @@ const ManageTransaction = () => {
                 <h2 className="font-semibold flex-wrap text-xl md:text-2xl">
                   Total Supporter
                 </h2>
-                <p className="text-2xl md:text-3xl font-bold text-primary">5</p>
+                <p className="text-2xl md:text-3xl font-bold text-primary">
+                  {totalSupporter}
+                </p>
               </div>
             </div>
           )}
