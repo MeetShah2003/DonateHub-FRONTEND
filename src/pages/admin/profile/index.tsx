@@ -81,6 +81,22 @@ const AdminProfile = () => {
       .required("Mobile Number is required"),
   });
 
+  const intialValue: {
+    firstName: string;
+    lastName: string;
+    userlogo: string;
+    email: string;
+    gender: string;
+    mono: string;
+  } = {
+    firstName: user?.firstName || "",
+    lastName: user?.lastName || "",
+    userlogo: user?.userlogo || "",
+    email: user?.email || "",
+    gender: user?.gender || "",
+    mono: user?.mono || "",
+  };
+
   const {
     handleChange,
     handleSubmit,
@@ -90,14 +106,7 @@ const AdminProfile = () => {
     values,
     setFieldValue,
   } = useFormik({
-    initialValues: {
-      firstName: user?.firstName || "",
-      lastName: user?.lastName || "",
-      userlogo: user?.userlogo || "",
-      email: user?.email || "",
-      gender: user?.gender || "",
-      mono: user?.mono || "",
-    },
+    initialValues: intialValue,
     validationSchema: profileSchema,
     onSubmit: async (formValues) => {
       getUpdateAdminProfile(formValues);
