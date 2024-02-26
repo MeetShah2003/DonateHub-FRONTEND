@@ -29,3 +29,15 @@ export type TrustData = {
   isVerified?: boolean;
   TotalAmount?: number;
 };
+
+export type FundRequirement = {
+  _id: string;
+  tId: TrustData;
+  targetFund: number;
+  startDate?: Date;
+  endDate?: Date;
+  title: string;
+  description: string;
+  altContact: string;
+  __v?: 0;
+};
