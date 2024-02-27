@@ -4,11 +4,11 @@ export const TRUST_CATAGORY_OPTIONS: {
 }[] = [
   { id: 1, option: { label: "Select Catagory", value: "" } },
   { id: 2, option: { label: "Education", value: "education" } },
-  { id: 3, option: { label: "healthcare", value: "healthcare" } },
-  { id: 4, option: { label: "technology", value: "technology" } },
-  { id: 5, option: { label: "food", value: "food" } },
-  { id: 6, option: { label: "financial", value: "financial" } },
-  { id: 6, option: { label: "clothing", value: "clothing" } },
+  { id: 3, option: { label: "Healthcare", value: "healthcare" } },
+  { id: 4, option: { label: "Technology", value: "technology" } },
+  { id: 5, option: { label: "Food", value: "food" } },
+  { id: 6, option: { label: "Financial", value: "financial" } },
+  { id: 6, option: { label: "Clothing", value: "clothing" } },
 ];
 
 // export const CITY: {

@@ -1,4 +1,5 @@
 import { getAuthenticatedRouteCheck } from "@/authguard/authguard";
+import TrustDonationModel from "@/components/TrustDonationModel";
 import TrustModel from "@/components/TrustModel";
 import UserRoute from "@/components/UserRoute/UserRoute";
 import Visitor from "@/components/Visitor";
@@ -35,20 +36,21 @@ const TrustDonation = () => {
       <Visitor />
       <div className="max-w-screen-lg w-90% mx-auto">
         <h1 className="my-5 text-2xl font-semibold">Trust Donation</h1>
-        <div className="grid grid-cols-1 mx-5 sm:grid-cols-2 md:grid-cols-3 gap-5 justify-center items-center">
+        <div className="flex flex-col gap-5 justify-center items-center">
           {trusts &&
             trusts.length &&
-            trusts.map(({ _id, trustName, trustlogo, description }) => {
+            trusts.map((trust) => {
               return (
-                <TrustModel
-                  key={_id as string}
-                  title={trustName}
-                  trustlogo={trustlogo}
-                  trustId={_id as string}
-                  type="trust"
-                  supporters={502}
-                  description={description}
-                />
+                // <TrustModel
+                //   key={_id as string}
+                //   title={trustName}
+                //   trustlogo={trustlogo}
+                //   trustId={_id as string}
+                //   type="trust"
+                //   supporters={502}
+                //   description={description}
+                // />
+                <TrustDonationModel trust={trust} />
               );
             })}
         </div>

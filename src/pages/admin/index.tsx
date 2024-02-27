@@ -7,6 +7,8 @@ import Cookies from "js-cookie";
 import ProfileIcon from "@/icons/ProfileIcon";
 import ManageTrustIcon from "@/icons/ManageTrustIcon";
 import { useRouter } from "next/router";
+import ReactLineChart from "@/components/ReactLineChart";
+import ReactBarChart from "@/components/ReactBarChart.tsx";
 
 const Admin = () => {
   const [totalSuppoters, setTotalSuppoters] = useState<number>();
@@ -92,15 +94,40 @@ const Admin = () => {
     }
   };
 
+  const data = [
+    { name: "Page A", uv: 4000, pv: 2400, amt: 2400 },
+    { name: "Page B", uv: 3000, pv: 1398, amt: 2210 },
+    // Add more data points as needed
+  ];
+
   useEffect(() => {
     getAllUsersCount();
     getAllTrustCount();
     getAllUnverifedTrustCount();
     getTotalCollection();
   }, [totalSuppoters, totalTrusts]);
+
+  const suppoters = [
+    { name: "12 jan", suppoters: 2400, amt: 2400 },
+    { name: "13 jan", suppoters: 1398, amt: 2210 },
+    { name: "14 jan", suppoters: 9800, amt: 2290 },
+    { name: "15 jan", suppoters: 3908, amt: 2000 },
+    { name: "16 jan", suppoters: 4800, amt: 2181 },
+    { name: "17 jan", suppoters: 3800, amt: 2500 },
+    { name: "18 jan", suppoters: 4300, amt: 2100 },
+  ];
+  const income = [
+    { name: "12 jan", income: 2400, amt: 2400 },
+    { name: "13 jan", income: 1398, amt: 2210 },
+    { name: "14 jan", income: 9800, amt: 2290 },
+    { name: "15 jan", income: 3908, amt: 2000 },
+    { name: "16 jan", income: 4800, amt: 2181 },
+    { name: "17 jan", income: 3800, amt: 2500 },
+    { name: "18 jan", income: 4300, amt: 2100 },
+  ];
   return (
     <AdminFrame title="Dashboard">
-      <div className="flex flex-col">
+      <div className="flex flex-col gap-5 py-5">
         <div className="grid grid-cols-2 justify-between gap-5">
           <div
             onClick={() => {
@@ -156,7 +183,15 @@ const Admin = () => {
             <p className="text-base font-medium">Unverified Trusts</p>
           </div>
         </div>
-        <div></div>
+        <div>
+          <h1 className="sm:block py-5 font-inter font-semibold text-steelGray text-xl sm:text-2xl">
+            Analytics
+          </h1>
+        </div>
+        <div className="flex gap-5">
+          <ReactLineChart data={suppoters} />
+          <ReactBarChart data={income} />
+        </div>
       </div>
     </AdminFrame>
   );
