@@ -11,6 +11,7 @@ import CloseHamburgerIcon from "@/icons/CloseHamburgerIcon";
 import { useAuth } from "@/context/auth";
 import Logo from "@/icons/Logo";
 import UserProfile from "../UserProfile";
+import DropDownArrow from "@/icons/DropDownArrow";
 
 const NAV_MENUES: {
   id: number;
@@ -28,9 +29,11 @@ const NAV_MENUES: {
   {
     id: 2,
     menu: "Products",
-    path: "/dashboard/profileuser",
+    path: "",
     icon: <ProfileIcon color="#000000" />,
-    dropdownOptions: [{ title: "Profile", path: "/dashboard/profile" }],
+    dropdownOptions: [
+      { title: "Trust Donation", path: "/dashboard/trustdonation" },
+    ],
   },
   {
     id: 3,
@@ -76,34 +79,43 @@ const Visitor = () => {
                   return null;
                 }
                 return (
-                  <li
-                    key={id}
-                    className="text-base text-gray-700 font-semibold relative"
-                    onMouseEnter={() => {
-                      if (menu === "Products") {
-                        setIsHovered(true);
-                      }
-                    }} // Set isHovered to true on mouse enter
-                  >
-                    <Link href={path}>{menu}</Link>
-                    {dropdownOptions && isHovered && (
-                      <ul className="absolute left-0 mt-2 w-[200px] bg-white shadow-lg border rounded-md py-1">
-                        {dropdownOptions.map((option, index) => (
-                          <li
-                            onClick={() => {
-                              if (menu === "Products") {
-                                setIsHovered(false);
-                              }
-                            }}
-                            key={index}
-                            className="px-4 py-2 border-b-2"
-                          >
-                            <Link href={option.path}>{option.title}</Link>
-                          </li>
-                        ))}
-                      </ul>
+                  <div className="flex items-center justify-center">
+                    <li
+                      key={id}
+                      className="text-base text-gray-700 font-semibold relative"
+                      onMouseEnter={() => {
+                        if (menu === "Products") {
+                          setIsHovered(true);
+                        }
+                      }} // Set isHovered to true on mouse enter
+                    >
+                      <Link href={path}>{menu}</Link>
+                      {dropdownOptions && isHovered && (
+                        <ul className="absolute left-0 mt-2 w-[200px] bg-white shadow-lg border rounded-md py-1">
+                          {dropdownOptions.map((option, index) => (
+                            <>
+                              <li
+                                onClick={() => {
+                                  if (menu === "Products") {
+                                    setIsHovered(false);
+                                  }
+                                }}
+                                key={index}
+                                className="px-4 py-2 border-b-2"
+                              >
+                                <Link href={option.path}>{option.title}</Link>
+                              </li>
+                            </>
+                          ))}
+                        </ul>
+                      )}
+                    </li>
+                    {menu === "Products" && (
+                      <div className="mt-1">
+                        <DropDownArrow />
+                      </div>
                     )}
-                  </li>
+                  </div>
                 );
               })}
             </ul>
@@ -178,7 +190,7 @@ const Visitor = () => {
                 }}
                 className="text-base px-5 py-4 font-medium flex items-center gap-3"
               >
-                <LogoutIcon color="" />
+                <LogoutIcon color="#000000" />
                 <p>Logout</p>
               </li>
             )}

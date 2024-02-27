@@ -6,10 +6,12 @@ import { useRouter } from "next/router";
 interface TrustModelProps {
   trustId: string;
   title: string;
-  donationRaised: number;
-  donationTarget: number;
+  donationRaised?: number;
+  donationTarget?: number;
   supporters: number;
   trustlogo: string;
+  description?: string;
+  type: "fundrequest" | "trust";
 }
 const TrustModel: React.FC<TrustModelProps> = ({
   donationRaised,
@@ -18,6 +20,8 @@ const TrustModel: React.FC<TrustModelProps> = ({
   title,
   trustId,
   trustlogo,
+  type,
+  description,
 }) => {
   const progress = (donationRaised / donationTarget) * 100;
 
@@ -38,19 +42,28 @@ const TrustModel: React.FC<TrustModelProps> = ({
       </div>
       <div className="flex flex-col justify-between gap-3 p-5">
         <h1 className="text-base font-bold text-[#444] ">{title}</h1>
-        <p className="text-xl font-bold text-[#444]">
-          ₹{formatNumber(donationRaised)}
-          <span className="text-[#999] text-base font-normal">
-            {" "}
-            raised out of ₹{formatNumber(donationTarget)}
-          </span>
-        </p>
-        <div className="w-full h-2 bg-primaryLight rounded-full">
-          <div
-            style={{ width: `${progress}%` }}
-            className="h-full rounded-full bg-primary"
-          ></div>
-        </div>
+        {type === "fundrequest" ? (
+          <>
+            <p className="text-xl font-bold text-[#444]">
+              ₹{formatNumber(donationRaised)}
+              <span className="text-[#999] text-base font-normal">
+                {" "}
+                raised out of ₹{formatNumber(donationTarget)}
+              </span>
+            </p>
+            <div className="w-full h-2 bg-primaryLight rounded-full">
+              <div
+                style={{ width: `${progress}%` }}
+                className="h-full rounded-full bg-primary"
+              ></div>
+            </div>
+          </>
+        ) : (
+          <p className="text-sm text-gray-500 overflow-hidden whitespace-nowrap overflow-ellipsis">
+            {description}
+          </p>
+        )}
+
         <div className="md:flex md:flex-col md:justify-between sm:items-center gap-1">
           <div className="flex justify-start gap-1 pb-3 sm:pb-0">
             <HeartIcon />
@@ -62,7 +75,11 @@ const TrustModel: React.FC<TrustModelProps> = ({
               type="submit"
               className="outline-none text-white font-inter font-medium"
               onClick={() => {
-                push(`/dashboard/${trustId}`);
+                if (type === "trust") {
+                  push(`/dashboard/trustdonation/${trustId}`);
+                } else {
+                  push(`/dashboard/${trustId}`);
+                }
               }}
             >
               Donate
