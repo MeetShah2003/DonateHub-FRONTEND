@@ -157,7 +157,9 @@ const TrustSignup = () => {
                 router.push("/login");
               }, 3000);
             } else {
-              successToast(`Account created successfully ${data.trustName}`);
+              successToast(
+                `Account created successfully ${data.newTrust.trustName}`
+              );
               setTimeout(() => {
                 router.push("/login");
               }, 3000);
