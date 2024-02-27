@@ -7,16 +7,17 @@ import ContactUsIcon from "@/icons/ContactUsIcon";
 import AboutUsIcon from "@/icons/AboutUsIcon";
 import LogoutIcon from "@/icons/LogoutIcon";
 import ProfileIcon from "@/icons/ProfileIcon";
-
 import CloseHamburgerIcon from "@/icons/CloseHamburgerIcon";
 import { useAuth } from "@/context/auth";
 import Logo from "@/icons/Logo";
 import UserProfile from "../UserProfile";
+
 const NAV_MENUES: {
   id: number;
   menu: string;
   path: string;
   icon: ReactNode;
+  dropdownOptions?: { title: string; path: string }[];
 }[] = [
   {
     id: 1,
@@ -26,9 +27,10 @@ const NAV_MENUES: {
   },
   {
     id: 2,
-    menu: "Profile",
-    path: "/dashboard/profile",
-    icon: <ProfileIcon color="#FFFFFF" />,
+    menu: "Products",
+    path: "/dashboard/profileuser",
+    icon: <ProfileIcon color="#000000" />,
+    dropdownOptions: [{ title: "Profile", path: "/dashboard/profile" }],
   },
   {
     id: 3,
@@ -46,6 +48,7 @@ const NAV_MENUES: {
 
 const Visitor = () => {
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
+  const [isHovered, setIsHovered] = useState(false); // State to track hover state
   const router = useRouter();
   const { isAuthenticated, logout, user } = useAuth();
 
@@ -68,19 +71,38 @@ const Visitor = () => {
 
           <div className="hidden sm:flex">
             <ul className="gap-5 lg:gap-7 sm:flex">
-              {NAV_MENUES.map(({ id, menu, path }) => {
-                if (menu === "Profile" && !isAuthenticated) {
+              {NAV_MENUES.map(({ id, menu, path, dropdownOptions }) => {
+                if (menu === "Products" && !isAuthenticated) {
                   return null;
                 }
                 return (
                   <li
                     key={id}
-                    onClick={() => {
-                      router.push(path);
-                    }}
-                    className="text-base font-semibold"
+                    className="text-base text-gray-700 font-semibold relative"
+                    onMouseEnter={() => {
+                      if (menu === "Products") {
+                        setIsHovered(true);
+                      }
+                    }} // Set isHovered to true on mouse enter
                   >
-                    {menu}
+                    <Link href={path}>{menu}</Link>
+                    {dropdownOptions && isHovered && (
+                      <ul className="absolute left-0 mt-2 w-[200px] bg-white shadow-lg border rounded-md py-1">
+                        {dropdownOptions.map((option, index) => (
+                          <li
+                            onClick={() => {
+                              if (menu === "Products") {
+                                setIsHovered(false);
+                              }
+                            }}
+                            key={index}
+                            className="px-4 py-2 border-b-2"
+                          >
+                            <Link href={option.path}>{option.title}</Link>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                   </li>
                 );
               })}
@@ -127,39 +149,42 @@ const Visitor = () => {
           } rounded-sm h-screen w-1/2`}
         >
           <ul className="flex  flex-col justify-center">
-            {NAV_MENUES.map(({ id, menu, path, icon }) => {
-              if (menu === "Profile" && !isAuthenticated) {
+            {NAV_MENUES.map(({ id, menu, path, icon, dropdownOptions }) => {
+              if (menu === "My Account" && !isAuthenticated) {
                 return null;
               }
               return (
-                <li
-                  key={id}
-                  className="text-base px-5 py-4 font-medium flex gap-3"
-                >
-                  <div>{icon}</div>
-                  <Link href={path}>{menu}</Link>
+                <li key={id} className="text-base px-5 py-4 font-medium">
+                  <div className="flex items-center gap-3">
+                    {icon}
+                    <Link href={path}>{menu}</Link>
+                  </div>
+                  {dropdownOptions && (
+                    <ul className="pl-8">
+                      {dropdownOptions.map((option, index) => (
+                        <li key={index} className="py-2">
+                          <Link href={option.path}>{option.title}</Link>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </li>
               );
             })}
-
-            <li
-              onClick={() => {
-                logout();
-              }}
-              className="text-base px-5 py-4 font-medium flex gap-3"
-            >
-              <div>
+            {isAuthenticated && (
+              <li
+                onClick={() => {
+                  logout();
+                }}
+                className="text-base px-5 py-4 font-medium flex items-center gap-3"
+              >
                 <LogoutIcon color="" />
-              </div>
-              <p>Logout</p>
-            </li>
+                <p>Logout</p>
+              </li>
+            )}
           </ul>
         </div>
       </div>
-
-      {/* <div className="h-screen">
-        <Image src={HeaderBgImage} alt="headerImage" />
-      </div> */}
     </div>
   );
 };
