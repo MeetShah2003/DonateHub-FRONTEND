@@ -131,13 +131,13 @@ const AdminFrame: React.FC<{
 
           <div className="flex-grow overflow-y-auto">
             <div className="px-5">
-              <div className="flex sm:hidden p-5 items-center gap-3">
+              <div className="flex sm:hidden py-5 items-center gap-3">
                 <p className="font-inter font-semibold text-steelGray text-xl sm:text-2xl">
                   {title}
                 </p>
               </div>
 
-              <p className="hidden sm:block p-5 font-inter font-semibold text-steelGray text-xl sm:text-2xl">
+              <p className="hidden sm:block py-5 font-inter font-semibold text-steelGray text-xl sm:text-2xl">
                 {title}
               </p>
               {children}
