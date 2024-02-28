@@ -28,6 +28,7 @@ export type TrustData = {
   isBlocked?: boolean;
   isVerified?: boolean;
   TotalAmount?: number;
+  manualDonation?: number;
 };
 
 export type FundRequirement = {

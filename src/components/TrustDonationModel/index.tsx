@@ -1,5 +1,4 @@
 import React from "react";
-import HeartIcon from "@/icons/HeartIcon";
 import Image from "next/image";
 import { TrustData } from "@/types/types";
 import { useRouter } from "next/router";
@@ -23,6 +22,7 @@ const TrustDonationModel: React.FC<TrustCardProps> = ({ trust }) => {
     pincode,
     email,
     TotalAmount,
+    manualDonation,
     _id,
   } = trust;
 
@@ -71,7 +71,7 @@ const TrustDonationModel: React.FC<TrustCardProps> = ({ trust }) => {
               <div>
                 <h1 className="text-lg font-semibold">Current Balance</h1>
                 <p className="text-xl text-gray-500">
-                  ₹{formatAmount(TotalAmount)}
+                  ₹{formatAmount(manualDonation)}
                 </p>
               </div>
             </div>

@@ -34,7 +34,7 @@ const TrustDetails = () => {
           curruncy: "INR",
           trustId: query.id,
         };
-        const response = await fetch(`${BACKEND_BASE_URL}/api/trustDonate`, {
+        const response = await fetch(`${BACKEND_BASE_URL}/api/manualDonate`, {
           method: "POST",
           headers: {
             Authorization: `Bearer ${access_token}`,
@@ -196,7 +196,7 @@ const TrustDetails = () => {
                 <div>
                   <h1 className="text-lg font-semibold">Currunt Balance</h1>
                   <p className="text-xl text-gray-500">
-                    ₹{formatAmount(singleData.TotalAmount)}
+                    ₹{formatAmount(singleData.manualDonation)}
                   </p>
                 </div>
               </div>
