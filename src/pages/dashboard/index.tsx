@@ -86,7 +86,6 @@ const Dashboard = () => {
             </label>
             <select
               id="searchCategory"
-              // value={searchQuery}
               onChange={(e) => setSelectedCategory(e.target.value)}
               className="border-2 cursor-pointer w-full shadow-sm outline-none rounded p-2"
             >
