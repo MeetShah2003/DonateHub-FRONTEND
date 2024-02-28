@@ -43,7 +43,6 @@ const Dashboard = () => {
     const categoryMatches =
       selectedCategory === "" || user.tId.category === selectedCategory;
 
-    // Convert all object values to strings and search across all fields
     const containsSearchQuery = Object.values(user).some((value) => {
       if (typeof value === "object") {
         return Object.values(value).some((nestedValue) =>
@@ -81,7 +80,7 @@ const Dashboard = () => {
               className="border-2 w-full shadow-sm outline-none rounded p-2"
             />
           </div>
-          <div className="w-1/4 flex flex-col cu">
+          <div className="w-1/4 flex flex-col">
             <label htmlFor="searchCategory" className="text-lg font-bold mb-2">
               Category Search
             </label>
@@ -117,7 +116,7 @@ const Dashboard = () => {
                   key={_id}
                   title={title}
                   trustlogo={tId.trustlogo}
-                  trustId={_id}
+                  trustId={_id as string}
                   donationRaised={tId.TotalAmount}
                   donationTarget={targetFund}
                   supporters={502}

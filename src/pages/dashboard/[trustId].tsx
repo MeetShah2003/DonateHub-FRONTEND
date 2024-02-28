@@ -32,7 +32,7 @@ const TrustDetails = () => {
         const data = {
           amount: values.amount,
           curruncy: "INR",
-          trustId: query.trustId,
+          trustId: singleData?.tId._id,
         };
         const response = await fetch(`${BACKEND_BASE_URL}/api/trustDonate`, {
           method: "POST",
