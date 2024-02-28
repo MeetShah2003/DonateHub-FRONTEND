@@ -33,8 +33,8 @@ const TrustDonationModel: React.FC<TrustCardProps> = ({ trust }) => {
   const { push } = useRouter();
 
   return (
-    <div className="relative w-full">
-      <div className="flex items-center w-full mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
+    <div className="relative rounded-lg border-2 w-full">
+      <div className="flex items-center w-full mx-auto bg-white  shadow-sm overflow-hidden">
         {/* <div className="m-2 flex sm:flex-shrink-0">
           <Image
             alt="trustImage"

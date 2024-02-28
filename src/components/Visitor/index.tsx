@@ -12,13 +12,16 @@ import { useAuth } from "@/context/auth";
 import Logo from "@/icons/Logo";
 import UserProfile from "../UserProfile";
 import DropDownArrow from "@/icons/DropDownArrow";
+import ManageTrustIcon from "@/icons/ManageTrustIcon";
+import TrustDonationIcon from "@/icons/TrustDonationIcon";
+import RequestFundIcon from "@/icons/RequestFundIcon";
 
 const NAV_MENUES: {
   id: number;
   menu: string;
   path: string;
   icon: ReactNode;
-  dropdownOptions?: { title: string; path: string }[];
+  dropdownOptions?: { icon: ReactNode; title: string; path: string }[];
 }[] = [
   {
     id: 1,
@@ -29,10 +32,19 @@ const NAV_MENUES: {
   {
     id: 2,
     menu: "Products",
-    path: "",
+    path: "/dashboard/trustdonation",
     icon: <ProfileIcon color="#000000" />,
     dropdownOptions: [
-      { title: "Trust Donation", path: "/dashboard/trustdonation" },
+      {
+        icon: <TrustDonationIcon />,
+        title: "Trust Donation",
+        path: "/dashboard/trustdonation",
+      },
+      {
+        icon: <RequestFundIcon />,
+        title: "Request Funds",
+        path: "/dashboard/requestfunds",
+      },
     ],
   },
   {
@@ -51,9 +63,9 @@ const NAV_MENUES: {
 
 const Visitor = () => {
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
-  const [isHovered, setIsHovered] = useState(false); // State to track hover state
+  const [isHovered, setIsHovered] = useState(false);
   const router = useRouter();
-  const { isAuthenticated, logout, user } = useAuth();
+  const { isAuthenticated, logout } = useAuth();
 
   return (
     <div>
@@ -87,13 +99,14 @@ const Visitor = () => {
                         if (menu === "Products") {
                           setIsHovered(true);
                         }
-                      }} // Set isHovered to true on mouse enter
+                      }}
                     >
                       <Link href={path}>{menu}</Link>
                       {dropdownOptions && isHovered && (
                         <ul className="absolute left-0 mt-2 w-[200px] bg-white shadow-lg border rounded-md py-1">
                           {dropdownOptions.map((option, index) => (
-                            <>
+                            <div className="flex items-center border-b cursor-pointer hover:bg-gray-100 px-3">
+                              <div>{option.icon}</div>
                               <li
                                 onClick={() => {
                                   if (menu === "Products") {
@@ -101,11 +114,11 @@ const Visitor = () => {
                                   }
                                 }}
                                 key={index}
-                                className="px-4 py-2 border-b-2"
+                                className="px-4 py-2 "
                               >
                                 <Link href={option.path}>{option.title}</Link>
                               </li>
-                            </>
+                            </div>
                           ))}
                         </ul>
                       )}

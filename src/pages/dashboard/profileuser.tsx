@@ -126,7 +126,7 @@ const ProfileUser = () => {
 
   return (
     <div>
-      <div>
+      <div className="navbar sticky top-0 bg-white z-10">
         <Visitor />
       </div>
       {loading && <Spinner />}

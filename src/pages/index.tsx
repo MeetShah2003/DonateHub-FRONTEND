@@ -6,8 +6,10 @@ import WelcomePage from "@/components/WelcomePage";
 const home = () => {
   return (
     <div>
-      {/* <Visitor /> */}
-      <SignUp />
+      <div className="navbar sticky top-0 bg-white z-10">
+        <Visitor />
+      </div>
+      {/* <SignUp /> */}
     </div>
   );
 };
