@@ -245,11 +245,11 @@ const TrustDetails = () => {
             </div>
           </div>
 
-          <div className="flex gap-3">
+          <div className="flex flex-col gap-3">
             <div className="flex flex-col md:flex-row w-full p-3 shadow-md rounded-lg gap-5 bg-gray-100">
               <form className="w-full" onSubmit={handleSubmit}>
-                <div className="flex items-center justify-between gap-3">
-                  <div className="relative w-3/4">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+                  <div className="relative w-full sm:w-3/4">
                     <span className="absolute inset-y-0 left-0 flex items-center pl-2">
                       <RuppeSymbol />
                     </span>
@@ -267,7 +267,7 @@ const TrustDetails = () => {
                       <div className="text-red-500">{errors.amount}</div>
                     ) : null}
                   </div>
-                  <div className="flex flex-col w-1/4 border-2 bg-primary shadow-sm rounded-lg px-2 py-2">
+                  <div className="flex flex-col w-full sm:w-1/4 border-2 bg-primary shadow-sm rounded-lg px-2 py-2">
                     <button
                       type="submit"
                       className="outline-none text-white font-inter font-medium"
@@ -281,7 +281,7 @@ const TrustDetails = () => {
             <div className="flex flex-col md:flex-row w-full p-3 shadow-md rounded-lg gap-5 bg-gray-100">
               <div className="w-full">
                 <h1 className="text-lg font-semibold mb-2">Suggestions</h1>
-                <div className="grid grid-cols-4 gap-3">
+                <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
                   <div className="w-full text-center border-2 border-primary bg-white shadow-sm rounded-lg px-2 py-2">
                     <button
                       onClick={() => {

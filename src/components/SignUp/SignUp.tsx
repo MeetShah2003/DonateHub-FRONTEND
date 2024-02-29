@@ -14,6 +14,7 @@ import CameraIcon from "@/icons/CameraIcon";
 import { uploadBytes, ref, getDownloadURL } from "firebase/storage";
 import { storage } from "@/firebase";
 import { v4 } from "uuid";
+import Cookies from "js-cookie";
 
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -89,14 +90,61 @@ const SignUp = () => {
     onSubmit: async (values) => {
       setLoading(true);
       const { confirmPassword, ...data } = values;
-      try {
+      // try {
+      //   fetch(`${BACKEND_BASE_URL}/api/signup`, {
+      //     method: "POST",
+      //     headers: { "Content-Type": "application/json" },
+      //     body: JSON.stringify(data),
+      //   })
+      //     .then((res) => res.json())
+      //     .then((data) => {
+      //       if (data && data.message == "user already exist") {
+      //         errorToast(`${data.user.email} already in use`);
+      //         setTimeout(() => {
+      //           router.push("/login");
+      //         }, 3000);
+      //       }
+      //       if (data && data.message == "trust already exist") {
+      //         errorToast(`${data.trust.email} already in use`);
+      //         setTimeout(() => {
+      //           router.push("/login");
+      //         }, 3000);
+      //       } else {
+      //         successToast("Account created successfully");
+      //         setTimeout(() => {
+      //           router.push("/login");
+      //         }, 3000);
+      //       }
+      //     })
+      //     .catch((error) => {
+      //       console.log(error);
+      //     })
+      //     .finally(() => {
+      //       setLoading(false);
+      //     });
+      // } catch (error) {
+      //   errorToast("something went wrong");
+      // }
+
+      if (values) {
+        const signUpData = JSON.stringify(data);
+        Cookies.set("signup-data", signUpData);
+        // const getSignUpData = Cookies.get("signup-data");
+        // const parsedSignUpData = JSON.parse(getSignUpData);
+        // console.log("finaldata", parsedSignUpData);
+
         fetch(`${BACKEND_BASE_URL}/api/signup`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(data),
         })
-          .then((res) => res.json())
+          .then((res) => {
+            if (res) {
+              return res.json();
+            }
+          })
           .then((data) => {
+            console.log("apiData", data);
             if (data && data.message == "user already exist") {
               errorToast(`${data.user.email} already in use`);
               setTimeout(() => {
@@ -109,9 +157,10 @@ const SignUp = () => {
                 router.push("/login");
               }, 3000);
             } else {
+              successToast("Otp Sent Successfully");
               successToast("Account created successfully");
               setTimeout(() => {
-                router.push("/login");
+                router.push("/signup/otpverification");
               }, 3000);
             }
           })
@@ -121,8 +170,6 @@ const SignUp = () => {
           .finally(() => {
             setLoading(false);
           });
-      } catch (error) {
-        errorToast("something went wrong");
       }
     },
   });

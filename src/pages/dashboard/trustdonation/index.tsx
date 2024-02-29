@@ -63,7 +63,9 @@ const TrustDonation = () => {
   const currentItems = filteredUsers?.slice(offset, offset + itemsPerPage);
   return (
     <>
-      <Visitor />
+      <div className="navbar sticky top-0 bg-white z-10">
+        <Visitor />
+      </div>
       <div className="max-w-screen-lg w-90% mx-auto">
         <h1 className="my-5 text-2xl font-semibold">Trust Donation</h1>
         <div className="w-full flex gap-3 mb-5 justify-between">
