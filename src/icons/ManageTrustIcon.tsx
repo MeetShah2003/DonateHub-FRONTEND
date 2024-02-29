@@ -1,7 +1,7 @@
 const ManageTrustIcon = () => {
   return (
     <svg
-      fill="#000000"
+      fill="#FFFFFF"
       height="20px"
       width="20px"
       version="1.1"

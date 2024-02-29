@@ -11,6 +11,8 @@ import { ReactNode, useState } from "react";
 import Link from "next/link";
 import LogoutIcon from "@/icons/LogoutIcon";
 import TrustProfile from "../TrustProfile";
+import RequestFundIcon from "@/icons/RequestFundIcon";
+import DropDownArrow from "@/icons/DropDownArrow";
 
 const TrustNavbar = () => {
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
@@ -24,6 +26,7 @@ const TrustNavbar = () => {
     menu: string;
     path: string;
     icon: ReactNode;
+    dropdownOptions?: { icon: ReactNode; title: string; path: string }[];
   }[] = [
     {
       id: 1,
@@ -33,9 +36,16 @@ const TrustNavbar = () => {
     },
     {
       id: 2,
-      menu: "Profile",
-      path: "/trust/profile",
-      icon: <ProfileIcon color="#FFFFFF" />,
+      menu: "Products",
+      path: "/trust/fundrequest",
+      icon: <ProfileIcon color="#000000" />,
+      dropdownOptions: [
+        {
+          icon: <RequestFundIcon />,
+          title: "Fund Requests",
+          path: "/trust/fundrequest",
+        },
+      ],
     },
     {
       id: 3,
@@ -50,6 +60,9 @@ const TrustNavbar = () => {
       icon: <AboutUsIcon />,
     },
   ];
+
+  const [isHovered, setIsHovered] = useState(false);
+
   return (
     <div>
       <div className="bg-white border shadow-sm">
@@ -69,7 +82,7 @@ const TrustNavbar = () => {
 
           <div className="hidden sm:flex">
             <ul className="gap-5 lg:gap-7 sm:flex">
-              {NAV_MENUES.map(({ id, menu, path }) => {
+              {/* {NAV_MENUES.map(({ id, menu, path }) => {
                 if (menu === "Profile" && !isAuthenticated) {
                   return null;
                 }
@@ -83,6 +96,51 @@ const TrustNavbar = () => {
                   >
                     {menu}
                   </li>
+                );
+              })} */}
+              {NAV_MENUES.map(({ id, menu, path, dropdownOptions }) => {
+                if (menu === "Products" && !isAuthenticated) {
+                  return null;
+                }
+                return (
+                  <div className="flex items-center justify-center">
+                    <li
+                      key={id}
+                      className="text-base text-gray-700 font-semibold relative"
+                      onMouseEnter={() => {
+                        if (menu === "Products") {
+                          setIsHovered(true);
+                        }
+                      }}
+                    >
+                      <Link href={path}>{menu}</Link>
+                      {dropdownOptions && isHovered && (
+                        <ul className="absolute left-0 mt-2 w-[200px] bg-white shadow-lg border rounded-md py-1">
+                          {dropdownOptions.map((option, index) => (
+                            <div className="flex items-center border-b cursor-pointer hover:bg-gray-100 px-3">
+                              <div>{option.icon}</div>
+                              <li
+                                onClick={() => {
+                                  if (menu === "Products") {
+                                    setIsHovered(false);
+                                  }
+                                }}
+                                key={index}
+                                className="px-4 py-2 "
+                              >
+                                <Link href={option.path}>{option.title}</Link>
+                              </li>
+                            </div>
+                          ))}
+                        </ul>
+                      )}
+                    </li>
+                    {menu === "Products" && (
+                      <div className="mt-1">
+                        <DropDownArrow />
+                      </div>
+                    )}
+                  </div>
                 );
               })}
             </ul>

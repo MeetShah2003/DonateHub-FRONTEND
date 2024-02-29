@@ -23,9 +23,13 @@ const TrustModel: React.FC<TrustModelProps> = ({
   type,
   description,
 }) => {
-  const progress = (donationRaised / donationTarget) * 100;
+  const progress =
+    donationRaised && donationTarget
+      ? (donationRaised / donationTarget) * 100
+      : 0;
 
-  const formatNumber = (num: number) => {
+  const formatNumber = (num?: number) => {
+    if (num === undefined) return ""; // handle undefined case
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
   const { push } = useRouter();

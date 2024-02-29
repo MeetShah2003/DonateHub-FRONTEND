@@ -12,12 +12,20 @@ import * as Yup from "yup";
 import { storage } from "@/firebase";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { v4 } from "uuid";
+import { toast } from "react-toastify";
+import Spinner from "@/components/Spinner";
+import { useRouter } from "next/router";
 
 const RequestFunds = () => {
   const access_token = Cookies.get("access_token");
   const [trusts, setTrusts] = useState<TrustData[]>([]);
+  const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<TrustData | null>(null);
+
+  const errorToast = (errorMessage: string) => toast.error(errorMessage);
+  const successToast = (successMessage: string) =>
+    toast.success(successMessage);
 
   useEffect(() => {
     fetch(`${BACKEND_BASE_URL}/api/allTrustsV`, {
@@ -33,6 +41,10 @@ const RequestFunds = () => {
       });
   }, [access_token]);
 
+  const formatAmount = (amount: any) => {
+    return new Intl.NumberFormat("en-IN").format(amount);
+  };
+
   const validationSchema = Yup.object({
     tId: Yup.string().required("Trust is required"),
     title: Yup.string().required("Title is required"),
@@ -44,11 +56,14 @@ const RequestFunds = () => {
       .min(1, "Amount must be at least 1"),
   });
 
+  const { push } = useRouter();
+
   const {
     handleBlur,
     handleChange,
     setFieldValue,
     handleSubmit,
+    resetForm,
     errors,
     touched,
     values,
@@ -62,7 +77,29 @@ const RequestFunds = () => {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      console.log(values);
+      console.log("values", values);
+      setLoading(true);
+      fetch(`${BACKEND_BASE_URL}/api/askForFund`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      })
+        .then((res) => {
+          if (res && res.status === 200) {
+            successToast("Fund Request Send Successfully");
+            resetForm();
+            push(`/dashboard`);
+          }
+        })
+        .catch(() => {
+          errorToast("Fund Request Not Send");
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     },
   });
 
@@ -77,6 +114,7 @@ const RequestFunds = () => {
   };
 
   const handleFileUpload = async (event: any) => {
+    setLoading(true);
     const files = event.target.files;
     const uploadedURLs = [];
 
@@ -88,6 +126,8 @@ const RequestFunds = () => {
         uploadedURLs.push(downloadURL);
       } catch (error) {
         console.error("Error uploading document:", error);
+      } finally {
+        setLoading(false);
       }
     }
 
@@ -96,6 +136,7 @@ const RequestFunds = () => {
 
   return (
     <div>
+      {loading && <Spinner />}
       <div className="navbar sticky top-0 bg-white z-10">
         <Visitor />
       </div>
@@ -223,6 +264,7 @@ const RequestFunds = () => {
                 id="documents"
                 onChange={handleFileUpload}
                 multiple
+                accept="*/*"
               />
               {Array.isArray(values.documents) &&
                 values.documents.length > 0 && (

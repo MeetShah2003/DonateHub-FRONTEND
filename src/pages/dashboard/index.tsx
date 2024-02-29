@@ -29,7 +29,7 @@ const Dashboard = () => {
       })
       .then((data) => {
         console.log(data);
-        setFundRequirement(data.fundRequirement);
+        setFundRequirement(data.fullTrust);
       });
   };
 
@@ -41,7 +41,7 @@ const Dashboard = () => {
 
   const filteredUsers = fundRequirement?.filter((user) => {
     const categoryMatches =
-      selectedCategory === "" || user.tId.category === selectedCategory;
+      selectedCategory === "" || user.trust.category === selectedCategory;
 
     const containsSearchQuery = Object.values(user).some((value) => {
       if (typeof value === "object") {
@@ -111,16 +111,17 @@ const Dashboard = () => {
         <div className="grid grid-cols-1  sm:grid-cols-2 md:grid-cols-3 gap-5 justify-center items-center">
           {currentItems &&
             currentItems.length > 0 &&
-            currentItems.map(({ tId, _id, targetFund, title }) => {
+            currentItems.map(({ trust, fundRequest }) => {
+              console.log(currentItems);
               return (
                 <TrustModel
-                  key={_id}
-                  title={title}
-                  trustlogo={tId.trustlogo}
-                  trustId={_id as string}
-                  donationRaised={tId.TotalAmount}
-                  donationTarget={targetFund}
-                  supporters={502}
+                  key={trust._id}
+                  title={fundRequest.title}
+                  trustlogo={trust.trustlogo}
+                  trustId={trust._id as string}
+                  donationRaised={trust.TotalAmount}
+                  donationTarget={fundRequest.targetFund}
+                  supporters={trust.nUniqueSupporters}
                   type="fundrequest"
                 />
               );
