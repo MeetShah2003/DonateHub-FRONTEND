@@ -1,5 +1,6 @@
 import { getAuthenticatedRouteCheck } from "@/authguard/authguard";
 import NoData from "@/components/NoData";
+import Spinner from "@/components/Spinner";
 import TrustModel from "@/components/TrustModel";
 import UserRoute from "@/components/UserRoute/UserRoute";
 import Visitor from "@/components/Visitor";
@@ -12,11 +13,13 @@ const Dashboard = () => {
   const access_token = Cookies.get("access_token");
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(0);
+  const [loading, setLoading] = useState(false);
   const [fundRequirement, setFundRequirement] = useState<FundRequirement[]>();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
 
   const getAllTrust = async () => {
+    setLoading(true);
     fetch(`${BACKEND_BASE_URL}/api/fundRequest`, {
       method: "GET",
       headers: {
@@ -30,6 +33,9 @@ const Dashboard = () => {
       .then((data) => {
         console.log(data);
         setFundRequirement(data.fullTrust);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
@@ -118,7 +124,7 @@ const Dashboard = () => {
                   key={trust._id}
                   title={fundRequest.title}
                   trustlogo={trust.trustlogo}
-                  trustId={trust._id as string}
+                  trustId={fundRequest._id as string}
                   donationRaised={trust.TotalAmount}
                   donationTarget={fundRequest.targetFund}
                   supporters={trust.nUniqueSupporters}
@@ -127,7 +133,8 @@ const Dashboard = () => {
               );
             })}
         </div>
-        {!currentItems?.length && <NoData />}
+        {!currentItems?.length && !loading && <NoData />}
+        {loading && <Spinner />}
       </div>
     </>
   );

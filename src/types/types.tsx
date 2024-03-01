@@ -40,7 +40,43 @@ export type FundRequirement = {
     title: string;
     description: string;
     altContact: 8520369741;
+    _id: string;
   };
+};
+
+export type SingleFundRequirement = {
+  _id: string;
+  tId: {
+    _id: string;
+    trustlogo: string;
+    trustName: string;
+    email: string;
+    password: string;
+    description: string;
+    category: string;
+    creationDate: string;
+    founder: string;
+    contactNo: number;
+    address: string;
+    state: string;
+    city: string;
+    pincode: number;
+    role: string;
+    isVerified: boolean;
+    isBlocked: boolean;
+    TotalAmount: number;
+    __v: number;
+    manualDonation: number;
+    naturalSupporter: string[];
+    nUniqueSupporters: number;
+  };
+  targetFund: number;
+  startDate: Date;
+  endDate: Date;
+  title: string;
+  description: string;
+  altContact: number;
+  __v: number;
 };
 
 export type RequestFunds = {

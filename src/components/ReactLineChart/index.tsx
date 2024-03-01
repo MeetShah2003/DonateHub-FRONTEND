@@ -19,13 +19,13 @@ const ReactLineChart: React.FC<{ data: any }> = ({ data }) => {
     >
       <LineChart data={data}>
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" />
+        <XAxis dataKey="date" />
         <YAxis />
         <Tooltip />
         <Legend />
         <Line
           type="monotone"
-          dataKey="suppoters"
+          dataKey="supporters"
           stroke="#8884d8"
           activeDot={{ r: 8 }}
         />

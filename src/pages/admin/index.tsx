@@ -13,6 +13,8 @@ import ReactBarChart from "@/components/ReactBarChart.tsx";
 const Admin = () => {
   const [totalSuppoters, setTotalSuppoters] = useState<number>();
   const [totalUnverifiedTrusts, setTotalUnverifiedTrusts] = useState<number>();
+  const [supporterChartData, setSupporterChartData] =
+    useState<{ date: string; supporters: number }[]>();
   const [totalCollection, setTotalCollection] = useState();
   const [totalTrusts, setTotalTrusts] = useState<number>();
   const router = useRouter();
@@ -32,6 +34,26 @@ const Admin = () => {
       })
       .then((data) => {
         setTotalSuppoters(data.totalUsers);
+      });
+  };
+
+  const getSupporterChartData = () => {
+    fetch(`${BACKEND_BASE_URL}/admin/userChart`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${access_token}`,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        if (res && res.status === 200) {
+          return res.json();
+        }
+      })
+      .then((data) => {
+        setSupporterChartData(data.formattedData);
+        console.log(data);
       });
   };
 
@@ -105,6 +127,7 @@ const Admin = () => {
     getAllTrustCount();
     getAllUnverifedTrustCount();
     getTotalCollection();
+    getSupporterChartData();
   }, [totalSuppoters, totalTrusts]);
 
   const suppoters = [
@@ -189,7 +212,7 @@ const Admin = () => {
           </h1>
         </div>
         <div className="flex gap-5">
-          <ReactLineChart data={suppoters} />
+          <ReactLineChart data={supporterChartData} />
           <ReactBarChart data={income} />
         </div>
       </div>
