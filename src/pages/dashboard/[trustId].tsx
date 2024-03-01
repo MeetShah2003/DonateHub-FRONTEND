@@ -157,7 +157,10 @@ const TrustDetails = () => {
     return <Spinner />;
   }
 
-  const progress = (singleData.trust.TotalAmount / singleData.targetFund) * 100;
+  const progress =
+    ((singleData?.trust?.TotalAmount as number) /
+      singleData?.fundRequest?.targetFund) *
+    100;
 
   return (
     <>
@@ -169,7 +172,7 @@ const TrustDetails = () => {
           <div className="flex flex-col md:flex-row w-full p-3 shadow-sm rounded-lg gap-5 bg-gray-100">
             <div className="w-full md:w-1/4 h-full rounded-lg">
               <Image
-                src={singleData.trust.trustlogo}
+                src={singleData.trust?.trustlogo}
                 width={500}
                 height={300}
                 className="h-full w-full rounded-lg"
@@ -180,24 +183,26 @@ const TrustDetails = () => {
               <div className="w-3/4 flex flex-col gap-5 justify-between">
                 <div>
                   <h1 className="text-lg font-semibold">Trust Name</h1>
-                  <p className="text-xl text-gray-500">{singleData.title}</p>
+                  <p className="text-xl text-gray-500">
+                    {singleData.fundRequest?.title}
+                  </p>
                 </div>
                 <div>
                   <h1 className="text-lg font-semibold">Catagory</h1>
                   <p className="text-xl text-gray-500">
-                    {singleData.trust.category}
+                    {singleData.trust?.category}
                   </p>
                 </div>
                 <div>
                   <h1 className="text-lg font-semibold">Founder</h1>
                   <p className="text-xl text-gray-500">
-                    {singleData.trust.founder}
+                    {singleData.trust?.founder}
                   </p>
                 </div>
                 <div>
                   <h1 className="text-lg font-semibold">Currunt Balance</h1>
                   <p className="text-xl text-gray-500">
-                    ₹{formatAmount(singleData.trust.TotalAmount)}
+                    ₹{formatAmount(singleData.trust?.TotalAmount)}
                   </p>
                 </div>
               </div>
@@ -205,19 +210,19 @@ const TrustDetails = () => {
                 <div>
                   <h1 className="text-lg font-semibold">Email</h1>
                   <p className="text-xl text-gray-500">
-                    {singleData.trust.email}
+                    {singleData.trust?.email}
                   </p>
                 </div>
                 <div>
                   <h1 className="text-lg font-semibold">Contact No</h1>
                   <p className="text-xl text-gray-500">
-                    {singleData.trust.contactNo}
+                    {singleData.trust?.contactNo}
                   </p>
                 </div>
                 <div>
                   <h1 className="text-lg font-semibold">Help No</h1>
                   <p className="text-xl text-gray-500">
-                    {singleData.altContact}
+                    {singleData.fundRequest?.altContact}
                   </p>
                 </div>
               </div>
@@ -226,7 +231,9 @@ const TrustDetails = () => {
           <div className="flex flex-col md:flex-row w-full p-3 shadow-md rounded-lg gap-5 bg-gray-100">
             <div className="w-full">
               <h1 className="text-lg font-semibold">Description</h1>
-              <p className="text-xl text-gray-500">{singleData.description}</p>
+              <p className="text-xl text-gray-500">
+                {singleData.fundRequest?.description}
+              </p>
             </div>
           </div>
 
@@ -246,10 +253,10 @@ const TrustDetails = () => {
                 >
                   <div className="flex w-full justify-between">
                     <span className="bg-secondary rounded-lg p-2 text-white font-bold">
-                      ₹{formatAmount(singleData.trust.TotalAmount)}
+                      ₹{formatAmount(singleData.trust?.TotalAmount)}
                     </span>
                     <span className="bg-secondary rounded-lg p-2 text-white font-bold">
-                      ₹{formatAmount(singleData.targetFund)}
+                      ₹{formatAmount(singleData.fundRequest?.targetFund)}
                     </span>
                   </div>
                 </div>
@@ -264,25 +271,25 @@ const TrustDetails = () => {
                 <div>
                   <h1 className="text-base font-normal">Address</h1>
                   <p className="text-lg text-gray-500">
-                    {singleData.trust.address}
+                    {singleData.trust?.address}
                   </p>
                 </div>
                 <div>
                   <h1 className="text-base font-normal">State</h1>
                   <p className="text-lg text-gray-500">
-                    {singleData.trust.state}
+                    {singleData.trust?.state}
                   </p>
                 </div>
                 <div>
                   <h1 className="text-base font-normal">City</h1>
                   <p className="text-lg text-gray-500">
-                    {singleData.trust.city}
+                    {singleData.trust?.city}
                   </p>
                 </div>
                 <div>
                   <h1 className="text-base font-normal">Pincode</h1>
                   <p className="text-lg text-gray-500">
-                    {singleData.trust.pincode}
+                    {singleData.trust?.pincode}
                   </p>
                 </div>
               </div>

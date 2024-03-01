@@ -13,6 +13,9 @@ import { useRouter } from "next/router";
 import TrustNavbar from "../../../components/TrustNavbar";
 import TrustRoute from "@/components/TrustRoute/TrustRoute";
 import { RequestFunds } from "@/types/types";
+import firebase from "firebase/compat/app";
+import { getDownloadURL, ref } from "firebase/storage";
+import { storage } from "@/firebase";
 
 const RequestFund = () => {
   const access_token = Cookies.get("access_token");
@@ -99,6 +102,21 @@ const RequestFund = () => {
       });
   };
 
+  const DownloadImages = async (imageUrls: string[]) => {
+    setLoading(true);
+    try {
+      for (const imageUrl of imageUrls) {
+        const imageRef = ref(storage, imageUrl);
+        const downloadURL = await getDownloadURL(imageRef);
+        window.open(downloadURL, "_blank");
+      }
+    } catch (error) {
+      console.error("Error downloading images:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     getSingleRequestData(query.id as string);
   }, []);
@@ -173,6 +191,9 @@ const RequestFund = () => {
                           key={index}
                           src={document}
                           alt="documents"
+                          onClick={() => {
+                            DownloadImages(singleRequestData.documents);
+                          }}
                           className="max-w-xs border rounded-md max-h-40"
                         />
                       ))}
