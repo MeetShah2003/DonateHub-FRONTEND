@@ -29,16 +29,30 @@ export type TrustData = {
   isVerified?: boolean;
   TotalAmount?: number;
   manualDonation?: number;
+  naturalSupporter: string[];
+  nUniqueSupporters: number;
 };
 
 export type FundRequirement = {
+  trust: TrustData;
+  fundRequest: {
+    targetFund: number;
+    title: string;
+    description: string;
+    altContact: 8520369741;
+  };
+};
+
+export type RequestFunds = {
   _id: string;
-  tId: TrustData;
-  targetFund: number;
-  startDate?: Date;
-  endDate?: Date;
+  tId: string;
+  uId: string;
   title: string;
   description: string;
-  altContact: string;
-  __v?: 0;
+  reqAmount: number;
+  documents: string[];
+  transactionDate: Date;
+  isAccepted: boolean;
+  isRejected: boolean;
+  __v?: number;
 };

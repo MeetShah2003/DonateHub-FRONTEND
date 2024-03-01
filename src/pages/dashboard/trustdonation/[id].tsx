@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
-import { FundRequirement, TrustData } from "@/types/types";
+import { TrustData } from "@/types/types";
 import { BACKEND_BASE_URL } from "@/consts";
 import Spinner from "@/components/Spinner";
 import UserRoute from "@/components/UserRoute/UserRoute";
@@ -21,6 +21,25 @@ const TrustDetails = () => {
   const amountValidationSchema = Yup.object().shape({
     amount: Yup.number().required("Amount is required"),
   });
+
+  const getSingleTrustData = async (id: string) => {
+    try {
+      const res = await fetch(`${BACKEND_BASE_URL}/api/singleTrust/${id}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+          "Content-Type": "application/json",
+        },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        console.log(data);
+        setSingleData(data.singlePageTrust);
+      }
+    } catch (error) {
+      console.error("Error fetching trust details:", error);
+    }
+  };
 
   const { handleSubmit, handleChange, setValues, values, errors, touched } =
     useFormik({
@@ -67,7 +86,7 @@ const TrustDetails = () => {
             "https://firebasestorage.googleapis.com/v0/b/donatehub-d09f5.appspot.com/o/DonateHUB_Logo%2Fdonatehublogo.png?alt=media&token=2cd59db5-3e2a-4d23-93e8-b2ee36314453",
           order_id: order.order.id,
           handler: (response: any) => {
-            console.log(response);
+            getSingleTrustData(query.id as string);
           },
           prefill: {
             name: `${user.firstName} ${user.lastName}`,
@@ -90,61 +109,7 @@ const TrustDetails = () => {
       },
     });
 
-  //   {
-  //     "singleTrust": {
-  //         "_id": "65dc377bf43b3cce6d52846a",
-  //         "tId": {
-  //             "_id": "65db0df955564d015b472a97",
-  //             "trustlogo": "https://firebasestorage.googleapis.com/v0/b/donatehub-d09f5.appspot.com/o/trust_logos%2Fd95d701b-f6d7-4610-989c-cbcc0568c84e?alt=media&token=92a6ef31-a31f-4ddf-88bd-b9ccabcc6846",
-  //             "trustName": "The Education Trust",
-  //             "email": "education@mailinator.com",
-  //             "password": "$2b$07$LcFbebzomxJLaaiGPH.WgeFhwpvWxzn/OjEf/Z75Voon89C1wfnCe",
-  //             "description": "this is the education trust",
-  //             "category": "education",
-  //             "creationDate": "2024-02-15",
-  //             "founder": "Dk",
-  //             "contactNo": 9598998889,
-  //             "address": "B-22,Test Society",
-  //             "state": "gujrat",
-  //             "city": "surat",
-  //             "pincode": 656665,
-  //             "role": "trust",
-  //             "isVerified": true,
-  //             "isBlocked": false,
-  //             "TotalAmount": 5177,
-  //             "__v": 0
-  //         },
-  //         "targetFund": 5000,
-  //         "startDate": "2024-02-26T05:19:34.374Z",
-  //         "endDate": "1970-01-01T02:48:22.005Z",
-  //         "title": "Test",
-  //         "description": "Test",
-  //         "altContact": 78787875555,
-  //         "__v": 0
-  //     }
-  // }
-
   useEffect(() => {
-    // Fetch trust details
-    const getSingleTrustData = async (id: string) => {
-      try {
-        const res = await fetch(`${BACKEND_BASE_URL}/api/singleTrust/${id}`, {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${access_token}`,
-            "Content-Type": "application/json",
-          },
-        });
-        if (res.ok) {
-          const data = await res.json();
-          console.log(data);
-          setSingleData(data.singlePageTrust);
-        }
-      } catch (error) {
-        console.error("Error fetching trust details:", error);
-      }
-    };
-
     if (query.id) {
       getSingleTrustData(query.id as string);
     }

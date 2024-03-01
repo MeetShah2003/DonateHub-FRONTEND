@@ -32,7 +32,7 @@ const TrustDetails = () => {
         const data = {
           amount: values.amount,
           curruncy: "INR",
-          trustId: singleData?.tId._id,
+          trustId: singleData?.trust._id,
         };
         const response = await fetch(`${BACKEND_BASE_URL}/api/trustDonate`, {
           method: "POST",
@@ -92,7 +92,7 @@ const TrustDetails = () => {
   //   {
   //     "singleTrust": {
   //         "_id": "65dc377bf43b3cce6d52846a",
-  //         "tId": {
+  //         "trust": {
   //             "_id": "65db0df955564d015b472a97",
   //             "trustlogo": "https://firebasestorage.googleapis.com/v0/b/donatehub-d09f5.appspot.com/o/trust_logos%2Fd95d701b-f6d7-4610-989c-cbcc0568c84e?alt=media&token=92a6ef31-a31f-4ddf-88bd-b9ccabcc6846",
   //             "trustName": "The Education Trust",
@@ -157,7 +157,7 @@ const TrustDetails = () => {
     return <Spinner />;
   }
 
-  const progress = (singleData.tId.TotalAmount / singleData.targetFund) * 100;
+  const progress = (singleData.trust.TotalAmount / singleData.targetFund) * 100;
 
   return (
     <>
@@ -169,7 +169,7 @@ const TrustDetails = () => {
           <div className="flex flex-col md:flex-row w-full p-3 shadow-sm rounded-lg gap-5 bg-gray-100">
             <div className="w-full md:w-1/4 h-full rounded-lg">
               <Image
-                src={singleData.tId.trustlogo}
+                src={singleData.trust.trustlogo}
                 width={500}
                 height={300}
                 className="h-full w-full rounded-lg"
@@ -185,19 +185,19 @@ const TrustDetails = () => {
                 <div>
                   <h1 className="text-lg font-semibold">Catagory</h1>
                   <p className="text-xl text-gray-500">
-                    {singleData.tId.category}
+                    {singleData.trust.category}
                   </p>
                 </div>
                 <div>
                   <h1 className="text-lg font-semibold">Founder</h1>
                   <p className="text-xl text-gray-500">
-                    {singleData.tId.founder}
+                    {singleData.trust.founder}
                   </p>
                 </div>
                 <div>
                   <h1 className="text-lg font-semibold">Currunt Balance</h1>
                   <p className="text-xl text-gray-500">
-                    ₹{formatAmount(singleData.tId.TotalAmount)}
+                    ₹{formatAmount(singleData.trust.TotalAmount)}
                   </p>
                 </div>
               </div>
@@ -205,13 +205,13 @@ const TrustDetails = () => {
                 <div>
                   <h1 className="text-lg font-semibold">Email</h1>
                   <p className="text-xl text-gray-500">
-                    {singleData.tId.email}
+                    {singleData.trust.email}
                   </p>
                 </div>
                 <div>
                   <h1 className="text-lg font-semibold">Contact No</h1>
                   <p className="text-xl text-gray-500">
-                    {singleData.tId.contactNo}
+                    {singleData.trust.contactNo}
                   </p>
                 </div>
                 <div>
@@ -246,7 +246,7 @@ const TrustDetails = () => {
                 >
                   <div className="flex w-full justify-between">
                     <span className="bg-secondary rounded-lg p-2 text-white font-bold">
-                      ₹{formatAmount(singleData.tId.TotalAmount)}
+                      ₹{formatAmount(singleData.trust.TotalAmount)}
                     </span>
                     <span className="bg-secondary rounded-lg p-2 text-white font-bold">
                       ₹{formatAmount(singleData.targetFund)}
@@ -264,23 +264,25 @@ const TrustDetails = () => {
                 <div>
                   <h1 className="text-base font-normal">Address</h1>
                   <p className="text-lg text-gray-500">
-                    {singleData.tId.address}
+                    {singleData.trust.address}
                   </p>
                 </div>
                 <div>
                   <h1 className="text-base font-normal">State</h1>
                   <p className="text-lg text-gray-500">
-                    {singleData.tId.state}
+                    {singleData.trust.state}
                   </p>
                 </div>
                 <div>
                   <h1 className="text-base font-normal">City</h1>
-                  <p className="text-lg text-gray-500">{singleData.tId.city}</p>
+                  <p className="text-lg text-gray-500">
+                    {singleData.trust.city}
+                  </p>
                 </div>
                 <div>
                   <h1 className="text-base font-normal">Pincode</h1>
                   <p className="text-lg text-gray-500">
-                    {singleData.tId.pincode}
+                    {singleData.trust.pincode}
                   </p>
                 </div>
               </div>
