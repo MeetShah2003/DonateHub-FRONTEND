@@ -2,7 +2,11 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
-import { FundRequirement, TrustData } from "@/types/types";
+import {
+  FundRequirement,
+  SingleFundRequirement,
+  TrustData,
+} from "@/types/types";
 import { BACKEND_BASE_URL } from "@/consts";
 import Spinner from "@/components/Spinner";
 import UserRoute from "@/components/UserRoute/UserRoute";
@@ -13,7 +17,8 @@ import Visitor from "@/components/Visitor";
 import RuppeSymbol from "@/icons/RuppeSymbol";
 
 const TrustDetails = () => {
-  const [singleData, setSingleData] = useState<FundRequirement>();
+  const [singleData, setSingleData] = useState<SingleFundRequirement>();
+  const [loading, setLoading] = useState(false);
   const { query } = useRouter();
   const { user } = useAuth();
   const access_token = Cookies.get("access_token");
@@ -29,102 +34,61 @@ const TrustDetails = () => {
       },
       validationSchema: amountValidationSchema,
       onSubmit: async (values) => {
+        setLoading(true);
         const data = {
           amount: values.amount,
           curruncy: "INR",
-          trustId: singleData?.trust._id,
+          trustId: singleData?.tId?._id,
         };
-        const response = await fetch(`${BACKEND_BASE_URL}/api/trustDonate`, {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${access_token}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        });
-        const order = await response.json();
-        //   {
-        //     "id": "order_NbfUJFFXjQvgBB",
-        //     "entity": "order",
-        //     "amount": 5500,
-        //     "amount_paid": 0,
-        //     "amount_due": 5500,
-        //     "currency": "INR",
-        //     "receipt": null,
-        //     "offer_id": null,
-        //     "status": "created",
-        //     "attempts": 0,
-        //     "notes": [],
-        //     "created_at": 1708112082
-        // }
-        var options = {
-          key: "rzp_test_zfmhrR9Z3TReMH",
-          amount: data.amount,
-          currency: data.curruncy,
-          name: "DonateHub",
-          description: "Test Transaction",
-          image: "https://example.com/your_logo",
-          order_id: order.order.id,
-          handler: (response: any) => {
+        try {
+          const response = await fetch(`${BACKEND_BASE_URL}/api/trustDonate`, {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${access_token}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          });
+          const order = await response.json();
+          var options = {
+            key: "rzp_test_zfmhrR9Z3TReMH",
+            amount: data.amount,
+            currency: data.curruncy,
+            name: "DonateHub",
+            description: "Test Transaction",
+            image: "https://example.com/your_logo",
+            order_id: order.order.id,
+            handler: (response: any) => {
+              console.log(response);
+            },
+            prefill: {
+              name: `${user.firstName} ${user.lastName}`,
+              email: user.email,
+              contact: "9000090000",
+            },
+            notes: {
+              address: "Razorpay Corporate Office",
+            },
+            theme: {
+              color: "#3399cc",
+            },
+          };
+          var rzp1 = new window.Razorpay(options);
+          rzp1.on("payment.failed", function (response: any) {
             console.log(response);
-          },
-          prefill: {
-            name: `${user.firstName} ${user.lastName}`,
-            email: user.email,
-            contact: "9000090000",
-          },
-          notes: {
-            address: "Razorpay Corporate Office",
-          },
-          theme: {
-            color: "#3399cc",
-          },
-        };
-        var rzp1 = new window.Razorpay(options);
-        rzp1.on("payment.failed", function (response: any) {
-          console.log(response);
-        });
+          });
 
-        rzp1.open();
+          rzp1.open();
+        } catch (error) {
+          console.log(error);
+        } finally {
+          setLoading(false);
+          getSingleTrustData(query.trustId as string);
+        }
       },
     });
 
-  //   {
-  //     "singleTrust": {
-  //         "_id": "65dc377bf43b3cce6d52846a",
-  //         "trust": {
-  //             "_id": "65db0df955564d015b472a97",
-  //             "trustlogo": "https://firebasestorage.googleapis.com/v0/b/donatehub-d09f5.appspot.com/o/trust_logos%2Fd95d701b-f6d7-4610-989c-cbcc0568c84e?alt=media&token=92a6ef31-a31f-4ddf-88bd-b9ccabcc6846",
-  //             "trustName": "The Education Trust",
-  //             "email": "education@mailinator.com",
-  //             "password": "$2b$07$LcFbebzomxJLaaiGPH.WgeFhwpvWxzn/OjEf/Z75Voon89C1wfnCe",
-  //             "description": "this is the education trust",
-  //             "category": "education",
-  //             "creationDate": "2024-02-15",
-  //             "founder": "Dk",
-  //             "contactNo": 9598998889,
-  //             "address": "B-22,Test Society",
-  //             "state": "gujrat",
-  //             "city": "surat",
-  //             "pincode": 656665,
-  //             "role": "trust",
-  //             "isVerified": true,
-  //             "isBlocked": false,
-  //             "TotalAmount": 5177,
-  //             "__v": 0
-  //         },
-  //         "targetFund": 5000,
-  //         "startDate": "2024-02-26T05:19:34.374Z",
-  //         "endDate": "1970-01-01T02:48:22.005Z",
-  //         "title": "Test",
-  //         "description": "Test",
-  //         "altContact": 78787875555,
-  //         "__v": 0
-  //     }
-  // }
-
   useEffect(() => {
-    // Fetch trust details
     const getSingleTrustData = async (id: string) => {
       try {
         const res = await fetch(`${BACKEND_BASE_URL}/api/fundRequest/${id}`, {
@@ -153,14 +117,12 @@ const TrustDetails = () => {
     return new Intl.NumberFormat("en-IN").format(amount);
   };
 
-  if (!singleData) {
+  if (!singleData || loading) {
     return <Spinner />;
   }
 
   const progress =
-    ((singleData?.trust?.TotalAmount as number) /
-      singleData?.fundRequest?.targetFund) *
-    100;
+    ((singleData?.tId?.TotalAmount as number) / singleData?.targetFund) * 100;
 
   return (
     <>
@@ -172,7 +134,7 @@ const TrustDetails = () => {
           <div className="flex flex-col md:flex-row w-full p-3 shadow-sm rounded-lg gap-5 bg-gray-100">
             <div className="w-full md:w-1/4 h-full rounded-lg">
               <Image
-                src={singleData.trust?.trustlogo}
+                src={singleData.tId.trustlogo}
                 width={500}
                 height={300}
                 className="h-full w-full rounded-lg"
@@ -183,26 +145,24 @@ const TrustDetails = () => {
               <div className="w-3/4 flex flex-col gap-5 justify-between">
                 <div>
                   <h1 className="text-lg font-semibold">Trust Name</h1>
-                  <p className="text-xl text-gray-500">
-                    {singleData.fundRequest?.title}
-                  </p>
+                  <p className="text-xl text-gray-500">{singleData?.title}</p>
                 </div>
                 <div>
                   <h1 className="text-lg font-semibold">Catagory</h1>
                   <p className="text-xl text-gray-500">
-                    {singleData.trust?.category}
+                    {singleData.tId?.category}
                   </p>
                 </div>
                 <div>
                   <h1 className="text-lg font-semibold">Founder</h1>
                   <p className="text-xl text-gray-500">
-                    {singleData.trust?.founder}
+                    {singleData.tId?.founder}
                   </p>
                 </div>
                 <div>
                   <h1 className="text-lg font-semibold">Currunt Balance</h1>
                   <p className="text-xl text-gray-500">
-                    ₹{formatAmount(singleData.trust?.TotalAmount)}
+                    ₹{formatAmount(singleData.tId?.TotalAmount)}
                   </p>
                 </div>
               </div>
@@ -210,19 +170,19 @@ const TrustDetails = () => {
                 <div>
                   <h1 className="text-lg font-semibold">Email</h1>
                   <p className="text-xl text-gray-500">
-                    {singleData.trust?.email}
+                    {singleData.tId?.email}
                   </p>
                 </div>
                 <div>
                   <h1 className="text-lg font-semibold">Contact No</h1>
                   <p className="text-xl text-gray-500">
-                    {singleData.trust?.contactNo}
+                    {singleData.tId?.contactNo}
                   </p>
                 </div>
                 <div>
                   <h1 className="text-lg font-semibold">Help No</h1>
                   <p className="text-xl text-gray-500">
-                    {singleData.fundRequest?.altContact}
+                    {singleData.altContact}
                   </p>
                 </div>
               </div>
@@ -231,9 +191,7 @@ const TrustDetails = () => {
           <div className="flex flex-col md:flex-row w-full p-3 shadow-md rounded-lg gap-5 bg-gray-100">
             <div className="w-full">
               <h1 className="text-lg font-semibold">Description</h1>
-              <p className="text-xl text-gray-500">
-                {singleData.fundRequest?.description}
-              </p>
+              <p className="text-xl text-gray-500">{singleData?.description}</p>
             </div>
           </div>
 
@@ -253,10 +211,10 @@ const TrustDetails = () => {
                 >
                   <div className="flex w-full justify-between">
                     <span className="bg-secondary rounded-lg p-2 text-white font-bold">
-                      ₹{formatAmount(singleData.trust?.TotalAmount)}
+                      ₹{formatAmount(singleData.tId?.TotalAmount)}
                     </span>
                     <span className="bg-secondary rounded-lg p-2 text-white font-bold">
-                      ₹{formatAmount(singleData.fundRequest?.targetFund)}
+                      ₹{formatAmount(singleData?.targetFund)}
                     </span>
                   </div>
                 </div>
@@ -271,25 +229,25 @@ const TrustDetails = () => {
                 <div>
                   <h1 className="text-base font-normal">Address</h1>
                   <p className="text-lg text-gray-500">
-                    {singleData.trust?.address}
+                    {singleData.tId?.address}
                   </p>
                 </div>
                 <div>
                   <h1 className="text-base font-normal">State</h1>
                   <p className="text-lg text-gray-500">
-                    {singleData.trust?.state}
+                    {singleData.tId?.state}
                   </p>
                 </div>
                 <div>
                   <h1 className="text-base font-normal">City</h1>
                   <p className="text-lg text-gray-500">
-                    {singleData.trust?.city}
+                    {singleData.tId?.city}
                   </p>
                 </div>
                 <div>
                   <h1 className="text-base font-normal">Pincode</h1>
                   <p className="text-lg text-gray-500">
-                    {singleData.trust?.pincode}
+                    {singleData.tId?.pincode}
                   </p>
                 </div>
               </div>

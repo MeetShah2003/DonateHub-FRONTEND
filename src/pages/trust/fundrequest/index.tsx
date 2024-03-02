@@ -49,17 +49,18 @@ const FundRequests = () => {
   return (
     <div>
       {loading && <Spinner />}
-      <div className="navbar sticky top-0 bg-white z-10">
-        <TrustNavbar />
-      </div>
-      <div className="max-w-screen-lg w-90% mx-auto">
-        <h1 className="my-5 text-2xl font-semibold">Fund Requests</h1>
-        {fundRequests &&
-          fundRequests.length &&
-          fundRequests.map((data) => {
-            return <FundRequestsModel data={data} />;
-          })}
-      </div>
+      {/* <div className="navbar sticky top-0 bg-white z-10"> */}
+      <TrustNavbar>
+        <div className="max-w-screen-lg w-90% mx-auto">
+          <h1 className="my-5 text-2xl font-semibold">Fund Requests</h1>
+          {fundRequests &&
+            fundRequests.length &&
+            fundRequests.map((data) => {
+              return <FundRequestsModel data={data} />;
+            })}
+        </div>
+      </TrustNavbar>
+      {/* </div> */}
     </div>
   );
 };
