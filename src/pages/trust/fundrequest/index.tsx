@@ -50,9 +50,8 @@ const FundRequests = () => {
     <div>
       {loading && <Spinner />}
       {/* <div className="navbar sticky top-0 bg-white z-10"> */}
-      <TrustNavbar>
-        <div className="max-w-screen-lg w-90% mx-auto">
-          <h1 className="my-5 text-2xl font-semibold">Fund Requests</h1>
+      <TrustNavbar title="Fund Requests">
+        <div className="w-fit mx-auto">
           {fundRequests &&
             fundRequests.length &&
             fundRequests.map((data) => {
