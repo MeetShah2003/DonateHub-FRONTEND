@@ -26,7 +26,7 @@ const TrustProfile = () => {
       <div className="flex items-center gap-3">
         <button
           type="button"
-          className="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition duration-150 ease-in-out"
+          className="flex text-sm border-2 border-gray-200 rounded-full focus:outline-none focus:border-gray-300 transition duration-150 ease-in-out"
           id="user-menu"
           aria-label="User menu"
           aria-haspopup="true"
