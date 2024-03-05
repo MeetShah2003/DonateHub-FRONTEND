@@ -14,7 +14,10 @@ import TrustProfile from "../TrustProfile";
 import RequestFundIcon from "@/icons/RequestFundIcon";
 import DropDownArrow from "@/icons/DropDownArrow";
 
-const TrustNavbar = () => {
+const TrustNavbar: React.FC<{ children: ReactNode; title: string }> = ({
+  children,
+  title,
+}) => {
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
   const { isAuthenticated, logout } = useAuth();
   const router = useRouter();
@@ -188,47 +191,62 @@ const TrustNavbar = () => {
       </div>
 
       {/* Sidebar for screens larger than md */}
-      <div className="hidden border-r h-screen md:block bg-white text-white w-64">
-        <ul>
-          {SIDE_BAR_MENUES.map(({ id, menu, path, icon, dropdownOptions }) => (
-            <li
-              key={id}
-              className="p-4  border cursor-pointer"
-              onClick={() => {
-                setIsMenuTouched(!isMenuTouched);
-              }}
-            >
-              <Link href={path}>
-                <div className="flex items-center">
-                  <div className="mr-2">{icon}</div>
-                  <span className="text-[#374151]">{menu}</span>
+      <div className="flex w-full">
+        <div className="hidden border-r h-screen md:block bg-white text-white w-[20%]">
+          <ul>
+            {SIDE_BAR_MENUES.map(
+              ({ id, menu, path, icon, dropdownOptions }) => (
+                <li
+                  key={id}
+                  className="p-4  border cursor-pointer"
+                  onClick={() => {
+                    if (menu === "Products") {
+                      setIsMenuTouched(!isMenuTouched);
+                    }
+                  }}
+                >
+                  <Link href={path}>
+                    <div className="flex items-center">
+                      <div className="mr-2">{icon}</div>
+                      <span className="text-[#374151]">{menu}</span>
+                    </div>
+                  </Link>
+                  {dropdownOptions && (
+                    <ul className={` pl-4`}>
+                      {dropdownOptions.map(({ icon, path, title }, index) => (
+                        <li
+                          key={index}
+                          className={`${isMenuTouched ? "flex" : "hidden"} p-2`}
+                        >
+                          <Link href={path}>
+                            <div className="flex items-center">
+                              <div className="mr-2">{icon}</div>
+                              <span className="text-[#374151]">{title}</span>
+                            </div>
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </li>
+              )
+            )}
+            <li className="p-4 cursor-pointer" onClick={logout}>
+              <div className="flex items-center">
+                <div className="mr-2">
+                  <LogoutIcon color="#FFFFFF" />
                 </div>
-              </Link>
-              {dropdownOptions && (
-                <ul className={`${isMenuTouched ? "flex" : "hidden"} pl-4`}>
-                  {dropdownOptions.map(({ icon, path, title }, index) => (
-                    <li key={index} className=" p-2">
-                      <Link href={path}>
-                        <div className="flex items-center">
-                          <div className="mr-2">{icon}</div>
-                          <span className="text-[#374151]">{title}</span>
-                        </div>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </li>
-          ))}
-          <li className="p-4 cursor-pointer" onClick={logout}>
-            <div className="flex items-center">
-              <div className="mr-2">
-                <LogoutIcon color="#FFFFFF" />
+                <span>Logout</span>
               </div>
-              <span>Logout</span>
-            </div>
-          </li>
-        </ul>
+            </li>
+          </ul>
+        </div>
+        <div className="p-5 w-full md:w-[80%]">
+          <p className="font-inter p-5 font-semibold text-steelGray text-xl sm:text-2xl">
+            {title}
+          </p>
+          {children}
+        </div>
       </div>
 
       {/* Hamburger menu for smaller screens */}
