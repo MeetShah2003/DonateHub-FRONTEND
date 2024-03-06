@@ -12,6 +12,7 @@ import RequestFundIcon from "@/icons/RequestFundIcon";
 import ContactUsIcon from "@/icons/ContactUsIcon";
 import AboutUsIcon from "@/icons/AboutUsIcon";
 import ProductsIcon from "@/icons/ProductsIcon";
+import PlusIcon from "@/icons/PlusIcon";
 
 const NAV_MENUES: { id: number; menu: string; path: string }[] = [
   { id: 1, menu: "Home", path: "/trust" },
@@ -24,7 +25,12 @@ const SIDE_BAR_MENUES: {
   menu: string;
   path: string;
   icon: ReactNode;
-  dropdownOptions?: { icon: ReactNode; menuTitle: string; path: string }[];
+  dropdownOptions?: {
+    id: number;
+    icon: ReactNode;
+    menuTitle: string;
+    path: string;
+  }[];
 }[] = [
   {
     id: 1,
@@ -39,9 +45,16 @@ const SIDE_BAR_MENUES: {
     icon: <ProductsIcon />,
     dropdownOptions: [
       {
+        id: 1,
         icon: <RequestFundIcon />,
         menuTitle: "Fund Requests",
         path: "/trust/fundrequest",
+      },
+      {
+        id: 2,
+        icon: <PlusIcon />,
+        menuTitle: "Add Disaster",
+        path: "/trust/adddisaster",
       },
     ],
   },
@@ -128,7 +141,11 @@ const TrustNavbar: React.FC<{ children: ReactNode; title: string }> = ({
                         <div>{icon}</div>
                         <Link href={path}>{menu}</Link>
                       </div>
-                      <ul className={`${isChildMenu ? "flex" : "hidden"}`}>
+                      <ul
+                        className={`${
+                          isChildMenu ? "flex" : "hidden"
+                        } flex-col`}
+                      >
                         {dropdownOptions &&
                           dropdownOptions.length &&
                           dropdownOptions.map(({ icon, path, menuTitle }) => {
@@ -180,7 +197,11 @@ const TrustNavbar: React.FC<{ children: ReactNode; title: string }> = ({
                           <div>{icon}</div>
                           <Link href={path}>{menu}</Link>
                         </div>
-                        <ul className={`${isChildMenu ? "flex" : "hidden"}`}>
+                        <ul
+                          className={`${
+                            isChildMenu ? "flex flex-col" : "hidden"
+                          }`}
+                        >
                           {dropdownOptions &&
                             dropdownOptions.length &&
                             dropdownOptions.map(({ icon, path, menuTitle }) => {
