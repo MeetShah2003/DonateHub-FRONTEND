@@ -53,7 +53,6 @@ const Admin = () => {
       })
       .then((data) => {
         setSupporterChartData(data.formattedData);
-        console.log(data);
       });
   };
 
@@ -109,7 +108,6 @@ const Admin = () => {
         throw new Error("Failed to fetch data");
       }
       const data = await response.json();
-      console.log(data);
       setTotalCollection(data.TotalAmount);
     } catch (error: any) {
       console.log(error);
@@ -119,7 +117,6 @@ const Admin = () => {
   const data = [
     { name: "Page A", uv: 4000, pv: 2400, amt: 2400 },
     { name: "Page B", uv: 3000, pv: 1398, amt: 2210 },
-    // Add more data points as needed
   ];
 
   useEffect(() => {

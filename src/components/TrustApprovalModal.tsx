@@ -12,7 +12,7 @@ const TrustApprovalModal: React.FC<{
 ) => {
   console.log(title);
 
-  const maxLines = 2; // Adjust the number of lines to show
+  const maxLines = 2;
   return (
     <div
       key={index}

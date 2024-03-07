@@ -5,7 +5,7 @@ import TrustModel from "@/components/TrustModel";
 import UserRoute from "@/components/UserRoute/UserRoute";
 import Visitor from "@/components/Visitor";
 import { BACKEND_BASE_URL, TRUST_CATAGORY_OPTIONS } from "@/consts";
-import { FundRequirement, TrustData } from "@/types/types";
+import { FundRequirement } from "@/types/types";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 
@@ -27,9 +27,7 @@ const Dashboard = () => {
         "Content-Type": "application/json",
       },
     })
-      .then((res: any) => {
-        return res.json();
-      })
+      .then((res) => res.json())
       .then((data) => {
         console.log(data);
         setFundRequirement(data.fullTrust);

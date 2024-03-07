@@ -7,7 +7,6 @@ import TransactionTrustsModel from "@/components/TransactionTrustsModel";
 import Spinner from "@/components/Spinner";
 import { useRouter } from "next/router";
 import NoData from "@/components/NoData";
-import { TrustData } from "@/types/types";
 
 const ManageTransaction = () => {
   const access_token = Cookies.get("access_token");
@@ -46,7 +45,7 @@ const ManageTransaction = () => {
       }
     };
 
-    fetchData(); // Call the function to fetch data
+    fetchData();
   }, [access_token]);
 
   const formatAmount = (amount: any) => {

@@ -21,7 +21,6 @@ import {
   getAdditionalUserInfo,
   signInWithPopup,
 } from "firebase/auth";
-import BlockedTrustIcon from "@/icons/BlockedTrustIcon";
 import TrustNotLoginPopup from "../TrustNotLoginPopup.tsx";
 
 const initialValue: {
@@ -53,8 +52,6 @@ const LogIn = () => {
   const { isAuthenticated, user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [reason, setReason] = useState<"blocked" | "pending">();
-
-  const { data: session } = useSession();
 
   const errorToast = (errorMessage: string) => toast.error(errorMessage);
   const successToast = (successMessage: string) =>
@@ -88,25 +85,20 @@ const LogIn = () => {
           },
           body: JSON.stringify(values),
         })
-          .then((res) => {
-            if (res && res.ok) {
-              return res.json();
-            }
-          })
+          .then((res) => res.json())
           .then((data) => {
             if (data && data?.token) {
-              // Cookies.set("access_token", data?.token);
               Cookies.set("role", data?.user?.role);
               if (data?.user?.role === "admin") {
                 Cookies.set("access_token", data?.token);
-
                 successToast(
                   `Welcome ${data.user.firstName} ${data.user.lastName}`
                 );
                 setTimeout(() => {
                   router.push("/admin");
                 }, 3000);
-              } else if (data?.user?.role === "user") {
+              }
+              if (data?.user?.role === "user") {
                 Cookies.set("access_token", data?.token);
                 successToast(
                   `Welcome ${data.user.firstName} ${data.user.lastName}`
@@ -114,7 +106,8 @@ const LogIn = () => {
                 setTimeout(() => {
                   router.push("/dashboard");
                 }, 3000);
-              } else {
+              }
+              if (data?.trust?.role === "trust") {
                 Cookies.set("role", data?.trust?.role);
                 if (data && data.trust.isVerified && !data.trust.isBlocked) {
                   Cookies.set("access_token", data?.token);
@@ -131,7 +124,11 @@ const LogIn = () => {
                     setIsOpen(true);
                   }
                 }
+              } else {
+                errorToast("user not found");
               }
+            } else {
+              errorToast("email not found");
             }
           })
           .catch((error) => {

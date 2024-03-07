@@ -1,13 +1,10 @@
 import Logo from "@/icons/Logo";
-import Visitor from "../Visitor";
 import TrustProfile from "../TrustProfile";
 import Link from "next/link";
 import HamburgerIcon from "@/icons/HamburgurIcon";
 import React, { ReactNode, useState } from "react";
-import CloseIcon from "@/icons/CloseIcon";
 import CloseHamburgerIcon from "@/icons/CloseHamburgerIcon";
 import HomeIcon from "@/icons/HomeIcon";
-import ProfileIcon from "@/icons/ProfileIcon";
 import RequestFundIcon from "@/icons/RequestFundIcon";
 import ContactUsIcon from "@/icons/ContactUsIcon";
 import AboutUsIcon from "@/icons/AboutUsIcon";

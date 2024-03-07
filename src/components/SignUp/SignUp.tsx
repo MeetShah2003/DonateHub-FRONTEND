@@ -138,13 +138,8 @@ const SignUp = () => {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(data),
         })
-          .then((res) => {
-            if (res) {
-              return res.json();
-            }
-          })
+          .then((res) => res.json())
           .then((data) => {
-            console.log("apiData", data);
             if (data && data.message == "user already exist") {
               errorToast(`${data.user.email} already in use`);
               setTimeout(() => {
@@ -158,7 +153,6 @@ const SignUp = () => {
               }, 3000);
             } else {
               successToast("Otp Sent Successfully");
-              successToast("Account created successfully");
               setTimeout(() => {
                 router.push("/signup/otpverification");
               }, 3000);

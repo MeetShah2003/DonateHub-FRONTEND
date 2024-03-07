@@ -6,7 +6,6 @@ interface TransactionInfoProps {
   paymentId: string;
   userImage: string;
   transactionDate: string;
-  // Add more details as needed
 }
 
 const TransactionInfo: React.FC<TransactionInfoProps> = ({

@@ -5,7 +5,6 @@ import { TrustData } from "@/types/types";
 import Cookies from "js-cookie";
 import { useState, useEffect, ChangeEvent } from "react";
 import Image from "next/image";
-import { Fragment } from "react";
 import { useFormik } from "formik";
 import DropDownArrow from "@/icons/DropDownArrow";
 import * as Yup from "yup";
@@ -77,7 +76,6 @@ const RequestFunds = () => {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      console.log("values", values);
       setLoading(true);
       fetch(`${BACKEND_BASE_URL}/api/askForFund`, {
         method: "POST",

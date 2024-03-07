@@ -16,8 +16,6 @@ import Spinner from "@/components/Spinner";
 import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
 import { storage } from "@/firebase";
 import { v4 } from "uuid";
-import UserRoute from "@/components/UserRoute/UserRoute";
-import Visitor from "@/components/Visitor";
 import TrustRoute from "@/components/TrustRoute/TrustRoute";
 import { TrustData } from "@/types/types";
 import TrustNavbar from "@/components/TrustNavbar";
@@ -122,7 +120,6 @@ const ProfileTrust = () => {
     initialValues: initialValue,
     validationSchema: trustDetailSchema,
     onSubmit: async (formValues) => {
-      console.log(values);
       getUpdatedTrustProfile(formValues);
     },
   });

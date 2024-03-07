@@ -12,7 +12,6 @@ import { useAuth } from "@/context/auth";
 import Logo from "@/icons/Logo";
 import UserProfile from "../UserProfile";
 import DropDownArrow from "@/icons/DropDownArrow";
-import ManageTrustIcon from "@/icons/ManageTrustIcon";
 import TrustDonationIcon from "@/icons/TrustDonationIcon";
 import RequestFundIcon from "@/icons/RequestFundIcon";
 

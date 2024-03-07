@@ -56,7 +56,6 @@ const AddDisaster = () => {
     title: "",
     disasterImage: "",
   };
-  console.log();
   const {
     handleSubmit,
     handleBlur,
@@ -83,9 +82,8 @@ const AddDisaster = () => {
           }
         })
         .then((data) => {
-          console.log(data);
           if (data) {
-            successToast("Disaster Add Successfully");
+            successToast("Disaster Added Successfully");
             push("/trust");
           }
         })

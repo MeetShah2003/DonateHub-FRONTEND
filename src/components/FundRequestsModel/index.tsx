@@ -1,15 +1,10 @@
-// FundRequestsModel.jsx
-
 import { RequestFunds } from "@/types/types";
 import React from "react";
 import { useRouter } from "next/router";
-import firebase from "firebase/compat/app";
 
 const FundRequestsModel: React.FC<{ data: RequestFunds }> = ({ data }) => {
   const { push } = useRouter();
   const { title, description, _id } = data;
-
-  
 
   return (
     <div className="flex w-full flex-col md:flex-row gap-3 bg-white border shadow-md rounded-lg p-6 mb-4">

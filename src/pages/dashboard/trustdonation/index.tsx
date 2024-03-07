@@ -1,7 +1,6 @@
 import { getAuthenticatedRouteCheck } from "@/authguard/authguard";
 import NoData from "@/components/NoData";
 import TrustDonationModel from "@/components/TrustDonationModel";
-import TrustModel from "@/components/TrustModel";
 import UserRoute from "@/components/UserRoute/UserRoute";
 import Visitor from "@/components/Visitor";
 import { BACKEND_BASE_URL, TRUST_CATAGORY_OPTIONS } from "@/consts";
@@ -24,11 +23,8 @@ const TrustDonation = () => {
         "Content-Type": "application/json",
       },
     })
-      .then((res: any) => {
-        return res.json();
-      })
+      .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         setTrusts(data.verifiedTrusts);
       });
   };

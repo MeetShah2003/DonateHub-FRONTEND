@@ -2,11 +2,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
-import {
-  FundRequirement,
-  SingleFundRequirement,
-  TrustData,
-} from "@/types/types";
+import { SingleFundRequirement } from "@/types/types";
 import { BACKEND_BASE_URL } from "@/consts";
 import Spinner from "@/components/Spinner";
 import UserRoute from "@/components/UserRoute/UserRoute";
@@ -100,7 +96,6 @@ const TrustDetails = () => {
         });
         if (res.ok) {
           const data = await res.json();
-          console.log(data);
           setSingleData(data.singleTrust);
         }
       } catch (error) {

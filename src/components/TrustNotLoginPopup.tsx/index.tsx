@@ -1,6 +1,5 @@
 import { Dispatch, SetStateAction, useState } from "react";
 import BlockedTrustIcon from "@/icons/BlockedTrustIcon";
-import Link from "next/link";
 import PendingStatusIcon from "@/icons/PendingStatusIcon";
 
 const TrustNotLoginPopup: React.FC<{

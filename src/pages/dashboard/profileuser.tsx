@@ -100,7 +100,6 @@ const ProfileUser = () => {
     },
     validationSchema: profileSchema,
     onSubmit: async (formValues) => {
-      console.log("clicked");
       getUpdateAdminProfile(formValues);
     },
   });

@@ -5,8 +5,6 @@ import { useAuth } from "../../context/auth";
 const ProtectedRoute = (Component: any, allowedRoles: any) => {
   const ProtectedRouteWrapper = (props: any) => {
     const { isAuthenticated, user } = useAuth();
-    console.log("trustuser", user);
-
     const router = useRouter();
 
     useEffect(() => {

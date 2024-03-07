@@ -48,9 +48,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         "Content-Type": "application/json",
       },
     })
-      .then((res) => {
-        return res.json();
-      })
+      .then((res) => res.json())
       .then((data: any) => {
         if (data && data.userAuth) {
           setAuthState({

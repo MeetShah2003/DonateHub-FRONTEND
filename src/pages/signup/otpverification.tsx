@@ -6,7 +6,6 @@ import * as Yup from "yup";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import { BACKEND_BASE_URL } from "@/consts";
-import { useAuth } from "@/context/auth";
 import Spinner from "@/components/Spinner";
 import Cookies from "js-cookie";
 
@@ -20,10 +19,7 @@ const OtpVerification = () => {
   const router = useRouter();
 
   const cookieSignUpData = Cookies.get("signup-data");
-
-  const sigUpData = JSON.parse(cookieSignUpData);
-
-  console.log(sigUpData);
+  const sigUpData = cookieSignUpData ? JSON.parse(cookieSignUpData) : null;
 
   const validationSchema = Yup.object().shape({
     otp: Yup.string()
@@ -42,8 +38,6 @@ const OtpVerification = () => {
       setSubmitted(true);
       const finalSignUpData = { otp: values.otp, ...sigUpData };
 
-      console.log(finalSignUpData);
-
       fetch(`${BACKEND_BASE_URL}/api/OTPV`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -51,7 +45,6 @@ const OtpVerification = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
           if (data.message === "Account created sucessfully") {
             successToast("Otp verified");
             successToast("Account created successfully");

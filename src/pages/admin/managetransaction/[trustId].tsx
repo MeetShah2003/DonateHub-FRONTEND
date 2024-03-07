@@ -13,7 +13,6 @@ const SingleTrustTransaction = () => {
   const [totalCollection, setTotalCollection] = useState();
   const [totalSupporter, setTotalSupporter] = useState();
   const access_token = Cookies.get("access_token");
-  // router.query.trustId
 
   const getAllTransaction = (id: string) => {
     fetch(`${BACKEND_BASE_URL}/admin/singleTrustTransaction/${id}`, {

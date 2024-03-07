@@ -1,19 +1,14 @@
-import UserRoute from "@/components/UserRoute/UserRoute";
-import Visitor from "@/components/Visitor";
 import { BACKEND_BASE_URL } from "@/consts";
 import Cookies from "js-cookie";
-import { useState, useEffect, ChangeEvent } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
-import { Fragment } from "react";
 import { useFormik } from "formik";
-import DropDownArrow from "@/icons/DropDownArrow";
 import { toast } from "react-toastify";
 import Spinner from "@/components/Spinner";
 import { useRouter } from "next/router";
 import TrustNavbar from "../../../components/TrustNavbar";
 import TrustRoute from "@/components/TrustRoute/TrustRoute";
 import { RequestFunds } from "@/types/types";
-import firebase from "firebase/compat/app";
 import { getDownloadURL, ref } from "firebase/storage";
 import { storage } from "@/firebase";
 
@@ -42,7 +37,6 @@ const RequestFund = () => {
         }
       })
       .then((data) => {
-        console.log(data.singleFundReq);
         setSingleRequestData(data.singleFundReq);
       })
       .finally(() => {
@@ -66,7 +60,6 @@ const RequestFund = () => {
       })
       .then((data) => {
         if (data) {
-          console.log(data);
           successToast("Fund Request Accepted");
           push(`/trust/fundrequest`);
         }
@@ -92,7 +85,6 @@ const RequestFund = () => {
       })
       .then((data) => {
         if (data) {
-          console.log(data);
           successToast("Fund Request Rejected");
           push(`/trust/fundrequest`);
         }
