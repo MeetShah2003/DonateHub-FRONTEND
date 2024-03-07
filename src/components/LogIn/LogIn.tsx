@@ -11,7 +11,6 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import { getAuthenticatedRouteCheck } from "@/authguard/authguard";
-import { useSession, signIn } from "next-auth/react";
 import { useAuth } from "@/context/auth";
 import { BACKEND_BASE_URL } from "@/consts";
 import Spinner from "../Spinner";
@@ -124,8 +123,6 @@ const LogIn = () => {
                     setIsOpen(true);
                   }
                 }
-              } else {
-                errorToast("user not found");
               }
             } else {
               errorToast("email not found");

@@ -92,6 +92,9 @@ const RequestFunds = () => {
             push(`/dashboard`);
           }
         })
+        .then((data) => {
+          console.log("Request Data===>>", data);
+        })
         .catch(() => {
           errorToast("Fund Request Not Send");
         })
