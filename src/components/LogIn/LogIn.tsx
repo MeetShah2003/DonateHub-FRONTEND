@@ -174,6 +174,7 @@ const LogIn = () => {
     })
       .then((res) => res.json())
       .then((data: any) => {
+        Cookies.set("data", data);
         Cookies.set("access_token", data?.token);
         Cookies.set("role", data?.user?.role);
         if (data?.user?.role === "admin") {
