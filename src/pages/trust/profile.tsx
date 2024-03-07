@@ -120,7 +120,8 @@ const ProfileTrust = () => {
     initialValues: initialValue,
     validationSchema: trustDetailSchema,
     onSubmit: async (formValues) => {
-      getUpdatedTrustProfile(formValues);
+      console.log(formValues);
+      // getUpdatedTrustProfile(formValues);
     },
   });
 
@@ -164,255 +165,246 @@ const ProfileTrust = () => {
   return (
     <div>
       <div>
-        <TrustNavbar />
+        <TrustNavbar title="Edit Profile">
+          {loading && <Spinner />}
+          <form
+            className="mx-auto w-full max-w-md gap-10"
+            onSubmit={handleSubmit}
+          >
+            <div className="flex items-center justify-center relative bottom-6">
+              <div className="border-4 h-32 w-32 p-1 border-primary rounded-full overflow-hidden">
+                <Image
+                  className="rounded-full h-full w-full object-contain"
+                  src={user.userlogo || values.trustlogo}
+                  alt="trustlogo"
+                  width={128}
+                  height={128}
+                />
+              </div>
+              <input
+                type="file"
+                id="trustlogo"
+                name="trustlogo"
+                accept="image/*"
+                className="hidden"
+                onChange={handleOnChange}
+              />
+              <div className="absolute left-1/2 bottom-0 translate-x-1/2">
+                <label htmlFor="trustlogo" className="cursor-pointer">
+                  <CameraIcon />
+                </label>
+              </div>
+            </div>
+
+            <div className="flex w-full flex-col border-2 px-2 py-1 rounded-t-lg focus-within:border-primary">
+              <label className="pb-1 text-sm font-medium">Trust Name</label>
+              <input
+                id="trustName"
+                name="trustName"
+                type="text"
+                className="outline-none tracking-wider"
+                placeholder="John"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.trustName || user?.trustName}
+              />
+              {touched.trustName && errors.trustName && (
+                <span className="text-sm text-red-600">{errors.trustName}</span>
+              )}
+            </div>
+
+            <div
+              className={`flex flex-col border-2 border-t-transparent px-2 py-1 ${
+                isDisabled ? "bg-gray-100" : ""
+              } focus-within:border-primary`}
+            >
+              <label className="pb-1 text-sm font-medium">Email</label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                disabled={isDisabled}
+                value={values.email || user.email}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                className="outline-none tracking-wider"
+                placeholder="johndoe@gmail.com"
+              />
+              {touched.email && errors.email && (
+                <span className="text-sm text-red-600">{errors.email}</span>
+              )}
+            </div>
+
+            <div className="flex flex-col border-2 px-2 py-1 border-t-transparent focus-within:border-primary">
+              <label className="pb-1 text-sm font-medium">About Trust</label>
+              <textarea
+                id="description"
+                name="description"
+                className="outline-none tracking-wider resize-none"
+                rows={4}
+                cols={30}
+                placeholder="Type Here About Trust"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.description || user.description}
+              />
+              {touched.description && errors.description && (
+                <span className="text-sm text-red-600">
+                  {errors.description}
+                </span>
+              )}
+            </div>
+
+            <div className="flex flex-col border-2 px-2 py-1 border-t-transparent focus-within:border-primary">
+              <label className="pb-1 text-sm font-medium">Category</label>
+              <select
+                className="outline-none tracking-wider"
+                id="category"
+                name="category"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.category || user?.category}
+              >
+                {TRUST_CATAGORY_OPTIONS?.map(({ option }, index) => (
+                  <option key={index} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="flex flex-col border-2 border-t-transparent px-2 py-1 rounded-b-lg focus-within:border-primary">
+              <label className="pb-1 text-sm font-medium">Mobile No</label>
+              <input
+                id="contactNo"
+                name="contactNo"
+                type="contactNo"
+                value={values.contactNo || user.contactNo}
+                onChange={handleChange}
+                maxLength={10}
+                onBlur={handleBlur}
+                className="outline-none tracking-wider"
+                placeholder="+91 9878588845"
+              />
+              {touched.contactNo && errors.contactNo && (
+                <span className="text-sm text-red-600">{errors.contactNo}</span>
+              )}
+            </div>
+
+            <div className="flex flex-col border-t-transparent border-2 px-2 py-1 focus-within:border-primary">
+              <label className="pb-1 text-sm font-medium">Creation Date</label>
+              <input
+                id="creationDate"
+                name="creationDate"
+                type="date"
+                className="outline-none select-none tracking-wider"
+                placeholder="John Doe"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                max={new Date().toISOString().split("T")[0]}
+                value={values.creationDate || user?.creationDate}
+              />
+            </div>
+            <div className="flex flex-col border-t-transparent border-2 px-2 py-1 focus-within:border-primary">
+              <label className="pb-1 text-sm font-medium">Founder</label>
+              <input
+                id="founder"
+                name="founder"
+                type="text"
+                className="outline-none tracking-wider"
+                placeholder="John Doe"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.founder || user?.founder}
+              />
+              {touched.founder && errors.founder && (
+                <span className="text-sm text-red-600">{errors.founder}</span>
+              )}
+            </div>
+
+            <div className="flex flex-col border-2 px-2 py-1 border-t-transparent focus-within:border-primary">
+              <label className="pb-1 text-sm font-medium">Address</label>
+              <input
+                id="address"
+                name="address"
+                type="text"
+                className="outline-none tracking-wider"
+                placeholder="A-50 , Dollar Colony"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.address || user?.address}
+              />
+              {touched.address && errors.address && (
+                <span className="text-sm text-red-600">{errors.address}</span>
+              )}
+            </div>
+            <div className="flex flex-col border-2 px-2 py-1 border-t-transparent focus-within:border-primary">
+              <label className="pb-1 text-sm font-medium">State</label>
+              <select
+                className="outline-none tracking-wider"
+                id="state"
+                name="state"
+                onChange={(e) => handleStateChange(e.target.value)}
+                onBlur={handleBlur}
+                value={values.state || user?.state}
+              >
+                {CITY_AND_STATE?.map(({ state }, index) => (
+                  <option key={index} value={state.value}>
+                    {state.label}
+                  </option>
+                ))}
+                {touched.state && errors.state && (
+                  <span className="text-sm text-red-600">{errors.state}</span>
+                )}
+              </select>
+            </div>
+            <div className="flex flex-col border-2 px-2 py-1 border-t-transparent focus-within:border-primary">
+              <label className="pb-1 text-sm font-medium">City</label>
+              <select
+                className="outline-none tracking-wider"
+                id="city"
+                name="city"
+                onChange={handleChange}
+                value={values.city || user?.city}
+                onBlur={handleBlur}
+              >
+                {cities.map(({ label, value }, index) => (
+                  <option key={index} value={value}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="flex flex-col border-t-transparent rounded-b-lg border-2 px-2 py-1 focus-within:border-primary">
+              <label className="pb-1 text-sm font-medium">Pincode</label>
+              <input
+                id="pincode"
+                name="pincode"
+                type="text"
+                className="outline-none tracking-wider"
+                placeholder="395004"
+                maxLength={6}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.pincode || user?.pincode}
+              />
+              {touched.pincode && errors.pincode && (
+                <span className="text-sm text-red-600">{errors.pincode}</span>
+              )}
+            </div>
+
+            <div className="flex flex-col border-2 mt-5 bg-primary shadow-sm rounded-lg px-2 py-2">
+              <button
+                type="submit"
+                name="submit"
+                className="outline-none text-white font-inter font-medium"
+              >
+                Save Changes
+              </button>
+            </div>
+          </form>
+        </TrustNavbar>
       </div>
-      {loading && <Spinner />}
-      <form
-        className="mx-auto w-full max-w-md gap-10 py-24"
-        onSubmit={handleSubmit}
-      >
-        <div className="flex items-center justify-center relative bottom-6">
-          <div className="border-4 h-32 w-32 p-1 border-primary rounded-full overflow-hidden">
-            <Image
-              className="rounded-full h-full w-full object-contain"
-              src={values.trustlogo || user.trustlogo}
-              alt="trustlogo"
-              width={128}
-              height={128}
-            />
-          </div>
-          <input
-            type="file"
-            id="trustlogo"
-            name="trustlogo"
-            accept="image/*"
-            className="hidden"
-            onChange={handleOnChange}
-          />
-          <div className="absolute  left-1/2 bottom-0 translate-x-1/2">
-            <label htmlFor="trustlogo" className="cursor-pointer">
-              <CameraIcon />
-            </label>
-          </div>
-        </div>
-
-        <div className="flex w-full">
-          <div className="flex w-full flex-col border-2 px-2 py-1 rounded-t-lg focus-within:border-primary">
-            <label className="pb-1 text-sm font-medium">Trust Name</label>
-            <input
-              id="trustName"
-              name="trustName"
-              type="text"
-              className="outline-none tracking-wider"
-              placeholder="The Education Trust"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.trustName || ""}
-            />
-            {touched.trustName && errors.trustName && (
-              <span className="text-sm text-red-600">{errors.trustName}</span>
-            )}
-          </div>
-        </div>
-
-        <div className="flex flex-col border-2 border-t-transparent px-2 py-1 focus-within:border-primary">
-          <label className="pb-1 text-sm font-medium">Email</label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            className="outline-none tracking-wider"
-            placeholder="Email"
-            onChange={handleChange}
-            onBlur={handleBlur}
-            value={values.email || ""}
-          />
-          {touched.email && errors.email && (
-            <span className="text-sm text-red-600">{errors.email}</span>
-          )}
-        </div>
-
-        <div className="flex flex-col border-2 border-t-transparent px-2 py-1 focus-within:border-primary">
-          <label className="pb-1 text-sm font-medium">Founder</label>
-          <input
-            id="founder"
-            name="founder"
-            type="text"
-            className="outline-none tracking-wider"
-            placeholder="Founder"
-            onChange={handleChange}
-            onBlur={handleBlur}
-            value={values.founder || ""}
-          />
-          {touched.founder && errors.founder && (
-            <span className="text-sm text-red-600">{errors?.founder}</span>
-          )}
-        </div>
-
-        <div className="flex flex-col border-2 border-t-transparent px-2 py-1 focus-within:border-primary">
-          <label className="pb-1 text-sm font-medium">Creation Date</label>
-          <input
-            id="creationDate"
-            name="creationDate"
-            type="date"
-            className="outline-none tracking-wider"
-            onChange={handleChange}
-            onBlur={handleBlur}
-            value={
-              values.creationDate
-                ? new Date(values.creationDate).toISOString().split("T")[0]
-                : ""
-            }
-          />
-          {touched.creationDate &&
-            errors.creationDate &&
-            typeof errors.creationDate === "string" && (
-              <span className="text-sm text-red-600">
-                {errors.creationDate}
-              </span>
-            )}
-        </div>
-
-        <div className="flex flex-col border-2 px-2 py-1 border-t-transparent focus-within:border-primary">
-          <label className="pb-1 text-sm font-medium">Category</label>
-          <select
-            className="outline-none tracking-wider"
-            id="category"
-            name="category"
-            onChange={handleChange}
-            onBlur={handleBlur}
-            value={values.category}
-          >
-            {TRUST_CATAGORY_OPTIONS?.map(({ option, id }) => (
-              <option
-                key={id}
-                value={option.value}
-                selected={option.value === values.category}
-              >
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="flex flex-col border-2 border-t-transparent px-2 py-1 focus-within:border-primary">
-          <label className="pb-1 text-sm font-medium">Contact Number</label>
-          <input
-            id="contactNo"
-            name="contactNo"
-            type="text"
-            className="outline-none tracking-wider"
-            placeholder="Contact Number"
-            onChange={handleChange}
-            onBlur={handleBlur}
-            value={values.contactNo || ""}
-          />
-          {touched.contactNo && errors.contactNo && (
-            <span className="text-sm text-red-600">{errors.contactNo}</span>
-          )}
-        </div>
-
-        <div className="flex flex-col border-2 border-t-transparent px-2 py-1 focus-within:border-primary">
-          <label className="pb-1 text-sm font-medium">Description</label>
-          <input
-            id="description"
-            name="description"
-            type="text"
-            className="outline-none tracking-wider"
-            placeholder="Description"
-            onChange={handleChange}
-            onBlur={handleBlur}
-            value={values.description || ""}
-          />
-          {touched.description && errors.description && (
-            <span className="text-sm text-red-600">{errors.description}</span>
-          )}
-        </div>
-
-        <div className="flex flex-col border-2 border-t-transparent px-2 py-1 focus-within:border-primary">
-          <label className="pb-1 text-sm font-medium">Address</label>
-          <input
-            id="address"
-            name="address"
-            type="text"
-            className="outline-none tracking-wider"
-            placeholder="A-50 , Dollar Colony"
-            onChange={handleChange}
-            onBlur={handleBlur}
-            value={values.address}
-          />
-          {touched.address && errors.address && (
-            <span className="text-sm text-red-600">{errors.address}</span>
-          )}
-        </div>
-        <div className="flex flex-col border-2 px-2 py-1 border-t-transparent focus-within:border-primary">
-          <label className="pb-1 text-sm font-medium">State</label>
-          <select
-            className="outline-none tracking-wider"
-            id="state"
-            name="state"
-            onChange={(e) => handleStateChange(e.target.value)}
-            onBlur={handleBlur}
-            value={values.state}
-          >
-            {CITY_AND_STATE?.map(({ state }) => (
-              <option
-                key={state.value}
-                value={state.value}
-                selected={state.value === values.state}
-              >
-                {state.label}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="flex flex-col border-2 px-2 py-1 border-t-transparent focus-within:border-primary">
-          <label className="pb-1 text-sm font-medium">City</label>
-          <select
-            className="outline-none tracking-wider"
-            id="city"
-            name="city"
-            onChange={handleChange}
-            value={values.city}
-            onBlur={handleBlur}
-          >
-            {cities.map(({ label, value }) => (
-              <option key={value} value={value}>
-                {label}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="flex flex-col border-t-transparent rounded-b-lg border-2 px-2 py-1 focus-within:border-primary">
-          <label className="pb-1 text-sm font-medium">Pincode</label>
-          <input
-            id="pincode"
-            name="pincode"
-            type="text"
-            className="outline-none tracking-wider"
-            placeholder="395004"
-            maxLength={6}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            value={values.pincode}
-          />
-          {touched.pincode && errors.pincode && (
-            <span className="text-sm text-red-600">{errors.pincode}</span>
-          )}
-        </div>
-
-        <div className="flex flex-col border-2 mt-5 bg-primary shadow-sm rounded-lg px-2 py-2">
-          <button
-            type="submit"
-            id="submit"
-            name="submit"
-            className="outline-none text-white font-inter font-medium"
-          >
-            Save Changes
-          </button>
-        </div>
-      </form>
     </div>
   );
 };

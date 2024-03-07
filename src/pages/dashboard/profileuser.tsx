@@ -129,6 +129,9 @@ const ProfileUser = () => {
         <Visitor />
       </div>
       {loading && <Spinner />}
+      <h1 className="font-inter p-5  font-semibold text-steelGray text-xl sm:text-2xl">
+        Profile
+      </h1>
       <form
         className="mx-auto w-full max-w-md gap-10 py-24"
         onSubmit={handleSubmit}
