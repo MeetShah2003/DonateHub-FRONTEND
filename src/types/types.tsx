@@ -97,9 +97,29 @@ export type RequestFunds = {
 };
 
 export type ContactUsType = {
+  _id?: string;
+  uId?: UserData;
   name: string;
   email: string;
   contactNo: number;
   subject: string;
   message: string;
+};
+
+export type ReviewType = {
+  _id: string;
+  uId: UserData;
+  tId: string;
+  reviewText: string;
+  createdAt: Date;
+  likes: number;
+  disLikes: number;
+  helpfullCount: number;
+  helpfullUsers: [];
+  notHelpfullCount: number;
+  notHelpfullUsers: [];
+  isVerified: boolean;
+  __v: 7;
+  disLikedBy: string[];
+  likedBy: string[];
 };

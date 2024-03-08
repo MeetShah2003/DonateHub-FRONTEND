@@ -386,7 +386,7 @@ const TrustDetails = () => {
               <div className="w-full">
                 <h1 className="text-lg font-semibold mb-2">Reviews</h1>
               </div>
-              <ReviewSection />
+              <ReviewSection trustId={query.id as string} />
             </div>
           </div>
         </div>
