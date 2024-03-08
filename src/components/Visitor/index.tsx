@@ -49,7 +49,7 @@ const NAV_MENUES: {
   {
     id: 3,
     menu: "Contact Us",
-    path: "/contactus",
+    path: "/dashboard/contactus",
     icon: <ContactUsIcon />,
   },
   {

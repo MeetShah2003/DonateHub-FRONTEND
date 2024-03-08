@@ -29,8 +29,8 @@ export type TrustData = {
   isVerified?: boolean;
   TotalAmount?: number;
   manualDonation?: number;
-  naturalSupporter: string[];
-  nUniqueSupporters: number;
+  naturalSupporter?: string[];
+  nUniqueSupporters?: number;
 };
 
 export type FundRequirement = {
@@ -91,4 +91,12 @@ export type RequestFunds = {
   isAccepted: boolean;
   isRejected: boolean;
   __v?: number;
+};
+
+export type ContactUsType = {
+  name: string;
+  email: string;
+  contactNo: number;
+  subject: string;
+  message: string;
 };

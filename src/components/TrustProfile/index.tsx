@@ -38,7 +38,7 @@ const TrustProfile = () => {
           />
         </button>
         <div className="flex flex-col">
-          <h1 className="font-semibold">{user.trustName}</h1>
+          <h1 className="font-semibold">{user?.trustName}</h1>
           <p className="font-normal text-sm text-gray-400">{user?.email}</p>
         </div>
       </div>

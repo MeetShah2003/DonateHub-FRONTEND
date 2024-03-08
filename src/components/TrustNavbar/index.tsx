@@ -10,11 +10,17 @@ import ContactUsIcon from "@/icons/ContactUsIcon";
 import AboutUsIcon from "@/icons/AboutUsIcon";
 import ProductsIcon from "@/icons/ProductsIcon";
 import PlusIcon from "@/icons/PlusIcon";
+import ProfileIcon from "@/icons/ProfileIcon"; // Add your profile icon component here
 
 const NAV_MENUES: { id: number; menu: string; path: string }[] = [
   { id: 1, menu: "Home", path: "/trust" },
-  { id: 2, menu: "Contact Us", path: "/" },
-  { id: 3, menu: "About Us", path: "/" },
+  { id: 2, menu: "Contact Us", path: "/trust/contactus" },
+  { id: 3, menu: "About Us", path: "/trust/aboutus" },
+  {
+    id: 4,
+    menu: "Profile",
+    path: "/trust/profile",
+  },
 ];
 
 const SIDE_BAR_MENUES: {
@@ -58,14 +64,20 @@ const SIDE_BAR_MENUES: {
   {
     id: 3,
     menu: "Contact Us",
-    path: "/contactus",
+    path: "/trust/contactus",
     icon: <ContactUsIcon />,
   },
   {
     id: 4,
     menu: "About Us",
-    path: "/aboutus",
+    path: "/trust/aboutus",
     icon: <AboutUsIcon />,
+  },
+  {
+    id: 5,
+    menu: "Profile",
+    path: "/trust/profile",
+    icon: <ProfileIcon color={"#000000"} />,
   },
 ];
 
@@ -77,7 +89,7 @@ const TrustNavbar: React.FC<{ children: ReactNode; title: string }> = ({
   const [isChildMenu, setIsChildMenu] = useState(false);
   return (
     <div>
-      <nav className="border-b-2 py-1 shadow-sm sticky top-0 z-10 bg-white">
+      <nav className="border-b-2 py-1 shadow-sm fixed w-full top-0 z-10 bg-white">
         <div className="max-w-full w-90% mx-auto flex items-center justify-between">
           <div
             onClick={() => {
@@ -94,10 +106,10 @@ const TrustNavbar: React.FC<{ children: ReactNode; title: string }> = ({
             <ul className="hidden md:flex gap-7">
               {NAV_MENUES &&
                 NAV_MENUES.length &&
-                NAV_MENUES.map(({ id, menu, path }) => {
+                NAV_MENUES.map(({ id, menu, path }, index) => {
                   return (
                     <li
-                      key={id}
+                      key={index}
                       className="text-base text-gray-700 font-semibold relative"
                     >
                       <Link href={path}>{menu}</Link>
@@ -111,22 +123,25 @@ const TrustNavbar: React.FC<{ children: ReactNode; title: string }> = ({
           </div>
         </div>
       </nav>
-      <div className="relative flex w-full md:hidden">
+      {/* Sidebar for mobile */}
+      <div className=" flex  w-full md:hidden">
+        {/* Hamburger menu */}
         <div
-          className={`absolute ${
+          className={`fixed ${
             isHamburgerOpen
               ? "transition-all ease-in-out duration-300 left-0"
               : "transition-all ease-in-out duration-300 -left-[2000px] md:left-0"
-          } bg-white border border-t-transparent rounded-sm w-2/4 h-screen`}
+          } bg-white top-[70px] z-20 border border-t-transparent rounded-sm w-2/4 h-screen overflow-y-auto`}
         >
           <ul>
+            {/* Sidebar menu items */}
             {SIDE_BAR_MENUES &&
               SIDE_BAR_MENUES.length &&
               SIDE_BAR_MENUES.map(
-                ({ id, menu, path, icon, dropdownOptions }) => {
+                ({ id, menu, path, icon, dropdownOptions }, index) => {
                   return (
                     <li
-                      key={id}
+                      key={index}
                       onClick={() => {
                         if (dropdownOptions) {
                           setIsChildMenu(!isChildMenu);
@@ -138,6 +153,7 @@ const TrustNavbar: React.FC<{ children: ReactNode; title: string }> = ({
                         <div>{icon}</div>
                         <Link href={path}>{menu}</Link>
                       </div>
+                      {/* Dropdown options */}
                       <ul
                         className={`${
                           isChildMenu ? "flex" : "hidden"
@@ -145,17 +161,19 @@ const TrustNavbar: React.FC<{ children: ReactNode; title: string }> = ({
                       >
                         {dropdownOptions &&
                           dropdownOptions.length &&
-                          dropdownOptions.map(({ icon, path, menuTitle }) => {
-                            return (
-                              <li
-                                key={id}
-                                className="text-base flex items-center gap-3 py-3 px-5 text-gray-700 font-semibold relative"
-                              >
-                                <div>{icon}</div>
-                                <Link href={path}>{menuTitle}</Link>
-                              </li>
-                            );
-                          })}
+                          dropdownOptions.map(
+                            ({ icon, path, menuTitle }, index) => {
+                              return (
+                                <li
+                                  key={index}
+                                  className="text-base flex items-center gap-3 py-3 px-5 text-gray-700 font-semibold relative"
+                                >
+                                  <div>{icon}</div>
+                                  <Link href={path}>{menuTitle}</Link>
+                                </li>
+                              );
+                            }
+                          )}
                       </ul>
                     </li>
                   );
@@ -163,6 +181,7 @@ const TrustNavbar: React.FC<{ children: ReactNode; title: string }> = ({
               )}
           </ul>
         </div>
+        {/* Main content */}
         <div className="w-full p-5">
           <p className="font-inter pb-5 font-semibold text-steelGray text-xl sm:text-2xl">
             {title}
@@ -170,19 +189,21 @@ const TrustNavbar: React.FC<{ children: ReactNode; title: string }> = ({
           {children}
         </div>
       </div>
+      {/* Sidebar for desktop */}
       <div className="hidden md:flex md:w-full">
         <div className="w-1/4">
           <div
-            className={`fixed bg-white border border-t-transparent rounded-sm h-screen w-1/4 lg:w-1/4`}
+            className={`fixed top-[70px] bg-white border border-t-transparent rounded-sm h-screen w-1/4 lg:w-1/4`}
           >
             <ul>
+              {/* Sidebar menu items */}
               {SIDE_BAR_MENUES &&
                 SIDE_BAR_MENUES.length &&
                 SIDE_BAR_MENUES.map(
-                  ({ id, menu, path, icon, dropdownOptions }) => {
+                  ({ id, menu, path, icon, dropdownOptions }, index) => {
                     return (
                       <li
-                        key={id}
+                        key={index}
                         onClick={() => {
                           if (dropdownOptions) {
                             setIsChildMenu(!isChildMenu);
@@ -194,6 +215,7 @@ const TrustNavbar: React.FC<{ children: ReactNode; title: string }> = ({
                           <div>{icon}</div>
                           <Link href={path}>{menu}</Link>
                         </div>
+                        {/* Dropdown options */}
                         <ul
                           className={`${
                             isChildMenu ? "flex flex-col" : "hidden"
@@ -201,17 +223,19 @@ const TrustNavbar: React.FC<{ children: ReactNode; title: string }> = ({
                         >
                           {dropdownOptions &&
                             dropdownOptions.length &&
-                            dropdownOptions.map(({ icon, path, menuTitle }) => {
-                              return (
-                                <li
-                                  key={id}
-                                  className="text-base flex items-center gap-3 py-3 px-5 text-gray-700 font-semibold relative"
-                                >
-                                  <div>{icon}</div>
-                                  <Link href={path}>{menuTitle}</Link>
-                                </li>
-                              );
-                            })}
+                            dropdownOptions.map(
+                              ({ icon, path, menuTitle }, index) => {
+                                return (
+                                  <li
+                                    key={index}
+                                    className="text-base flex items-center gap-3 py-3 px-5 text-gray-700 font-semibold relative"
+                                  >
+                                    <div>{icon}</div>
+                                    <Link href={path}>{menuTitle}</Link>
+                                  </li>
+                                );
+                              }
+                            )}
                         </ul>
                       </li>
                     );
@@ -220,7 +244,7 @@ const TrustNavbar: React.FC<{ children: ReactNode; title: string }> = ({
             </ul>
           </div>
         </div>
-        <div className="w-3/4 p-5">
+        <div className="w-3/4 mt-16 p-5">
           <p className="font-inter pb-5  font-semibold text-steelGray text-xl sm:text-2xl">
             {title}
           </p>
