@@ -1,5 +1,6 @@
 export type UserData = {
   _id: string;
+  userlogo: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -7,6 +8,8 @@ export type UserData = {
   password: string;
   isBlocked: boolean;
   role: "user";
+  mono: number;
+  createdAt: Date;
 };
 
 export type TrustData = {

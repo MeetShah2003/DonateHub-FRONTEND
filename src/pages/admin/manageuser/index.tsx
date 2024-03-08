@@ -11,6 +11,7 @@ import UnBlockIcon from "@/icons/UnBlockIcon";
 import NoData from "@/components/NoData";
 import AdminRoute from "@/components/AdminRoute";
 import Spinner from "@/components/Spinner";
+import { useRouter } from "next/router";
 
 const ManageUser = () => {
   const itemsPerPage = 10;
@@ -19,6 +20,7 @@ const ManageUser = () => {
   const [loading, setLoading] = useState(false);
   const [allUserData, setAllUserData] = useState<UserData[]>([]);
   const access_token = Cookies.get("access_token");
+  const { push } = useRouter();
 
   const onPageChange = ({ selected }: any) => {
     setCurrentPage(selected);
@@ -145,6 +147,11 @@ const ManageUser = () => {
                         return (
                           <tr
                             className="hover:bg-gray-100 transition"
+                            onClick={() => {
+                              if (_id) {
+                                push(`/admin/manageuser/${_id}`);
+                              }
+                            }}
                             key={index}
                           >
                             <td className="py-4 px-6 border-b">

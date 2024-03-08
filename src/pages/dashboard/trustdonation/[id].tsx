@@ -11,6 +11,7 @@ import * as Yup from "yup";
 import { useAuth } from "@/context/auth";
 import Visitor from "@/components/Visitor";
 import RuppeSymbol from "@/icons/RuppeSymbol";
+import ReviewSection from "@/components/ReviewSection";
 
 const TrustDetails = () => {
   const [singleData, setSingleData] = useState<TrustData>();
@@ -380,6 +381,12 @@ const TrustDetails = () => {
                   </div>
                 </div>
               </div>
+            </div>
+            <div className="flex flex-col w-full p-3 shadow-md rounded-lg gap-5 bg-gray-100">
+              <div className="w-full">
+                <h1 className="text-lg font-semibold mb-2">Reviews</h1>
+              </div>
+              <ReviewSection />
             </div>
           </div>
         </div>

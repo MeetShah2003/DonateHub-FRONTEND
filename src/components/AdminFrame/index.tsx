@@ -11,6 +11,7 @@ import Logo from "@/icons/Logo";
 import { useAuth } from "@/context/auth";
 import TransactionIcon from "@/icons/TransactionIcon";
 import UserProfile from "../UserProfile";
+import CustomerQueryIcon from "@/icons/CustomerQueryIcon";
 
 const ADMIN_MENUS: {
   id: number;
@@ -45,6 +46,12 @@ const ADMIN_MENUS: {
   },
   {
     id: 6,
+    menu: "Customer Query",
+    path: "/admin/customerquery",
+    icon: <CustomerQueryIcon />,
+  },
+  {
+    id: 7,
     menu: "Logout",
     path: "/login",
     icon: <LogoutIcon color="#FFFFFF" />,
@@ -61,9 +68,9 @@ const AdminFrame: React.FC<{
 
   return (
     <>
-      <div className="flex h-screen overflow-hidden">
+      <div className="flex h-screen z-50 overflow-hidden">
         {/* Sidebar for large screens */}
-        <div className="hidden sm:block sm:w-1/2 md:w-[30%] z-50 border border-t-transparent shadow-sm bg-primary rounded-tr-md rounded-tb-md overflow-y-auto">
+        <div className="hidden  sm:block sm:w-1/2 md:w-[30%] z-50 border border-t-transparent shadow-sm bg-primary rounded-tr-md rounded-tb-md overflow-y-auto">
           <ul className="my-5">
             {ADMIN_MENUS.map(({ icon, id, menu, path }) => (
               <div
@@ -85,7 +92,7 @@ const AdminFrame: React.FC<{
         </div>
 
         <div
-          className={`sm:hidden w-2/3 absolute top-[60px] border border-t-transparent shadow-sm ${
+          className={`sm:hidden w-2/3 absolute h-screen top-[60px] border border-t-transparent shadow-sm ${
             sideBarIsOpen
               ? "-translate-x-0 transition-all duration-500 ease-in-out"
               : "-translate-x-[2000px] transition-all duration-1000 ease-in-out"

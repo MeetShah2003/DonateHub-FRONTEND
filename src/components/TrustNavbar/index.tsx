@@ -11,6 +11,8 @@ import AboutUsIcon from "@/icons/AboutUsIcon";
 import ProductsIcon from "@/icons/ProductsIcon";
 import PlusIcon from "@/icons/PlusIcon";
 import ProfileIcon from "@/icons/ProfileIcon"; // Add your profile icon component here
+import LogoutIcon from "@/icons/LogoutIcon";
+import { useAuth } from "@/context/auth";
 
 const NAV_MENUES: { id: number; menu: string; path: string }[] = [
   { id: 1, menu: "Home", path: "/trust" },
@@ -87,6 +89,7 @@ const TrustNavbar: React.FC<{ children: ReactNode; title: string }> = ({
 }) => {
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
   const [isChildMenu, setIsChildMenu] = useState(false);
+  const { logout } = useAuth();
   return (
     <div>
       <nav className="border-b-2 py-1 shadow-sm fixed w-full top-0 z-10 bg-white">
@@ -179,6 +182,23 @@ const TrustNavbar: React.FC<{ children: ReactNode; title: string }> = ({
                   );
                 }
               )}
+            <li
+              onClick={() => {}}
+              className="text-base flex flex-col justify-center border-b-2 py-3 px-5 text-gray-700 font-semibold relative"
+            >
+              <div className="flex gap-3">
+                <div>
+                  <LogoutIcon color="#000000" />
+                </div>
+                <p
+                  onClick={() => {
+                    logout();
+                  }}
+                >
+                  Logout
+                </p>
+              </div>
+            </li>
           </ul>
         </div>
         {/* Main content */}
@@ -241,6 +261,23 @@ const TrustNavbar: React.FC<{ children: ReactNode; title: string }> = ({
                     );
                   }
                 )}
+              <li
+                onClick={() => {}}
+                className="text-base flex flex-col justify-center border-b-2 py-3 px-5 text-gray-700 font-semibold relative"
+              >
+                <div className="flex gap-3">
+                  <div>
+                    <LogoutIcon color="#000000" />
+                  </div>
+                  <p
+                    onClick={() => {
+                      logout();
+                    }}
+                  >
+                    Logout
+                  </p>
+                </div>
+              </li>
             </ul>
           </div>
         </div>

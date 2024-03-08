@@ -41,7 +41,7 @@ const ProfileUser = () => {
   //     });
   // };
 
-  const getUpdateAdminProfile = (data: any) => {
+  const agetUpdateAdminProfile = (data: any) => {
     setLoading(true);
     fetch(`${BACKEND_BASE_URL}/api/updMyProfile`, {
       method: "PATCH",
@@ -129,7 +129,7 @@ const ProfileUser = () => {
         <Visitor />
       </div>
       {loading && <Spinner />}
-      <h1 className="font-inter p-5  font-semibold text-steelGray text-xl sm:text-2xl">
+      <h1 className="font-inter p-5  font-semibold text-steelGray text-xl sm:text-2xl mx-auto max-w-md flex flex-col gap-2 w-full">
         Profile
       </h1>
       <form

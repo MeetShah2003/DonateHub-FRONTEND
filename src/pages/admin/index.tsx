@@ -208,7 +208,7 @@ const Admin = () => {
             Analytics
           </h1>
         </div>
-        <div className="flex gap-5">
+        <div className="flex flex-col md:flex-row -z-10 gap-5">
           <ReactLineChart data={supporterChartData} />
           <ReactBarChart data={income} />
         </div>
