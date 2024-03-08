@@ -1,12 +1,14 @@
+import ContactUs from "@/components/ContactUs";
 import TrustNavbar from "@/components/TrustNavbar";
 import TrustRoute from "@/components/TrustRoute/TrustRoute";
 
-const ContactUs = () => {
+const ContactUspage = () => {
   return (
     <TrustNavbar title="Contact Us">
-      <div></div>
+      <ContactUs />
+      {/* <>d</> */}
     </TrustNavbar>
   );
 };
 
-export default TrustRoute(ContactUs);
+export default TrustRoute(ContactUspage);

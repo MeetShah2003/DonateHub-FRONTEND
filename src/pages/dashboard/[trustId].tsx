@@ -23,6 +23,14 @@ const TrustDetails = () => {
     amount: Yup.number().required("Amount is required"),
   });
 
+  const onSuccess = (response: any) => {
+    console.log("Payment successful:", response);
+  };
+
+  const onFailure = (response: any) => {
+    console.log("Payment failed:", response);
+  };
+
   const { handleSubmit, handleChange, setValues, values, errors, touched } =
     useFormik({
       initialValues: {
@@ -53,9 +61,12 @@ const TrustDetails = () => {
             name: "DonateHub",
             description: "Test Transaction",
             image: "https://example.com/your_logo",
-            order_id: order.order.id,
             handler: (response: any) => {
-              console.log(response);
+              if (response.razorpay_payment_id) {
+                onSuccess(response);
+              } else {
+                onFailure(response);
+              }
             },
             prefill: {
               name: `${user.firstName} ${user.lastName}`,
@@ -66,7 +77,7 @@ const TrustDetails = () => {
               address: "Razorpay Corporate Office",
             },
             theme: {
-              color: "#3399cc",
+              color: "#674CC4",
             },
           };
           var rzp1 = new window.Razorpay(options);

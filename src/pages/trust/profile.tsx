@@ -72,17 +72,6 @@ const ProfileTrust = () => {
     category: Yup.string().trim().required("Category is required"),
     contactNo: Yup.string().required("Contact Number is required"),
     description: Yup.string().trim().required("About Trust is required"),
-    password: Yup.string()
-      .min(8, "Password must be at least 8 characters")
-      .matches(
-        /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).*$/,
-        "Password must contain at least one uppercase letter, one lowercase letter, and one number"
-      )
-      .required("Password is required"),
-    role: Yup.string()
-      .trim()
-      .oneOf(["trust"], "Invalid Role")
-      .required("Role is required"),
     address: Yup.string().trim().required("Address is required"),
     city: Yup.string().trim().required("City is required"),
     state: Yup.string().trim().required("State is required"),
@@ -121,7 +110,7 @@ const ProfileTrust = () => {
     validationSchema: trustDetailSchema,
     onSubmit: async (formValues) => {
       console.log(formValues);
-      // getUpdatedTrustProfile(formValues);
+      getUpdatedTrustProfile(formValues);
     },
   });
 
@@ -224,7 +213,7 @@ const ProfileTrust = () => {
                 name="email"
                 type="email"
                 disabled={isDisabled}
-                value={values.email || user.email}
+                value={user.email}
                 onChange={handleChange}
                 onBlur={handleBlur}
                 className="outline-none tracking-wider"
@@ -278,7 +267,7 @@ const ProfileTrust = () => {
               <input
                 id="contactNo"
                 name="contactNo"
-                type="contactNo"
+                type="text"
                 value={values.contactNo || user.contactNo}
                 onChange={handleChange}
                 maxLength={10}
@@ -305,6 +294,7 @@ const ProfileTrust = () => {
                 value={values.creationDate || user?.creationDate}
               />
             </div>
+
             <div className="flex flex-col border-t-transparent border-2 px-2 py-1 focus-within:border-primary">
               <label className="pb-1 text-sm font-medium">Founder</label>
               <input
@@ -338,6 +328,7 @@ const ProfileTrust = () => {
                 <span className="text-sm text-red-600">{errors.address}</span>
               )}
             </div>
+
             <div className="flex flex-col border-2 px-2 py-1 border-t-transparent focus-within:border-primary">
               <label className="pb-1 text-sm font-medium">State</label>
               <select
@@ -358,6 +349,7 @@ const ProfileTrust = () => {
                 )}
               </select>
             </div>
+
             <div className="flex flex-col border-2 px-2 py-1 border-t-transparent focus-within:border-primary">
               <label className="pb-1 text-sm font-medium">City</label>
               <select
@@ -375,6 +367,7 @@ const ProfileTrust = () => {
                 ))}
               </select>
             </div>
+
             <div className="flex flex-col border-t-transparent rounded-b-lg border-2 px-2 py-1 focus-within:border-primary">
               <label className="pb-1 text-sm font-medium">Pincode</label>
               <input

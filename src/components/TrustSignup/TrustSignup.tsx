@@ -5,6 +5,7 @@ import * as Yup from "yup";
 import HidePasswordIcon from "@/icons/HidePasswordIcon";
 import ShowPasswordIcon from "@/icons/ShowPasswordIcon";
 import React, { ReactNode, useState } from "react";
+import Cookies from "js-cookie";
 import {
   BACKEND_BASE_URL,
   CITY_AND_STATE,
@@ -91,10 +92,6 @@ const TrustSignup = () => {
         "Password must contain at least one uppercase letter, one lowercase letter, and one number"
       )
       .required("Password is required"),
-    role: Yup.string()
-      .trim()
-      .oneOf(["trust"], "Invalid Role")
-      .required("Role is required"),
     address: Yup.string().trim().required("Address is required"),
     city: Yup.string().trim().required("City is required"),
     state: Yup.string().trim().required("State is required"),
@@ -138,6 +135,8 @@ const TrustSignup = () => {
     onSubmit: (value) => {
       setLoading(true);
       if (value && isValid) {
+        const signUpData = JSON.stringify(value);
+        Cookies.set("signup-data", signUpData);
         fetch(`${BACKEND_BASE_URL}/trust/trustSignup`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -145,13 +144,13 @@ const TrustSignup = () => {
         })
           .then((res) => res.json())
           .then((data) => {
-            if (data && data.message == "user already exist") {
+            if (data && data.message == "email already in use") {
               errorToast(`${data.user.email} already in use`);
               setTimeout(() => {
                 router.push("/login");
               }, 3000);
             }
-            if (data && data.message == "trust already exist") {
+            if (data && data.message == "email already in use") {
               errorToast(`${data.trust.email} already in use`);
               setTimeout(() => {
                 router.push("/login");
@@ -162,7 +161,7 @@ const TrustSignup = () => {
               //   `Account created successfully ${data}`
               // );
               setTimeout(() => {
-                router.push("/login");
+                router.push("/signup/trustotpverification");
               }, 3000);
             }
           })

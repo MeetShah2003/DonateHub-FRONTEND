@@ -7,8 +7,11 @@ import { BACKEND_BASE_URL } from "@/consts";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
+import UserRoute from "@/components/UserRoute/UserRoute";
+import ContactUs from "@/components/ContactUs";
+import TrustContactUs from "@/components/TrustContactUs";
 
-const ContactUs = () => {
+const ContactUsPage = () => {
   const [loading, setLoading] = useState(false);
   const access_token = Cookies.get("access_token");
   const { push } = useRouter();
@@ -64,110 +67,12 @@ const ContactUs = () => {
         <Visitor />
       </div>
       {loading && <Spinner />}
-      <h1 className="font-inter p-5 font-semibold text-steelGray text-xl sm:text-2xl">
+      <h1 className="font-inter py-5 font-semibold text-steelGray text-xl sm:text-2xl max-w-screen-md mx-auto flex flex-col gap-2 w-full">
         Contact Us
       </h1>
-      <form
-        onSubmit={handleSubmit}
-        className="max-w-screen-md mx-auto flex flex-col gap-2 w-full"
-      >
-        <div className="flex flex-col border-2 px-2 py-1 focus-within:border-primary">
-          <label className="pb-1 text-sm font-medium">Your Full Name</label>
-          <input
-            id="name"
-            name="name"
-            type="text"
-            value={values.name}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            className="outline-none tracking-wider"
-            placeholder="John Doe"
-          />
-          {touched.name && errors.name && (
-            <span className="text-sm text-red-600">{errors.name}</span>
-          )}
-        </div>
-        <div className="flex flex-col border-2 px-2 py-1 focus-within:border-primary">
-          <label className="pb-1 text-sm font-medium">Your Email Address</label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            value={values.email}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            className="outline-none tracking-wider"
-            placeholder="johndoe@gmail.com"
-          />
-          {touched.email && errors.email && (
-            <span className="text-sm text-red-600">{errors.email}</span>
-          )}
-        </div>
-
-        <div className="flex flex-col border-2 px-2 py-1 focus-within:border-primary">
-          <label className="pb-1 text-sm font-medium">Mobile No</label>
-          <input
-            id="contactNo"
-            name="contactNo"
-            type="number"
-            value={values.contactNo}
-            onChange={handleChange}
-            maxLength={10}
-            onBlur={handleBlur}
-            className="outline-none tracking-wider"
-            placeholder="+91 9878588845"
-          />
-          {touched.contactNo && errors.contactNo && (
-            <span className="text-sm text-red-600">{errors.contactNo}</span>
-          )}
-        </div>
-
-        <div className="flex flex-col border-2 px-2 py-1 focus-within:border-primary">
-          <label className="pb-1 text-sm font-medium">Subject</label>
-          <input
-            id="subject"
-            name="subject"
-            type="text"
-            value={values.subject}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            className="outline-none tracking-wider"
-            placeholder="For Donation Support"
-          />
-          {touched.subject && errors.subject && (
-            <span className="text-sm text-red-600">{errors.subject}</span>
-          )}
-        </div>
-
-        <div className="flex flex-col border-2 px-2 py-1 focus-within:border-primary">
-          <label className="pb-1 text-sm font-medium">Message</label>
-          <textarea
-            id="message"
-            name="message"
-            className="outline-none tracking-wider resize-none"
-            rows={4}
-            cols={30}
-            placeholder="Enter Message Here"
-            onChange={handleChange}
-            onBlur={handleBlur}
-            value={values.message}
-          />
-          {touched.message && errors.message && (
-            <span className="text-sm text-red-600">{errors.message}</span>
-          )}
-        </div>
-
-        <div className="w-full">
-          <button
-            type="submit"
-            className="bg-primary w-full font-bold text-white p-3"
-          >
-            Submit
-          </button>
-        </div>
-      </form>
+      <TrustContactUs />
     </div>
   );
 };
 
-export default ContactUs;
+export default UserRoute(ContactUsPage);
