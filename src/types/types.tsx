@@ -37,49 +37,31 @@ export type TrustData = {
 };
 
 export type FundRequirement = {
-  trust: TrustData;
-  fundRequest: {
-    targetFund: number;
-    title: string;
-    description: string;
-    altContact: 8520369741;
-    _id: string;
-  };
+  _id?: string;
+  tId?: TrustData;
+  targetFund?: number;
+  startDate?: Date;
+  recievedFund?: number;
+  title?: string;
+  description?: string;
+  altContact?: number;
+  naturalSupporter?: string[];
+  __v?: number;
+  nUniqueSupporters?: number;
 };
 
 export type SingleFundRequirement = {
-  _id: string;
-  tId: {
-    _id: string;
-    trustlogo: string;
-    trustName: string;
-    email: string;
-    password: string;
-    description: string;
-    category: string;
-    creationDate: string;
-    founder: string;
-    contactNo: number;
-    address: string;
-    state: string;
-    city: string;
-    pincode: number;
-    role: string;
-    isVerified: boolean;
-    isBlocked: boolean;
-    TotalAmount: number;
-    __v: number;
-    manualDonation: number;
-    naturalSupporter: string[];
-    nUniqueSupporters: number;
-  };
+  _id?: string;
+  tId: TrustData;
+  disasterImage: string;
   targetFund: number;
   startDate: Date;
-  endDate: Date;
+  recievedFund: number;
   title: string;
   description: string;
   altContact: number;
-  __v: number;
+  naturalSupporter: string[];
+  nUniqueSupporters: 2;
 };
 
 export type RequestFunds = {

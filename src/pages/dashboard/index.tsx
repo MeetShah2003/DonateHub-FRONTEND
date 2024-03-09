@@ -30,7 +30,8 @@ const Dashboard = () => {
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
-        setFundRequirement(data.fullTrust);
+        console.log(data.allTrust);
+        setFundRequirement(data.allTrust);
       })
       .finally(() => {
         setLoading(false);
@@ -45,7 +46,7 @@ const Dashboard = () => {
 
   const filteredUsers = fundRequirement?.filter((user) => {
     const categoryMatches =
-      selectedCategory === "" || user.trust.category === selectedCategory;
+      selectedCategory === "" || user.tId?.category === selectedCategory;
 
     const containsSearchQuery = Object.values(user).some((value) => {
       if (typeof value === "object") {
@@ -115,21 +116,30 @@ const Dashboard = () => {
         <div className="grid grid-cols-1  sm:grid-cols-2 md:grid-cols-3 gap-5 justify-center items-center">
           {currentItems &&
             currentItems.length > 0 &&
-            currentItems.map(({ trust, fundRequest }) => {
-              console.log(currentItems);
-              return (
-                <TrustModel
-                  key={trust._id}
-                  title={fundRequest.title}
-                  trustlogo={trust.trustlogo}
-                  trustId={fundRequest._id as string}
-                  donationRaised={trust.TotalAmount}
-                  donationTarget={fundRequest.targetFund}
-                  supporters={trust?.nUniqueSupporters}
-                  type="fundrequest"
-                />
-              );
-            })}
+            currentItems.map(
+              ({
+                tId,
+                title,
+                targetFund,
+                nUniqueSupporters,
+                _id,
+                recievedFund,
+              }) => {
+                console.log(currentItems);
+                return (
+                  <TrustModel
+                    key={tId?._id}
+                    title={title as string}
+                    trustlogo={tId?.trustlogo as string}
+                    trustId={_id as string}
+                    donationRaised={recievedFund || 0}
+                    donationTarget={targetFund || 0}
+                    supporters={nUniqueSupporters || 0}
+                    type="fundrequest"
+                  />
+                );
+              }
+            )}
         </div>
         {!currentItems?.length && !loading && <NoData />}
         {loading && <Spinner />}
