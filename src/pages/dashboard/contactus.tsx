@@ -75,4 +75,4 @@ const ContactUsPage = () => {
   );
 };
 
-export default UserRoute(ContactUsPage);
+export default ContactUsPage;

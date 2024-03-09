@@ -125,7 +125,7 @@ const Dashboard = () => {
                   trustId={fundRequest._id as string}
                   donationRaised={trust.TotalAmount}
                   donationTarget={fundRequest.targetFund}
-                  supporters={trust.nUniqueSupporters}
+                  supporters={trust?.nUniqueSupporters}
                   type="fundrequest"
                 />
               );

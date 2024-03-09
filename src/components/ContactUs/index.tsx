@@ -9,8 +9,7 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 
 const ContactUs = () => {
-  const [loading, setLoading] = useState(false);
-  const access_token = Cookies.get("access_token");
+  const [loading, setLoading] = useState(false);d
   const { push } = useRouter();
 
   const errorToast = (errorMessage: string) => toast.error(errorMessage);

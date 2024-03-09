@@ -25,7 +25,7 @@ const NAV_MENUES: {
   {
     id: 1,
     menu: "Home",
-    path: "/dashboard",
+    path: "/",
     icon: <HomeIcon />,
   },
   {

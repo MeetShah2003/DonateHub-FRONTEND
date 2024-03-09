@@ -9,10 +9,10 @@ import Spinner from "../Spinner";
 import { ReviewType } from "@/types/types";
 
 const ReviewSection: React.FC<{ trustId: string }> = ({ trustId }) => {
-  const [isLike, setIsLike] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [allReviews, setAllReviews] = useState<ReviewType[]>();
-
+  const [allReviews, setAllReviews] = useState<ReviewType[]>([]);
+  const [likedReviews, setLikedReviews] = useState<string[]>([]);
+  const [likeCounts, setLikeCounts] = useState<{ [key: string]: number }>({});
   const access_token = Cookies.get("access_token");
 
   const writeReview = (id: string, reviewText: string) => {
@@ -24,19 +24,6 @@ const ReviewSection: React.FC<{ trustId: string }> = ({ trustId }) => {
         Authorization: `Bearer ${access_token}`,
       },
       body: JSON.stringify({ trustId: id, reviewText }),
-    }).finally(() => {
-      setLoading(false);
-    });
-  };
-
-  const showReviews = (id: string) => {
-    setLoading(true);
-    fetch(`${BACKEND_BASE_URL}/api/allTrustReviews/${id}`, {
-      method: "GET",
-      headers: {
-        "Content-type": "apploication/json",
-        Authorization: `Bearer ${access_token}`,
-      },
     })
       .then((res) => {
         if (res && res.status === 200) {
@@ -44,8 +31,43 @@ const ReviewSection: React.FC<{ trustId: string }> = ({ trustId }) => {
         }
       })
       .then((data) => {
+        if (data) {
+          showReviews(trustId);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
+  const showReviews = (id: string) => {
+    setLoading(true);
+    fetch(`${BACKEND_BASE_URL}/api/allTrustReviews/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${access_token}`,
+      },
+    })
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+        throw new Error("Failed to fetch reviews");
+      })
+      .then((data) => {
         setAllReviews(data.allReviews);
-        console.log(data.allReviews);
+        const counts: { [key: string]: number } = {};
+        data.allReviews.forEach((review: any) => {
+          counts[review._id] = review.likes;
+        });
+        setLikeCounts(counts);
+      })
+      .catch((error) => {
+        console.error("Error fetching reviews:", error);
       })
       .finally(() => {
         setLoading(false);
@@ -54,7 +76,6 @@ const ReviewSection: React.FC<{ trustId: string }> = ({ trustId }) => {
 
   useEffect(() => {
     if (trustId) {
-      console.log(trustId);
       showReviews(trustId);
     }
   }, [trustId]);
@@ -65,12 +86,66 @@ const ReviewSection: React.FC<{ trustId: string }> = ({ trustId }) => {
         review: "",
       },
       onSubmit: (value) => {
-        console.log(value);
-        if (trustId && value) {
+        if (trustId && value.review) {
           writeReview(trustId, value.review);
         }
       },
     });
+
+  const toggleLike = (reviewId: string) => {
+    if (likedReviews.includes(reviewId)) {
+      setLikedReviews(likedReviews.filter((id) => id !== reviewId));
+      // Call API to remove like
+      fetch(`${BACKEND_BASE_URL}/api/dislikeReview/${reviewId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${access_token}`,
+        },
+      })
+        .then((res) => {
+          if (res.ok) {
+            return res.json();
+          }
+          throw new Error("Failed to unlike review");
+        })
+        .then(() => {
+          setLikeCounts((prevCounts) => ({
+            ...prevCounts,
+            [reviewId]: prevCounts[reviewId] - 1,
+          }));
+        })
+        .catch((error) => {
+          console.error("Error unliking review:", error);
+        });
+    } else {
+      setLikedReviews([...likedReviews, reviewId]);
+      // Call API to add like
+      fetch(`${BACKEND_BASE_URL}/api/likeReview/${reviewId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${access_token}`,
+        },
+      })
+        .then((res) => {
+          if (res.ok) {
+            return res.json();
+          }
+          throw new Error("Failed to like review");
+        })
+        .then(() => {
+          setLikeCounts((prevCounts) => ({
+            ...prevCounts,
+            [reviewId]: prevCounts[reviewId] + 1,
+          }));
+        })
+        .catch((error) => {
+          console.error("Error liking review:", error);
+        });
+    }
+  };
+
   return (
     <div className="w-full">
       {loading && <Spinner />}
@@ -101,42 +176,35 @@ const ReviewSection: React.FC<{ trustId: string }> = ({ trustId }) => {
           </button>
         </div>
       </form>
-      {allReviews &&
-        allReviews.length &&
-        allReviews.length &&
-        allReviews.map(({ uId, reviewText, likes }, index) => {
-          return (
+      {allReviews.map(({ uId, reviewText, _id }, index) => (
+        <div
+          key={index}
+          className="flex flex-col gap-2 w-full bg-white border p-3 my-5 rounded-md shadow-sm"
+        >
+          <div className="flex items-center gap-3">
+            <Image
+              alt="userImage"
+              className="w-7 h-7 rounded-full border object-cover object-center"
+              src={uId?.userlogo}
+              width={100}
+              height={100}
+            />
+            <p className="text-gray-400 text-sm">
+              {uId?.firstName} {uId?.lastName}
+            </p>
+          </div>
+          <div className="w-full flex items-end justify-between">
+            <p className="w-[90%] font-inter">{reviewText}</p>
             <div
-              key={index}
-              className="flex flex-col gap-2 w-full bg-white border p-3 my-5 rounded-md shadow-sm"
+              onClick={() => toggleLike(_id)}
+              className="flex cursor-pointer justify-end gap-2 w-[10%] items-center"
             >
-              <div className="flex items-center gap-3">
-                <Image
-                  alt="userImage"
-                  className="w-7 h-7 rounded-full border object-cover object-center"
-                  src={uId?.userlogo}
-                  width={100}
-                  height={100}
-                />
-                <p className="text-gray-400 text-sm">
-                  {uId?.firstName} {uId?.lastName}
-                </p>
-              </div>
-              <div className="w-full flex items-end justify-between">
-                <p className="w-[90%] font-inter">{reviewText}</p>
-                <div
-                  onClick={() => {
-                    setIsLike(!isLike);
-                  }}
-                  className="flex cursor-pointer justify-end gap-2 w-[10%] items-center"
-                >
-                  <LikeIcon isLike={isLike} />
-                  <p className="text-gray-500">{likes}</p>
-                </div>
-              </div>
+              <LikeIcon isLike={likedReviews.includes(_id)} />
+              <p className="text-gray-500">{likeCounts[_id]}</p>
             </div>
-          );
-        })}
+          </div>
+        </div>
+      ))}
     </div>
   );
 };

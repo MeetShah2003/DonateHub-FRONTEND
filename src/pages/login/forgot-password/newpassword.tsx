@@ -34,9 +34,9 @@ const Password = () => {
       onSubmit: (formData) => {
         setLoading(true);
         const { confirmPassword, ...passwordData } = formData;
-        const newData: { forgotPasswordEmail: string; newPassword: string } = {
-          forgotPasswordEmail: forgotPasswordEmail as string,
-          newPassword: passwordData.password,
+        const newData: { email: string; password: string } = {
+          email: forgotPasswordEmail as string,
+          password: passwordData.password,
         };
         fetch(`${BACKEND_BASE_URL}/api/updatePassword`, {
           method: "PATCH",
@@ -51,8 +51,8 @@ const Password = () => {
             }
           })
           .then((data) => {
-            Cookies.remove("forgotPasswordEmail");
             if (data.updatedPassword) {
+              Cookies.remove("forgotPasswordEmail");
               successToast("Password Change Successfully");
             } else {
               errorToast("Something went wrong");
