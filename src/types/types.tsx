@@ -105,3 +105,18 @@ export type ReviewType = {
   disLikedBy: string[];
   likedBy: string[];
 };
+
+export type TrustWiseTransaction = {
+  Tdata: TrustData[];
+  TotalAmount: number;
+  totalSupporters: number;
+};
+
+export type SingleTrustTransaction = {
+  _id: string;
+  paymentId: string;
+  tId: TrustData;
+  uId: UserData;
+  donatedAmount: number;
+  transactionDate: Date;
+};

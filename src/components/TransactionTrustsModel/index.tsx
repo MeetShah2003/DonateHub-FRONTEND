@@ -7,8 +7,8 @@ interface TransactionTrustsModelProps {
   title: string;
   description: string;
   founder: string;
-  creationDate: string;
-  amount: string;
+  creationDate: Date;
+  amount: number;
   onShowTransaction: () => void;
 }
 

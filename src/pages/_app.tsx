@@ -13,9 +13,7 @@ export default function App({
       <AuthProvider>
         <ToastMessage />
         <SessionProvider session={session}>
-          {/* <GoogleOAuthProvider clientId="609789324421-qica554rr8nhuq5lo9lv99jpvi6ti6g8.apps.googleusercontent.com"> */}
           <Component {...pageProps} />
-          {/* </GoogleOAuthProvider> */}
         </SessionProvider>
       </AuthProvider>
     </>

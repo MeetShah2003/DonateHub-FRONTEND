@@ -1,11 +1,11 @@
 import React from "react";
 
 interface TransactionInfoProps {
-  amount: string;
+  amount: number;
   userName: string;
   paymentId: string;
   userImage: string;
-  transactionDate: string;
+  transactionDate: Date;
 }
 
 const TransactionInfo: React.FC<TransactionInfoProps> = ({

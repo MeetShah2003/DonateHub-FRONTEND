@@ -15,6 +15,7 @@ import ReviewSection from "@/components/ReviewSection";
 
 const TrustDetails = () => {
   const [singleData, setSingleData] = useState<TrustData>();
+  const [loading, setLoading] = useState(false);
   const { query } = useRouter();
   const { user } = useAuth();
   const access_token = Cookies.get("access_token");
@@ -41,6 +42,40 @@ const TrustDetails = () => {
     }
   };
 
+  const onSuccess = (response: any) => {
+    console.log("Payment successful:", response);
+    setLoading(true);
+    console.log(response?.razorpay_payment_id);
+    fetch(`${BACKEND_BASE_URL}/api/manualDonate`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        paymentId: response?.razorpay_payment_id,
+        trustId: query?.id,
+        amount: values?.amount,
+      }),
+    })
+      .then((res) => {
+        if (res && res.status === 200) {
+          return res.json();
+        }
+      })
+      .then((data) => {
+        console.log(data);
+        getSingleTrustData(query.id as string);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
+  const onFailure = (response: any) => {
+    console.log("Payment failed:", response);
+  };
+
   const { handleSubmit, handleChange, setValues, values, errors, touched } =
     useFormik({
       initialValues: {
@@ -53,29 +88,19 @@ const TrustDetails = () => {
           curruncy: "INR",
           trustId: query.id,
         };
-        const response = await fetch(`${BACKEND_BASE_URL}/api/manualDonate`, {
+        const response = await fetch(`${BACKEND_BASE_URL}/api/donateCreate`, {
           method: "POST",
           headers: {
             Authorization: `Bearer ${access_token}`,
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(data),
+          body: JSON.stringify({
+            amount: data.amount,
+            currency: data.curruncy,
+          }),
         });
         const order = await response.json();
-        //   {
-        //     "id": "order_NbfUJFFXjQvgBB",
-        //     "entity": "order",
-        //     "amount": 5500,
-        //     "amount_paid": 0,
-        //     "amount_due": 5500,
-        //     "currency": "INR",
-        //     "receipt": null,
-        //     "offer_id": null,
-        //     "status": "created",
-        //     "attempts": 0,
-        //     "notes": [],
-        //     "created_at": 1708112082
-        // }
+
         var options = {
           key: "rzp_test_zfmhrR9Z3TReMH",
           amount: data.amount,
@@ -86,7 +111,12 @@ const TrustDetails = () => {
             "https://firebasestorage.googleapis.com/v0/b/donatehub-d09f5.appspot.com/o/DonateHUB_Logo%2Fdonatehublogo.png?alt=media&token=2cd59db5-3e2a-4d23-93e8-b2ee36314453",
           order_id: order.order.id,
           handler: (response: any) => {
-            getSingleTrustData(query.id as string);
+            if (response.razorpay_payment_id) {
+              console.log("responese", response);
+              onSuccess(response);
+            } else {
+              onFailure(response);
+            }
           },
           prefill: {
             name: `${user.firstName} ${user.lastName}`,
@@ -130,6 +160,7 @@ const TrustDetails = () => {
       <div className="navbar sticky top-0 bg-white z-10">
         <Visitor />
       </div>
+      {loading && <Spinner />}
       <div className="max-w-full w-90% mx-auto my-5">
         <div className="flex flex-col gap-3">
           <div className="flex flex-col md:flex-row w-full p-3 shadow-md rounded-lg gap-5 bg-gray-100">
@@ -366,17 +397,6 @@ const TrustDetails = () => {
                       className="outline-none text-black font-inter font-medium"
                     >
                       ₹25,000
-                    </button>
-                  </div>
-                  <div className="w-full text-center border-2 border-primary bg-white shadow-sm rounded-lg px-2 py-2">
-                    <button
-                      onClick={() => {
-                        setValues({ amount: 50000 });
-                      }}
-                      type="button"
-                      className="outline-none text-black font-inter font-medium"
-                    >
-                      ₹50,000
                     </button>
                   </div>
                 </div>

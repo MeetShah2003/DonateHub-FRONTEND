@@ -7,12 +7,12 @@ import TransactionTrustsModel from "@/components/TransactionTrustsModel";
 import Spinner from "@/components/Spinner";
 import { useRouter } from "next/router";
 import NoData from "@/components/NoData";
+import { TrustWiseTransaction } from "@/types/types";
 
 const ManageTransaction = () => {
   const access_token = Cookies.get("access_token");
-  const [totalCollection, setTotalCollection] = useState();
-  const [totalSupporter, setTotalSupporter] = useState();
-  const [trustWiseTransaction, setTrustWiseTransaction] = useState();
+  const [trustWiseTransaction, setTrustWiseTransaction] =
+    useState<TrustWiseTransaction>();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const router = useRouter();
@@ -35,9 +35,7 @@ const ManageTransaction = () => {
         }
         const data = await response.json();
         console.log(data);
-        setTotalCollection(data.TotalAmount);
-        setTotalSupporter(data.totalSupporters);
-        setTrustWiseTransaction(data.Tdata);
+        setTrustWiseTransaction(data);
         setLoading(false);
       } catch (error: any) {
         setError(error);
@@ -60,7 +58,7 @@ const ManageTransaction = () => {
         <p>Error: {error}</p>
       ) : (
         <div className="flex flex-col gap-10">
-          {!trustWiseTransaction.length ? (
+          {!trustWiseTransaction ? (
             <NoData />
           ) : (
             <div className="w-full flex flex-col md:flex-row justify-between items-center bg-gray-100 rounded-lg p-6">
@@ -69,7 +67,7 @@ const ManageTransaction = () => {
                   Total Collection
                 </h2>
                 <p className="text-2xl md:text-3xl font-bold text-primary">
-                  ₹{formatAmount(totalCollection)}
+                  ₹{formatAmount(trustWiseTransaction?.TotalAmount)}
                 </p>
               </div>
               <div className="w-1/2 border-t border-gray-300 md:border-none my-4 md:my-0"></div>
@@ -78,31 +76,44 @@ const ManageTransaction = () => {
                   Total Supporter
                 </h2>
                 <p className="text-2xl md:text-3xl font-bold text-primary">
-                  {totalSupporter}
+                  {trustWiseTransaction?.totalSupporters}
                 </p>
               </div>
             </div>
           )}
 
-          {trustWiseTransaction &&
-            trustWiseTransaction.length &&
-            trustWiseTransaction.map((data: any) => {
-              return (
-                <TransactionTrustsModel
-                  key={data?.tId}
-                  title={data?.trustName}
-                  description={data?.description}
-                  trustImage={data?.trustlogo}
-                  founder={data?.founder}
-                  creationDate={data?.creationDate}
-                  amount={formatAmount(data?.TotalAmount)}
-                  onShowTransaction={() => {
-                    console.log(data?._id);
-                    router.push(`/admin/managetransaction/${data?._id}`);
-                  }}
-                />
-              );
-            })}
+          {trustWiseTransaction?.Tdata &&
+            trustWiseTransaction?.Tdata?.length &&
+            trustWiseTransaction?.Tdata.map(
+              (
+                {
+                  _id,
+                  trustName,
+                  description,
+                  trustlogo,
+                  founder,
+                  creationDate,
+                  TotalAmount,
+                },
+                index
+              ) => {
+                return (
+                  <TransactionTrustsModel
+                    key={_id}
+                    title={trustName}
+                    description={description}
+                    trustImage={trustlogo}
+                    founder={founder}
+                    creatsionDate={creationDate}
+                    amount={formatAmount(TotalAmount)}
+                    onShowTransaction={() => {
+                      console.log(_id);
+                      router.push(`/admin/managetransaction/${_id}`);
+                    }}
+                  />
+                );
+              }
+            )}
         </div>
       )}
     </AdminFrame>
