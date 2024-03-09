@@ -128,7 +128,7 @@ const home = () => {
       </div>
       <div className="py-10 lg:py-20">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-full w-90% mx-auto">
             <h1 className="flex justify-center py-5 text-3xl lg:text-4xl font-bold mb-4 font-inter text-gray-900/75 text-center">
               Our Team
             </h1>

@@ -23,8 +23,31 @@ const TrustDetails = () => {
     amount: Yup.number().required("Amount is required"),
   });
 
+  console.log(singleData?.tId._id);
   const onSuccess = (response: any) => {
     console.log("Payment successful:", response);
+    setLoading(true);
+    console.log(response?.razorpay_payment_id);
+    fetch(`${BACKEND_BASE_URL}/api/trustDonate/${query?.trustId}`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        paymentId: response?.razorpay_payment_id,
+        trustId: singleData?.tId._id,
+        amount: values?.amount,
+      }),
+    })
+      .then((res) => {
+        if (res && res.status === 200) {
+          return res.json();
+        }
+      })
+      .then((data) => {
+        console.log(data);
+      });
   };
 
   const onFailure = (response: any) => {
@@ -40,22 +63,27 @@ const TrustDetails = () => {
       onSubmit: async (values) => {
         setLoading(true);
         const data = {
-          amount: values.amount,
+          amount: values.amount * 100,
           curruncy: "INR",
           trustId: singleData?.tId?._id,
         };
         try {
-          const response = await fetch(`${BACKEND_BASE_URL}/api/trustDonate`, {
+          const response = await fetch(`${BACKEND_BASE_URL}/api/donateCreate`, {
             method: "POST",
             headers: {
               Authorization: `Bearer ${access_token}`,
               "Content-Type": "application/json",
             },
-            body: JSON.stringify(data),
+            body: JSON.stringify({
+              amount: data.amount,
+              currency: data.curruncy,
+            }),
           });
           const order = await response.json();
+          console.log(order);
+
           var options = {
-            key: "rzp_test_zfmhrR9Z3TReMH",
+            key: "rzp_test_zfmhrR9Z3TReMHa",
             amount: data.amount,
             currency: data.curruncy,
             name: "DonateHub",
@@ -63,6 +91,7 @@ const TrustDetails = () => {
             image: "https://example.com/your_logo",
             handler: (response: any) => {
               if (response.razorpay_payment_id) {
+                console.log("responese", response);
                 onSuccess(response);
               } else {
                 onFailure(response);
@@ -80,17 +109,16 @@ const TrustDetails = () => {
               color: "#674CC4",
             },
           };
+
           var rzp1 = new window.Razorpay(options);
           rzp1.on("payment.failed", function (response: any) {
             console.log(response);
           });
-
           rzp1.open();
         } catch (error) {
           console.log(error);
         } finally {
           setLoading(false);
-          getSingleTrustData(query.trustId as string);
         }
       },
     });
@@ -128,7 +156,7 @@ const TrustDetails = () => {
   }
 
   const progress =
-    ((singleData?.tId?.TotalAmount as number) / singleData?.targetFund) * 100;
+    ((singleData?.recievedFund as number) / singleData?.targetFund) * 100;
 
   return (
     <>
@@ -168,7 +196,7 @@ const TrustDetails = () => {
                 <div>
                   <h1 className="text-lg font-semibold">Currunt Balance</h1>
                   <p className="text-xl text-gray-500">
-                    ₹{formatAmount(singleData.tId?.TotalAmount)}
+                    ₹{formatAmount(singleData?.recievedFund)}
                   </p>
                 </div>
               </div>
@@ -217,7 +245,7 @@ const TrustDetails = () => {
                 >
                   <div className="flex w-full justify-between">
                     <span className="bg-secondary rounded-lg p-2 text-white font-bold">
-                      ₹{formatAmount(singleData.tId?.TotalAmount)}
+                      ₹{formatAmount(singleData?.recievedFund)}
                     </span>
                     <span className="bg-secondary rounded-lg p-2 text-white font-bold">
                       ₹{formatAmount(singleData?.targetFund)}
@@ -416,17 +444,6 @@ const TrustDetails = () => {
                       className="outline-none text-black font-inter font-medium"
                     >
                       ₹25,000
-                    </button>
-                  </div>
-                  <div className="w-full text-center border-2 border-primary bg-white shadow-sm rounded-lg px-2 py-2">
-                    <button
-                      onClick={() => {
-                        setValues({ amount: 50000 });
-                      }}
-                      type="button"
-                      className="outline-none text-black font-inter font-medium"
-                    >
-                      ₹50,000
                     </button>
                   </div>
                 </div>
