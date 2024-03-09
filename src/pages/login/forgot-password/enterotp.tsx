@@ -6,7 +6,7 @@ import * as Yup from "yup";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import { BACKEND_BASE_URL } from "@/consts";
-import { useAuth } from "@/context/auth";
+import Cookies from "js-cookie";
 import Spinner from "@/components/Spinner";
 
 const errorToast = (errorMessage: string) => toast.error(errorMessage);
@@ -17,7 +17,8 @@ const EnterOtp = () => {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const { forgotPasswordEmail } = useAuth();
+  // const { forgotPasswordEmail } = useAuth();
+  const forgotPasswordEmail = Cookies.get(`forgotPasswordEmail`);
 
   const validationSchema = Yup.object().shape({
     otp: Yup.string()
@@ -76,7 +77,6 @@ const EnterOtp = () => {
     fetch(`${BACKEND_BASE_URL}/api/resendEmail`, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${forgotPasswordEmail}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ email: forgotPasswordEmail }),
