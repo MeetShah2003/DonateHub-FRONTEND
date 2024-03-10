@@ -47,6 +47,9 @@ const TrustDetails = () => {
       })
       .then((data) => {
         console.log(data);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
@@ -83,7 +86,7 @@ const TrustDetails = () => {
           console.log(order);
 
           var options = {
-            key: "rzp_test_zfmhrR9Z3TReMHa",
+            key: "rzp_test_zfmhrR9Z3TReMH",
             amount: data.amount,
             currency: data.curruncy,
             name: "DonateHub",
