@@ -8,6 +8,8 @@ import Spinner from "@/components/Spinner";
 import { useRouter } from "next/router";
 import NoData from "@/components/NoData";
 import { TrustWiseTransaction } from "@/types/types";
+import ReactPaginate from "react-paginate";
+import ArrowIcon from "@/icons/ArrowIcon";
 
 const ManageTransaction = () => {
   const access_token = Cookies.get("access_token");
@@ -16,7 +18,7 @@ const ManageTransaction = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const router = useRouter();
-
+  const itemsPerPage = 10;
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -105,7 +107,7 @@ const ManageTransaction = () => {
                     trustImage={trustlogo}
                     founder={founder}
                     creatsionDate={creationDate}
-                    amount={formatAmount(TotalAmount)}
+                    amount={TotalAmount}
                     onShowTransaction={() => {
                       console.log(_id);
                       router.push(`/admin/managetransaction/${_id}`);
@@ -116,6 +118,29 @@ const ManageTransaction = () => {
             )}
         </div>
       )}
+
+      {!trustWiseTransaction?.Tdata?.length && !loading && <NoData />}
+      <ReactPaginate
+        previousLabel={<ArrowIcon />}
+        nextLabel={
+          <div className="rotate-180">
+            <ArrowIcon />
+          </div>
+        }
+        breakLabel={<div className="px-4 py-2 border rounded">...</div>}
+        breakClassName={"break-me"}
+        pageCount={Math.ceil(trustWiseTransaction?.Tdata.length / itemsPerPage)}
+        marginPagesDisplayed={5}
+        pageRangeDisplayed={5}
+        containerClassName={"pagination flex justify-center mt-4"}
+        activeClassName={"text-primary border border-primary"}
+        previousClassName={"px-4 py-2 border rounded"}
+        nextClassName={"px-4 py-2 border rounded"}
+        pageClassName={"px-4 py-2 border rounded"}
+        pageLinkClassName={"cursor-pointer"}
+        activeLinkClassName={"text-primary  border-primary"}
+        disabledClassName={"opacity-50 cursor-not-allowed"}
+      />
     </AdminFrame>
   );
 };

@@ -34,6 +34,9 @@ const RequestFund = () => {
       .then((res) => {
         if (res && res.status === 200) {
           return res.json();
+        } else if (res && res.status === 400) {
+          errorToast("Some thing went wrong");
+          push(`/trust/fundrequest`);
         }
       })
       .then((data) => {
@@ -56,6 +59,9 @@ const RequestFund = () => {
       .then((res) => {
         if (res && res.status === 200) {
           return res.json();
+        } else if (res && res.status === 400) {
+          errorToast("Insufficient funds");
+          push(`/trust/fundrequest`);
         }
       })
       .then((data) => {
@@ -81,6 +87,9 @@ const RequestFund = () => {
       .then((res) => {
         if (res && res.status === 200) {
           return res.json();
+        } else if (res && res.status === 400) {
+          errorToast("Insufficient funds");
+          push(`/trust/fundrequest`);
         }
       })
       .then((data) => {
@@ -214,6 +223,7 @@ const RequestFund = () => {
             </div>
           </form>
         </div>
+        
       </TrustNavbar>
     </div>
   );

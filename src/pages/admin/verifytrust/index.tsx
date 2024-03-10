@@ -7,12 +7,15 @@ import { BACKEND_BASE_URL } from "@/consts";
 import NoData from "@/components/NoData";
 import AdminRoute from "@/components/AdminRoute";
 import Spinner from "@/components/Spinner";
+import ReactPaginate from "react-paginate";
+import ArrowIcon from "@/icons/ArrowIcon";
 
 const VerifyTrust = () => {
   const [unVerifiedTrusts, setUnVerifiedTrusts] = useState([]);
   const access_token = Cookies.get("access_token");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const itemsPerPage = 10;
 
   const getPendingTrust = async () => {
     setLoading(true);
@@ -74,6 +77,27 @@ const VerifyTrust = () => {
           }
         )}
       {!unVerifiedTrusts?.length && !loading && <NoData />}
+      <ReactPaginate
+        previousLabel={<ArrowIcon />}
+        nextLabel={
+          <div className="rotate-180">
+            <ArrowIcon />
+          </div>
+        }
+        breakLabel={<div className="px-4 py-2 border rounded">...</div>}
+        breakClassName={"break-me"}
+        pageCount={Math.ceil(unVerifiedTrusts?.length / itemsPerPage)}
+        marginPagesDisplayed={5}
+        pageRangeDisplayed={5}
+        containerClassName={"pagination flex justify-center mt-4"}
+        activeClassName={"text-primary border border-primary"}
+        previousClassName={"px-4 py-2 border rounded"}
+        nextClassName={"px-4 py-2 border rounded"}
+        pageClassName={"px-4 py-2 border rounded"}
+        pageLinkClassName={"cursor-pointer"}
+        activeLinkClassName={"text-primary  border-primary"}
+        disabledClassName={"opacity-50 cursor-not-allowed"}
+      />
     </AdminFrame>
   );
 };

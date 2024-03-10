@@ -1,10 +1,77 @@
+import ReactBarChart from "@/components/ReactBarChart.tsx";
+import ReactLineChart from "@/components/ReactLineChart";
 import TrustNavbar from "@/components/TrustNavbar";
 import TrustRoute from "@/components/TrustRoute/TrustRoute";
+import { useAuth } from "@/context/auth";
+import ManageTrustIcon from "@/icons/ManageTrustIcon";
+import ProfileIcon from "@/icons/ProfileIcon";
 
 const Trust = () => {
+  const { user } = useAuth();
+  console.log(user);
+
+  const formatAmount = (amount: any) => {
+    return new Intl.NumberFormat("en-IN").format(amount);
+  };
+
+  const supporterChartData = [
+    { date: "12 jan", supporters: 2400 },
+    { date: "13 jan", supporters: 1398 },
+    { date: "14 jan", supporters: 9800 },
+    { date: "15 jan", supporters: 3908 },
+    { date: "16 jan", supporters: 4800 },
+    { date: "17 jan", supporters: 3800 },
+    { date: "18 jan", supporters: 4300 },
+  ];
+  const income = [
+    { name: "01 jan", income: 2400, amt: 2400 },
+    { name: "05 jan", income: 1398, amt: 2210 },
+    { name: "09 jan", income: 9800, amt: 2290 },
+    { name: "11 jan", income: 3908, amt: 2000 },
+    { name: "16 jan", income: 4800, amt: 2181 },
+    { name: "15 jan", income: 3800, amt: 2500 },
+    { name: "18 feb", income: 4300, amt: 2100 },
+  ];
   return (
     <TrustNavbar title="Home">
-      <p></p>
+      <div className="grid grid-cols-2 justify-between gap-5">
+        <div
+          onClick={() => {
+            // router.push("/admin/manageuser");
+          }}
+          className="flex flex-col py-5 justify-center hover:scale-105 cursor-pointer hover:transition-all hover:duration-400 hover:ease-out items-center bg-primary w-full rounded-md text-white"
+        >
+          <h1 className="font-inter flex items-center justify-center gap-2 font-bold text-2xl">
+            <span>
+              <ProfileIcon color="#FFFFFF" />
+            </span>
+            {5}
+          </h1>
+          <p className="text-base font-medium">Suppoters</p>
+        </div>
+
+        <div
+          // onClick={() => {
+          //   router.push("/admin/managetransaction");
+          // }}
+          className="flex flex-col py-5 justify-center hover:scale-105 cursor-pointer hover:transition-all hover:duration-400 hover:ease-out items-center bg-secondary w-full rounded-md text-white"
+        >
+          <h1 className="font-inter font-bold text-2xl">
+            <span className="font-normal">₹</span>{" "}
+            {formatAmount(user.manualDonation)}
+          </h1>
+          <p className="text-base font-medium">Collection</p>
+        </div>
+      </div>
+      <div>
+        <h1 className="sm:block py-5 font-inter font-semibold text-steelGray text-xl sm:text-2xl">
+          Analytics
+        </h1>
+      </div>
+      <div className="flex flex-col md:flex-row -z-10 gap-5">
+        <ReactLineChart data={supporterChartData} />
+        <ReactBarChart data={income} />
+      </div>
     </TrustNavbar>
   );
 };

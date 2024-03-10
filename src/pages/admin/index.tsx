@@ -41,9 +41,8 @@ const Admin = () => {
     fetch(`${BACKEND_BASE_URL}/admin/userChart`, {
       method: "GET",
       headers: {
-        "Content-type": "application/json",
         Authorization: `Bearer ${access_token}`,
-        "Content-Type": "application/json",
+        "Content-type": "application/json",
       },
     })
       .then((res) => {
@@ -53,6 +52,25 @@ const Admin = () => {
       })
       .then((data) => {
         setSupporterChartData(data.formattedData);
+      });
+  };
+
+  const getIncomeChartData = () => {
+    fetch(`${BACKEND_BASE_URL}/admin/trustIncChart`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+        "Content-type": "application/json",
+      },
+    })
+      .then((res) => {
+        if (res && res.status === 200) {
+          return res.json();
+        }
+      })
+      .then((data) => {
+        console.log(data.income);
+        // setSupporterChartData(data.formattedData);
       });
   };
 
@@ -125,6 +143,7 @@ const Admin = () => {
     getAllUnverifedTrustCount();
     getTotalCollection();
     getSupporterChartData();
+    getIncomeChartData();
   }, [totalSuppoters, totalTrusts]);
 
   const suppoters = [
@@ -137,13 +156,13 @@ const Admin = () => {
     { name: "18 jan", suppoters: 4300, amt: 2100 },
   ];
   const income = [
-    { name: "12 jan", income: 2400, amt: 2400 },
-    { name: "13 jan", income: 1398, amt: 2210 },
-    { name: "14 jan", income: 9800, amt: 2290 },
-    { name: "15 jan", income: 3908, amt: 2000 },
+    { name: "01 jan", income: 2400, amt: 2400 },
+    { name: "05 jan", income: 1398, amt: 2210 },
+    { name: "09 jan", income: 9800, amt: 2290 },
+    { name: "11 jan", income: 3908, amt: 2000 },
     { name: "16 jan", income: 4800, amt: 2181 },
-    { name: "17 jan", income: 3800, amt: 2500 },
-    { name: "18 jan", income: 4300, amt: 2100 },
+    { name: "15 jan", income: 3800, amt: 2500 },
+    { name: "18 feb", income: 4300, amt: 2100 },
   ];
   return (
     <AdminFrame title="Dashboard">

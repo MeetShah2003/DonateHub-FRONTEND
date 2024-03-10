@@ -8,6 +8,10 @@ interface TransactionInfoProps {
   transactionDate: Date;
 }
 
+const formatAmount = (amount: any) => {
+  return new Intl.NumberFormat("en-IN").format(amount);
+};
+
 const TransactionInfo: React.FC<TransactionInfoProps> = ({
   amount,
   userName,
@@ -31,7 +35,9 @@ const TransactionInfo: React.FC<TransactionInfoProps> = ({
         </div>
         <div className="flex flex-col items-end text-right">
           <h2 className="text-lg font-semibold mb-2">Amount</h2>
-          <p className="text-xl font-normal text-green-600">+ ₹ {amount}</p>
+          <p className="text-xl font-normal text-green-600">
+            + ₹ {formatAmount(amount)}
+          </p>
           <p className="text-sm text-gray-500">{transactionDate}</p>
         </div>
       </div>

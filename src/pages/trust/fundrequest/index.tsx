@@ -7,25 +7,33 @@ import Cookies from "js-cookie";
 import { RequestFunds } from "@/types/types";
 import { toast } from "react-toastify";
 import Spinner from "@/components/Spinner";
+import NoData from "@/components/NoData";
+import ReactPaginate from "react-paginate";
+import ArrowIcon from "@/icons/ArrowIcon";
 
 const FundRequests = () => {
   const [loading, setLoading] = useState(false);
   const access_token = Cookies.get("access_token");
-  const [fundRequests, setFundRequests] = useState<RequestFunds[]>();
+  const [fundRequests, setFundRequests] = useState<RequestFunds[]>([]);
+  const [currentPage, setCurrentPage] = useState(0);
+  const itemsPerPage = 10; // You can change this according to your requirement
 
   const errorToast = (errorMessage: string) => toast.error(errorMessage);
   const successToast = (successMessage: string) =>
     toast.success(successMessage);
 
-  const getRequestData = () => {
+  const getRequestData = (page: number) => {
     setLoading(true);
-    fetch(`${BACKEND_BASE_URL}/trust/fundReq`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-        "Content-Type": "application/json",
-      },
-    })
+    fetch(
+      `${BACKEND_BASE_URL}/trust/fundReq?page=${page}&perPage=${itemsPerPage}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    )
       .then((res) => {
         if (res && res.status === 200) {
           return res.json();
@@ -43,23 +51,51 @@ const FundRequests = () => {
   };
 
   useEffect(() => {
-    getRequestData();
-  }, []);
+    getRequestData(currentPage);
+  }, [currentPage]);
+
+  const handlePageChange = ({ selected }: { selected: number }) => {
+    setCurrentPage(selected);
+  };
 
   return (
     <div>
       {loading && <Spinner />}
-      {/* <div className="navbar sticky top-0 bg-white z-10"> */}
+
       <TrustNavbar title="Fund Requests">
         <div className="w-fit mx-auto">
-          {fundRequests &&
-            fundRequests.length &&
-            fundRequests.map((data) => {
-              return <FundRequestsModel data={data} />;
-            })}
+          {fundRequests.map((data, index) => {
+            return <FundRequestsModel key={index} data={data} />;
+          })}
         </div>
+        {fundRequests.length === 0 && !loading && <NoData />}
+        {fundRequests.length > 0 && !loading && (
+          <>
+            <ReactPaginate
+              previousLabel={<ArrowIcon />}
+              nextLabel={
+                <div className="rotate-180">
+                  <ArrowIcon />
+                </div>
+              }
+              breakLabel={<div className="px-4 py-2 border rounded">...</div>}
+              breakClassName={"break-me"}
+              pageCount={Math.ceil(fundRequests.length / itemsPerPage)}
+              marginPagesDisplayed={2}
+              pageRangeDisplayed={5}
+              containerClassName={"pagination flex justify-center mt-4"}
+              activeClassName={"text-primary border border-primary"}
+              previousClassName={"px-4 py-2 border rounded"}
+              nextClassName={"px-4 py-2 border rounded"}
+              pageClassName={"px-4 py-2 border rounded"}
+              pageLinkClassName={"cursor-pointer"}
+              activeLinkClassName={"text-primary  border-primary"}
+              disabledClassName={"opacity-50 cursor-not-allowed"}
+              onPageChange={handlePageChange}
+            />
+          </>
+        )}
       </TrustNavbar>
-      {/* </div> */}
     </div>
   );
 };
