@@ -78,7 +78,7 @@ const Dashboard = () => {
         <h1 className="my-5 text-2xl font-semibold">Home Page</h1>
         <div className="w-full flex gap-3 mb-5 justify-between">
           <div className="w-full flex flex-col">
-            <h1 className="text-lg font-bold mb-2">Text Search</h1>
+            <h1 className="text-lg font-bold mb-2">Search</h1>
             <input
               type="text"
               placeholder="Search Here"

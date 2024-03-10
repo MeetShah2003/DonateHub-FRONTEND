@@ -213,7 +213,7 @@ const TrustNavbar: React.FC<{ children: ReactNode; title: string }> = ({
       <div className="hidden md:flex md:w-full">
         <div className="w-1/4">
           <div
-            className={`fixed top-[70px] bg-white border border-t-transparent rounded-sm h-screen w-1/4 lg:w-1/4`}
+            className={`fixed top-[70px] bg-white border-4 border-t-transparent rounded-sm h-screen w-1/4 lg:w-1/4`}
           >
             <ul>
               {/* Sidebar menu items */}
@@ -229,7 +229,7 @@ const TrustNavbar: React.FC<{ children: ReactNode; title: string }> = ({
                             setIsChildMenu(!isChildMenu);
                           }
                         }}
-                        className="text-base flex flex-col justify-center border-b-2 py-3 px-5 text-gray-700 font-semibold relative"
+                        className="text-base flex flex-col justify-center border-b-4 py-3 px-5 text-gray-700 font-semibold relative"
                       >
                         <div className="flex gap-3">
                           <div>{icon}</div>
@@ -263,7 +263,7 @@ const TrustNavbar: React.FC<{ children: ReactNode; title: string }> = ({
                 )}
               <li
                 onClick={() => {}}
-                className="text-base flex flex-col justify-center border-b-2 py-3 px-5 text-gray-700 font-semibold relative"
+                className="text-base flex flex-col justify-center border-b-4 py-3 px-5 text-gray-700 font-semibold relative"
               >
                 <div className="flex gap-3">
                   <div>

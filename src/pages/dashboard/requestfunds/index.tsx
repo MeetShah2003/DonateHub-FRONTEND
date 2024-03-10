@@ -250,7 +250,7 @@ const RequestFunds = () => {
                 placeholder="₹5000"
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.reqAmount || ""}
+                value={formatAmount(values.reqAmount) || ""}
               />
               {touched.reqAmount && errors.reqAmount && (
                 <div className="text-red-500">{errors.reqAmount}</div>

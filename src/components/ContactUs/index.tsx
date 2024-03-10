@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 
 const ContactUs = () => {
-  const [loading, setLoading] = useState(false);d
+  const [loading, setLoading] = useState(false);
   const { push } = useRouter();
 
   const errorToast = (errorMessage: string) => toast.error(errorMessage);
@@ -63,7 +63,7 @@ const ContactUs = () => {
 
       <form
         onSubmit={handleSubmit}
-        className="max-w-screen-md mx-auto flex flex-col gap-2 w-full"
+        className="max-w-full mx-auto flex flex-col gap-2 w-full"
       >
         <div className="flex flex-col border-2 px-2 py-1 focus-within:border-primary">
           <label className="pb-1 text-sm font-medium">Your Full Name</label>

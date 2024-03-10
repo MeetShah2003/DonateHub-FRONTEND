@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
-import { SingleFundRequirement } from "@/types/types";
+import { TrustData } from "@/types/types";
 import { BACKEND_BASE_URL } from "@/consts";
 import Spinner from "@/components/Spinner";
 import UserRoute from "@/components/UserRoute/UserRoute";
@@ -11,24 +11,48 @@ import * as Yup from "yup";
 import { useAuth } from "@/context/auth";
 import Visitor from "@/components/Visitor";
 import RuppeSymbol from "@/icons/RuppeSymbol";
+import ReviewSection from "@/components/ReviewSection";
+import { toast } from "react-toastify";
 
 const TrustDetails = () => {
-  const [singleData, setSingleData] = useState<SingleFundRequirement>();
+  const [singleData, setSingleData] = useState<TrustData>();
   const [loading, setLoading] = useState(false);
   const { query } = useRouter();
   const { user } = useAuth();
   const access_token = Cookies.get("access_token");
+  const { push } = useRouter();
 
   const amountValidationSchema = Yup.object().shape({
     amount: Yup.number().required("Amount is required"),
   });
 
-  console.log(singleData?.tId._id);
+  const errorToast = (errorMessage: string) => toast.error(errorMessage);
+  const successToast = (successMessage: string) =>
+    toast.success(successMessage);
+
+  const getSingleTrustData = async (id: string) => {
+    try {
+      const res = await fetch(`${BACKEND_BASE_URL}/api/singleTrust/${id}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+          "Content-Type": "application/json",
+        },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setSingleData(data.singlePageTrust);
+      }
+    } catch (error) {
+      console.error("Error fetching trust details:", error);
+    }
+  };
+
   const onSuccess = (response: any) => {
     console.log("Payment successful:", response);
     setLoading(true);
     console.log(response?.razorpay_payment_id);
-    fetch(`${BACKEND_BASE_URL}/api/trustDonate/${query?.trustId}`, {
+    fetch(`${BACKEND_BASE_URL}/api/manualDonate`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${access_token}`,
@@ -36,7 +60,7 @@ const TrustDetails = () => {
       },
       body: JSON.stringify({
         paymentId: response?.razorpay_payment_id,
-        trustId: singleData?.tId._id,
+        trustId: query?.id,
         amount: values?.amount,
       }),
     })
@@ -47,6 +71,14 @@ const TrustDetails = () => {
       })
       .then((data) => {
         console.log(data);
+        getSingleTrustData(query.id as string);
+        if (data) {
+          console.log(data);
+          const successTransaction = JSON.stringify(data.userTransaction);
+          Cookies.set("successTransaction", successTransaction);
+          successToast("Thank You For Donation");
+          push(`/dashboard/trustdonation/${query.id}/showtransaction`);
+        }
       })
       .finally(() => {
         setLoading(false);
@@ -64,114 +96,90 @@ const TrustDetails = () => {
       },
       validationSchema: amountValidationSchema,
       onSubmit: async (values) => {
-        setLoading(true);
         const data = {
-          amount: values.amount * 100,
+          amount: values.amount,
           curruncy: "INR",
-          trustId: singleData?.tId?._id,
+          trustId: query.id,
         };
-        try {
-          const response = await fetch(`${BACKEND_BASE_URL}/api/donateCreate`, {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${access_token}`,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              amount: data.amount,
-              currency: data.curruncy,
-            }),
-          });
-          const order = await response.json();
-          console.log(order);
-
-          var options = {
-            key: "rzp_test_zfmhrR9Z3TReMH",
-            amount: data.amount,
-            currency: data.curruncy,
-            name: "DonateHub",
-            description: "Test Transaction",
-            image: "https://example.com/your_logo",
-            handler: (response: any) => {
-              if (response.razorpay_payment_id) {
-                console.log("responese", response);
-                onSuccess(response);
-              } else {
-                onFailure(response);
-              }
-            },
-            prefill: {
-              name: `${user.firstName} ${user.lastName}`,
-              email: user.email,
-              contact: "9000090000",
-            },
-            notes: {
-              address: "Razorpay Corporate Office",
-            },
-            theme: {
-              color: "#674CC4",
-            },
-          };
-
-          var rzp1 = new window.Razorpay(options);
-          rzp1.on("payment.failed", function (response: any) {
-            console.log(response);
-          });
-          rzp1.open();
-        } catch (error) {
-          console.log(error);
-        } finally {
-          setLoading(false);
-        }
-      },
-    });
-
-  useEffect(() => {
-    const getSingleTrustData = async (id: string) => {
-      try {
-        const res = await fetch(`${BACKEND_BASE_URL}/api/fundRequest/${id}`, {
-          method: "GET",
+        const response = await fetch(`${BACKEND_BASE_URL}/api/donateCreate`, {
+          method: "POST",
           headers: {
             Authorization: `Bearer ${access_token}`,
             "Content-Type": "application/json",
           },
+          body: JSON.stringify({
+            amount: data.amount,
+            currency: data.curruncy,
+          }),
         });
-        if (res.ok) {
-          const data = await res.json();
-          setSingleData(data.singleTrust);
-        }
-      } catch (error) {
-        console.error("Error fetching trust details:", error);
-      }
-    };
+        const order = await response.json();
 
-    if (query.trustId) {
-      getSingleTrustData(query.trustId as string);
+        var options = {
+          key: "rzp_test_zfmhrR9Z3TReMH",
+          amount: data.amount,
+          currency: data.curruncy,
+          name: "DonateHub",
+          description: "Test Transaction",
+          image:
+            "https://firebasestorage.googleapis.com/v0/b/donatehub-d09f5.appspot.com/o/DonateHUB_Logo%2Fdonatehublogo.png?alt=media&token=2cd59db5-3e2a-4d23-93e8-b2ee36314453",
+          order_id: order.order.id,
+          handler: (response: any) => {
+            if (response.razorpay_payment_id) {
+              console.log("responese", response);
+              onSuccess(response);
+            } else {
+              onFailure(response);
+            }
+          },
+          prefill: {
+            name: `${user.firstName} ${user.lastName}`,
+            email: user.email,
+            contact: "9000090000",
+          },
+          notes: {
+            address: "Razorpay Corporate Office",
+          },
+          theme: {
+            color: "#674CC4",
+          },
+        };
+        var rzp1 = new window.Razorpay(options);
+        rzp1.on("payment.failed", function (response: any) {
+          console.log(response);
+        });
+
+        rzp1.open();
+      },
+    });
+
+  useEffect(() => {
+    if (query.id) {
+      getSingleTrustData(query.id as string);
     }
-  }, [query.trustId, access_token]);
+  }, [query.id, access_token]);
 
   const formatAmount = (amount: any) => {
     return new Intl.NumberFormat("en-IN").format(amount);
   };
 
-  if (!singleData || loading) {
+  if (!singleData) {
     return <Spinner />;
   }
 
-  const progress =
-    ((singleData?.recievedFund as number) / singleData?.targetFund) * 100;
+  //   const progress = (singleData.tId.TotalAmount / singleData.targetFund) * 100;
 
   return (
     <>
       <div className="navbar sticky top-0 bg-white z-10">
         <Visitor />
       </div>
+      {loading && <Spinner />}
       <div className="max-w-full w-90% mx-auto my-5">
         <div className="flex flex-col gap-3">
-          <div className="flex flex-col md:flex-row w-full p-3 shadow-sm rounded-lg gap-5 bg-gray-100">
+          <div className="flex flex-col md:flex-row w-full p-3 shadow-md rounded-lg gap-5 bg-gray-100">
             <div className="w-full md:w-1/4 h-full rounded-lg">
               <Image
-                src={singleData.tId.trustlogo}
+                src={singleData.trustlogo}
                 width={500}
                 height={300}
                 className="h-full w-full rounded-lg"
@@ -182,44 +190,34 @@ const TrustDetails = () => {
               <div className="w-3/4 flex flex-col gap-5 justify-between">
                 <div>
                   <h1 className="text-lg font-semibold">Trust Name</h1>
-                  <p className="text-xl text-gray-500">{singleData?.title}</p>
+                  <p className="text-xl text-gray-500">
+                    {singleData.trustName}
+                  </p>
                 </div>
                 <div>
                   <h1 className="text-lg font-semibold">Catagory</h1>
-                  <p className="text-xl text-gray-500">
-                    {singleData.tId?.category}
-                  </p>
+                  <p className="text-xl text-gray-500">{singleData.category}</p>
                 </div>
                 <div>
                   <h1 className="text-lg font-semibold">Founder</h1>
-                  <p className="text-xl text-gray-500">
-                    {singleData.tId?.founder}
-                  </p>
+                  <p className="text-xl text-gray-500">{singleData.founder}</p>
                 </div>
                 <div>
                   <h1 className="text-lg font-semibold">Currunt Balance</h1>
                   <p className="text-xl text-gray-500">
-                    ₹{formatAmount(singleData?.recievedFund)}
+                    ₹{formatAmount(singleData.manualDonation)}
                   </p>
                 </div>
               </div>
               <div className="w-3/4 flex flex-col gap-5">
                 <div>
                   <h1 className="text-lg font-semibold">Email</h1>
-                  <p className="text-xl text-gray-500">
-                    {singleData.tId?.email}
-                  </p>
+                  <p className="text-xl text-gray-500">{singleData.email}</p>
                 </div>
                 <div>
                   <h1 className="text-lg font-semibold">Contact No</h1>
                   <p className="text-xl text-gray-500">
-                    {singleData.tId?.contactNo}
-                  </p>
-                </div>
-                <div>
-                  <h1 className="text-lg font-semibold">Help No</h1>
-                  <p className="text-xl text-gray-500">
-                    {singleData.altContact}
+                    {singleData.contactNo}
                   </p>
                 </div>
               </div>
@@ -228,34 +226,7 @@ const TrustDetails = () => {
           <div className="flex flex-col md:flex-row w-full p-3 shadow-md rounded-lg gap-5 bg-gray-100">
             <div className="w-full">
               <h1 className="text-lg font-semibold">Description</h1>
-              <p className="text-xl text-gray-500">{singleData?.description}</p>
-            </div>
-          </div>
-
-          <div className="flex flex-col md:flex-row w-full bg-gray-100 shadow-md p-3 rounded-lg gap-5 ">
-            <div className="flex flex-col gap-3 w-full">
-              <h1 className="text-lg font-semibold">Progress</h1>
-              <div className="w-full h-2 bg-primaryLight rounded-full">
-                <div
-                  style={{ width: `${progress}%` }}
-                  className="h-full rounded-full bg-primary"
-                ></div>
-              </div>
-              <div className="w-full  rounded-full">
-                <div
-                  style={{ marginLeft: `${progress}%` }}
-                  className="h-full rounded-full"
-                >
-                  <div className="flex w-full justify-between">
-                    <span className="bg-secondary rounded-lg p-2 text-white font-bold">
-                      ₹{formatAmount(singleData?.recievedFund)}
-                    </span>
-                    <span className="bg-secondary rounded-lg p-2 text-white font-bold">
-                      ₹{formatAmount(singleData?.targetFund)}
-                    </span>
-                  </div>
-                </div>
-              </div>
+              <p className="text-xl text-gray-500">{singleData.description}</p>
             </div>
           </div>
 
@@ -265,27 +236,19 @@ const TrustDetails = () => {
               <div className="grid md:grid-cols-2 md:grid-rows-2 gap-5">
                 <div>
                   <h1 className="text-base font-normal">Address</h1>
-                  <p className="text-lg text-gray-500">
-                    {singleData.tId?.address}
-                  </p>
+                  <p className="text-lg text-gray-500">{singleData.address}</p>
                 </div>
                 <div>
                   <h1 className="text-base font-normal">State</h1>
-                  <p className="text-lg text-gray-500">
-                    {singleData.tId?.state}
-                  </p>
+                  <p className="text-lg text-gray-500">{singleData.state}</p>
                 </div>
                 <div>
                   <h1 className="text-base font-normal">City</h1>
-                  <p className="text-lg text-gray-500">
-                    {singleData.tId?.city}
-                  </p>
+                  <p className="text-lg text-gray-500">{singleData.city}</p>
                 </div>
                 <div>
                   <h1 className="text-base font-normal">Pincode</h1>
-                  <p className="text-lg text-gray-500">
-                    {singleData.tId?.pincode}
-                  </p>
+                  <p className="text-lg text-gray-500">{singleData.pincode}</p>
                 </div>
               </div>
             </div>
@@ -451,6 +414,12 @@ const TrustDetails = () => {
                   </div>
                 </div>
               </div>
+            </div>
+            <div className="flex flex-col w-full p-3 shadow-md rounded-lg gap-5 bg-gray-100">
+              <div className="w-full">
+                <h1 className="text-lg font-semibold mb-2">Reviews</h1>
+              </div>
+              <ReviewSection trustId={query.id as string} />
             </div>
           </div>
         </div>

@@ -115,8 +115,29 @@ export type TrustWiseTransaction = {
 export type SingleTrustTransaction = {
   _id: string;
   paymentId: string;
-  tId: TrustData;
+  tId?: TrustData;
   uId: UserData;
   donatedAmount: number;
   transactionDate: Date;
+};
+
+export type SuccessTransaction = {
+  userTransaction: {
+    paymentId: string;
+    tId: string;
+    uId: string;
+    donatedAmount: number;
+    transactionDate: Date;
+    _id: string;
+  };
+  tData: SingleFundRequirement;
+};
+
+export type SuccessTrustDonationTransaction = {
+  paymentId: string;
+  tId: string;
+  uId: string;
+  manualDonatedAmount: number;
+  transactionDate: Date;
+  _id: string;
 };
