@@ -19,6 +19,7 @@ const ManageTransaction = () => {
   const [error, setError] = useState(null);
   const router = useRouter();
   const itemsPerPage = 10;
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -39,7 +40,7 @@ const ManageTransaction = () => {
         console.log(data);
         setTrustWiseTransaction(data);
         setLoading(false);
-      } catch (error: any) {
+      } catch (error) {
         setError(error);
         setLoading(false);
       }
@@ -60,7 +61,7 @@ const ManageTransaction = () => {
         <p>Error: {error}</p>
       ) : (
         <div className="flex flex-col gap-10">
-          {!trustWiseTransaction ? (
+          {!trustWiseTransaction?.allTrust ? (
             <NoData />
           ) : (
             <div className="w-full flex flex-col md:flex-row justify-between items-center bg-gray-100 rounded-lg p-6">
@@ -69,7 +70,7 @@ const ManageTransaction = () => {
                   Total Collection
                 </h2>
                 <p className="text-2xl md:text-3xl font-bold text-primary">
-                  ₹{formatAmount(trustWiseTransaction?.TotalAmount)}
+                  ₹{formatAmount(trustWiseTransaction.receiveFund)}
                 </p>
               </div>
               <div className="w-1/2 border-t border-gray-300 md:border-none my-4 md:my-0"></div>
@@ -78,48 +79,37 @@ const ManageTransaction = () => {
                   Total Supporter
                 </h2>
                 <p className="text-2xl md:text-3xl font-bold text-primary">
-                  {trustWiseTransaction?.totalSupporters}
+                  {5}
                 </p>
               </div>
             </div>
           )}
 
-          {trustWiseTransaction?.Tdata &&
-            trustWiseTransaction?.Tdata?.length &&
-            trustWiseTransaction?.Tdata.map(
+          {trustWiseTransaction?.allTrust?.length &&
+            trustWiseTransaction?.allTrust?.map(
               (
-                {
-                  _id,
-                  trustName,
-                  description,
-                  trustlogo,
-                  founder,
-                  creationDate,
-                  TotalAmount,
-                },
+                { _id, tId, title, description, recievedFund, disasterImage },
                 index
-              ) => {
-                return (
-                  <TransactionTrustsModel
-                    key={_id}
-                    title={trustName}
-                    description={description}
-                    trustImage={trustlogo}
-                    founder={founder}
-                    creatsionDate={creationDate}
-                    amount={TotalAmount}
-                    onShowTransaction={() => {
-                      console.log(_id);
-                      router.push(`/admin/managetransaction/${_id}`);
-                    }}
-                  />
-                );
-              }
+              ) => (
+                <TransactionTrustsModel
+                  key={_id}
+                  title={title}
+                  description={description}
+                  trustImage={disasterImage}
+                  founder={tId.founder}
+                  creatsionDate={tId.creationDate}
+                  amount={recievedFund}
+                  onShowTransaction={() => {
+                    router.push(`/admin/managetransaction/${tId._id}`);
+                  }}
+                />
+              )
             )}
         </div>
       )}
 
-      {!trustWiseTransaction?.Tdata?.length && !loading && <NoData />}
+      {!trustWiseTransaction?.allTrust?.length && !loading && <NoData />}
+
       <ReactPaginate
         previousLabel={<ArrowIcon />}
         nextLabel={
@@ -129,7 +119,9 @@ const ManageTransaction = () => {
         }
         breakLabel={<div className="px-4 py-2 border rounded">...</div>}
         breakClassName={"break-me"}
-        pageCount={Math.ceil(trustWiseTransaction?.Tdata.length / itemsPerPage)}
+        pageCount={Math.ceil(
+          trustWiseTransaction?.allTrust?.length / itemsPerPage
+        )}
         marginPagesDisplayed={5}
         pageRangeDisplayed={5}
         containerClassName={"pagination flex justify-center mt-4"}

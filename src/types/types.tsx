@@ -107,9 +107,22 @@ export type ReviewType = {
 };
 
 export type TrustWiseTransaction = {
-  Tdata: TrustData[];
-  TotalAmount: number;
-  totalSupporters: number;
+  allTrust: [
+    {
+      _id: string;
+      tId: TrustData;
+      disasterImage: string;
+      targetFund: number;
+      startDate: Date;
+      recievedFund: number;
+      title: string;
+      description: string;
+      altContact: number;
+      naturalSupporter: string[];
+      nUniqueSupporters: number;
+    }
+  ];
+  receiveFund: number;
 };
 
 export type SingleTrustTransaction = {
