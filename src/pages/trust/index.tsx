@@ -1,18 +1,52 @@
 import ReactBarChart from "@/components/ReactBarChart.tsx";
 import ReactLineChart from "@/components/ReactLineChart";
+import Spinner from "@/components/Spinner";
 import TrustNavbar from "@/components/TrustNavbar";
 import TrustRoute from "@/components/TrustRoute/TrustRoute";
+import { BACKEND_BASE_URL } from "@/consts";
 import { useAuth } from "@/context/auth";
 import ManageTrustIcon from "@/icons/ManageTrustIcon";
 import ProfileIcon from "@/icons/ProfileIcon";
+import Cookies from "js-cookie";
+import { useEffect, useState } from "react";
 
 const Trust = () => {
   const { user } = useAuth();
+  const access_token = Cookies.get("access_token");
+  const [supporter, setSupporter] = useState();
+  const [loading, setLoading] = useState(false);
+
   console.log(user);
 
   const formatAmount = (amount: any) => {
     return new Intl.NumberFormat("en-IN").format(amount);
   };
+
+  const getSupporterChartData = () => {
+    setLoading(true);
+    fetch(`${BACKEND_BASE_URL}/trust/mySupporter`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+        "Content-type": "application/json",
+      },
+    })
+      .then((res) => {
+        if (res && res.status === 200) {
+          return res.json();
+        }
+      })
+      .then((data) => {
+        setSupporter(data.mySupporters[0].nUniqueSupporters);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    getSupporterChartData();
+  }, [access_token]);
 
   const supporterChartData = [
     { date: "12 jan", supporters: 2400 },
@@ -34,6 +68,7 @@ const Trust = () => {
   ];
   return (
     <TrustNavbar title="Home">
+      {loading && <Spinner />}
       <div className="grid grid-cols-2 justify-between gap-5">
         <div
           onClick={() => {
@@ -45,17 +80,12 @@ const Trust = () => {
             <span>
               <ProfileIcon color="#FFFFFF" />
             </span>
-            {5}
+            {supporter}
           </h1>
           <p className="text-base font-medium">Suppoters</p>
         </div>
 
-        <div
-          // onClick={() => {
-          //   router.push("/admin/managetransaction");
-          // }}
-          className="flex flex-col py-5 justify-center hover:scale-105 cursor-pointer hover:transition-all hover:duration-400 hover:ease-out items-center bg-secondary w-full rounded-md text-white"
-        >
+        <div className="flex flex-col py-5 justify-center hover:scale-105 cursor-pointer hover:transition-all hover:duration-400 hover:ease-out items-center bg-secondary w-full rounded-md text-white">
           <h1 className="font-inter font-bold text-2xl">
             <span className="font-normal">₹</span>{" "}
             {formatAmount(user.manualDonation)}
