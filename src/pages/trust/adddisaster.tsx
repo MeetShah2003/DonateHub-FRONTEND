@@ -204,6 +204,16 @@ const AddDisaster = () => {
               placeholder="₹5000"
               onChange={handleChange}
               onBlur={handleBlur}
+              onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+                  e.preventDefault(); // Prevent the default behavior of increasing/decreasing the value
+                }
+              }}
+              onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
+                if (e.target.value.length > 6) {
+                  e.target.value = e.target.value.slice(0, 6);
+                }
+              }}
               value={values.targetFund || ""}
             />
             {touched.targetFund && errors.targetFund && (
@@ -218,11 +228,20 @@ const AddDisaster = () => {
               className="border-2 w-full shadow-sm outline-none rounded-md p-2"
               name="altContact"
               id="altContact"
-              maxLength={10}
               placeholder="+91 9858988854"
               onChange={handleChange}
               onBlur={handleBlur}
               value={values.altContact}
+              onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+                  e.preventDefault(); // Prevent the default behavior of increasing/decreasing the value
+                }
+              }}
+              onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
+                if (e.target.value.length > 10) {
+                  e.target.value = e.target.value.slice(0, 10);
+                }
+              }}
             />
             {touched.altContact && errors.altContact && (
               <div className="text-red-500">{errors.altContact}</div>

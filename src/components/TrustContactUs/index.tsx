@@ -30,31 +30,34 @@ const TrustContactUs = () => {
       initialValues: initialValues,
       onSubmit: (values) => {
         setLoading(true);
-        fetch(`${BACKEND_BASE_URL}/trust/contactUs`, {
-          method: "POST",
-          headers: {
-            "Content-type": "application/json",
-            Authorization: `Bearer ${access_token}`,
-          },
-          body: JSON.stringify(values),
-        })
-          .then((res) => {
-            if (res && res.status === 200) {
-              return res.json();
-            }
+        if (values) {
+          console.log(values);
+          fetch(`${BACKEND_BASE_URL}/trust/contactUs`, {
+            method: "POST",
+            headers: {
+              "Content-type": "application/json",
+              Authorization: `Bearer ${access_token}`,
+            },
+            body: JSON.stringify(values),
           })
-          .then((data) => {
-            if (data) {
-              successToast("Form Submitted Successfully");
-              push("/dashboard");
-            }
-          })
-          .catch(() => {
-            errorToast("Something Went Wrong");
-          })
-          .finally(() => {
-            setLoading(false);
-          });
+            .then((res) => {
+              if (res && res.status === 200) {
+                return res.json();
+              }
+            })
+            .then((data) => {
+              if (data) {
+                successToast("Form Submitted Successfully");
+                push("/dashboard");
+              }
+            })
+            .catch(() => {
+              errorToast("Something Went Wrong");
+            })
+            .finally(() => {
+              setLoading(false);
+            });
+        }
       },
     });
 
@@ -64,7 +67,7 @@ const TrustContactUs = () => {
 
       <form
         onSubmit={handleSubmit}
-        className="max-w-screen-md mx-auto flex flex-col gap-2 w-full"
+        className="max-w-full mx-auto flex flex-col gap-2 w-full"
       >
         <div className="flex flex-col border-2 px-2 py-1 focus-within:border-primary">
           <label className="pb-1 text-sm font-medium">Your Full Name</label>
@@ -107,8 +110,17 @@ const TrustContactUs = () => {
             type="number"
             value={values.contactNo}
             onChange={handleChange}
-            maxLength={10}
             onBlur={handleBlur}
+            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+              if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+                e.preventDefault(); // Prevent the default behavior of increasing/decreasing the value
+              }
+            }}
+            onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
+              if (e.target.value.length > 10) {
+                e.target.value = e.target.value.slice(0, 10);
+              }
+            }}
             className="outline-none tracking-wider"
             placeholder="+91 9878588845"
           />

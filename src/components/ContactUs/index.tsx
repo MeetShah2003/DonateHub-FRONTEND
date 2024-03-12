@@ -11,7 +11,7 @@ import { useRouter } from "next/router";
 const ContactUs = () => {
   const [loading, setLoading] = useState(false);
   const { push } = useRouter();
-  const access_token = Cookies.get('access_token')
+  const access_token = Cookies.get("access_token");
 
   const errorToast = (errorMessage: string) => toast.error(errorMessage);
   const successToast = (successMessage: string) =>
@@ -107,8 +107,17 @@ const ContactUs = () => {
             type="text"
             value={values.contactNo}
             onChange={handleChange}
-            maxLength={10}
             onBlur={handleBlur}
+            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+              if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+                e.preventDefault();
+              }
+            }}
+            onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
+              if (e.target.value.length > 10) {
+                e.target.value = e.target.value.slice(0, 10);
+              }
+            }}
             className="outline-none tracking-wider"
             placeholder="+91 9878588845"
           />

@@ -262,7 +262,7 @@ const ProfileTrust = () => {
               </select>
             </div>
 
-            <div className="flex flex-col border-2 border-t-transparent px-2 py-1 rounded-b-lg focus-within:border-primary">
+            <div className="flex flex-col border-2 border-t-transparent px-2 py-1 focus-within:border-primary">
               <label className="pb-1 text-sm font-medium">Mobile No</label>
               <input
                 id="contactNo"
