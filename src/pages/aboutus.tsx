@@ -56,19 +56,19 @@ const AboutUsPage = () => {
                   <h3 className="text-xl font-semibold mb-2">
                     Darshan Prajapati
                   </h3>
-                  <p className="text-sm">Frontend Developer</p>
+                  <p className="text-sm">Team Member</p>
                 </div>
                 <div className="bg-white p-6 rounded-lg shadow-lg">
                   <h3 className="text-xl font-semibold mb-2">Meet Shah</h3>
-                  <p className="text-sm">Backend Developer</p>
+                  <p className="text-sm">Team Member</p>
                 </div>
                 <div className="bg-white p-6 rounded-lg shadow-lg">
                   <h3 className="text-xl font-semibold mb-2">Kishan Pandav</h3>
-                  <p className="text-sm">Documentation Creator</p>
+                  <p className="text-sm">Team Member</p>
                 </div>
                 <div className="bg-white p-6 rounded-lg shadow-lg">
                   <h3 className="text-xl font-semibold mb-2">Parth Katariya</h3>
-                  <p className="text-sm">PPT Creator</p>
+                  <p className="text-sm">Team Member</p>
                 </div>
               </div>
             </div>

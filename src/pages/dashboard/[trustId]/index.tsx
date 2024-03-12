@@ -320,7 +320,22 @@ const TrustDetails = () => {
                       onChange={handleChange}
                       className="w-full border border-primary outline-none rounded-lg pl-10 p-2"
                       placeholder="Enter Amount"
+                      onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                        if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+                          e.preventDefault(); // Prevent the default behavior of increasing/decreasing the value
+                        }
+                      }}
+                      onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        const inputValue = e.target.value;
+                        // Check if the first character is '0' or if all characters are '0'
+                        if (inputValue === "0" || /^0+$/.test(inputValue)) {
+                          e.target.value = ""; // Clear the input field
+                        } else if (inputValue.length > 5) {
+                          e.target.value = inputValue.slice(0, 5); // Limit to 5 characters
+                        }
+                      }}
                     />
+
                     {touched.amount && errors.amount ? (
                       <div className="text-red-500">{errors.amount}</div>
                     ) : null}

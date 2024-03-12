@@ -14,6 +14,7 @@ import { v4 } from "uuid";
 import { toast } from "react-toastify";
 import Spinner from "@/components/Spinner";
 import { useRouter } from "next/router";
+import RuppeSymbol from "@/icons/RuppeSymbol";
 
 const RequestFunds = () => {
   const access_token = Cookies.get("access_token");
@@ -52,7 +53,7 @@ const RequestFunds = () => {
       .min(150, "Description must be at least 150 characters"),
     reqAmount: Yup.number()
       .required("Amount is required")
-      .min(1, "Amount must be at least 1"),
+      .positive("Amount must be greater than zero"),
   });
 
   const { push } = useRouter();
@@ -241,7 +242,7 @@ const RequestFunds = () => {
               )}
             </div>
             <div className="w-full bg-secondary/20 border p-5">
-              <p className="font-bold pb-2">Amount</p>
+              <p className="font-bold pb-2">Tartget Funds</p>
               <input
                 type="number"
                 className="border-2 w-full shadow-sm outline-none rounded-md p-2"
@@ -250,12 +251,23 @@ const RequestFunds = () => {
                 placeholder="₹5000"
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={formatAmount(values.reqAmount) || ""}
+                onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                  if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+                    e.preventDefault(); // Prevent the default behavior of increasing/decreasing the value
+                  }
+                }}
+                onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  if (e.target.value.length > 6) {
+                    e.target.value = e.target.value.slice(0, 6);
+                  }
+                }}
+                value={values.reqAmount || ""}
               />
               {touched.reqAmount && errors.reqAmount && (
                 <div className="text-red-500">{errors.reqAmount}</div>
               )}
             </div>
+
             <div className="w-full bg-secondary/20 border p-5">
               <p className="font-bold pb-2">Upload Documents</p>
               <input

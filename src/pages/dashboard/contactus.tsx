@@ -70,7 +70,7 @@ const ContactUsPage = () => {
       <h1 className="font-inter py-5 font-semibold text-steelGray text-xl sm:text-2xl max-w-screen-md mx-auto flex flex-col gap-2 w-full">
         Contact Us
       </h1>
-      <TrustContactUs />
+      <ContactUs />
     </div>
   );
 };

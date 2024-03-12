@@ -97,14 +97,14 @@ const Visitor = () => {
 
           <div className="hidden sm:flex">
             <ul className="gap-5 h-full lg:gap-7 sm:flex">
-              {NAV_MENUES.map(({ id, menu, path, dropdownOptions }) => {
+              {NAV_MENUES.map(({ id, menu, path, dropdownOptions }, index) => {
                 if (menu === "Products" && !isAuthenticated) {
                   return null;
                 }
                 return (
                   <div className="flex items-center justify-center">
                     <li
-                      key={id}
+                      key={index}
                       className="text-base py-5 text-gray-700 font-semibold relative"
                       onMouseEnter={() => {
                         if (menu === "Products") {
@@ -189,28 +189,30 @@ const Visitor = () => {
           } rounded-sm h-screen w-1/2`}
         >
           <ul className="flex  flex-col justify-center">
-            {NAV_MENUES.map(({ id, menu, path, icon, dropdownOptions }) => {
-              if (menu === "My Account" && !isAuthenticated) {
-                return null;
+            {NAV_MENUES.map(
+              ({ id, menu, path, icon, dropdownOptions }, index) => {
+                if (menu === "My Account" && !isAuthenticated) {
+                  return null;
+                }
+                return (
+                  <li key={index} className="text-base px-5 py-4 font-medium">
+                    <div className="flex items-center gap-3">
+                      {icon}
+                      <Link href={path}>{menu}</Link>
+                    </div>
+                    {dropdownOptions && (
+                      <ul className="pl-8">
+                        {dropdownOptions.map((option, index) => (
+                          <li key={index} className="py-2">
+                            <Link href={option.path}>{option.title}</Link>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </li>
+                );
               }
-              return (
-                <li key={id} className="text-base px-5 py-4 font-medium">
-                  <div className="flex items-center gap-3">
-                    {icon}
-                    <Link href={path}>{menu}</Link>
-                  </div>
-                  {dropdownOptions && (
-                    <ul className="pl-8">
-                      {dropdownOptions.map((option, index) => (
-                        <li key={index} className="py-2">
-                          <Link href={option.path}>{option.title}</Link>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </li>
-              );
-            })}
+            )}
             {isAuthenticated && (
               <li
                 onClick={() => {
