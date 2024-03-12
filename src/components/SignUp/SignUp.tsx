@@ -89,50 +89,12 @@ const SignUp = () => {
     validationSchema: SignupSchema,
     onSubmit: async (values) => {
       setLoading(true);
-      const { confirmPassword, ...data } = values;
-      // try {
-      //   fetch(`${BACKEND_BASE_URL}/api/signup`, {
-      //     method: "POST",
-      //     headers: { "Content-Type": "application/json" },
-      //     body: JSON.stringify(data),
-      //   })
-      //     .then((res) => res.json())
-      //     .then((data) => {
-      //       if (data && data.message == "user already exist") {
-      //         errorToast(`${data.user.email} already in use`);
-      //         setTimeout(() => {
-      //           router.push("/login");
-      //         }, 3000);
-      //       }
-      //       if (data && data.message == "trust already exist") {
-      //         errorToast(`${data.trust.email} already in use`);
-      //         setTimeout(() => {
-      //           router.push("/login");
-      //         }, 3000);
-      //       } else {
-      //         successToast("Account created successfully");
-      //         setTimeout(() => {
-      //           router.push("/login");
-      //         }, 3000);
-      //       }
-      //     })
-      //     .catch((error) => {
-      //       console.log(error);
-      //     })
-      //     .finally(() => {
-      //       setLoading(false);
-      //     });
-      // } catch (error) {
-      //   errorToast("something went wrong");
-      // }
+      const { confirmPassword, ...data } = values
 
+      
       if (values) {
         const signUpData = JSON.stringify(data);
         Cookies.set("signup-data", signUpData);
-        // const getSignUpData = Cookies.get("signup-data");
-        // const parsedSignUpData = JSON.parse(getSignUpData);
-        // console.log("finaldata", parsedSignUpData);
-
         fetch(`${BACKEND_BASE_URL}/api/signup`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -157,6 +119,7 @@ const SignUp = () => {
                 router.push("/signup/otpverification");
               }, 3000);
             }
+            
           })
           .catch((error) => {
             console.log(error);
@@ -215,7 +178,6 @@ const SignUp = () => {
                   <CameraIcon />
                 </label>
               </div>
-              {errors.userlogo && errorToast(errors.userlogo)}
             </div>
             <h3 className="font-inter text-3xl drop-shadow-2xl tracking-wider font-bold mb-8">
               Sign Up

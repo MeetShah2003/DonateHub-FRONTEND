@@ -126,6 +126,7 @@ const Admin = () => {
         throw new Error("Failed to fetch data");
       }
       const data = await response.json();
+      console.log(data.receiveFund)
       setTotalCollection(data.receiveFund);
     } catch (error: any) {
       console.log(error);

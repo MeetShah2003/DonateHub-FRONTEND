@@ -7,11 +7,12 @@ import { BACKEND_BASE_URL } from "@/consts";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
+import TrustRoute from "../TrustRoute/TrustRoute";
 
-const ContactUs = () => {
+const ContactUsTrust = () => {
   const [loading, setLoading] = useState(false);
   const { push } = useRouter();
-  const access_token = Cookies.get("access_token");
+  const access_token = Cookies.get('access_token')
 
   const errorToast = (errorMessage: string) => toast.error(errorMessage);
   const successToast = (successMessage: string) =>
@@ -30,7 +31,7 @@ const ContactUs = () => {
       initialValues: initialValues,
       onSubmit: (values) => {
         setLoading(true);
-        fetch(`${BACKEND_BASE_URL}/api/contactUs`, {
+        fetch(`${BACKEND_BASE_URL}/trust/contactUs`, {
           method: "POST",
           headers: {
             "Content-type": "application/json",
@@ -45,6 +46,7 @@ const ContactUs = () => {
           })
           .then((data) => {
             if (data) {
+                console.log(data)
               successToast("Form Submitted Successfully");
               push("/dashboard");
             }
@@ -64,7 +66,7 @@ const ContactUs = () => {
 
       <form
         onSubmit={handleSubmit}
-        className="max-w-screen-md mx-auto flex flex-col gap-2 w-full"
+        className="max-w-full mx-auto flex flex-col gap-2 w-full"
       >
         <div className="flex flex-col border-2 px-2 py-1 focus-within:border-primary">
           <label className="pb-1 text-sm font-medium">Your Full Name</label>
@@ -107,17 +109,8 @@ const ContactUs = () => {
             type="text"
             value={values.contactNo}
             onChange={handleChange}
+            maxLength={10}
             onBlur={handleBlur}
-            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-              if (e.key === "ArrowUp" || e.key === "ArrowDown") {
-                e.preventDefault();
-              }
-            }}
-            onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
-              if (e.target.value.length > 10) {
-                e.target.value = e.target.value.slice(0, 10);
-              }
-            }}
             className="outline-none tracking-wider"
             placeholder="+91 9878588845"
           />
@@ -174,4 +167,4 @@ const ContactUs = () => {
   );
 };
 
-export default ContactUs;
+export default TrustRoute(ContactUsTrust);

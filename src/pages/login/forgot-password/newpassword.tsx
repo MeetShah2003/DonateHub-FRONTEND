@@ -13,12 +13,13 @@ import { toast } from "react-toastify";
 const validationSchema = Yup.object().shape({
   password: Yup.string()
     .required("Required")
-    .min(8, "Password must be at least 8 characters"),
+    .min(8, "Password must be at least 8 characters")
+    .matches(/^[A-Z]/, "First character must be a capital letter"),
   confirmPassword: Yup.string().oneOf(
     [Yup.ref("password")],
-    "Passwords must match"
-  ),
-});
+    "Passwords must match"
+  ),
+});a
 
 const Password = () => {
   const successToast = (message: string) => toast.success(message);
