@@ -81,7 +81,7 @@ const SingleTrustTransaction = () => {
                   Total Supporter
                 </h2>
                 <p className="text-2xl md:text-3xl font-bold text-primary">
-                  {2}
+                  {3}
                 </p>
               </div>
             </div>

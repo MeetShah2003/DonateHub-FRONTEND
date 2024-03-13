@@ -41,7 +41,7 @@ const ProfileUser = () => {
   //     });
   // };
 
-  const agetUpdateAdminProfile = (data: any) => {
+  const getUpdateAdminProfile = (data: any) => {
     setLoading(true);
     fetch(`${BACKEND_BASE_URL}/api/updMyProfile`, {
       method: "PATCH",
