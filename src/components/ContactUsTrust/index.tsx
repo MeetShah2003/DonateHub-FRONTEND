@@ -106,7 +106,7 @@ const ContactUsTrust = () => {
           <input
             id="contactNo"
             name="contactNo"
-            type="text"
+            type="text/trust/contactusc"
             value={values.contactNo}
             onChange={handleChange}
             maxLength={10}

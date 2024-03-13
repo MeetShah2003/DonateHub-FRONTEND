@@ -7,6 +7,7 @@ import { BACKEND_BASE_URL } from "@/consts";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
+import * as Yup from "yup"
 
 const TrustContactUs = () => {
   const [loading, setLoading] = useState(false);
@@ -24,6 +25,14 @@ const TrustContactUs = () => {
     name: "",
     subject: "",
   };
+
+  const validationSchema = Yup.object().shape({
+    name: Yup.string().required("Name is required"),
+    email: Yup.string().email("Invalid email").required("Email is required"),
+    contactNo: Yup.string().required("Mobile No is required"),
+    subject: Yup.string().required("Subject is required"),
+    message: Yup.string().required("Message is required"),
+  });
 
   const { handleBlur, handleChange, handleSubmit, values, errors, touched } =
     useFormik({
@@ -59,6 +68,7 @@ const TrustContactUs = () => {
             });
         }
       },
+      validationSchema
     });
 
   return (
