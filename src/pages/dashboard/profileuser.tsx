@@ -175,7 +175,9 @@ const ProfileUser = () => {
               value={values.firstName || user?.firstName}
             />
             {touched.firstName && errors.firstName && (
-              <span className="text-sm text-red-600">{errors.firstName}</span>
+              <span className="text-sm text-red-600">
+                {errors.firstName.toString()}
+              </span>
             )}
           </div>
           <div className="flex w-1/2 flex-col border-2 border-l-transparent px-2 py-1 rounded-tr-lg focus-within:border-primary">
@@ -191,7 +193,9 @@ const ProfileUser = () => {
               value={values.lastName || user?.lastName}
             />
             {touched.lastName && errors.lastName && (
-              <span className="text-sm text-red-600">{errors.lastName}</span>
+              <span className="text-sm text-red-600">
+                {errors.lastName.toString()}
+              </span>
             )}
           </div>
         </div>
@@ -229,7 +233,9 @@ const ProfileUser = () => {
             </div>
           </div>
           {touched.gender && errors.gender && (
-            <span className="text-sm text-red-600">{errors.gender}</span>
+            <span className="text-sm text-red-600">
+              {errors.gender.toString()}
+            </span>
           )}
         </div>
 
@@ -251,7 +257,9 @@ const ProfileUser = () => {
             placeholder="johndoe@gmail.com"
           />
           {touched.email && errors.email && (
-            <span className="text-sm text-red-600">{errors.email}</span>
+            <span className="text-sm text-red-600">
+              {errors.email.toString()}
+            </span>
           )}
         </div>
 
@@ -269,7 +277,9 @@ const ProfileUser = () => {
             placeholder="+91 9878588845"
           />
           {touched.mono && errors.mono && (
-            <span className="text-sm text-red-600">{errors.mono}</span>
+            <span className="text-sm text-red-600">
+              {errors.mono.toString()}
+            </span>
           )}
         </div>
 

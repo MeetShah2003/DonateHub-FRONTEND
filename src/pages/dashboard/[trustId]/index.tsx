@@ -13,6 +13,12 @@ import Visitor from "@/components/Visitor";
 import RuppeSymbol from "@/icons/RuppeSymbol";
 import { toast } from "react-toastify";
 
+declare global {
+  interface Window {
+    Razorpay: any; // Adjust the type accordingly if you have type definitions for Razorpay
+  }
+}
+
 const TrustDetails = () => {
   const [singleData, setSingleData] = useState<SingleFundRequirement>();
   const [loading, setLoading] = useState(false);

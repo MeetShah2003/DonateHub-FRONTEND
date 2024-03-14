@@ -12,7 +12,7 @@ import TrustRoute from "../TrustRoute/TrustRoute";
 const ContactUsTrust = () => {
   const [loading, setLoading] = useState(false);
   const { push } = useRouter();
-  const access_token = Cookies.get('access_token')
+  const access_token = Cookies.get("access_token");
 
   const errorToast = (errorMessage: string) => toast.error(errorMessage);
   const successToast = (successMessage: string) =>
@@ -46,7 +46,7 @@ const ContactUsTrust = () => {
           })
           .then((data) => {
             if (data) {
-                console.log(data)
+              console.log(data);
               successToast("Form Submitted Successfully");
               push("/dashboard");
             }
@@ -107,7 +107,7 @@ const ContactUsTrust = () => {
             id="contactNo"
             name="contactNo"
             type="text/trust/contactusc"
-            value={values.contactNo}
+            value={values.contactNo as number}
             onChange={handleChange}
             maxLength={10}
             onBlur={handleBlur}

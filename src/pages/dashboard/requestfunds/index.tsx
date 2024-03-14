@@ -162,10 +162,12 @@ const RequestFunds = () => {
                       <span className="flex items-center">
                         {selectedOption ? (
                           <>
-                            <img
+                            <Image
                               src={selectedOption.trustlogo}
                               alt={`Image for ${selectedOption.trustName}`}
                               className="h-6 w-6 mr-2"
+                              width={200}
+                              height={300}
                             />
                             <span>{selectedOption.trustName}</span>
                           </>
@@ -193,7 +195,7 @@ const RequestFunds = () => {
                           role="menuitem"
                           onClick={() => selectOption(option)}
                         >
-                          <img
+                          <Image
                             height={100}
                             width={100}
                             src={option.trustlogo}

@@ -86,10 +86,10 @@ const TrustDonation = () => {
             >
               {TRUST_CATAGORY_OPTIONS &&
                 TRUST_CATAGORY_OPTIONS.length &&
-                TRUST_CATAGORY_OPTIONS.map(({ id, option }) => {
+                TRUST_CATAGORY_OPTIONS.map(({ id, option }, index) => {
                   return (
                     <option
-                      key={id}
+                      key={index}
                       className="cursor-pointer"
                       value={option.value}
                     >
@@ -103,8 +103,8 @@ const TrustDonation = () => {
         <div className="flex flex-col gap-5 justify-center items-center">
           {currentItems &&
             currentItems.length > 0 &&
-            currentItems.map((trust) => {
-              return <TrustDonationModel trust={trust} />;
+            currentItems.map((trust, index) => {
+              return <TrustDonationModel key={index} trust={trust} />;
             })}
         </div>
         {!currentItems?.length && <NoData />}

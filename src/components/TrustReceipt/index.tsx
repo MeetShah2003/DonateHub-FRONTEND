@@ -55,15 +55,12 @@ const styles = StyleSheet.create({
 
 // Receipt component
 const TrustReceipt: React.FC<{
-  transactionData: SuccessTrustDonationTransaction;
+  transactionData: SuccessTrustDonationTransaction | undefined;
   firstName: string;
   lastName: string;
 }> = ({ transactionData, firstName, lastName }) => (
   <Document>
     <Page size="A4" style={styles.page}>
-      {/* Logo */}
-      <Image src={logo} style={styles.logo} />
-
       {/* Title */}
       <Text style={styles.title}>Donation Receipt</Text>
 
@@ -104,7 +101,9 @@ const TrustReceipt: React.FC<{
             <Text style={styles.text}>Transaction Date</Text>
           </View>
           <View style={styles.tableCell}>
-            <Text style={styles.text}>{transactionData?.transactionDate}</Text>
+            <Text style={styles.text}>
+              {transactionData?.transactionDate?.toString()}
+            </Text>
           </View>
         </View>
         <View style={styles.table}>

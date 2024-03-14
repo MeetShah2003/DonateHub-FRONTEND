@@ -3,7 +3,7 @@ import BlockedTrustIcon from "@/icons/BlockedTrustIcon";
 import PendingStatusIcon from "@/icons/PendingStatusIcon";
 
 const TrustNotLoginPopup: React.FC<{
-  reason: "blocked" | "pending";
+  reason: "blocked" | "pending" | undefined;
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }> = ({ reason, isOpen, setIsOpen }) => {

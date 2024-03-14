@@ -79,8 +79,8 @@ const AboutUsPage = () => {
             <div className="max-w-4xl mx-auto text-center text-white">
               <h2 className="text-4xl font-bold mb-8">Contact Us</h2>
               <p className="text-lg">
-                We'd love to hear from you! If you have any questions, feedback,
-                or inquiries, feel free to reach out to us.
+                We&apos;`d love to hear from you! If you have any questions,
+                feedback, or inquiries, feel free to reach out to us.
               </p>
               <p className="text-lg">
                 Email: contact@donatehub.com <br />

@@ -1,4 +1,5 @@
 import Visitor from "@/components/Visitor";
+import Link from "next/link";
 
 const home = () => {
   const HOW_IT_WORKS: { id: number; title: string; description: string }[] = [
@@ -48,12 +49,12 @@ const home = () => {
                 impact in the world. Your donation can change lives.
               </p>
               <div className="mt-10 flex flex-col items-center sm:flex-row sm:justify-center sm:gap-x-6">
-                <a
+                <Link
                   href="/login"
                   className="rounded-md bg-primary px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-primaryLight focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mb-4 sm:mb-0"
                 >
                   Donate Now
-                </a>
+                </Link>
               </div>
             </div>
           </div>
@@ -68,18 +69,18 @@ const home = () => {
             At Donate Hub, we prioritize providing you with an effortless and
             enriching donation experience. Our user-friendly interface ensures
             easy navigation, allowing you to explore various categories of
-            causes and charities seamlessly. Whether you're passionate about
-            environmental conservation, education, healthcare, or social
+            causes and charities seamlessly. Whether you&apos;re passionate
+            about environmental conservation, education, healthcare, or social
             justice, finding the cause that resonates with you has never been
             easier. When it comes to making donations, your security and privacy
-            are paramount. That's why we've implemented robust measures to
-            safeguard your transactions and personal information. With Donate
-            Hub, you can donate with confidence, knowing that your data is
-            protected at all times. But our commitment doesn't stop at secure
-            transactions. We believe in the power of impactful giving. With
-            Donate Hub, you have the opportunity to track the impact of your
-            donations and witness firsthand how they're making a difference in
-            the lives of others.
+            are paramount. That&apos;s why we&apos;ve implemented robust
+            measures to safeguard your transactions and personal information.
+            With Donate Hub, you can donate with confidence, knowing that your
+            data is protected at all times. But our commitment doesn&apos;t stop
+            at secure transactions. We believe in the power of impactful giving.
+            With Donate Hub, you have the opportunity to track the impact of
+            your donations and witness firsthand how they&apos;re making a
+            difference in the lives of others.
           </p>
         </div>
         <div className="flex flex-col gap-10 items-center justify-center my-10 w-full">
@@ -93,7 +94,6 @@ const home = () => {
                 return (
                   <div
                     key={index}
-                    id={id}
                     className="border rounded-md shadow-md gap-3 h-full bg-indigo-50 p-3 flex flex-col items-center"
                   >
                     <h1 className="text-xl font-extrabold font-inter text-black/75">
@@ -166,8 +166,8 @@ const home = () => {
               Trusted by thousands of donors worldwide
             </p>
             <p className="mt-6 text-lg leading-8 text-indigo-200">
-              We're committed to providing a seamless donation experience with
-              transparent processes and impactful results.
+              We&apos;re committed to providing a seamless donation experience
+              with transparent processes and impactful results.
             </p>
           </div>
           <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">

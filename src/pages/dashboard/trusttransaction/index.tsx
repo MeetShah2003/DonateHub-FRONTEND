@@ -71,9 +71,12 @@ const TrustTransaction = () => {
 
         <div className="flex flex-col gap-3">
           {currentTransactions.map(
-            ({ manualDonatedAmount, paymentId, transactionDate, tId }) => (
+            (
+              { manualDonatedAmount, paymentId, transactionDate, tId },
+              index
+            ) => (
               <div
-                key={tId}
+                key={index}
                 className="w-full bg-white rounded-lg shadow-md border p-4"
               >
                 <div className="flex flex-col md:flex-row items-center justify-between">
@@ -87,7 +90,9 @@ const TrustTransaction = () => {
                     <p className="text-xl font-normal text-red-600">
                       - ₹ {formatAmount(manualDonatedAmount)}
                     </p>
-                    <p className="text-sm text-gray-500">{transactionDate}</p>
+                    <p className="text-sm text-gray-500">
+                      {transactionDate.toString()}
+                    </p>
                   </div>
                 </div>
               </div>

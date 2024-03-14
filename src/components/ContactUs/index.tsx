@@ -117,7 +117,7 @@ const ContactUs = () => {
             id="contactNo"
             name="contactNo"
             type="text"
-            value={values.contactNo}
+            value={values.contactNo as number}
             onChange={handleChange}
             onBlur={handleBlur}
             onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {

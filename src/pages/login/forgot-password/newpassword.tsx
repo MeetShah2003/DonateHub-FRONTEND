@@ -18,8 +18,8 @@ const validationSchema = Yup.object().shape({
   confirmPassword: Yup.string().oneOf(
     [Yup.ref("password")],
     "Passwords must match"
-  ),
-});a
+  ),
+});
 
 const Password = () => {
   const successToast = (message: string) => toast.success(message);

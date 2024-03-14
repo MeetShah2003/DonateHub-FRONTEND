@@ -41,7 +41,7 @@ const ManageTransaction = () => {
         setTrustWiseTransaction(data);
         setLoading(false);
       } catch (error) {
-        setError(error);
+        console.log(error);
         setLoading(false);
       }
     };
@@ -97,7 +97,7 @@ const ManageTransaction = () => {
                   description={description}
                   trustImage={disasterImage}
                   founder={tId.founder}
-                  creatsionDate={tId.creationDate}
+                  creationDate={tId.creationDate}
                   amount={recievedFund}
                   onShowTransaction={() => {
                     router.push(`/admin/managetransaction/${tId._id}`);
@@ -120,7 +120,7 @@ const ManageTransaction = () => {
         breakLabel={<div className="px-4 py-2 border rounded">...</div>}
         breakClassName={"break-me"}
         pageCount={Math.ceil(
-          trustWiseTransaction?.allTrust?.length / itemsPerPage
+          (trustWiseTransaction?.allTrust?.length as number) / itemsPerPage
         )}
         marginPagesDisplayed={5}
         pageRangeDisplayed={5}
