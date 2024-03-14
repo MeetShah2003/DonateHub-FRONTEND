@@ -223,7 +223,6 @@ const RequestFund = () => {
             </div>
           </form>
         </div>
-        
       </TrustNavbar>
     </div>
   );

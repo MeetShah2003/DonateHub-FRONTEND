@@ -83,7 +83,7 @@ export type ContactUsType = {
   uId?: UserData;
   name: string;
   email: string;
-  contactNo: number;
+  contactNo: number | null;
   subject: string;
   message: string;
 };
@@ -131,6 +131,7 @@ export type SingleTrustTransaction = {
   tId?: TrustData;
   uId: UserData;
   donatedAmount: number;
+  manualDonatedAmount?: number;
   transactionDate: Date;
 };
 

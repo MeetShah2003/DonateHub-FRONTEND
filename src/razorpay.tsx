@@ -20,7 +20,7 @@ const handlePayment = async (amount: number) => {
     theme?: {
       color?: string;
     };
-    handler?: (response: RazorpayPaymentResponse) => void;
+    handler?: (response: any) => void;
     modal?: {
       ondismiss?: () => void;
     };
@@ -48,7 +48,7 @@ const handlePayment = async (amount: number) => {
     order_id: "pay_123",
   };
 
-  const rzp = new Razorpay(options);
+  const rzp = new Razorpay(options as any);
   rzp.open();
 };
 

@@ -1,7 +1,8 @@
 import React from "react";
+import Image from "next/image";
 
 interface TransactionInfoProps {
-  amount: number;
+  amount: string;
   userName: string;
   paymentId: string;
   userImage: string;
@@ -23,10 +24,12 @@ const TransactionInfo: React.FC<TransactionInfoProps> = ({
     <div className="w-full bg-white rounded-lg shadow-md p-4">
       <div className="flex flex-col md:flex-row items-center justify-between">
         <div className="flex items-center space-x-4 mb-4 md:mb-0">
-          <img
+          <Image
             src={userImage}
             alt="User"
             className="w-12 h-12 rounded-full object-cover"
+            height={200}
+            width={300}
           />
           <div>
             <h2 className="text-lg font-semibold">{userName}</h2>
@@ -38,7 +41,7 @@ const TransactionInfo: React.FC<TransactionInfoProps> = ({
           <p className="text-xl font-normal text-green-600">
             + ₹ {formatAmount(amount)}
           </p>
-          <p className="text-sm text-gray-500">{transactionDate}</p>
+          <p className="text-sm text-gray-500">{transactionDate.toString()}</p>
         </div>
       </div>
     </div>

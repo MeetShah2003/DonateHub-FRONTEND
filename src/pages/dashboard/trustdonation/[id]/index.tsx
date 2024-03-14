@@ -13,6 +13,8 @@ import Visitor from "@/components/Visitor";
 import RuppeSymbol from "@/icons/RuppeSymbol";
 import ReviewSection from "@/components/ReviewSection";
 import { toast } from "react-toastify";
+import Razorpay from "razorpay";
+import RazorpayScript from "@/components/RazorpayScript";
 
 const TrustDetails = () => {
   const [singleData, setSingleData] = useState<TrustData>();
@@ -89,11 +91,13 @@ const TrustDetails = () => {
     console.log("Payment failed:", response);
   };
 
+  const initialValues: { amount: number | null } = {
+    amount: null,
+  };
+
   const { handleSubmit, handleChange, setValues, values, errors, touched } =
     useFormik({
-      initialValues: {
-        amount: null,
-      },
+      initialValues,
       validationSchema: amountValidationSchema,
       onSubmit: async (values) => {
         const data = {
@@ -174,6 +178,7 @@ const TrustDetails = () => {
         <Visitor />
       </div>
       {loading && <Spinner />}
+      <RazorpayScript />
       <div className="max-w-full w-90% mx-auto my-5">
         <div className="flex flex-col gap-3">
           <div className="flex flex-col md:flex-row w-full p-3 shadow-md rounded-lg gap-5 bg-gray-100">
@@ -267,7 +272,7 @@ const TrustDetails = () => {
                       id="amount"
                       name="amount"
                       maxLength={7}
-                      value={values.amount}
+                      value={values.amount as number}
                       onChange={handleChange}
                       className="w-full border border-primary outline-none rounded-lg pl-10 p-2"
                       placeholder="Enter Amount"

@@ -257,10 +257,10 @@ const AddDisaster = () => {
               id="endDate"
               onChange={handleChange}
               onBlur={handleBlur}
-              value={values.endDate}
+              value={values.endDate.toString()}
             />
             {touched.endDate && errors.endDate && (
-              <div className="text-red-500">{errors.endDate}</div>
+              <div className="text-red-500">{errors.endDate as string}</div>
             )}
           </div>
 

@@ -88,7 +88,7 @@ const ShowTransaction = () => {
                 transaction date
               </td>
               <td className="border border-gray-400 px-4 py-2">
-                {successTransactionData?.userTransaction?.transactionDate}
+                {successTransactionData?.userTransaction?.transactionDate.toString()}
               </td>
             </tr>
             <tr>

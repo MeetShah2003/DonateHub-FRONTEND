@@ -19,7 +19,7 @@ const ProtectedRoute = (Component: any, allowedRoles: any) => {
           router.push("/dashboard");
         }
       }
-    }, [isAuthenticated, user, router, allowedRoles]);
+    }, [isAuthenticated, user, router]);
 
     return isAuthenticated &&
       user &&

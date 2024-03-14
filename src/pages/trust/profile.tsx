@@ -291,7 +291,7 @@ const ProfileTrust = () => {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 max={new Date().toISOString().split("T")[0]}
-                value={values.creationDate || user?.creationDate}
+                value={values.creationDate.toString() || user?.creationDate}
               />
             </div>
 

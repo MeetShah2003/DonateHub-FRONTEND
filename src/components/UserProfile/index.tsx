@@ -3,6 +3,7 @@ import LogoutIcon from "@/icons/LogoutIcon";
 import ProfileIcon from "@/icons/ProfileIcon";
 import { useRouter } from "next/router";
 import React, { ReactNode, useState } from "react";
+import Image from "next/image";
 
 const UserProfile = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -31,10 +32,12 @@ const UserProfile = () => {
           aria-label="User menu"
           aria-haspopup="true"
         >
-          <img
+          <Image
             className="h-10 w-10 rounded-full"
             src={user?.userlogo}
             alt="User avatar"
+            height={200}
+            width={300}
           />
         </button>
         <div className="flex flex-col">

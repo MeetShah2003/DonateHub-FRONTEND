@@ -102,9 +102,8 @@ const Visitor = () => {
                   return null;
                 }
                 return (
-                  <div className="flex items-center justify-center">
+                  <div key={index} className="flex items-center justify-center">
                     <li
-                      key={index}
                       className="text-base py-5 text-gray-700 font-semibold relative"
                       onMouseEnter={() => {
                         if (menu === "Products") {
@@ -122,6 +121,7 @@ const Visitor = () => {
                         <ul className="absolute left-0 mt-2 w-[250px] bg-white shadow-lg border rounded-md py-1">
                           {dropdownOptions.map((option, index) => (
                             <div
+                              key={index}
                               onClick={() => {
                                 if (menu === "Products") {
                                   setIsHovered(false);
@@ -189,30 +189,28 @@ const Visitor = () => {
           } rounded-sm h-screen w-1/2`}
         >
           <ul className="flex  flex-col justify-center">
-            {NAV_MENUES.map(
-              ({ id, menu, path, icon, dropdownOptions }, index) => {
-                if (menu === "My Account" && !isAuthenticated) {
-                  return null;
-                }
-                return (
-                  <li key={index} className="text-base px-5 py-4 font-medium">
-                    <div className="flex items-center gap-3">
-                      {icon}
-                      <Link href={path}>{menu}</Link>
-                    </div>
-                    {dropdownOptions && (
-                      <ul className="pl-8">
-                        {dropdownOptions.map((option, index) => (
-                          <li key={index} className="py-2">
-                            <Link href={option.path}>{option.title}</Link>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </li>
-                );
+            {NAV_MENUES.map(({ menu, path, icon, dropdownOptions }, index) => {
+              if (menu === "My Account" && !isAuthenticated) {
+                return null;
               }
-            )}
+              return (
+                <li key={index} className="text-base px-5 py-4 font-medium">
+                  <div className="flex items-center gap-3">
+                    {icon}
+                    <Link href={path}>{menu}</Link>
+                  </div>
+                  {dropdownOptions && (
+                    <ul className="pl-8">
+                      {dropdownOptions.map((option, index) => (
+                        <li key={index} className="py-2">
+                          <Link href={option.path}>{option.title}</Link>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </li>
+              );
+            })}
             {isAuthenticated && (
               <li
                 onClick={() => {

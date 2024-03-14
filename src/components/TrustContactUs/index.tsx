@@ -118,7 +118,7 @@ const TrustContactUs = () => {
             id="contactNo"
             name="contactNo"
             type="number"
-            value={values.contactNo}
+            value={values.contactNo as number}
             onChange={handleChange}
             onBlur={handleBlur}
             onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
