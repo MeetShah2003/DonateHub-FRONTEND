@@ -65,7 +65,7 @@ const TrustProfile = () => {
                         if (user?.role === "trust") {
                           setTimeout(() => {
                             router.push("/trust/profile");
-                          }, 1000);
+                          }, 3000);
                         }
                       } else {
                         logout();

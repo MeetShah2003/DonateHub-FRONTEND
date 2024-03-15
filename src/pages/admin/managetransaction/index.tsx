@@ -10,6 +10,7 @@ import NoData from "@/components/NoData";
 import { TrustWiseTransaction } from "@/types/types";
 import ReactPaginate from "react-paginate";
 import ArrowIcon from "@/icons/ArrowIcon";
+import { toast } from "react-toastify";
 
 const ManageTransaction = () => {
   const access_token = Cookies.get("access_token");
@@ -19,6 +20,10 @@ const ManageTransaction = () => {
   const [error, setError] = useState(null);
   const router = useRouter();
   const itemsPerPage = 10;
+
+  const errorToast = (errorMessage: string) => toast.error(errorMessage);
+  const successToast = (successMessage: string) =>
+    toast.success(successMessage);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -41,7 +46,7 @@ const ManageTransaction = () => {
         setTrustWiseTransaction(data);
         setLoading(false);
       } catch (error) {
-        console.log(error);
+        errorToast("something went wrong");
         setLoading(false);
       }
     };

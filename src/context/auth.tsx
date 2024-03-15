@@ -10,6 +10,7 @@ import {
   SetStateAction,
   Dispatch,
 } from "react";
+import { toast } from "react-toastify";
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -19,6 +20,8 @@ interface AuthContextType {
   forgotPasswordEmail: string | null;
   setForgotPasswordEmail: Dispatch<SetStateAction<string>>;
 }
+const errorToast = (errorMessage: string) => toast.error(errorMessage);
+const successToast = (successMessage: string) => toast.success(successMessage);
 
 export const AuthContext = createContext<AuthContextType | undefined>(
   undefined
@@ -65,7 +68,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         }
       })
       .catch((error: any) => {
-        console.log(error);
+        errorToast("something went wrong");
       });
   };
 

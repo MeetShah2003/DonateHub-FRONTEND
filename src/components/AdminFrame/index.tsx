@@ -69,7 +69,6 @@ const AdminFrame: React.FC<{
   return (
     <>
       <div className="flex h-screen z-50 overflow-hidden">
-        {/* Sidebar for large screens */}
         <div className="hidden  sm:block sm:w-1/2 md:w-[30%] z-50 border border-t-transparent shadow-sm bg-primary rounded-tr-md rounded-tb-md overflow-y-auto">
           <ul className="my-5">
             {ADMIN_MENUS.map(({ icon, id, menu, path }) => (

@@ -1,5 +1,4 @@
 import Spinner from "@/components/Spinner";
-import Visitor from "@/components/Visitor";
 import { useFormik } from "formik";
 import { useState } from "react";
 import { ContactUsType } from "@/types/types";

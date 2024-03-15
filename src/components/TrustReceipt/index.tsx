@@ -9,7 +9,6 @@ import {
   Image,
 } from "@react-pdf/renderer";
 import { SuccessTrustDonationTransaction } from "@/types/types";
-import logo from "../../../public/images/donatehublogo.png";
 
 // Define styles for the PDF
 const styles = StyleSheet.create({

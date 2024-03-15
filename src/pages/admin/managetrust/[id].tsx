@@ -5,20 +5,19 @@ import Cookies from "js-cookie";
 import { TrustData } from "@/types/types";
 import { BACKEND_BASE_URL } from "@/consts";
 import Spinner from "@/components/Spinner";
-import UserRoute from "@/components/UserRoute/UserRoute";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import { useAuth } from "@/context/auth";
-import Visitor from "@/components/Visitor";
-import RuppeSymbol from "@/icons/RuppeSymbol";
 import AdminRoute from "@/components/AdminRoute";
 import AdminFrame from "@/components/AdminFrame";
+import { toast } from "react-toastify";
 
 const SingleTrustDetail = () => {
   const [singleData, setSingleData] = useState<TrustData>();
   const [loading, setLoading] = useState(false);
   const { query } = useRouter();
   const access_token = Cookies.get("access_token");
+
+  const errorToast = (errorMessage: string) => toast.error(errorMessage);
+  const successToast = (successMessage: string) =>
+    toast.success(successMessage);
 
   const getSingleTrustData = async (id: string) => {
     setLoading(true);
@@ -36,7 +35,9 @@ const SingleTrustDetail = () => {
       })
       .then((data) => {
         setSingleData(data.singlePageTrust);
-        console.log(data);
+      })
+      .catch((error) => {
+        errorToast("something went wrong");
       })
       .finally(() => {
         setLoading(false);

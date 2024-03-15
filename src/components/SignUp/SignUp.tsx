@@ -89,9 +89,8 @@ const SignUp = () => {
     validationSchema: SignupSchema,
     onSubmit: async (values) => {
       setLoading(true);
-      const { confirmPassword, ...data } = values
+      const { confirmPassword, ...data } = values;
 
-      
       if (values) {
         const signUpData = JSON.stringify(data);
         Cookies.set("signup-data", signUpData);
@@ -102,14 +101,13 @@ const SignUp = () => {
         })
           .then((res) => res.json())
           .then((data) => {
-            if (data && data.message == "user already exist") {
-              errorToast(`${data.user.email} already in use`);
+            if (data.message == "user already exist") {
+              errorToast("email already in use");
               setTimeout(() => {
                 router.push("/login");
               }, 3000);
-            }
-            if (data && data.message == "trust already exist") {
-              errorToast(`${data.trust.email} already in use`);
+            } else if (data.message == "trust already exist") {
+              errorToast("email already in use");
               setTimeout(() => {
                 router.push("/login");
               }, 3000);
@@ -119,10 +117,9 @@ const SignUp = () => {
                 router.push("/signup/otpverification");
               }, 3000);
             }
-            
           })
           .catch((error) => {
-            console.log(error);
+            errorToast("something went wrong");
           })
           .finally(() => {
             setLoading(false);

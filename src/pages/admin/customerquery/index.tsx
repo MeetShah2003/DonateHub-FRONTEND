@@ -9,6 +9,7 @@ import Spinner from "@/components/Spinner";
 import { useRouter } from "next/router";
 import NoData from "@/components/NoData";
 import AdminRoute from "@/components/AdminRoute";
+import { toast } from "react-toastify";
 
 const CustomerQuery = () => {
   const itemsPerPage = 10;
@@ -18,6 +19,10 @@ const CustomerQuery = () => {
   const [contactQueries, setContactQueries] = useState<ContactUsType[]>([]);
   const access_token = Cookies.get("access_token");
   const { push } = useRouter();
+
+  const errorToast = (errorMessage: string) => toast.error(errorMessage);
+  const successToast = (successMessage: string) =>
+    toast.success(successMessage);
 
   const onPageChange = ({ selected }: any) => {
     setCurrentPage(selected);
@@ -49,7 +54,7 @@ const CustomerQuery = () => {
         setContactQueries(data.contactUs);
       })
       .catch((error) => {
-        console.error("Error fetching data:", error);
+        errorToast("something went wrong");
       })
       .finally(() => {
         setLoading(false);

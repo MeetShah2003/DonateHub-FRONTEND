@@ -24,23 +24,7 @@ const AdminProfile = () => {
   const errorToast = (errorMessage: string) => toast.error(errorMessage);
   const successToast = (successMessage: string) =>
     toast.success(successMessage);
-
-  // const getAdminProfile = () => {
-  //   fetch(`${BACKEND_BASE_URL}/admin/adminProfile`, {
-  //     method: "GET",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Authorization: `Bearer ${token}`,
-  //     },
-  //   })
-  //     .then((res) => {
-  //       return res.json();
-  //     })
-  //     .then((data) => {
-  //       setUserData(data["myProfile"]);
-  //     });
-  // };
-
+    
   const getUpdateAdminProfile = (data: any) => {
     setLoading(true);
     fetch(`${BACKEND_BASE_URL}/admin/updateProfile`, {

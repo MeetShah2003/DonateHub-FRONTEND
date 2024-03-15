@@ -7,6 +7,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import Spinner from "../Spinner";
 import { ReviewType } from "@/types/types";
+import { toast } from "react-toastify";
 
 const ReviewSection: React.FC<{ trustId: string }> = ({ trustId }) => {
   const [loading, setLoading] = useState(false);
@@ -14,6 +15,10 @@ const ReviewSection: React.FC<{ trustId: string }> = ({ trustId }) => {
   const [likedReviews, setLikedReviews] = useState<string[]>([]);
   const [likeCounts, setLikeCounts] = useState<{ [key: string]: number }>({});
   const access_token = Cookies.get("access_token");
+
+  const errorToast = (errorMessage: string) => toast.error(errorMessage);
+  const successToast = (successMessage: string) =>
+    toast.success(successMessage);
 
   const writeReview = (id: string, reviewText: string) => {
     setLoading(true);
@@ -36,7 +41,7 @@ const ReviewSection: React.FC<{ trustId: string }> = ({ trustId }) => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        errorToast("something went wrong");
       })
       .finally(() => {
         setLoading(false);
@@ -67,7 +72,7 @@ const ReviewSection: React.FC<{ trustId: string }> = ({ trustId }) => {
         setLikeCounts(counts);
       })
       .catch((error) => {
-        console.error("Error fetching reviews:", error);
+        errorToast("something went wrong");
       })
       .finally(() => {
         setLoading(false);
@@ -116,7 +121,7 @@ const ReviewSection: React.FC<{ trustId: string }> = ({ trustId }) => {
           }));
         })
         .catch((error) => {
-          console.error("Error unliking review:", error);
+          errorToast("something went wrong");
         });
     } else {
       setLikedReviews([...likedReviews, reviewId]);
@@ -141,7 +146,7 @@ const ReviewSection: React.FC<{ trustId: string }> = ({ trustId }) => {
           }));
         })
         .catch((error) => {
-          console.error("Error liking review:", error);
+          errorToast("something went wrong");
         });
     }
   };

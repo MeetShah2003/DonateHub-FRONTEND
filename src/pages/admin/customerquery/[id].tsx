@@ -7,12 +7,17 @@ import { BACKEND_BASE_URL } from "@/consts";
 import Cookies from "js-cookie";
 import { ContactUsType } from "@/types/types";
 import Spinner from "@/components/Spinner";
+import { error } from "console";
+import { toast } from "react-toastify";
 
 const CustomerQueryDetail = () => {
   const { query } = useRouter();
   const [loading, setLoading] = useState(false);
   const access_token = Cookies.get("access_token");
   const [contactQuery, setContactQuery] = useState<ContactUsType>();
+  const errorToast = (errorMessage: string) => toast.error(errorMessage);
+  const successToast = (successMessage: string) =>
+    toast.success(successMessage);
 
   const getSingleCustomerQuery = (id: string) => {
     setLoading(true);
@@ -29,8 +34,10 @@ const CustomerQueryDetail = () => {
         }
       })
       .then((data) => {
-        console.log(data.singleContact);
         setContactQuery(data.singleContact);
+      })
+      .catch((error) => {
+        errorToast("something went wrong");
       })
       .finally(() => {
         setLoading(false);

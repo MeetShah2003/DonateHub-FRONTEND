@@ -22,7 +22,6 @@ const SingleTrust = () => {
       }).format(new Date(singleData?.creationDate))
     : "";
 
-  console.log(singleData?.creationDate);
   const errorToast = (errorMessage: string) => toast.error(errorMessage);
   const successToast = (successMessage: string) =>
     toast.success(successMessage);

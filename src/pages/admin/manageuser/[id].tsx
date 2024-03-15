@@ -30,7 +30,6 @@ const SingleUser = () => {
       })
       .then((data) => {
         setUserData(data.singlePageUser);
-        console.log(data.singlePageUser);
       })
       .finally(() => {
         setLoading(false);

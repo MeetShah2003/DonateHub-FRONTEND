@@ -129,7 +129,7 @@ const LogIn = () => {
             }
           })
           .catch((error) => {
-            console.log(error);
+            errorToast("something went wrong");
           })
           .finally(() => {
             setLoading(false);

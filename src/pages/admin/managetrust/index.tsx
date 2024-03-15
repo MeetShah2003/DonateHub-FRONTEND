@@ -12,6 +12,8 @@ import NoData from "@/components/NoData";
 import AdminRoute from "@/components/AdminRoute";
 import Spinner from "@/components/Spinner";
 import { useRouter } from "next/router";
+import { error } from "console";
+import { toast } from "react-toastify";
 
 const ManageTrust = () => {
   const itemsPerPage = 10;
@@ -21,6 +23,10 @@ const ManageTrust = () => {
   const [allTrustData, setAllTrustData] = useState<TrustData[]>([]);
   const access_token = Cookies.get("access_token");
   const { push } = useRouter();
+
+  const errorToast = (errorMessage: string) => toast.error(errorMessage);
+  const successToast = (successMessage: string) =>
+    toast.success(successMessage);
 
   const onPageChange = ({ selected }: any) => {
     setCurrentPage(selected);
@@ -38,6 +44,9 @@ const ManageTrust = () => {
       .then((res) => res.json())
       .then((data) => {
         setAllTrustData(data["verifiedTrusts"]);
+      })
+      .catch((error) => {
+        errorToast("something went wrong");
       })
       .finally(() => {
         setLoading(false);
@@ -86,7 +95,7 @@ const ManageTrust = () => {
       }
       setLoading(false);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      errorToast("something went wrong");
     }
   };
 

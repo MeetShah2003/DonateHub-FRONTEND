@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import TransactionInfo from "@/components/TransactionInfo";
 import NoData from "@/components/NoData";
 import { SingleTrustTransaction } from "@/types/types";
+import { toast } from "react-toastify";
 
 const SingleTrustTransaction = () => {
   const router = useRouter();
@@ -14,6 +15,10 @@ const SingleTrustTransaction = () => {
   const [totalCollection, setTotalCollection] = useState();
   const [totalSupporter, setTotalSupporter] = useState();
   const access_token = Cookies.get("access_token");
+
+  const errorToast = (errorMessage: string) => toast.error(errorMessage);
+  const successToast = (successMessage: string) =>
+    toast.success(successMessage);
 
   const totalCollectionFinder = (transactions: SingleTrustTransaction[]) => {
     if (!transactions || transactions.length === 0) {
@@ -40,10 +45,12 @@ const SingleTrustTransaction = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data) {
-          console.log(data);
           setTotalSupporter(data.totalSupporters);
           setTransactions(data.myTrust);
         }
+      })
+      .catch((error) => {
+        errorToast("something went wrong");
       });
   };
   useEffect(() => {

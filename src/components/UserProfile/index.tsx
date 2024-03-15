@@ -71,7 +71,7 @@ const UserProfile = () => {
                         } else {
                           setTimeout(() => {
                             router.push("/dashboard/profileuser");
-                          }, 1000);
+                          }, 2000);
                         }
                       } else {
                         logout();

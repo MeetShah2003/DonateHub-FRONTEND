@@ -10,7 +10,7 @@ import ContactUsIcon from "@/icons/ContactUsIcon";
 import AboutUsIcon from "@/icons/AboutUsIcon";
 import ProductsIcon from "@/icons/ProductsIcon";
 import PlusIcon from "@/icons/PlusIcon";
-import ProfileIcon from "@/icons/ProfileIcon"; // Add your profile icon component here
+import ProfileIcon from "@/icons/ProfileIcon";
 import LogoutIcon from "@/icons/LogoutIcon";
 import { useAuth } from "@/context/auth";
 
