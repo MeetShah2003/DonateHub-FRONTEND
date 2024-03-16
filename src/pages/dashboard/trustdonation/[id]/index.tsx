@@ -170,8 +170,6 @@ const TrustDetails = () => {
     return <Spinner />;
   }
 
-  //   const progress = (singleData.tId.TotalAmount / singleData.targetFund) * 100;
-
   return (
     <>
       <div className="navbar sticky top-0 bg-white z-10">
@@ -278,16 +276,16 @@ const TrustDetails = () => {
                       placeholder="Enter Amount"
                       onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
                         if (e.key === "ArrowUp" || e.key === "ArrowDown") {
-                          e.preventDefault(); // Prevent the default behavior of increasing/decreasing the value
+                          e.preventDefault();
                         }
                       }}
                       onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
                         const inputValue = e.target.value;
-                        // Check if the first character is '0' or if all characters are '0'
+
                         if (inputValue === "0" || /^0+$/.test(inputValue)) {
-                          e.target.value = ""; // Clear the input field
+                          e.target.value = "";
                         } else if (inputValue.length > 5) {
-                          e.target.value = inputValue.slice(0, 5); // Limit to 5 characters
+                          e.target.value = inputValue.slice(0, 5);
                         }
                       }}
                     />

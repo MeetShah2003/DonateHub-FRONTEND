@@ -20,6 +20,7 @@ import DisaterTransactionIcon from "@/icons/DisasterTransactionIcon";
 const Visitor = () => {
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [IsNestedMenu, setIsNestedMenu] = useState(false);
   const router = useRouter();
   const { isAuthenticated, logout } = useAuth();
 
@@ -39,7 +40,7 @@ const Visitor = () => {
     {
       id: 2,
       menu: "Products",
-      path: "/dashboard/trustdonation",
+      path: "/dashboard",
       icon: <ProfileIcon color="#000000" />,
       dropdownOptions: [
         {
@@ -186,21 +187,31 @@ const Visitor = () => {
             isHamburgerOpen
               ? "transition-all ease-in-out duration-300 left-0"
               : "transition-all ease-in-out duration-300 -left-[2000px]"
-          } rounded-sm h-screen w-1/2`}
+          } rounded-sm h-screen`}
         >
-          <ul className="flex  flex-col justify-center">
+          <ul className="flex flex-col justify-center">
             {NAV_MENUES.map(({ menu, path, icon, dropdownOptions }, index) => {
               if (menu === "My Account" && !isAuthenticated) {
                 return null;
               }
               return (
-                <li key={index} className="text-base px-5 py-4 font-medium">
-                  <div className="flex items-center gap-3">
+                <li
+                  key={index}
+                  className="text-base border-b px-5 py-4 font-medium"
+                >
+                  <div
+                    onClick={() => {
+                      if (dropdownOptions) {
+                        setIsNestedMenu(!IsNestedMenu);
+                      }
+                    }}
+                    className="flex items-center gap-3"
+                  >
                     {icon}
                     <Link href={path}>{menu}</Link>
                   </div>
-                  {dropdownOptions && (
-                    <ul className="pl-8">
+                  {dropdownOptions && IsNestedMenu && (
+                    <ul className="pl-8 text-gray-500">
                       {dropdownOptions.map((option, index) => (
                         <li key={index} className="py-2">
                           <Link href={option.path}>{option.title}</Link>

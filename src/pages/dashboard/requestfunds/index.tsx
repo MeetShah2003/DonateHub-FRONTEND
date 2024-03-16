@@ -189,21 +189,25 @@ const RequestFunds = () => {
                       aria-labelledby="options-menu"
                     >
                       {trusts.map((option, index) => (
-                        <button
-                          key={index}
-                          className="flex items-center border-b w-full text-left gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                          role="menuitem"
-                          onClick={() => selectOption(option)}
-                        >
-                          <Image
-                            height={100}
-                            width={100}
-                            src={option.trustlogo}
-                            alt={`Image for ${option.trustName}`}
-                            className="h-16 w-16 mr-2 border"
-                          />
-                          <p className="font-bold">{option.trustName}</p>
-                        </button>
+                        <>
+                          {!option.isBlocked && option.isVerified && (
+                            <button
+                              key={index}
+                              className="flex items-center border-b w-full text-left gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                              role="menuitem"
+                              onClick={() => selectOption(option)}
+                            >
+                              <Image
+                                height={100}
+                                width={100}
+                                src={option.trustlogo}
+                                alt={`Image for ${option.trustName}`}
+                                className="h-16 w-16 mr-2 border"
+                              />
+                              <p className="font-bold">{option.trustName}</p>
+                            </button>
+                          )}
+                        </>
                       ))}
                     </div>
                   </div>
