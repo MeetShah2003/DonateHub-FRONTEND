@@ -64,7 +64,7 @@ const TrustDonation = () => {
       </div>
       <div className="max-w-screen-lg w-90% mx-auto">
         <h1 className="my-5 text-2xl font-semibold">Trust Donation</h1>
-        <div className="w-full flex gap-3 mb-5 justify-between">
+        <div className="w-full flex flex-col md:flex-row gap-3 mb-5 justify-between">
           <div className="w-full flex flex-col">
             <h1 className="text-lg font-bold mb-2">Text Search</h1>
             <input
@@ -75,7 +75,7 @@ const TrustDonation = () => {
               className="border-2 w-full shadow-sm outline-none rounded p-2"
             />
           </div>
-          <div className="w-1/4 flex flex-col">
+          <div className="w-full md:w-1/4 flex flex-col">
             <label htmlFor="searchCategory" className="text-lg font-bold mb-2">
               Category Search
             </label>

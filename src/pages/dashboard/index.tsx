@@ -76,7 +76,7 @@ const Dashboard = () => {
       </div>
       <div className="max-w-screen-lg w-90% mx-auto">
         <h1 className="my-5 text-2xl font-semibold">Home Page</h1>
-        <div className="w-full flex gap-3 mb-5 justify-between">
+        <div className="w-full flex flex-col md:flex-row gap-3 mb-5 justify-between">
           <div className="w-full flex flex-col">
             <h1 className="text-lg font-bold mb-2">Search</h1>
             <input
@@ -87,7 +87,7 @@ const Dashboard = () => {
               className="border-2 w-full shadow-sm outline-none rounded p-2"
             />
           </div>
-          <div className="w-1/4 flex flex-col">
+          <div className="w-full md:w-1/4 flex flex-col">
             <label htmlFor="searchCategory" className="text-lg font-bold mb-2">
               Category Search
             </label>
@@ -127,16 +127,18 @@ const Dashboard = () => {
               }) => {
                 console.log(currentItems);
                 return (
-                  <TrustModel
-                    key={tId?._id}
-                    title={title as string}
-                    trustlogo={tId?.trustlogo as string}
-                    trustId={_id as string}
-                    donationRaised={recievedFund || 0}
-                    donationTarget={targetFund || 0}
-                    supporters={nUniqueSupporters || 0}
-                    type="fundrequest"
-                  />
+                  <>
+                    <TrustModel
+                      key={tId?._id}
+                      title={title as string}
+                      trustlogo={tId?.trustlogo as string}
+                      trustId={_id as string}
+                      donationRaised={recievedFund || 0}
+                      donationTarget={targetFund || 0}
+                      supporters={nUniqueSupporters || 0}
+                      type="fundrequest"
+                    />
+                  </>
                 );
               }
             )}
