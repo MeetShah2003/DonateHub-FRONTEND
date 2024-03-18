@@ -76,15 +76,13 @@ const AddDisaster = () => {
         },
         body: JSON.stringify(data),
       })
-        .then((res) => {
-          if (res && res.status === 200) {
-            return res.json();
-          }
-        })
+        .then((res) => res.json())
         .then((data) => {
           if (data) {
             successToast("Disaster Added Successfully");
-            push("/trust");
+            setTimeout(() => {
+              push("/trust");
+            }, 3000);
           }
         })
         .catch((err) => {

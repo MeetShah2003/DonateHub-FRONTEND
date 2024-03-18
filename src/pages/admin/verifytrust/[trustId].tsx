@@ -35,11 +35,7 @@ const SingleTrust = () => {
         "Content-Type": "application/json",
       },
     })
-      .then((res) => {
-        if (res.status === 200) {
-          return res.json();
-        }
-      })
+      .then((res) => res.json())
       .then((data) => {
         if (data) {
           setSingleData(data["singlePageTrust"]);
@@ -71,7 +67,7 @@ const SingleTrust = () => {
           successToast("Trust Request Accepted");
           setTimeout(() => {
             push("/admin/verifytrust");
-          }, 2000);
+          }, 3000);
         }
       })
       .finally(() => {
@@ -95,7 +91,7 @@ const SingleTrust = () => {
           errorToast("Trust Request Rejected");
           setTimeout(() => {
             push("/admin/verifytrust");
-          }, 2000);
+          }, 3000);
         }
       })
       .finally(() => {

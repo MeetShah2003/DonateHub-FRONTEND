@@ -61,13 +61,17 @@ const RequestFund = () => {
           return res.json();
         } else if (res && res.status === 400) {
           errorToast("Insufficient funds");
-          push(`/trust/fundrequest`);
+          setTimeout(() => {
+            push(`/trust/fundrequest`);
+          }, 3000);
         }
       })
       .then((data) => {
         if (data) {
           successToast("Fund Request Accepted");
-          push(`/trust/fundrequest`);
+          setTimeout(() => {
+            push(`/trust/fundrequest`);
+          }, 3000);
         }
       })
       .finally(() => {
@@ -95,7 +99,9 @@ const RequestFund = () => {
       .then((data) => {
         if (data) {
           successToast("Fund Request Rejected");
-          push(`/trust/fundrequest`);
+          setTimeout(() => {
+            push(`/trust/fundrequest`);
+          }, 3000);
         }
       })
       .finally(() => {

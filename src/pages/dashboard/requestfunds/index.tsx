@@ -3,7 +3,7 @@ import Visitor from "@/components/Visitor";
 import { BACKEND_BASE_URL } from "@/consts";
 import { TrustData } from "@/types/types";
 import Cookies from "js-cookie";
-import { useState, useEffect, ChangeEvent } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useFormik } from "formik";
 import DropDownArrow from "@/icons/DropDownArrow";
@@ -14,7 +14,6 @@ import { v4 } from "uuid";
 import { toast } from "react-toastify";
 import Spinner from "@/components/Spinner";
 import { useRouter } from "next/router";
-import RuppeSymbol from "@/icons/RuppeSymbol";
 
 const RequestFunds = () => {
   const access_token = Cookies.get("access_token");
@@ -86,18 +85,16 @@ const RequestFunds = () => {
         },
         body: JSON.stringify(values),
       })
-        .then((res) => {
-          if (res && res.status === 200) {
-            successToast("Fund Request Send Successfully");
-            resetForm();
-            push(`/dashboard`);
-          }
-        })
+        .then((res) => res.json())
         .then((data) => {
-          console.log("Request Data===>>", data);
+          successToast("Fund Request Send Successfully");
+          resetForm();
+          setTimeout(() => {
+            push(`/dashboard`);
+          }, 3000);
         })
         .catch(() => {
-          errorToast("Fund Request Not Send");
+          errorToast("Something went wrong");
         })
         .finally(() => {
           setLoading(false);

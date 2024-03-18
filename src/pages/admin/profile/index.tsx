@@ -24,7 +24,7 @@ const AdminProfile = () => {
   const errorToast = (errorMessage: string) => toast.error(errorMessage);
   const successToast = (successMessage: string) =>
     toast.success(successMessage);
-    
+
   const getUpdateAdminProfile = (data: any) => {
     setLoading(true);
     fetch(`${BACKEND_BASE_URL}/admin/updateProfile`, {
@@ -35,11 +35,7 @@ const AdminProfile = () => {
       },
       body: JSON.stringify(data),
     })
-      .then((res) => {
-        if (res.status === 200) {
-          return res.json();
-        }
-      })
+      .then((res) => res.json())
       .then((data) => {
         if (data) {
           successToast("Profile Update Successfully");

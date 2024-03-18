@@ -128,7 +128,7 @@ const LogIn = () => {
               errorToast("email not found");
             }
           })
-          .catch((error) => {
+          .catch(() => {
             errorToast("something went wrong");
           })
           .finally(() => {
@@ -156,7 +156,7 @@ const LogIn = () => {
         console.error("Additional user info not available");
       }
     } catch (error) {
-      console.log(error);
+      errorToast("Something went wrong");
     }
   };
 
@@ -203,7 +203,7 @@ const LogIn = () => {
         console.error("Additional user info not available");
       }
     } catch (error) {
-      console.log(error);
+      errorToast("Something went wrong");
     }
   };
 

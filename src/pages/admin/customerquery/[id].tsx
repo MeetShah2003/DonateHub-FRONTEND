@@ -1,13 +1,11 @@
 import AdminFrame from "@/components/AdminFrame";
 import AdminRoute from "@/components/AdminRoute";
 import { useRouter } from "next/router";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { BACKEND_BASE_URL } from "@/consts";
 import Cookies from "js-cookie";
 import { ContactUsType } from "@/types/types";
 import Spinner from "@/components/Spinner";
-import { error } from "console";
 import { toast } from "react-toastify";
 
 const CustomerQueryDetail = () => {
@@ -28,16 +26,12 @@ const CustomerQueryDetail = () => {
         Authorization: `Bearer ${access_token}`,
       },
     })
-      .then((res) => {
-        if (res && res.status === 200) {
-          return res.json();
-        }
-      })
+      .then((res) => res.json())
       .then((data) => {
         setContactQuery(data.singleContact);
       })
-      .catch((error) => {
-        errorToast("something went wrong");
+      .catch(() => {
+        errorToast("Something went wrong");
       })
       .finally(() => {
         setLoading(false);

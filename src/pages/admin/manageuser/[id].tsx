@@ -23,11 +23,7 @@ const SingleUser = () => {
         "Content-type": "application/json",
       },
     })
-      .then((res) => {
-        if (res && res.status === 200) {
-          return res.json();
-        }
-      })
+      .then((res) => res.json())
       .then((data) => {
         setUserData(data.singlePageUser);
       })

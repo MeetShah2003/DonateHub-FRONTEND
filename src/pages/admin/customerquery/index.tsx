@@ -53,8 +53,8 @@ const CustomerQuery = () => {
       .then((data) => {
         setContactQueries(data.contactUs);
       })
-      .catch((error) => {
-        errorToast("something went wrong");
+      .catch(() => {
+        errorToast("Something went wrong");
       })
       .finally(() => {
         setLoading(false);

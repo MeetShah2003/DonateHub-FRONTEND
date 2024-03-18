@@ -1,7 +1,6 @@
 import AboutUs from "@/components/AboutUs";
 import TrustNavbar from "@/components/TrustNavbar";
 import TrustRoute from "@/components/TrustRoute/TrustRoute";
-import { useEffect } from "react";
 
 const AboutUsPage = () => {
   return (

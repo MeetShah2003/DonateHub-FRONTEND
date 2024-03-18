@@ -29,8 +29,6 @@ const Dashboard = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
-        console.log(data.allTrust);
         setFundRequirement(data.allTrust);
       })
       .finally(() => {
@@ -66,8 +64,6 @@ const Dashboard = () => {
   });
 
   const currentItems = filteredUsers?.slice(offset, offset + itemsPerPage);
-
-  console.log(currentItems);
 
   return (
     <>

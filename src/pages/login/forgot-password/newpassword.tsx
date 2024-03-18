@@ -46,11 +46,7 @@ const Password = () => {
           },
           body: JSON.stringify(newData),
         })
-          .then((res) => {
-            if (res && res.status === 200) {
-              return res.json();
-            }
-          })
+          .then((res) => res.json())
           .then((data) => {
             if (data.updatedPassword) {
               Cookies.remove("forgotPasswordEmail");
@@ -64,7 +60,7 @@ const Password = () => {
           });
         setTimeout(() => {
           router.push("/login/forgot-password/change-success");
-        }, 2000);
+        }, 3000);
       },
     }
   );

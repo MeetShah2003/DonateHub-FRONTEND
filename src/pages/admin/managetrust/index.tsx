@@ -12,7 +12,6 @@ import NoData from "@/components/NoData";
 import AdminRoute from "@/components/AdminRoute";
 import Spinner from "@/components/Spinner";
 import { useRouter } from "next/router";
-import { error } from "console";
 import { toast } from "react-toastify";
 
 const ManageTrust = () => {
@@ -46,7 +45,7 @@ const ManageTrust = () => {
         setAllTrustData(data["verifiedTrusts"]);
       })
       .catch((error) => {
-        errorToast("something went wrong");
+        errorToast("Something went wrong");
       })
       .finally(() => {
         setLoading(false);
@@ -72,7 +71,7 @@ const ManageTrust = () => {
       }
       setLoading(false);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      errorToast("Something went wrong");
     }
   };
 
@@ -95,7 +94,7 @@ const ManageTrust = () => {
       }
       setLoading(false);
     } catch (error) {
-      errorToast("something went wrong");
+      errorToast("Something went wrong");
     }
   };
 

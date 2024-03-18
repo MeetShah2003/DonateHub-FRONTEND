@@ -9,6 +9,7 @@ import ManageTrustIcon from "@/icons/ManageTrustIcon";
 import { useRouter } from "next/router";
 import ReactLineChart from "@/components/ReactLineChart";
 import ReactBarChart from "@/components/ReactBarChart.tsx";
+import { toast } from "react-toastify";
 
 const Admin = () => {
   const [totalSuppoters, setTotalSuppoters] = useState<number>();
@@ -19,6 +20,10 @@ const Admin = () => {
   const [totalTrusts, setTotalTrusts] = useState<number>();
   const router = useRouter();
   const access_token = Cookies.get("access_token");
+  const errorToast = (errorMessage: string) => toast.error(errorMessage);
+  const successToast = (successMessage: string) =>
+    toast.success(successMessage);
+
   const getAllUsersCount = () => {
     fetch(`${BACKEND_BASE_URL}/admin/countUser`, {
       method: "GET",
@@ -27,11 +32,7 @@ const Admin = () => {
         "Content-Type": "application/json",
       },
     })
-      .then((res) => {
-        if (res && res.status === 200) {
-          return res.json();
-        }
-      })
+      .then((res) => res.json())
       .then((data) => {
         setTotalSuppoters(data.totalUsers);
       });
@@ -45,11 +46,7 @@ const Admin = () => {
         "Content-type": "application/json",
       },
     })
-      .then((res) => {
-        if (res && res.status === 200) {
-          return res.json();
-        }
-      })
+      .then((res) => res.json())
       .then((data) => {
         setSupporterChartData(data.formattedData);
       });
@@ -63,13 +60,8 @@ const Admin = () => {
         "Content-type": "application/json",
       },
     })
-      .then((res) => {
-        if (res && res.status === 200) {
-          return res.json();
-        }
-      })
+      .then((res) => res.json())
       .then((data) => {
-        console.log(data.income);
         // setSupporterChartData(data.formattedData);
       });
   };
@@ -82,11 +74,7 @@ const Admin = () => {
         "Content-Type": "application/json",
       },
     })
-      .then((res) => {
-        if (res && res.status === 200) {
-          return res.json();
-        }
-      })
+      .then((res) => res.json())
       .then((data) => {
         setTotalTrusts(data?.totalTrusts);
       });
@@ -100,11 +88,7 @@ const Admin = () => {
         "Content-Type": "application/json",
       },
     })
-      .then((res) => {
-        if (res && res.status === 200) {
-          return res.json();
-        }
-      })
+      .then((res) => res.json())
       .then((data) => {
         setTotalUnverifiedTrusts(data?.totalTrusts);
       });
@@ -128,7 +112,7 @@ const Admin = () => {
       const data = await response.json();
       setTotalCollection(data.receiveFund);
     } catch (error: any) {
-      console.log(error);
+      errorToast("Something went wrong");
     }
   };
 

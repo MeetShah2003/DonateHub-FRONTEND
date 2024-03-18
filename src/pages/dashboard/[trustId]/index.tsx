@@ -15,7 +15,7 @@ import { toast } from "react-toastify";
 
 declare global {
   interface Window {
-    Razorpay: any; // Adjust the type accordingly if you have type definitions for Razorpay
+    Razorpay: any;
   }
 }
 
@@ -37,9 +37,7 @@ const TrustDetails = () => {
 
   console.log(singleData?.tId._id);
   const onSuccess = (response: any) => {
-    console.log("Payment successful:", response);
     setLoading(true);
-    console.log(response?.razorpay_payment_id);
     fetch(`${BACKEND_BASE_URL}/api/trustDonate/${query?.trustId}`, {
       method: "POST",
       headers: {
@@ -52,13 +50,8 @@ const TrustDetails = () => {
         amount: values?.amount,
       }),
     })
-      .then((res) => {
-        if (res && res.status === 200) {
-          return res.json();
-        }
-      })
+      .then((res) => res.json())
       .then((data: SuccessTransaction) => {
-        console.log(data);
         if (data) {
           const successTransaction = JSON.stringify(data);
           Cookies.set("successTransaction", successTransaction);
@@ -72,7 +65,7 @@ const TrustDetails = () => {
   };
 
   const onFailure = (response: any) => {
-    console.log("Payment failed:", response);
+    errorToast("Last transaction was cancelled");
   };
 
   const { handleSubmit, handleChange, setValues, values, errors, touched } =
@@ -101,18 +94,16 @@ const TrustDetails = () => {
             }),
           });
           const order = await response.json();
-          console.log(order);
 
           var options = {
             key: "rzp_test_zfmhrR9Z3TReMH",
             amount: data.amount,
             currency: data.curruncy,
-            name: "DonateHub",
+            name: "DonateHUB",
             description: "Test Transaction",
             image: "https://example.com/your_logo",
             handler: (response: any) => {
               if (response.razorpay_payment_id) {
-                console.log("responese", response);
                 onSuccess(response);
               } else {
                 onFailure(response);
@@ -137,7 +128,7 @@ const TrustDetails = () => {
           });
           rzp1.open();
         } catch (error) {
-          console.log(error);
+          errorToast("Something went wrong");
         } finally {
           setLoading(false);
         }
@@ -159,7 +150,7 @@ const TrustDetails = () => {
           setSingleData(data.singleTrust);
         }
       } catch (error) {
-        console.error("Error fetching trust details:", error);
+        errorToast("Something went wrong");
       }
     };
 

@@ -22,7 +22,6 @@ const ShowTransaction = () => {
       : null;
 
     if (successTransaction) {
-      console.log(successTransaction);
       setSuccessTransactionData(successTransaction);
     }
   };

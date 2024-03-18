@@ -30,18 +30,14 @@ const ReviewSection: React.FC<{ trustId: string }> = ({ trustId }) => {
       },
       body: JSON.stringify({ trustId: id, reviewText }),
     })
-      .then((res) => {
-        if (res && res.status === 200) {
-          return res.json();
-        }
-      })
+      .then((res) => res.json())
       .then((data) => {
         if (data) {
           showReviews(trustId);
         }
       })
-      .catch((err) => {
-        errorToast("something went wrong");
+      .catch(() => {
+        errorToast("Something went wrong");
       })
       .finally(() => {
         setLoading(false);
@@ -120,7 +116,7 @@ const ReviewSection: React.FC<{ trustId: string }> = ({ trustId }) => {
             [reviewId]: prevCounts[reviewId] - 1,
           }));
         })
-        .catch((error) => {
+        .catch(() => {
           errorToast("something went wrong");
         });
     } else {
@@ -145,8 +141,8 @@ const ReviewSection: React.FC<{ trustId: string }> = ({ trustId }) => {
             [reviewId]: prevCounts[reviewId] + 1,
           }));
         })
-        .catch((error) => {
-          errorToast("something went wrong");
+        .catch(() => {
+          errorToast("Something went wrong");
         });
     }
   };

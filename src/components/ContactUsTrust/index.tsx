@@ -38,16 +38,13 @@ const ContactUsTrust = () => {
           },
           body: JSON.stringify(values),
         })
-          .then((res) => {
-            if (res && res.status === 200) {
-              return res.json();
-            }
-          })
+          .then((res) => res.json())
           .then((data) => {
             if (data) {
-              console.log(data);
               successToast("Form Submitted Successfully");
-              push("/dashboard");
+              setTimeout(() => {
+                push("/dashboard");
+              });
             }
           })
           .catch(() => {

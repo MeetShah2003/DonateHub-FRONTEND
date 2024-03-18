@@ -29,7 +29,7 @@ const TrustModel: React.FC<TrustModelProps> = ({
       : 0;
 
   const formatNumber = (num?: number) => {
-    if (num === undefined) return ""; // handle undefined case
+    if (num === undefined) return "";
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
   const { push } = useRouter();

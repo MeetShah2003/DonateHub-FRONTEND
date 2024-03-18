@@ -17,7 +17,6 @@ const EnterOtp = () => {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  // const { forgotPasswordEmail } = useAuth();
   const forgotPasswordEmail = Cookies.get(`forgotPasswordEmail`);
 
   const validationSchema = Yup.object().shape({

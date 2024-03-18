@@ -1,7 +1,6 @@
 import UserRoute from "@/components/UserRoute/UserRoute";
 import Visitor from "@/components/Visitor";
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
 import Cookies from "js-cookie";
 import { BACKEND_BASE_URL } from "@/consts";
 import { SingleTrustTransaction } from "@/types/types";
@@ -31,13 +30,8 @@ const DisasterTransaction = () => {
         "Content-Type": "application/json",
       },
     })
-      .then((res) => {
-        if (res && res.status === 200) {
-          return res.json();
-        }
-      })
+      .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         setDisasterTransactionData(data.allTransaction);
       })
       .finally(() => {

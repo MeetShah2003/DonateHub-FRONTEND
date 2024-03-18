@@ -42,11 +42,10 @@ const ManageTransaction = () => {
           throw new Error("Failed to fetch data");
         }
         const data = await response.json();
-        console.log(data);
         setTrustWiseTransaction(data);
         setLoading(false);
       } catch (error) {
-        errorToast("something went wrong");
+        errorToast("Something went wrong");
         setLoading(false);
       }
     };

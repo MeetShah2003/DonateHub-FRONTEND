@@ -47,11 +47,7 @@ const ContactUs = () => {
             },
             body: JSON.stringify(values),
           })
-            .then((res) => {
-              if (res && res.status === 200) {
-                return res.json();
-              }
-            })
+            .then((res) => res.json())
             .then((data) => {
               if (data) {
                 successToast("Form Submitted Successfully");

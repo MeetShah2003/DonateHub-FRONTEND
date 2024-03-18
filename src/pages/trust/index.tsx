@@ -5,7 +5,6 @@ import TrustNavbar from "@/components/TrustNavbar";
 import TrustRoute from "@/components/TrustRoute/TrustRoute";
 import { BACKEND_BASE_URL } from "@/consts";
 import { useAuth } from "@/context/auth";
-import ManageTrustIcon from "@/icons/ManageTrustIcon";
 import ProfileIcon from "@/icons/ProfileIcon";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
@@ -31,11 +30,7 @@ const Trust = () => {
         "Content-type": "application/json",
       },
     })
-      .then((res) => {
-        if (res && res.status === 200) {
-          return res.json();
-        }
-      })
+      .then((res) => res.json())
       .then((data) => {
         setSupporter(data.mySupporters[0].nUniqueSupporters);
       })

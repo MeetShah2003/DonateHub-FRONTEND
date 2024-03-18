@@ -1,10 +1,8 @@
-import Receipt from "@/components/Receipt";
 import TrustReceipt from "@/components/TrustReceipt";
 import UserRoute from "@/components/UserRoute/UserRoute";
 import Visitor from "@/components/Visitor";
 import { useAuth } from "@/context/auth";
 import {
-  SuccessTransaction,
   SuccessTrustDonationTransaction,
 } from "@/types/types";
 import { PDFDownloadLink } from "@react-pdf/renderer";
@@ -25,7 +23,6 @@ const ShowTransaction = () => {
       cookieSuccessTransaction ? JSON.parse(cookieSuccessTransaction) : null;
 
     if (successTransaction) {
-      console.log(successTransaction);
       setSuccessTransactionData(successTransaction);
     }
   };

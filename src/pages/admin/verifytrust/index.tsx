@@ -9,6 +9,7 @@ import AdminRoute from "@/components/AdminRoute";
 import Spinner from "@/components/Spinner";
 import ReactPaginate from "react-paginate";
 import ArrowIcon from "@/icons/ArrowIcon";
+import { toast } from "react-toastify";
 
 const VerifyTrust = () => {
   const [unVerifiedTrusts, setUnVerifiedTrusts] = useState([]);
@@ -16,6 +17,9 @@ const VerifyTrust = () => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const itemsPerPage = 10;
+  const errorToast = (errorMessage: string) => toast.error(errorMessage);
+  const successToast = (successMessage: string) =>
+    toast.success(successMessage);
 
   const getPendingTrust = async () => {
     setLoading(true);
@@ -32,7 +36,7 @@ const VerifyTrust = () => {
       setUnVerifiedTrusts(data["unverifiedTrusts"]);
       setLoading(false);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      errorToast("Something went wrong");
     }
   };
 

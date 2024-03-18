@@ -46,7 +46,7 @@ const TrustDetails = () => {
         setSingleData(data.singlePageTrust);
       }
     } catch (error) {
-      console.error("Error fetching trust details:", error);
+      errorToast("Something went wrong");
     }
   };
 
@@ -66,16 +66,10 @@ const TrustDetails = () => {
         amount: values?.amount,
       }),
     })
-      .then((res) => {
-        if (res && res.status === 200) {
-          return res.json();
-        }
-      })
+      .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         getSingleTrustData(query.id as string);
         if (data) {
-          console.log(data);
           const successTransaction = JSON.stringify(data.userTransaction);
           Cookies.set("successTransaction", successTransaction);
           successToast("Thank You For Donation");
@@ -129,7 +123,6 @@ const TrustDetails = () => {
           order_id: order.order.id,
           handler: (response: any) => {
             if (response.razorpay_payment_id) {
-              console.log("responese", response);
               onSuccess(response);
             } else {
               onFailure(response);

@@ -56,10 +56,6 @@ const ForgotPassword = () => {
       },
     }
   );
-  // Use useEffect to log the updated value of forgotPasswordEmail
-  // useEffect(() => {
-  //   console.log("forgotPasswordEmail", forgotPasswordEmail);
-  // }, [forgotPasswordEmail]);
   return (
     <WelcomePage title="Reset" secondTitle="Password">
       {loading && <Spinner />}

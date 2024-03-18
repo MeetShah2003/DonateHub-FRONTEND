@@ -118,7 +118,7 @@ const SignUp = () => {
               }, 3000);
             }
           })
-          .catch((error) => {
+          .catch(() => {
             errorToast("something went wrong");
           })
           .finally(() => {

@@ -16,7 +16,7 @@ const FundRequests = () => {
   const access_token = Cookies.get("access_token");
   const [fundRequests, setFundRequests] = useState<RequestFunds[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
-  const itemsPerPage = 10; // You can change this according to your requirement
+  const itemsPerPage = 10;
 
   const errorToast = (errorMessage: string) => toast.error(errorMessage);
   const successToast = (successMessage: string) =>
@@ -34,11 +34,7 @@ const FundRequests = () => {
         },
       }
     )
-      .then((res) => {
-        if (res && res.status === 200) {
-          return res.json();
-        }
-      })
+      .then((res) => res.json())
       .then((data) => {
         setFundRequests(data.allMyReq);
       })

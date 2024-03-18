@@ -49,8 +49,8 @@ const SingleTrustTransaction = () => {
           setTransactions(data.myTrust);
         }
       })
-      .catch((error) => {
-        errorToast("something went wrong");
+      .catch(() => {
+        errorToast("Something went wrong");
       });
   };
   useEffect(() => {

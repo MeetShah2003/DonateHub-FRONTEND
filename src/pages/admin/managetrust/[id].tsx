@@ -28,16 +28,12 @@ const SingleTrustDetail = () => {
         "Content-Type": "application/json",
       },
     })
-      .then((res) => {
-        if (res && res.status === 200) {
-          return res.json();
-        }
-      })
+      .then((res) => res.json())
       .then((data) => {
         setSingleData(data.singlePageTrust);
       })
-      .catch((error) => {
-        errorToast("something went wrong");
+      .catch(() => {
+        errorToast("Something went wrong");
       })
       .finally(() => {
         setLoading(false);
