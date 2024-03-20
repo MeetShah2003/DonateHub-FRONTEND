@@ -13,6 +13,8 @@ const Trust = () => {
   const { user } = useAuth();
   const access_token = Cookies.get("access_token");
   const [supporter, setSupporter] = useState();
+  const [totalCollection, setTotalCollection] = useState<number>();
+  const [incomeChart, setIncomeChart] = useState();
   const [loading, setLoading] = useState(false);
 
   console.log(user);
@@ -21,9 +23,9 @@ const Trust = () => {
     return new Intl.NumberFormat("en-IN").format(amount);
   };
 
-  const getSupporterChartData = () => {
+  const getSupporterAndCollectionData = () => {
     setLoading(true);
-    fetch(`${BACKEND_BASE_URL}/trust/mySupporter`, {
+    fetch(`${BACKEND_BASE_URL}/trust/myManualSupp`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${access_token}`,
@@ -32,15 +34,62 @@ const Trust = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        setSupporter(data.mySupporters[0].nUniqueSupporters);
+        setSupporter(data.uniqueSupportersCount);
+        setTotalCollection(data.totalManualDonation);
+        console.log(data);
       })
       .finally(() => {
         setLoading(false);
       });
   };
 
+  const manualIncomeChart = () => {
+    setLoading(true);
+    fetch(`${BACKEND_BASE_URL}/trust/myManualIncChart`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${access_token}`,
+      },
+    })
+      .then((res) => {
+        if (res && res.status === 200) {
+          return res.json();
+        }
+      })
+      .then((data: any) => {
+        if (data) {
+          console.log(data?.myIncomeData);
+          setIncomeChart(data?.myIncomeData);
+        }
+      });
+  };
+  const supporterChart = () => {
+    setLoading(true);
+    fetch(`${BACKEND_BASE_URL}/trust/myDisasterIncChart`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${access_token}`,
+      },
+    })
+      .then((res) => {
+        if (res && res.status === 200) {
+          return res.json();
+        }
+      })
+      .then((data: any) => {
+        if (data) {
+          console.log(data);
+          // setIncomeChart(data?.myIncomeData);
+        }
+      });
+  };
+
   useEffect(() => {
-    getSupporterChartData();
+    getSupporterAndCollectionData();
+    manualIncomeChart();
+    supporterChart();
   }, [access_token]);
 
   const supporterChartData = [
@@ -83,7 +132,7 @@ const Trust = () => {
         <div className="flex flex-col py-5 justify-center hover:scale-105 cursor-pointer hover:transition-all hover:duration-400 hover:ease-out items-center bg-secondary w-full rounded-md text-white">
           <h1 className="font-inter font-bold text-2xl">
             <span className="font-normal">₹</span>{" "}
-            {formatAmount(user.manualDonation)}
+            {formatAmount(totalCollection)}
           </h1>
           <p className="text-base font-medium">Collection</p>
         </div>
@@ -95,7 +144,7 @@ const Trust = () => {
       </div>
       <div className="flex flex-col md:flex-row -z-10 gap-5">
         <ReactLineChart data={supporterChartData} />
-        <ReactBarChart data={income} />
+        <ReactBarChart data={incomeChart} />
       </div>
     </TrustNavbar>
   );
