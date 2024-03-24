@@ -10,7 +10,7 @@ interface TransactionTrustsModelProps {
   creationDate: Date;
   amount: number;
   onShowTransaction: () => void;
-  onEditDisaster: () => void;
+  onEditDisaster?: () => void;
 }
 
 const formatAmount = (amount: any) => {

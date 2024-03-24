@@ -129,7 +129,7 @@ export type TrustWiseTransaction = {
   receiveFund: number;
 };
 
-export type SingleTrustTransaction = {
+export type SingleTrustTransactions = {
   _id: string;
   paymentId: string;
   tId?: TrustData;

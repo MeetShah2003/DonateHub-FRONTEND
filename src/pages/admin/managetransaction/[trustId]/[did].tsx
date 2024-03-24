@@ -6,12 +6,12 @@ import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import TransactionInfo from "@/components/TransactionInfo";
 import NoData from "@/components/NoData";
-import { SingleTrustTransaction } from "@/types/types";
+import { SingleTrustTransactions } from "@/types/types";
 import { toast } from "react-toastify";
 
 const SingleTrustTransaction = () => {
   const router = useRouter();
-  const [transactions, setTransactions] = useState<SingleTrustTransaction[]>();
+  const [transactions, setTransactions] = useState<SingleTrustTransactions[]>();
   const [totalCollection, setTotalCollection] = useState();
   const [totalSupporter, setTotalSupporter] = useState();
   const access_token = Cookies.get("access_token");
@@ -22,7 +22,7 @@ const SingleTrustTransaction = () => {
   const successToast = (successMessage: string) =>
     toast.success(successMessage);
 
-  const totalCollectionFinder = (transactions: SingleTrustTransaction[]) => {
+  const totalCollectionFinder = (transactions: SingleTrustTransactions[]) => {
     if (!transactions || transactions.length === 0) {
       return 0;
     }
@@ -35,16 +35,13 @@ const SingleTrustTransaction = () => {
   };
 
   const getAllTransaction = (id: string) => {
-    fetch(
-      `${BACKEND_BASE_URL}/admin/singleTrustTransaction/${id}/${did}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    )
+    fetch(`${BACKEND_BASE_URL}/admin/SingleTrustTransactions/${id}/${did}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+        "Content-Type": "application/json",
+      },
+    })
       .then((res) => res.json())
       .then((data) => {
         if (data) {
@@ -81,7 +78,7 @@ const SingleTrustTransaction = () => {
                   ₹
                   {formatAmount(
                     totalCollectionFinder(
-                      transactions as SingleTrustTransaction[]
+                      transactions as SingleTrustTransactions[]
                     )
                   )}
                 </p>
