@@ -16,6 +16,8 @@ const Admin = () => {
   const [totalUnverifiedTrusts, setTotalUnverifiedTrusts] = useState<number>();
   const [supporterChartData, setSupporterChartData] =
     useState<{ date: string; supporters: number }[]>();
+  const [IncomeChartData, setIncomeChartData] =
+    useState<{ date: string; totalIncome: number }[]>();
   const [totalCollection, setTotalCollection] = useState();
   const [totalTrusts, setTotalTrusts] = useState<number>();
   const router = useRouter();
@@ -53,7 +55,7 @@ const Admin = () => {
   };
 
   const getIncomeChartData = () => {
-    fetch(`${BACKEND_BASE_URL}/admin/trustIncChart`, {
+    fetch(`${BACKEND_BASE_URL}/admin/trustManualInc`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${access_token}`,
@@ -62,7 +64,7 @@ const Admin = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        // setSupporterChartData(data.formattedData);
+        setIncomeChartData(data.totalIncome);
       });
   };
 
@@ -121,6 +123,10 @@ const Admin = () => {
     { name: "Page B", uv: 3000, pv: 1398, amt: 2210 },
   ];
 
+  const formatAmount = (amount: any) => {
+    return new Intl.NumberFormat("en-IN").format(amount);
+  };
+
   useEffect(() => {
     getAllUsersCount();
     getAllTrustCount();
@@ -129,25 +135,6 @@ const Admin = () => {
     getSupporterChartData();
     getIncomeChartData();
   }, [totalSuppoters, totalTrusts]);
-
-  const suppoters = [
-    { name: "12 jan", suppoters: 2400, amt: 2400 },
-    { name: "13 jan", suppoters: 1398, amt: 2210 },
-    { name: "14 jan", suppoters: 9800, amt: 2290 },
-    { name: "15 jan", suppoters: 3908, amt: 2000 },
-    { name: "16 jan", suppoters: 4800, amt: 2181 },
-    { name: "17 jan", suppoters: 3800, amt: 2500 },
-    { name: "18 jan", suppoters: 4300, amt: 2100 },
-  ];
-  const income = [
-    { name: "01 jan", income: 2400, amt: 2400 },
-    { name: "05 jan", income: 1398, amt: 2210 },
-    { name: "09 jan", income: 9800, amt: 2290 },
-    { name: "11 jan", income: 3908, amt: 2000 },
-    { name: "16 jan", income: 4800, amt: 2181 },
-    { name: "15 jan", income: 3800, amt: 2500 },
-    { name: "18 feb", income: 4300, amt: 2100 },
-  ];
   return (
     <AdminFrame title="Dashboard">
       <div className="flex flex-col gap-5 py-5">
@@ -187,7 +174,8 @@ const Admin = () => {
             className="flex flex-col py-5 justify-center hover:scale-105 cursor-pointer hover:transition-all hover:duration-400 hover:ease-out items-center bg-secondary w-full rounded-md text-white"
           >
             <h1 className="font-inter font-bold text-2xl">
-              <span className="font-normal">₹</span> {totalCollection}
+              <span className="font-normal">₹</span>{" "}
+              {formatAmount(totalCollection)}
             </h1>
             <p className="text-base font-medium">Collection</p>
           </div>
@@ -213,7 +201,7 @@ const Admin = () => {
         </div>
         <div className="flex flex-col md:flex-row -z-10 gap-5">
           <ReactLineChart data={supporterChartData} />
-          <ReactBarChart data={income} />
+          <ReactBarChart data={IncomeChartData} />
         </div>
       </div>
     </AdminFrame>

@@ -15,6 +15,8 @@ const SingleTrustTransaction = () => {
   const [totalCollection, setTotalCollection] = useState();
   const [totalSupporter, setTotalSupporter] = useState();
   const access_token = Cookies.get("access_token");
+  const { query } = useRouter();
+  const { did, trustId } = query;
 
   const errorToast = (errorMessage: string) => toast.error(errorMessage);
   const successToast = (successMessage: string) =>
@@ -22,7 +24,6 @@ const SingleTrustTransaction = () => {
 
   const totalCollectionFinder = (transactions: SingleTrustTransaction[]) => {
     if (!transactions || transactions.length === 0) {
-      console.log("No transactions available");
       return 0;
     }
 
@@ -30,21 +31,24 @@ const SingleTrustTransaction = () => {
       return total + donatedAmount;
     }, 0);
 
-    console.log("Total Collection:", totalCollection);
     return totalCollection;
   };
 
   const getAllTransaction = (id: string) => {
-    fetch(`${BACKEND_BASE_URL}/admin/singleTrustTransaction/${id}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-        "Content-Type": "application/json",
-      },
-    })
+    fetch(
+      `${BACKEND_BASE_URL}/admin/singleTrustTransaction/${id}/${did}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    )
       .then((res) => res.json())
       .then((data) => {
         if (data) {
+          console.log();
           setTotalSupporter(data.totalSupporters);
           setTransactions(data.myTrust);
         }

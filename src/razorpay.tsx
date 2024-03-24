@@ -35,7 +35,6 @@ const handlePayment = async (amount: number) => {
     image: "donatehublogo.png",
     handler: function (response: any) {
       // Handle success
-      console.log(response);
     },
     prefill: {
       name: "Donor Name",

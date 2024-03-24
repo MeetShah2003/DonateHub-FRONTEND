@@ -5,19 +5,22 @@ import TrustNavbar from "@/components/TrustNavbar";
 import TrustRoute from "@/components/TrustRoute/TrustRoute";
 import { BACKEND_BASE_URL } from "@/consts";
 import { useAuth } from "@/context/auth";
+import DisasterIcon from "@/icons/DisasterIcon";
 import ProfileIcon from "@/icons/ProfileIcon";
 import Cookies from "js-cookie";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 const Trust = () => {
-  const { user } = useAuth();
+  const { push } = useRouter();
   const access_token = Cookies.get("access_token");
   const [supporter, setSupporter] = useState();
   const [totalCollection, setTotalCollection] = useState<number>();
+  const [disasterCount, setDisasterCount] = useState<number>();
+  const [totalDisasterCollection, setTotalDisasterCollection] =
+    useState<number>();
   const [incomeChart, setIncomeChart] = useState();
   const [loading, setLoading] = useState(false);
-
-  console.log(user);
 
   const formatAmount = (amount: any) => {
     return new Intl.NumberFormat("en-IN").format(amount);
@@ -36,7 +39,6 @@ const Trust = () => {
       .then((data) => {
         setSupporter(data.uniqueSupportersCount);
         setTotalCollection(data.totalManualDonation);
-        console.log(data);
       })
       .finally(() => {
         setLoading(false);
@@ -59,14 +61,14 @@ const Trust = () => {
       })
       .then((data: any) => {
         if (data) {
-          console.log(data?.myIncomeData);
           setIncomeChart(data?.myIncomeData);
         }
       });
   };
-  const supporterChart = () => {
+
+  const disastersCount = () => {
     setLoading(true);
-    fetch(`${BACKEND_BASE_URL}/trust/myDisasterIncChart`, {
+    fetch(`${BACKEND_BASE_URL}/trust/myDisaster`, {
       method: "GET",
       headers: {
         "Content-type": "application/json",
@@ -80,8 +82,39 @@ const Trust = () => {
       })
       .then((data: any) => {
         if (data) {
-          console.log(data);
+          let totalCollection = 0;
+          console.log(data.myDisasters[0].recievedFund);
+          data.myDisasters.map((value: any) => {
+            totalCollection += value.recievedFund;
+            console.log("totalCollection>>", totalCollection);
+            setTotalDisasterCollection(totalCollection);
+          });
+
+          setDisasterCount(data.countDisaster);
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+  const supporterChart = () => {
+    setLoading(true);
+    fetch(`${BACKEND_BASE_URL}/trust/myNaturalSupp`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${access_token}`,
+      },
+    })
+      .then((res) => {
+        if (res && res.status === 200) {
+          return res.json();
+        }
+      })
+      .then((data: any) => {
+        if (data) {
           // setIncomeChart(data?.myIncomeData);
+          console.log(data);
         }
       });
   };
@@ -90,6 +123,7 @@ const Trust = () => {
     getSupporterAndCollectionData();
     manualIncomeChart();
     supporterChart();
+    disastersCount();
   }, [access_token]);
 
   const supporterChartData = [
@@ -113,7 +147,7 @@ const Trust = () => {
   return (
     <TrustNavbar title="Home">
       {loading && <Spinner />}
-      <div className="grid grid-cols-2 justify-between gap-5">
+      <div className="grid grid-cols-2 grid-rows-2 justify-between gap-5">
         <div
           onClick={() => {
             // router.push("/admin/manageuser");
@@ -135,6 +169,28 @@ const Trust = () => {
             {formatAmount(totalCollection)}
           </h1>
           <p className="text-base font-medium">Collection</p>
+        </div>
+
+        <div className="flex flex-col py-5 justify-center hover:scale-105 cursor-pointer hover:transition-all hover:duration-400 hover:ease-out items-center bg-secondary w-full rounded-md text-white">
+          <h1 className="font-inter font-bold text-2xl">
+            <span className="font-normal">₹</span>{" "}
+            {formatAmount(totalDisasterCollection)}
+          </h1>
+          <p className="text-base font-medium">Disasters Collection</p>
+        </div>
+        <div
+          onClick={() => {
+            push("/trust/disasters");
+          }}
+          className="flex flex-col py-5 justify-center hover:scale-105 cursor-pointer hover:transition-all hover:duration-400 hover:ease-out items-center bg-primary w-full rounded-md text-white"
+        >
+          <h1 className="font-inter flex items-center justify-center gap-2 font-bold text-2xl">
+            <span>
+              <DisasterIcon color="#FFFFFF" />
+            </span>
+            {disasterCount}
+          </h1>
+          <p className="text-base font-medium">Disasters</p>
         </div>
       </div>
       <div>

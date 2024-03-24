@@ -13,6 +13,9 @@ import PlusIcon from "@/icons/PlusIcon";
 import ProfileIcon from "@/icons/ProfileIcon";
 import LogoutIcon from "@/icons/LogoutIcon";
 import { useAuth } from "@/context/auth";
+import TrustTransactionIcon from "@/icons/TrustTransactionIcon";
+import DisaterTransactionIcon from "@/icons/DisasterTransactionIcon";
+import DisasterIcon from "@/icons/DisasterIcon";
 
 const NAV_MENUES: { id: number; menu: string; path: string }[] = [
   { id: 1, menu: "Home", path: "/trust" },
@@ -60,6 +63,18 @@ const SIDE_BAR_MENUES: {
         icon: <PlusIcon />,
         menuTitle: "Add Disaster",
         path: "/trust/adddisaster",
+      },
+      {
+        id: 3,
+        icon: <DisasterIcon color="#374151" />,
+        menuTitle: "Disasters",
+        path: "/trust/disasters",
+      },
+      {
+        id: 4,
+        icon: <TrustTransactionIcon />,
+        menuTitle: "Transactions",
+        path: "/trust/transactions",
       },
     ],
   },
