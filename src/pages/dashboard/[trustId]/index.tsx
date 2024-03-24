@@ -35,7 +35,6 @@ const TrustDetails = () => {
     amount: Yup.number().required("Amount is required"),
   });
 
-  console.log(singleData?.tId._id);
   const onSuccess = (response: any) => {
     setLoading(true);
     fetch(`${BACKEND_BASE_URL}/api/trustDonate/${query?.trustId}`, {
@@ -48,6 +47,7 @@ const TrustDetails = () => {
         paymentId: response?.razorpay_payment_id,
         trustId: singleData?.tId._id,
         amount: values?.amount,
+        disasterId: singleData?._id,
       }),
     })
       .then((res) => res.json())

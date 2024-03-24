@@ -6,23 +6,24 @@ import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import TransactionInfo from "@/components/TransactionInfo";
 import NoData from "@/components/NoData";
-import { SingleTrustTransaction } from "@/types/types";
+import { SingleTrustTransactions } from "@/types/types";
 import { toast } from "react-toastify";
 
 const SingleTrustTransaction = () => {
   const router = useRouter();
-  const [transactions, setTransactions] = useState<SingleTrustTransaction[]>();
+  const [transactions, setTransactions] = useState<SingleTrustTransactions[]>();
   const [totalCollection, setTotalCollection] = useState();
   const [totalSupporter, setTotalSupporter] = useState();
   const access_token = Cookies.get("access_token");
+  const { query } = useRouter();
+  const { did, trustId } = query;
 
   const errorToast = (errorMessage: string) => toast.error(errorMessage);
   const successToast = (successMessage: string) =>
     toast.success(successMessage);
 
-  const totalCollectionFinder = (transactions: SingleTrustTransaction[]) => {
+  const totalCollectionFinder = (transactions: SingleTrustTransactions[]) => {
     if (!transactions || transactions.length === 0) {
-      console.log("No transactions available");
       return 0;
     }
 
@@ -30,12 +31,11 @@ const SingleTrustTransaction = () => {
       return total + donatedAmount;
     }, 0);
 
-    console.log("Total Collection:", totalCollection);
     return totalCollection;
   };
 
   const getAllTransaction = (id: string) => {
-    fetch(`${BACKEND_BASE_URL}/admin/singleTrustTransaction/${id}`, {
+    fetch(`${BACKEND_BASE_URL}/admin/SingleTrustTransactions/${id}/${did}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${access_token}`,
@@ -45,6 +45,7 @@ const SingleTrustTransaction = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data) {
+          console.log();
           setTotalSupporter(data.totalSupporters);
           setTransactions(data.myTrust);
         }
@@ -77,7 +78,7 @@ const SingleTrustTransaction = () => {
                   ₹
                   {formatAmount(
                     totalCollectionFinder(
-                      transactions as SingleTrustTransaction[]
+                      transactions as SingleTrustTransactions[]
                     )
                   )}
                 </p>

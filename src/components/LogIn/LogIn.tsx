@@ -58,7 +58,6 @@ const LogIn = () => {
 
   useEffect(() => {
     if (isAuthenticated && user && !user.isBlocked) {
-      console.log("Login successful!", isAuthenticated);
       if (user.role === "admin") {
         router.push("/admin");
       } else {

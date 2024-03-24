@@ -7,17 +7,19 @@ import { storage } from "@/firebase";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useFormik } from "formik";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { v4 } from "uuid";
 import * as Yup from "yup";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
+import { SingleDisaster } from "@/types/types";
 
-const AddDisaster = () => {
+const EditDisaster = () => {
   const { user } = useAuth();
-  const { push } = useRouter();
+  const { push, query } = useRouter();
   const [loading, setLoading] = useState(false);
+  const [disasterData, setDisasterData] = useState<SingleDisaster>();
   const access_token = Cookies.get("access_token");
 
   const errorToast = (errorMessage: string) => toast.error(errorMessage);
@@ -56,6 +58,7 @@ const AddDisaster = () => {
     handleBlur,
     handleChange,
     setFieldValue,
+    setValues,
     values,
     errors,
     touched,
@@ -63,8 +66,8 @@ const AddDisaster = () => {
     initialValues: initialValue,
     onSubmit: (data) => {
       setLoading(true);
-      fetch(`${BACKEND_BASE_URL}/trust/fundRequest`, {
-        method: "POST",
+      fetch(`${BACKEND_BASE_URL}/trust/editDisaster/${query.id}`, {
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${access_token}`,
@@ -74,10 +77,8 @@ const AddDisaster = () => {
         .then((res) => res.json())
         .then((data) => {
           if (data) {
-            successToast("Disaster Added Successfully");
-            setTimeout(() => {
-              push("/trust");
-            }, 3000);
+            successToast("Disaster Edited Successfully");
+            getSingleDisaster();
           }
         })
         .catch((err) => {
@@ -89,6 +90,43 @@ const AddDisaster = () => {
     },
     validationSchema,
   });
+
+  const getSingleDisaster = () => {
+    setLoading(true);
+    fetch(`${BACKEND_BASE_URL}/trust/singleDisaster/${query.id}`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${access_token}`,
+      },
+    })
+      .then((res) => {
+        if (res && res.status === 200) {
+          return res.json();
+        }
+      })
+      .then((data) => {
+        setDisasterData(data?.disasterDetails);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    getSingleDisaster();
+  }, [access_token]);
+
+  useEffect(() => {
+    setValues({
+      altContact: disasterData?.altContact as number,
+      description: disasterData?.description as string,
+      disasterImage: disasterData?.disasterImage as string,
+      title: disasterData?.title as string,
+      targetFund: disasterData?.targetFund as number,
+      tId: disasterData?.tId as string,
+    });
+  }, [disasterData]);
 
   const handleOnChange = async (e: any) => {
     setLoading(true);
@@ -113,7 +151,7 @@ const AddDisaster = () => {
   };
 
   return (
-    <TrustNavbar title="Add Disaster">
+    <TrustNavbar title="Edit Disaster">
       {loading && <Spinner />}
       <div className="w-full">
         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
@@ -199,7 +237,7 @@ const AddDisaster = () => {
               onBlur={handleBlur}
               onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
                 if (e.key === "ArrowUp" || e.key === "ArrowDown") {
-                  e.preventDefault();
+                  e.preventDefault(); // Prevent the default behavior of increasing/decreasing the value
                 }
               }}
               onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -227,7 +265,7 @@ const AddDisaster = () => {
               value={values.altContact}
               onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
                 if (e.key === "ArrowUp" || e.key === "ArrowDown") {
-                  e.preventDefault();
+                  e.preventDefault(); // Prevent the default behavior of increasing/decreasing the value
                 }
               }}
               onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -240,6 +278,7 @@ const AddDisaster = () => {
               <div className="text-red-500">{errors.altContact}</div>
             )}
           </div>
+
           <div className="w-full">
             <button
               type="submit"
@@ -254,4 +293,4 @@ const AddDisaster = () => {
   );
 };
 
-export default TrustRoute(AddDisaster);
+export default TrustRoute(EditDisaster);

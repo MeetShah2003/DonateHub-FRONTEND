@@ -120,14 +120,14 @@ const Dashboard = () => {
                 nUniqueSupporters,
                 _id,
                 recievedFund,
+                disasterImage,
               }) => {
-                console.log(currentItems);
                 return (
                   <>
                     <TrustModel
                       key={tId?._id}
                       title={title as string}
-                      trustlogo={tId?.trustlogo as string}
+                      trustlogo={disasterImage as string}
                       trustId={_id as string}
                       donationRaised={recievedFund || 0}
                       donationTarget={targetFund || 0}

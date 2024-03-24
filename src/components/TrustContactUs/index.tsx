@@ -39,7 +39,6 @@ const TrustContactUs = () => {
       onSubmit: (values) => {
         setLoading(true);
         if (values) {
-          console.log(values);
           fetch(`${BACKEND_BASE_URL}/trust/contactUs`, {
             method: "POST",
             headers: {

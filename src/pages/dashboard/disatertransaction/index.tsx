@@ -3,7 +3,7 @@ import Visitor from "@/components/Visitor";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { BACKEND_BASE_URL } from "@/consts";
-import { SingleTrustTransaction } from "@/types/types";
+import { SingleTrustTransactions } from "@/types/types";
 import NoData from "@/components/NoData";
 import ReactPaginate from "react-paginate";
 import ArrowIcon from "@/icons/ArrowIcon";
@@ -13,7 +13,7 @@ const DisasterTransaction = () => {
   const access_token = Cookies.get("access_token");
   const itemsPerPage = 10;
   const [disasterTransactionData, setDisasterTransactionData] = useState<
-    SingleTrustTransaction[]
+    SingleTrustTransactions[]
   >([]);
   const [currentPage, setCurrentPage] = useState(0);
 

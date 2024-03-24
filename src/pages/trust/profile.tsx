@@ -105,7 +105,6 @@ const ProfileTrust = () => {
     initialValues: initialValue,
     validationSchema: trustDetailSchema,
     onSubmit: async (formValues) => {
-      console.log(formValues);
       getUpdatedTrustProfile(formValues);
     },
   });

@@ -104,7 +104,7 @@ const ManageTransaction = () => {
                   creationDate={tId.creationDate}
                   amount={recievedFund}
                   onShowTransaction={() => {
-                    router.push(`/admin/managetransaction/${tId._id}`);
+                    router.push(`/admin/managetransaction/${_id}/${tId._id}`);
                   }}
                 />
               )

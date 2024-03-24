@@ -10,6 +10,7 @@ interface TransactionTrustsModelProps {
   creationDate: Date;
   amount: number;
   onShowTransaction: () => void;
+  onEditDisaster?: () => void;
 }
 
 const formatAmount = (amount: any) => {
@@ -24,6 +25,7 @@ const TransactionTrustsModel: React.FC<TransactionTrustsModelProps> = ({
   title,
   trustImage,
   onShowTransaction,
+  onEditDisaster,
 }) => {
   const router = useRouter();
   return (
@@ -54,13 +56,24 @@ const TransactionTrustsModel: React.FC<TransactionTrustsModelProps> = ({
               <span className="text-gray-900 font-semibold">{founder}</span>
             </div>
           </div>
-          <div className="mt-4 flex justify-center md:justify-start">
-            <button
-              onClick={onShowTransaction}
-              className="py-2 px-4 bg-primary text-white rounded-md shadow-sm"
-            >
-              Show Transaction
-            </button>
+
+          <div className="flex gap-2">
+            <div className="mt-4 flex justify-center md:justify-start">
+              <button
+                onClick={onShowTransaction}
+                className="py-2 px-4 bg-primary text-white rounded-md shadow-sm"
+              >
+                Show Transaction
+              </button>
+            </div>
+            <div className="mt-4 flex justify-center md:justify-start">
+              <button
+                onClick={onEditDisaster}
+                className="py-2 px-4 bg-green-600 text-white rounded-md shadow-sm"
+              >
+                Edit
+              </button>
+            </div>
           </div>
         </div>
       </div>

@@ -10,8 +10,6 @@ const TrustApprovalModal: React.FC<{
   { description, title, trustImage, creationDate, founder, onVerify },
   index
 ) => {
-  console.log(title);
-
   const maxLines = 2;
   return (
     <div

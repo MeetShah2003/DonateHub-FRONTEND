@@ -37,17 +37,19 @@ export type TrustData = {
 };
 
 export type FundRequirement = {
-  _id?: string;
-  tId?: TrustData;
-  targetFund?: number;
-  startDate?: Date;
-  recievedFund?: number;
-  title?: string;
-  description?: string;
-  altContact?: number;
-  naturalSupporter?: string[];
-  __v?: number;
-  nUniqueSupporters?: number;
+  _id: string;
+  tId: TrustData;
+  disasterImage: string;
+  targetFund: number;
+  startDate: Date;
+  recievedFund: number;
+  title: string;
+  description: string;
+  altContact: number;
+  nUniqueSupporters: number;
+  naturalSupporter: [];
+  status: string;
+  defaultDate: Date;
 };
 
 export type SingleFundRequirement = {
@@ -59,7 +61,7 @@ export type SingleFundRequirement = {
   recievedFund: number;
   title: string;
   description: string;
-  altContact: number;
+  altContact: number | undefined;
   naturalSupporter: string[];
   nUniqueSupporters: 2;
 };
@@ -109,6 +111,8 @@ export type ReviewType = {
 export type TrustWiseTransaction = {
   allTrust: [
     {
+      status: string;
+      defaultDate: Date;
       _id: string;
       tId: TrustData;
       disasterImage: string;
@@ -125,7 +129,7 @@ export type TrustWiseTransaction = {
   receiveFund: number;
 };
 
-export type SingleTrustTransaction = {
+export type SingleTrustTransactions = {
   _id: string;
   paymentId: string;
   tId?: TrustData;
@@ -154,4 +158,67 @@ export type SuccessTrustDonationTransaction = {
   manualDonatedAmount: number;
   transactionDate: Date;
   _id: string;
+};
+
+export type NormalTransactionForTrust = {
+  myIncome: number;
+  uniqueSupporters: number;
+  myTransactions: {
+    _id: string;
+    paymentId: string;
+    tId: TrustData;
+    uId: {
+      defaultDate: string;
+      _id: string;
+      userlogo: string;
+      firstName: string;
+      lastName: string;
+      email: string;
+      password: string;
+      gender: string;
+      mono: number;
+      role: string;
+      isBlocked: boolean;
+      createdAt: Date;
+      emergencyFund: number;
+    };
+    manualDonatedAmount: number;
+    transactionDate: Date;
+    defaultDate: Date;
+  }[];
+};
+
+export type DisasterForTrust = {
+  myDisasters: {
+    _id: string;
+    tId: TrustData;
+    disasterImage: string;
+    targetFund: number;
+    startDate: Date;
+    recievedFund: number;
+    title: string;
+    description: string;
+    altContact: number;
+    nUniqueSupporters: number;
+    naturalSupporter: string[];
+    status: string;
+    defaultDate: Date;
+  }[];
+  countDisaster: number;
+};
+
+export type SingleDisaster = {
+  _id: string;
+  tId: string;
+  disasterImage: string;
+  targetFund: number;
+  startDate: string;
+  receivedFund: number;
+  title: string;
+  description: string;
+  altContact: number;
+  nUniqueSupporters: number;
+  naturalSupporter: string[];
+  status: string;
+  defaultDate: string;
 };
