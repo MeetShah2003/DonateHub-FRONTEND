@@ -113,7 +113,8 @@ const ContactUs = () => {
           <input
             id="contactNo"
             name="contactNo"
-            type="text"
+            type="number"
+            maxLength={10}
             value={values.contactNo as number}
             onChange={handleChange}
             onBlur={handleBlur}
@@ -122,10 +123,11 @@ const ContactUs = () => {
                 e.preventDefault();
               }
             }}
-            onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
-              if (e.target.value.length > 10) {
-                e.target.value = e.target.value.slice(0, 10);
-              }
+            onInput={(e) => {
+              e.currentTarget.value = e.currentTarget.value
+                .replace(/\D/, "")
+                .slice(0, 10);
+              handleChange(e);
             }}
             className="outline-none tracking-wider"
             placeholder="+91 9878588845"

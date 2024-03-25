@@ -1,7 +1,9 @@
-const RequestFundIcon = () => {
+import React from "react";
+
+const RequestFundIcon: React.FC<{ color: string }> = ({ color }) => {
   return (
     <svg
-      fill="#374151"
+      fill={color}
       width="24px"
       height="24px"
       viewBox="0 0 16 16"

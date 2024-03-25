@@ -49,12 +49,12 @@ const Visitor = () => {
           path: "/dashboard/trustdonation",
         },
         {
-          icon: <RequestFundIcon />,
+          icon: <RequestFundIcon color="#374151" />,
           title: "Request Funds",
           path: "/dashboard/requestfunds",
         },
         {
-          icon: <DisaterTransactionIcon />,
+          icon: <DisaterTransactionIcon color="#000000" />,
           title: "Disater Transaction",
           path: "/dashboard/disatertransaction",
         },

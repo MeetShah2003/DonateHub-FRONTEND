@@ -97,13 +97,17 @@ const LogIn = () => {
                 }, 3000);
               }
               if (data?.user?.role === "user") {
-                Cookies.set("access_token", data?.token);
-                successToast(
-                  `Welcome ${data.user.firstName} ${data.user.lastName}`
-                );
-                setTimeout(() => {
-                  router.push("/dashboard");
-                }, 3000);
+                if (!data?.user.isBlocked) {
+                  Cookies.set("access_token", data?.token);
+                  successToast(
+                    `Welcome ${data.user.firstName} ${data.user.lastName}`
+                  );
+                  setTimeout(() => {
+                    router.push("/dashboard");
+                  }, 3000);
+                } else {
+                  errorToast("You Are Blocked");
+                }
               }
               if (data?.trust?.role === "trust") {
                 Cookies.set("role", data?.trust?.role);
@@ -127,8 +131,8 @@ const LogIn = () => {
               errorToast("email not found");
             }
           })
-          .catch(() => {
-            errorToast("something went wrong");
+          .catch((error) => {
+            errorToast(error.message);
           })
           .finally(() => {
             setLoading(false);

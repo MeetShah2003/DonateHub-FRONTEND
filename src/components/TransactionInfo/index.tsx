@@ -21,8 +21,8 @@ const TransactionInfo: React.FC<TransactionInfoProps> = ({
   transactionDate,
 }) => {
   return (
-    <div className="w-full bg-white rounded-lg shadow-md p-4">
-      <div className="flex flex-col md:flex-row items-center justify-between">
+    <div className="w-full bg-white rounded-lg border shadow-md p-4">
+      <div className="flex  md:flex-row items-center justify-between">
         <div className="flex items-center space-x-4 mb-4 md:mb-0">
           <Image
             src={userImage}
@@ -41,7 +41,9 @@ const TransactionInfo: React.FC<TransactionInfoProps> = ({
           <p className="text-xl font-normal text-green-600">
             + ₹ {formatAmount(amount)}
           </p>
-          <p className="text-sm text-gray-500">{transactionDate.toString()}</p>
+          <p className="text-sm hidden md:block text-gray-500">
+            {transactionDate.toString()}
+          </p>
         </div>
       </div>
     </div>

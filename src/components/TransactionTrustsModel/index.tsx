@@ -1,6 +1,7 @@
 import React from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
+import { useAuth } from "@/context/auth";
 
 interface TransactionTrustsModelProps {
   trustImage: string;
@@ -28,6 +29,7 @@ const TransactionTrustsModel: React.FC<TransactionTrustsModelProps> = ({
   onEditDisaster,
 }) => {
   const router = useRouter();
+  const { isAdmin } = useAuth();
   return (
     <div className="w-full border shadow-md rounded-lg overflow-hidden">
       <div className="flex flex-col md:flex-row">
@@ -66,14 +68,16 @@ const TransactionTrustsModel: React.FC<TransactionTrustsModelProps> = ({
                 Show Transaction
               </button>
             </div>
-            <div className="mt-4 flex justify-center md:justify-start">
-              <button
-                onClick={onEditDisaster}
-                className="py-2 px-4 bg-green-600 text-white rounded-md shadow-sm"
-              >
-                Edit
-              </button>
-            </div>
+            {!isAdmin && (
+              <div className="mt-4 flex justify-center md:justify-start">
+                <button
+                  onClick={onEditDisaster}
+                  className="py-2 px-4 bg-green-600 text-white rounded-md shadow-sm"
+                >
+                  Edit
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

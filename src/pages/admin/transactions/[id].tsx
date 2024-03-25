@@ -6,22 +6,20 @@ import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import TransactionInfo from "@/components/TransactionInfo";
 import NoData from "@/components/NoData";
-import { TransctionForAdmin } from "@/types/types";
+import { TransctionForAdmin, TransctionsForAdmin } from "@/types/types";
 import { toast } from "react-toastify";
 
 const SingleTrustTransaction = () => {
-  const router = useRouter();
-  const [transactions, setTransactions] = useState<TransctionForAdmin>();
+  const [transactions, setTransactions] = useState<TransctionsForAdmin>();
   const access_token = Cookies.get("access_token");
   const { query } = useRouter();
-  const { did } = query;
 
   const errorToast = (errorMessage: string) => toast.error(errorMessage);
   const successToast = (successMessage: string) =>
     toast.success(successMessage);
 
   const getAllTransaction = (id: string) => {
-    fetch(`${BACKEND_BASE_URL}/admin/singleTrustTransaction/${did}/${id}`, {
+    fetch(`${BACKEND_BASE_URL}/admin/manualTrustTransaction/${id}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${access_token}`,
@@ -31,7 +29,7 @@ const SingleTrustTransaction = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data) {
-          console.log();
+          console.log(data);
           setTransactions(data);
         }
       })
@@ -40,7 +38,7 @@ const SingleTrustTransaction = () => {
       });
   };
   useEffect(() => {
-    getAllTransaction(router?.query?.trustId as string);
+    getAllTransaction(query?.id as string);
   }, [access_token]);
 
   const formatAmount = (amount: any) => {
@@ -73,16 +71,22 @@ const SingleTrustTransaction = () => {
                 </p>
               </div>
             </div>
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col mt-2 gap-2">
               {transactions &&
                 transactions.myTrust.length &&
                 transactions.myTrust.map(
-                  ({ _id, uId, paymentId, transactionDate, donatedAmount }) => {
+                  ({
+                    _id,
+                    uId,
+                    paymentId,
+                    transactionDate,
+                    manualDonatedAmount,
+                  }) => {
                     return (
                       <TransactionInfo
                         key={_id}
                         transactionDate={transactionDate}
-                        amount={formatAmount(donatedAmount)}
+                        amount={formatAmount(manualDonatedAmount)}
                         paymentId={paymentId}
                         userImage={uId?.userlogo}
                         userName={`${uId?.firstName} ${uId?.lastName}`}

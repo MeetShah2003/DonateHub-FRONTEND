@@ -12,6 +12,8 @@ import { useAuth } from "@/context/auth";
 import TransactionIcon from "@/icons/TransactionIcon";
 import UserProfile from "../UserProfile";
 import CustomerQueryIcon from "@/icons/CustomerQueryIcon";
+import DisaterTransactionIcon from "@/icons/DisasterTransactionIcon";
+import RequestFundIcon from "@/icons/RequestFundIcon";
 
 const ADMIN_MENUS: {
   id: number;
@@ -40,18 +42,30 @@ const ADMIN_MENUS: {
   },
   {
     id: 5,
-    menu: "Manage Transaction",
-    path: "/admin/managetransaction",
+    menu: "Transactions",
+    path: "/admin/transactions",
     icon: <TransactionIcon />,
   },
   {
     id: 6,
+    menu: "Disaster Transactions",
+    path: "/admin/managetransaction",
+    icon: <DisaterTransactionIcon color="#FFFFFF" />,
+  },
+  {
+    id: 7,
+    menu: "Ask For Funds",
+    path: "/admin/askforfunds",
+    icon: <RequestFundIcon color="#FFFFFF" />,
+  },
+  {
+    id: 8,
     menu: "Customer Query",
     path: "/admin/customerquery",
     icon: <CustomerQueryIcon />,
   },
   {
-    id: 7,
+    id: 9,
     menu: "Logout",
     path: "/login",
     icon: <LogoutIcon color="#FFFFFF" />,

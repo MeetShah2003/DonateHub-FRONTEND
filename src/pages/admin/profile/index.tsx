@@ -240,13 +240,19 @@ const AdminProfile = () => {
           <input
             id="mono"
             name="mono"
-            type="mono"
+            type="number"
             value={values.mono || user.mono}
             onChange={handleChange}
             maxLength={10}
             onBlur={handleBlur}
             className="outline-none tracking-wider"
             placeholder="+91 9878588845"
+            onInput={(e) => {
+              e.currentTarget.value = e.currentTarget.value
+                .replace(/\D/, "")
+                .slice(0, 10);
+              handleChange(e);
+            }}
           />
           {touched.mono && errors.mono && (
             <span className="text-sm text-red-600">{errors.mono}</span>

@@ -18,8 +18,10 @@ const Admin = () => {
     useState<{ date: string; supporters: number }[]>();
   const [IncomeChartData, setIncomeChartData] =
     useState<{ date: string; totalIncome: number }[]>();
+  const [disasterIncomeChartData, setDisasterIncomeChartData] =
+    useState<{ date: string; totalIncome: number }[]>();
   const [totalCollection, setTotalCollection] = useState();
-  const [totalTrusts, setTotalTrusts] = useState<number>();
+  const [totalTrusts, setTotalTrusts] = useState<number>(0);
   const router = useRouter();
   const access_token = Cookies.get("access_token");
   const errorToast = (errorMessage: string) => toast.error(errorMessage);
@@ -68,6 +70,20 @@ const Admin = () => {
       });
   };
 
+  const getDisasterIncomeChartData = () => {
+    fetch(`${BACKEND_BASE_URL}/admin/trustDisasterInc`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+        "Content-type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setDisasterIncomeChartData(data.totalIncome);
+      });
+  };
+
   const getAllTrustCount = () => {
     fetch(`${BACKEND_BASE_URL}/admin/countTrust`, {
       method: "GET",
@@ -92,6 +108,7 @@ const Admin = () => {
     })
       .then((res) => res.json())
       .then((data) => {
+        console.log("data");
         setTotalUnverifiedTrusts(data?.totalTrusts);
       });
   };
@@ -134,6 +151,7 @@ const Admin = () => {
     getTotalCollection();
     getSupporterChartData();
     getIncomeChartData();
+    getDisasterIncomeChartData();
   }, [totalSuppoters, totalTrusts]);
   return (
     <AdminFrame title="Dashboard">
@@ -200,8 +218,14 @@ const Admin = () => {
           </h1>
         </div>
         <div className="flex flex-col md:flex-row -z-10 gap-5">
-          <ReactLineChart data={supporterChartData} />
-          <ReactBarChart data={IncomeChartData} />
+          <ReactLineChart data={supporterChartData} title="Supporter Chart" />
+          <ReactBarChart data={IncomeChartData} title="Income Chart" />
+        </div>
+        <div className="flex flex-col md:flex-row -z-10 gap-5">
+          <ReactBarChart
+            data={disasterIncomeChartData}
+            title="Disaster Income Chart"
+          />
         </div>
       </div>
     </AdminFrame>

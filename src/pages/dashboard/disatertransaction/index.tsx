@@ -70,7 +70,7 @@ const DisasterTransaction = () => {
                 key={index}
                 className="w-full bg-white rounded-lg shadow-md border p-4"
               >
-                <div className="flex flex-col md:flex-row items-center justify-between">
+                <div className="flex flex-row items-center justify-between">
                   <div className="flex items-center space-x-4 mb-4 md:mb-0">
                     <div>
                       <p className="text-gray-500 text-sm">{paymentId}</p>
@@ -81,7 +81,7 @@ const DisasterTransaction = () => {
                     <p className="text-xl font-normal text-red-600">
                       - ₹ {formatAmount(donatedAmount)}
                     </p>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm hidden md:block text-gray-500">
                       {transactionDate.toString()}
                     </p>
                   </div>
