@@ -20,6 +20,7 @@ const Trust = () => {
   const [totalDisasterCollection, setTotalDisasterCollection] =
     useState<number>(0);
   const [incomeChart, setIncomeChart] = useState();
+  const [disasterIncomeChart, setDisasterIncomeChart] = useState();
   const [loading, setLoading] = useState(false);
 
   const formatAmount = (amount: any) => {
@@ -97,9 +98,9 @@ const Trust = () => {
         setLoading(false);
       });
   };
-  const supporterChart = () => {
+  const disaterIncomChart = () => {
     setLoading(true);
-    fetch(`${BACKEND_BASE_URL}/trust/myNaturalSupp`, {
+    fetch(`${BACKEND_BASE_URL}/trust/myDisasterIncChart`, {
       method: "GET",
       headers: {
         "Content-type": "application/json",
@@ -113,8 +114,8 @@ const Trust = () => {
       })
       .then((data: any) => {
         if (data) {
-          // setIncomeChart(data?.myIncomeData);
-          console.log(data);
+          setDisasterIncomeChart(data?.myIncomeData);
+          console.log(data.myIncomeData);
         }
       });
   };
@@ -122,7 +123,7 @@ const Trust = () => {
   useEffect(() => {
     getSupporterAndCollectionData();
     manualIncomeChart();
-    supporterChart();
+    disaterIncomChart();
     disastersCount();
   }, [access_token]);
 
@@ -163,7 +164,12 @@ const Trust = () => {
           <p className="text-base font-medium">Suppoters</p>
         </div>
 
-        <div className="flex flex-col py-5 justify-center hover:scale-105 cursor-pointer hover:transition-all hover:duration-400 hover:ease-out items-center bg-secondary w-full rounded-md text-white">
+        <div
+          onClick={() => {
+            push(`/trust/transactions`);
+          }}
+          className="flex flex-col py-5 justify-center hover:scale-105 cursor-pointer hover:transition-all hover:duration-400 hover:ease-out items-center bg-secondary w-full rounded-md text-white"
+        >
           <h1 className="font-inter font-bold text-2xl">
             <span className="font-normal">₹</span>{" "}
             {formatAmount(totalCollection)}
@@ -171,7 +177,12 @@ const Trust = () => {
           <p className="text-base font-medium">Collection</p>
         </div>
 
-        <div className="flex flex-col py-5 justify-center hover:scale-105 cursor-pointer hover:transition-all hover:duration-400 hover:ease-out items-center bg-secondary w-full rounded-md text-white">
+        <div
+          onClick={() => {
+            push(`/trust/disasters`);
+          }}
+          className="flex flex-col py-5 justify-center hover:scale-105 cursor-pointer hover:transition-all hover:duration-400 hover:ease-out items-center bg-secondary w-full rounded-md text-white"
+        >
           <h1 className="font-inter font-bold text-2xl">
             <span className="font-normal">₹</span>{" "}
             {formatAmount(totalDisasterCollection)}
@@ -201,6 +212,12 @@ const Trust = () => {
       <div className="flex flex-col md:flex-row -z-10 gap-5">
         <ReactLineChart data={supporterChartData} title="Supporter Chart" />
         <ReactBarChart data={incomeChart} title="Income Chart" />
+      </div>
+      <div className="flex mt-5 flex-col md:flex-row -z-10 gap-5">
+        <ReactBarChart
+          data={disasterIncomeChart}
+          title="Disaster Income Chart"
+        />
       </div>
     </TrustNavbar>
   );

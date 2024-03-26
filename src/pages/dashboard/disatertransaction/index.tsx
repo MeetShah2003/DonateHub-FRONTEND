@@ -7,9 +7,11 @@ import { SingleTrustTransactions } from "@/types/types";
 import NoData from "@/components/NoData";
 import ReactPaginate from "react-paginate";
 import ArrowIcon from "@/icons/ArrowIcon";
+import { useRouter } from "next/router";
 
 const DisasterTransaction = () => {
   const [loading, setLoading] = useState(false);
+  const { push } = useRouter();
   const access_token = Cookies.get("access_token");
   const itemsPerPage = 10;
   const [disasterTransactionData, setDisasterTransactionData] = useState<
@@ -65,10 +67,16 @@ const DisasterTransaction = () => {
 
         <div className="flex flex-col gap-3">
           {currentTransactions.map(
-            ({ donatedAmount, paymentId, transactionDate, tId }, index) => (
+            (
+              { donatedAmount, paymentId, transactionDate, tId, _id },
+              index
+            ) => (
               <div
                 key={index}
-                className="w-full bg-white rounded-lg shadow-md border p-4"
+                onClick={() => {
+                  push(`/dashboard/disatertransaction/${_id}`);
+                }}
+                className="w-full bg-white hover:bg-gray-50 rounded-lg shadow-md border p-4"
               >
                 <div className="flex flex-row items-center justify-between">
                   <div className="flex items-center space-x-4 mb-4 md:mb-0">

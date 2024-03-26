@@ -8,10 +8,12 @@ import { SingleTrustTransactions } from "@/types/types";
 import NoData from "@/components/NoData";
 import ReactPaginate from "react-paginate";
 import ArrowIcon from "@/icons/ArrowIcon";
+import { useRouter } from "next/router";
 
 const TrustTransaction = () => {
   const [loading, setLoading] = useState(false);
   const access_token = Cookies.get("access_token");
+  const { push } = useRouter();
   const itemsPerPage = 10;
   const [disasterTransactionData, setDisasterTransactionData] = useState<
     SingleTrustTransactions[]
@@ -62,17 +64,20 @@ const TrustTransaction = () => {
         <Visitor />
       </div>
       <div className="max-w-screen-lg w-90% mx-auto">
-        <h1 className="my-5 text-2xl font-semibold">Disaster Transaction</h1>
+        <h1 className="my-5 text-2xl font-semibold">Trust Transaction</h1>
 
         <div className="flex flex-col gap-3">
           {currentTransactions.map(
             (
-              { manualDonatedAmount, paymentId, transactionDate, tId },
+              { manualDonatedAmount, paymentId, transactionDate, tId, _id },
               index
             ) => (
               <div
                 key={index}
-                className="w-full bg-white rounded-lg shadow-md border p-4"
+                onClick={() => {
+                  push(`/dashboard/trusttransaction/${_id}`);
+                }}
+                className="w-full bg-white hover:bg-gray-50 rounded-lg shadow-md border p-4"
               >
                 <div className="flex flex-row items-center justify-between">
                   <div className="flex items-center space-x-4 mb-4 md:mb-0">

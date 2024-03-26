@@ -1,5 +1,7 @@
 import { BACKEND_BASE_URL } from "@/consts";
 import LikeIcon from "@/icons/LikeIcon";
+import ThumbUpIcon from "@/icons/ThumbUpIcon";
+import ThumbDownIcon from "@/icons/ThumbDownIcon";
 import { useFormik } from "formik";
 import Cookies from "js-cookie";
 
@@ -13,13 +15,87 @@ const ReviewSection: React.FC<{ trustId: string }> = ({ trustId }) => {
   const [loading, setLoading] = useState(false);
   const [allReviews, setAllReviews] = useState<ReviewType[]>([]);
   const [likedReviews, setLikedReviews] = useState<string[]>([]);
+  const [helpfulReviews, setHelpfulReviews] = useState<string[]>([]);
+  const [notHelpfulReviews, setNotHelpfulReviews] = useState<string[]>([]);
   const [likeCounts, setLikeCounts] = useState<{ [key: string]: number }>({});
+  const [helpfulCounts, setHelpfulCounts] = useState<{ [key: string]: number }>(
+    {}
+  );
+  const [notHelpfulCounts, setNotHelpfulCounts] = useState<{
+    [key: string]: number;
+  }>({});
   const access_token = Cookies.get("access_token");
 
   const errorToast = (errorMessage: string) => toast.error(errorMessage);
   const successToast = (successMessage: string) =>
     toast.success(successMessage);
 
+  const markAsHelpful = (reviewId: string) => {
+    if (!helpfulReviews.includes(reviewId)) {
+      setHelpfulReviews([...helpfulReviews, reviewId]);
+      setNotHelpfulReviews(notHelpfulReviews.filter((id) => id !== reviewId));
+
+      fetch(`${BACKEND_BASE_URL}/api/helpfullCount/${reviewId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${access_token}`,
+        },
+      })
+        .then((res) => {
+          if (res.ok) {
+            // Update the count only after receiving the response
+            return res.json();
+          }
+          throw new Error("Failed to mark as helpful");
+        })
+        .then((data) => {
+          console.log(data.review.helpfulCount);
+
+          setHelpfulCounts((prevCounts) => ({
+            ...prevCounts,
+            [reviewId]: (prevCounts[reviewId] || 0) + 1, // Increment the count
+          }));
+        })
+        .catch((error) => {
+          errorToast("Something went wrong");
+          console.error(error);
+        });
+    }
+  };
+
+  const markAsNotHelpful = (reviewId: string) => {
+    if (!notHelpfulReviews.includes(reviewId)) {
+      setNotHelpfulReviews([...notHelpfulReviews, reviewId]);
+      setHelpfulReviews(helpfulReviews.filter((id) => id !== reviewId));
+
+      fetch(`${BACKEND_BASE_URL}/api/notHelpfullCount/${reviewId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${access_token}`,
+        },
+      })
+        .then((res) => {
+          if (res.ok) {
+            // Update the count only after receiving the response
+            return res.json();
+          }
+          throw new Error("Failed to mark as not helpful");
+        })
+        .then((data) => {
+          console.log(data.review.notHelpfulCount);
+          setNotHelpfulCounts((prevCounts) => ({
+            ...prevCounts,
+            [reviewId]: (prevCounts[reviewId] || 0) + 1, // Increment the count
+          }));
+        })
+        .catch((error) => {
+          errorToast("Something went wrong");
+          console.error(error);
+        });
+    }
+  };
   const writeReview = (id: string, reviewText: string) => {
     setLoading(true);
     fetch(`${BACKEND_BASE_URL}/api/trustReview`, {
@@ -44,6 +120,8 @@ const ReviewSection: React.FC<{ trustId: string }> = ({ trustId }) => {
       });
   };
 
+  // Function to fetch and display reviews
+  // Function to fetch and display reviews
   const showReviews = (id: string) => {
     setLoading(true);
     fetch(`${BACKEND_BASE_URL}/api/allTrustReviews/${id}`, {
@@ -60,15 +138,22 @@ const ReviewSection: React.FC<{ trustId: string }> = ({ trustId }) => {
         throw new Error("Failed to fetch reviews");
       })
       .then((data) => {
+        console.log(data);
         setAllReviews(data.allReviews);
         const counts: { [key: string]: number } = {};
+        const helpfulCounts: { [key: string]: number } = {};
+        const notHelpfulCounts: { [key: string]: number } = {};
         data.allReviews.forEach((review: any) => {
           counts[review._id] = review.likes;
+          helpfulCounts[review._id] = review.helpfulCount;
+          notHelpfulCounts[review._id] = review.notHelpfulCount;
         });
         setLikeCounts(counts);
+        setHelpfulCounts(helpfulCounts);
+        setNotHelpfulCounts(notHelpfulCounts);
       })
       .catch((error) => {
-        errorToast("something went wrong");
+        errorToast("Something went wrong");
       })
       .finally(() => {
         setLoading(false);
@@ -202,6 +287,20 @@ const ReviewSection: React.FC<{ trustId: string }> = ({ trustId }) => {
             >
               <LikeIcon isLike={likedReviews.includes(_id)} />
               <p className="text-gray-500">{likeCounts[_id]}</p>
+            </div>
+            <div
+              onClick={() => markAsHelpful(_id)}
+              className="flex cursor-pointer justify-end gap-2 w-[10%] items-center"
+            >
+              <ThumbUpIcon isLike={helpfulReviews.includes(_id)} />
+              <p className="text-gray-500">{helpfulCounts[_id]}</p>
+            </div>
+            <div
+              onClick={() => markAsNotHelpful(_id)}
+              className="flex cursor-pointer justify-end gap-2 w-[10%] items-center"
+            >
+              <ThumbDownIcon isLike={notHelpfulReviews.includes(_id)} />
+              <p className="text-gray-500">{notHelpfulCounts[_id]}</p>
             </div>
           </div>
         </div>
