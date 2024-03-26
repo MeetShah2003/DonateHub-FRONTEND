@@ -262,13 +262,19 @@ const ProfileTrust = () => {
               <input
                 id="contactNo"
                 name="contactNo"
-                type="text"
+                type="number"
                 value={values.contactNo || user.contactNo}
                 onChange={handleChange}
                 maxLength={10}
                 onBlur={handleBlur}
                 className="outline-none tracking-wider"
                 placeholder="+91 9878588845"
+                onInput={(e) => {
+                  e.currentTarget.value = e.currentTarget.value
+                    .replace(/\D/, "")
+                    .slice(0, 10);
+                  handleChange(e);
+                }}
               />
               {touched.contactNo && errors.contactNo && (
                 <span className="text-sm text-red-600">{errors.contactNo}</span>

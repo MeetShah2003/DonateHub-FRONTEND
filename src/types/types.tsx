@@ -16,17 +16,17 @@ export type TrustData = {
   _id?: string;
   trustName: string;
   trustlogo: string;
-  email: string;
+  email?: string;
   founder: string;
   creationDate: Date;
   category: string;
-  contactNo: string;
+  contactNo: number | null;
   description: string;
   password?: string;
   address: string;
   city: string;
   state: string;
-  pincode: string;
+  pincode: number | null;
   role?: "trust";
   isBlocked?: boolean;
   isVerified?: boolean;
@@ -78,6 +78,21 @@ export type RequestFunds = {
   isAccepted: boolean;
   isRejected: boolean;
   __v?: number;
+};
+
+export type RequestFundsForAdmin = {
+  _id: string;
+  tId: TrustData;
+  uId: UserData;
+  title: string;
+  description: string;
+  reqAmount: number;
+  documents: string[];
+  fundRequestedDate: Date;
+  status: string;
+  isAccepted: boolean;
+  isRejected: boolean;
+  defaultDate: string;
 };
 
 export type ContactUsType = {
@@ -188,6 +203,38 @@ export type NormalTransactionForTrust = {
   }[];
 };
 
+export type TransctionForAdmin = {
+  myTrust: {
+    _id: string;
+    paymentId: string;
+    tId: TrustData;
+    uId: UserData;
+    dId: string;
+    donatedAmount: number;
+    transactionDate: Date;
+    defaultDate: Date;
+    __v: 0;
+  }[];
+  totalDonatedAmount: number;
+  totalUniqueSupporters: number;
+};
+
+export type TransctionsForAdmin = {
+  myTrust: {
+    _id: string;
+    paymentId: string;
+    tId: TrustData;
+    uId: UserData;
+    dId: string;
+    manualDonatedAmount: number;
+    transactionDate: Date;
+    defaultDate: Date;
+    __v: 0;
+  }[];
+  totalDonatedAmount: number;
+  totalUniqueSupporters: number;
+};
+
 export type DisasterForTrust = {
   myDisasters: {
     _id: string;
@@ -221,4 +268,10 @@ export type SingleDisaster = {
   naturalSupporter: string[];
   status: string;
   defaultDate: string;
+};
+
+export type NormalTransactionForAdmin = {
+  uniqueSupportersCount: number;
+  manualDonation: number;
+  allTrusts: TrustData[];
 };

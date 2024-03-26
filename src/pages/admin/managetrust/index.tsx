@@ -105,7 +105,7 @@ const ManageTrust = () => {
   const offset = currentPage * itemsPerPage;
   const filteredUsers = allTrustData?.filter((user) =>
     Object.values(user).some((value) =>
-      value.toString().toLowerCase().includes(searchQuery.toLowerCase())
+      value?.toString().toLowerCase().includes(searchQuery.toLowerCase())
     )
   );
   const currentItems = filteredUsers?.slice(offset, offset + itemsPerPage);

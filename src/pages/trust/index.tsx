@@ -18,7 +18,7 @@ const Trust = () => {
   const [totalCollection, setTotalCollection] = useState<number>();
   const [disasterCount, setDisasterCount] = useState<number>();
   const [totalDisasterCollection, setTotalDisasterCollection] =
-    useState<number>();
+    useState<number>(0);
   const [incomeChart, setIncomeChart] = useState();
   const [loading, setLoading] = useState(false);
 
@@ -83,7 +83,7 @@ const Trust = () => {
       .then((data: any) => {
         if (data) {
           let totalCollection = 0;
-          console.log(data.myDisasters[0].recievedFund);
+
           data.myDisasters.map((value: any) => {
             totalCollection += value.recievedFund;
             console.log("totalCollection>>", totalCollection);
@@ -199,8 +199,8 @@ const Trust = () => {
         </h1>
       </div>
       <div className="flex flex-col md:flex-row -z-10 gap-5">
-        <ReactLineChart data={supporterChartData} />
-        <ReactBarChart data={incomeChart} />
+        <ReactLineChart data={supporterChartData} title="Supporter Chart" />
+        <ReactBarChart data={incomeChart} title="Income Chart" />
       </div>
     </TrustNavbar>
   );

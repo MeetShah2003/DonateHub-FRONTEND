@@ -59,13 +59,13 @@ const TrustSignup = () => {
     founder: "",
     creationDate: new Date(2023, 0, 1),
     category: "",
-    contactNo: "",
+    contactNo: null,
     description: "",
     password: "",
     role: "trust",
     address: "",
     city: "",
-    pincode: "",
+    pincode: null,
     state: "",
     isBlocked: false,
     isVerified: false,
@@ -338,7 +338,7 @@ const TrustSignup = () => {
           maxLength={10}
           onChange={handleChange}
           onBlur={handleBlur}
-          value={values.contactNo}
+          value={values.contactNo as number}
         />
         {touched.contactNo && errors.contactNo && (
           <span className="text-sm text-red-600">{errors.contactNo}</span>
@@ -409,7 +409,7 @@ const TrustSignup = () => {
           maxLength={6}
           onChange={handleChange}
           onBlur={handleBlur}
-          value={values.pincode}
+          value={values.pincode as number}
         />
         {touched.pincode && errors.pincode && (
           <span className="text-sm text-red-600">{errors.pincode}</span>

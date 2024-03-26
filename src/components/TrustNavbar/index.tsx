@@ -14,7 +14,6 @@ import ProfileIcon from "@/icons/ProfileIcon";
 import LogoutIcon from "@/icons/LogoutIcon";
 import { useAuth } from "@/context/auth";
 import TrustTransactionIcon from "@/icons/TrustTransactionIcon";
-import DisaterTransactionIcon from "@/icons/DisasterTransactionIcon";
 import DisasterIcon from "@/icons/DisasterIcon";
 
 const NAV_MENUES: { id: number; menu: string; path: string }[] = [
@@ -54,7 +53,7 @@ const SIDE_BAR_MENUES: {
     dropdownOptions: [
       {
         id: 1,
-        icon: <RequestFundIcon />,
+        icon: <RequestFundIcon color="#374151" />,
         menuTitle: "Fund Requests",
         path: "/trust/fundrequest",
       },
