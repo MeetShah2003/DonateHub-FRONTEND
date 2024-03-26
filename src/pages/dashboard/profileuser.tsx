@@ -55,6 +55,7 @@ const ProfileUser = () => {
       .then((data) => {
         if (data) {
           successToast("Profile Update Successfully");
+          window.location.reload();
         }
       })
       .finally(() => {
@@ -168,7 +169,7 @@ const ProfileUser = () => {
               placeholder="John"
               onChange={handleChange}
               onBlur={handleBlur}
-              value={values.firstName || user?.firstName}
+              value={values.firstName}
             />
             {touched.firstName && errors.firstName && (
               <span className="text-sm text-red-600">
@@ -186,7 +187,7 @@ const ProfileUser = () => {
               placeholder="Doe"
               onChange={handleChange}
               onBlur={handleBlur}
-              value={values.lastName || user?.lastName}
+              value={values.lastName}
             />
             {touched.lastName && errors.lastName && (
               <span className="text-sm text-red-600">
@@ -246,7 +247,7 @@ const ProfileUser = () => {
             name="email"
             type="email"
             disabled={isDisabled}
-            value={values.email || user.email}
+            value={values.email}
             onChange={handleChange}
             onBlur={handleBlur}
             className="outline-none tracking-wider"
@@ -265,7 +266,7 @@ const ProfileUser = () => {
             id="mono"
             name="mono"
             type="number"
-            value={values.mono || user.mono}
+            value={values.mono}
             onChange={handleChange}
             maxLength={10}
             onBlur={handleBlur}
