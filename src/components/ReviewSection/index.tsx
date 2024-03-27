@@ -61,6 +61,13 @@ const ReviewSection: React.FC<{ trustId: string }> = ({ trustId }) => {
           errorToast("Something went wrong");
           console.error(error);
         });
+    } else {
+      // If already marked as helpful, decrement the count and remove from helpfulReviews
+      setHelpfulReviews(helpfulReviews.filter((id) => id !== reviewId));
+      setHelpfulCounts((prevCounts) => ({
+        ...prevCounts,
+        [reviewId]: Math.max((prevCounts[reviewId] || 0) - 1, 0), // Decrement the count but ensure it doesn't go below 0
+      }));
     }
   };
 
@@ -94,6 +101,13 @@ const ReviewSection: React.FC<{ trustId: string }> = ({ trustId }) => {
           errorToast("Something went wrong");
           console.error(error);
         });
+    } else {
+      // If already marked as not helpful, decrement the count and remove from notHelpfulReviews
+      setNotHelpfulReviews(notHelpfulReviews.filter((id) => id !== reviewId));
+      setNotHelpfulCounts((prevCounts) => ({
+        ...prevCounts,
+        [reviewId]: Math.max((prevCounts[reviewId] || 0) - 1, 0), // Decrement the count but ensure it doesn't go below 0
+      }));
     }
   };
   const writeReview = (id: string, reviewText: string) => {
@@ -279,25 +293,25 @@ const ReviewSection: React.FC<{ trustId: string }> = ({ trustId }) => {
               {uId?.firstName} {uId?.lastName}
             </p>
           </div>
-          <div className="w-full flex items-end justify-between">
-            <p className="w-[90%] font-inter">{reviewText}</p>
+          <p className="w-[90%] font-inter">{reviewText}</p>
+          <div className="w-full flex items-end md:justify-end">
             <div
               onClick={() => toggleLike(_id)}
-              className="flex cursor-pointer justify-end gap-2 w-[10%] items-center"
+              className="flex cursor-pointer justify-end gap-2 w-[15%] items-center"
             >
               <LikeIcon isLike={likedReviews.includes(_id)} />
               <p className="text-gray-500">{likeCounts[_id]}</p>
             </div>
             <div
               onClick={() => markAsHelpful(_id)}
-              className="flex cursor-pointer justify-end gap-2 w-[10%] items-center"
+              className="flex cursor-pointer justify-end gap-2 w-[15%] items-center"
             >
               <ThumbUpIcon isLike={helpfulReviews.includes(_id)} />
               <p className="text-gray-500">{helpfulCounts[_id]}</p>
             </div>
             <div
               onClick={() => markAsNotHelpful(_id)}
-              className="flex cursor-pointer justify-end gap-2 w-[10%] items-center"
+              className="flex cursor-pointer justify-end gap-2 w-[15%] items-center"
             >
               <ThumbDownIcon isLike={notHelpfulReviews.includes(_id)} />
               <p className="text-gray-500">{notHelpfulCounts[_id]}</p>
