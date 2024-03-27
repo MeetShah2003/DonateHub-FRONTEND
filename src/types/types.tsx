@@ -275,3 +275,58 @@ export type NormalTransactionForAdmin = {
   manualDonation: number;
   allTrusts: TrustData[];
 };
+
+export type SingleDisasterTransactionDetails = {
+  _id: string;
+  paymentId: string;
+  tId: TrustData;
+  uId: UserData;
+  dId: string;
+  donatedAmount: number;
+  transactionDate: Date;
+  defaultDate: Date;
+};
+export type SingleTrustTransactionDetails = {
+  _id: string;
+  paymentId: string;
+  tId: TrustData;
+  uId: UserData;
+  dId: string;
+  manualDonatedAmount: number;
+  transactionDate: Date;
+  defaultDate: Date;
+};
+
+export type DisasterTransactionForTrust = {
+  myTrust: {
+    _id: string;
+    paymentId: string;
+    tId: TrustData;
+    uId: UserData;
+    dId: string;
+    donatedAmount: number;
+    transactionDate: Date;
+    defaultDate: Date;
+  }[];
+  totalDonatedAmount: number;
+  totalUniqueSupporters: number;
+};
+
+export type ReviewsForTrust = {
+  _id: string;
+  uId: UserData;
+  tId: TrustData;
+  reviewText: string;
+  likes: 1;
+  likedBy: string[];
+  disLikes: number;
+  disLikedBy: [];
+  helpfulCount: number;
+  helpfulBy: [];
+  notHelpfulCount: number;
+  notHelpfulBy: string[];
+  createdAt: Date;
+  defaultDate: Date;
+  usefullReview: [];
+  notUsefullReview: [];
+};

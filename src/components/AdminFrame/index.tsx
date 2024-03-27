@@ -38,7 +38,7 @@ const ADMIN_MENUS: {
     id: 4,
     menu: "Manage User",
     path: "/admin/manageuser",
-    icon: <ManageUserIcon />,
+    icon: <ManageUserIcon color="#FFFFFF" />,
   },
   {
     id: 5,
