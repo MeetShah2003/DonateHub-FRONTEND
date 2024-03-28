@@ -12,6 +12,7 @@ import { RequestFunds, RequestFundsForAdmin } from "@/types/types";
 import { getDownloadURL, ref } from "firebase/storage";
 import { storage } from "@/firebase";
 import AdminRoute from "@/components/AdminRoute";
+import AdminFrame from "@/components/AdminFrame";
 
 const RequestFund = () => {
   const access_token = Cookies.get("access_token");
@@ -75,7 +76,7 @@ const RequestFund = () => {
     <div>
       {loading && <Spinner />}
 
-      <TrustNavbar title="Request Funds">
+      <AdminFrame title="Request Funds">
         <div className="mx-auto">
           <div>
             <div className="flex flex-col gap-5 w-full">
@@ -128,7 +129,7 @@ const RequestFund = () => {
             </div>
           </div>
         </div>
-      </TrustNavbar>
+      </AdminFrame>
     </div>
   );
 };
