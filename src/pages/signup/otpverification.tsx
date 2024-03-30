@@ -75,15 +75,32 @@ const OtpVerification = () => {
     return () => clearInterval(interval);
   }, [resendTimer]);
 
+  const { role, ...withouteRoleData } = sigUpData;
+  const { firstName, lastName, password, email, mono, gender, userlogo } =
+    withouteRoleData;
+
+  const resendOtpData = {
+    otp: values?.otp,
+    firstName,
+    lastName,
+    password,
+    email,
+    mono,
+    gender,
+    userlogo,
+  };
+
+  console.log(resendOtpData);
+
   const handleResendOtp = () => {
     setLoading(true);
     setResendTimer(2);
-    fetch(`${BACKEND_BASE_URL}/api/resendEmailV`, {
+    fetch(`${BACKEND_BASE_URL}/api/ROTPV`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ email: sigUpData.email }),
+      body: JSON.stringify(resendOtpData),
     }).finally(() => {
       setLoading(false);
     });
