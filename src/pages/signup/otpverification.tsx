@@ -75,9 +75,11 @@ const OtpVerification = () => {
     return () => clearInterval(interval);
   }, [resendTimer]);
 
-  const { role, ...withouteRoleData } = sigUpData;
+  const { role, ...withouteRoleData } = sigUpData || {};
   const { firstName, lastName, password, email, mono, gender, userlogo } =
     withouteRoleData;
+
+  console.log(role);
 
   const resendOtpData = {
     otp: values?.otp,
