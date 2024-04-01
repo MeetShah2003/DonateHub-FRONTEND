@@ -41,7 +41,7 @@ const TrustDonation = () => {
 
     const containsSearchQuery = Object.values(user).some((value) => {
       if (typeof value === "object") {
-        return Object.values(value).some((nestedValue) =>
+        return Object.values(value as string[]).some((nestedValue) =>
           nestedValue
             .toString()
             .toLowerCase()
