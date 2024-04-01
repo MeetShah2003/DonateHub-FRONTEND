@@ -213,7 +213,7 @@ const TrustNavbar: React.FC<{ children: ReactNode; title: string }> = ({
               )}
             <li
               onClick={() => {}}
-              className="text-base flex flex-col justify-center border-b-2 py-3 px-5 text-gray-700 font-semibold relative"
+              className="text-base flex cursor-pointer flex-col justify-center border-b-2 py-3 px-5 text-gray-700 font-semibold relative"
             >
               <div className="flex gap-3">
                 <div>
@@ -292,7 +292,7 @@ const TrustNavbar: React.FC<{ children: ReactNode; title: string }> = ({
                 )}
               <li
                 onClick={() => {}}
-                className="text-base flex flex-col justify-center border-b-4 py-3 px-5 text-gray-700 font-semibold relative"
+                className="text-base flex flex-col cursor-pointer justify-center border-b-4 py-3 px-5 text-gray-700 font-semibold relative"
               >
                 <div className="flex gap-3">
                   <div>

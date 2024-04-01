@@ -40,13 +40,23 @@ const Disaters = () => {
   useEffect(() => {
     disastersCount();
   }, []);
+
+  console.log(disasters);
   return (
     <TrustNavbar title="Disaters">
       <div className="flex flex-col gap-2">
         {disasters &&
           disasters.myDisasters.length &&
           disasters.myDisasters.map(
-            ({ title, description, disasterImage, tId, recievedFund, _id }) => {
+            ({
+              title,
+              description,
+              disasterImage,
+              tId,
+              recievedFund,
+              _id,
+              status,
+            }) => {
               return (
                 <TransactionTrustsModel
                   key={1}
@@ -54,6 +64,7 @@ const Disaters = () => {
                   description={description}
                   trustImage={disasterImage}
                   founder={tId.founder}
+                  statusOfModel={status}
                   creationDate={tId.creationDate}
                   amount={recievedFund}
                   onShowTransaction={() => {

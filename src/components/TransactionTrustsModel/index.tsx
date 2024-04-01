@@ -2,6 +2,7 @@ import React from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { useAuth } from "@/context/auth";
+import items from "razorpay/dist/types/items";
 
 interface TransactionTrustsModelProps {
   trustImage: string;
@@ -10,6 +11,7 @@ interface TransactionTrustsModelProps {
   founder: string;
   creationDate: Date;
   amount: number;
+  statusOfModel?: string;
   onShowTransaction: () => void;
   onEditDisaster?: () => void;
 }
@@ -25,6 +27,7 @@ const TransactionTrustsModel: React.FC<TransactionTrustsModelProps> = ({
   founder,
   title,
   trustImage,
+  statusOfModel,
   onShowTransaction,
   onEditDisaster,
 }) => {
@@ -51,12 +54,27 @@ const TransactionTrustsModel: React.FC<TransactionTrustsModelProps> = ({
           <div className="flex flex-wrap gap-4 mt-4">
             <div className="flex items-center mr-4 mb-2">
               <span className="mr-2 text-gray-700">Collection:</span>
-              <span className="text-gray-900 font-semibold">₹{amount}</span>
+              <span className="text-gray-900 font-semibold">
+                ₹{formatAmount(amount)}
+              </span>
             </div>
             <div className="flex items-center mb-2">
               <span className="mr-2 text-gray-700">Founder:</span>
               <span className="text-gray-900 font-semibold">{founder}</span>
             </div>
+            {statusOfModel ? (
+              <div className="flex items-center mb-2">
+                <span className="mr-2 text-gray-700">Status:</span>
+                <span className="text-gray-900 font-semibold">
+                  {statusOfModel
+                    ?.charAt(0)
+                    .toUpperCase()
+                    .concat(statusOfModel?.slice(1))}
+                </span>
+              </div>
+            ) : (
+              ""
+            )}
           </div>
 
           <div className="flex gap-2">

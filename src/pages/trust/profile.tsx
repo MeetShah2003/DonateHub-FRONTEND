@@ -151,10 +151,7 @@ const ProfileTrust = () => {
       <div>
         <TrustNavbar title="Edit Profile">
           {loading && <Spinner />}
-          <form
-            className="mx-auto w-full max-w-md gap-10"
-            onSubmit={handleSubmit}
-          >
+          <form className="mx-auto w-full gap-10" onSubmit={handleSubmit}>
             <div className="flex items-center justify-center relative bottom-6">
               <div className="border-4 h-32 w-32 p-1 border-primary rounded-full overflow-hidden">
                 <Image
@@ -180,211 +177,258 @@ const ProfileTrust = () => {
               </div>
             </div>
 
-            <div className="flex w-full flex-col border-2 px-2 py-1 rounded-t-lg focus-within:border-primary">
-              <label className="pb-1 text-sm font-medium">Trust Name</label>
-              <input
-                id="trustName"
-                name="trustName"
-                type="text"
-                className="outline-none tracking-wider"
-                placeholder="John"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.trustName || user?.trustName}
-              />
-              {touched.trustName && errors.trustName && (
-                <span className="text-sm text-red-600">{errors.trustName}</span>
-              )}
-            </div>
+            <div className="flex flex-col gap-5 lg:flex-row w-full">
+              <div className="flex flex-col justify-end gap-5 w-full">
+                <div className="flex flex-col gap-1">
+                  <label
+                    className="w-full font-inter text-base font-semibold leading-4 tracking-heading text-black"
+                    htmlFor="trustName"
+                  >
+                    Trustname
+                  </label>
+                  <input
+                    className={
+                      "w-full rounded-lg placeholder:text-gray-650  border-2 border-gray-300 font-inter py-3 px-3 mb-4 sm:mb-0 text-base font-normal leading-4 outline-none"
+                    }
+                    type="text"
+                    id="trustName"
+                    name="trustName"
+                    placeholder="First name"
+                    value={values.trustName}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                  {touched.trustName && errors.trustName && (
+                    <span className="text-sm text-red-600">
+                      {errors.trustName}
+                    </span>
+                  )}
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label
+                    className="w-full font-inter text-base font-semibold leading-4 tracking-heading text-black"
+                    htmlFor="firstName"
+                  >
+                    Email
+                  </label>
+                  <input
+                    className={
+                      "w-full rounded-lg  placeholder:text-gray-650 border-2 border-gray-300 font-inter py-3 px-3 mb-4 sm:mb-0 text-base font-normal leading-4 outline-none"
+                    }
+                    type="text"
+                    id="email"
+                    name="email"
+                    placeholder="Email"
+                    value={values.email}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                  {touched.email && errors.email && (
+                    <span className="text-sm text-red-600">{errors.email}</span>
+                  )}
+                </div>
 
-            <div
-              className={`flex flex-col border-2 border-t-transparent px-2 py-1 ${
-                isDisabled ? "bg-gray-100" : ""
-              } focus-within:border-primary`}
-            >
-              <label className="pb-1 text-sm font-medium">Email</label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                disabled={isDisabled}
-                value={user.email}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                className="outline-none tracking-wider"
-                placeholder="johndoe@gmail.com"
-              />
-              {touched.email && errors.email && (
-                <span className="text-sm text-red-600">{errors.email}</span>
-              )}
-            </div>
+                <div className="flex flex-col gap-1">
+                  <label
+                    className="w-full font-inter text-base font-semibold leading-4 tracking-heading text-black"
+                    htmlFor="email"
+                  >
+                    Mobile No
+                  </label>
+                  <input
+                    className={
+                      "w-full rounded-lg placeholder:text-gray-650  border-2 border-gray-300 font-inter py-3 px-3 mb-4 sm:mb-0 text-base font-normal leading-4 outline-none"
+                    }
+                    type="text"
+                    id="contactNo"
+                    name="contactNo"
+                    placeholder="ContactNo"
+                    value={values.contactNo as number}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                  {touched.contactNo && errors.contactNo && (
+                    <span className="text-sm text-red-600">
+                      {errors.contactNo}
+                    </span>
+                  )}
+                </div>
 
-            <div className="flex flex-col border-2 px-2 py-1 border-t-transparent focus-within:border-primary">
-              <label className="pb-1 text-sm font-medium">About Trust</label>
-              <textarea
-                id="description"
-                name="description"
-                className="outline-none tracking-wider resize-none"
-                rows={4}
-                cols={30}
-                placeholder="Type Here About Trust"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.description || user.description}
-              />
-              {touched.description && errors.description && (
-                <span className="text-sm text-red-600">
-                  {errors.description}
-                </span>
-              )}
-            </div>
+                <div className="flex flex-col gap-1">
+                  <label
+                    className="w-full font-inter text-base font-semibold leading-4 tracking-heading text-black"
+                    htmlFor="email"
+                  >
+                    Creation Date
+                  </label>
+                  <input
+                    className={
+                      "w-full rounded-lg placeholder:text-gray-650  border-2 border-gray-300 font-inter py-3 px-3 mb-4 sm:mb-0 text-base font-normal leading-4 outline-none"
+                    }
+                    type="text"
+                    id="contactNo"
+                    name="contactNo"
+                    placeholder="ContactNo"
+                    max={new Date().toISOString().split("T")[0]}
+                    value={values.creationDate.toString() || user?.creationDate}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label
+                    className="w-full font-inter text-base font-semibold leading-4 tracking-heading text-black"
+                    htmlFor="email"
+                  >
+                    Catagory
+                  </label>
+                  <select
+                    className="w-full rounded-lg placeholder:text-gray-650  border-2 border-gray-300 font-inter py-3 px-3 mb-4 sm:mb-0 text-base font-normal leading-4 outline-none"
+                    id="category"
+                    name="category"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.category || user?.category}
+                  >
+                    {TRUST_CATAGORY_OPTIONS?.map(({ option }, index) => (
+                      <option key={index} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                  {touched.category && errors.category && (
+                    <span className="text-sm text-red-600">
+                      {errors.category}
+                    </span>
+                  )}
+                </div>
 
-            <div className="flex flex-col border-2 px-2 py-1 border-t-transparent focus-within:border-primary">
-              <label className="pb-1 text-sm font-medium">Category</label>
-              <select
-                className="outline-none tracking-wider"
-                id="category"
-                name="category"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.category || user?.category}
-              >
-                {TRUST_CATAGORY_OPTIONS?.map(({ option }, index) => (
-                  <option key={index} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </div>
+                <div className="flex flex-col gap-1">
+                  <label
+                    className="w-full font-inter text-base font-semibold leading-4 tracking-heading text-black"
+                    htmlFor="email"
+                  >
+                    Founder
+                  </label>
+                  <input
+                    className={
+                      "w-full rounded-lg placeholder:text-gray-650  border-2 border-gray-300 font-inter py-3 px-3 mb-4 sm:mb-0 text-base font-normal leading-4 outline-none"
+                    }
+                    type="text"
+                    id="founder"
+                    name="founder"
+                    placeholder="Founder"
+                    value={values.founder}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                  {touched.founder && errors.founder && (
+                    <span className="text-sm text-red-600">
+                      {errors.founder}
+                    </span>
+                  )}
+                </div>
+              </div>
+              <div className="flex flex-col gap-5 w-full">
+                <div className="flex flex-col px-2 border-t-transparent focus-within:border-primary">
+                  <label className="pb-1 text-sm font-medium">
+                    About Trust
+                  </label>
+                  <textarea
+                    id="description"
+                    name="description"
+                    className="w-full rounded-lg placeholder:text-gray-650  border-2 border-gray-300 font-inter py-3 px-3 mb-4 sm:mb-0 text-base font-normal leading-4 outline-none"
+                    rows={6}
+                    cols={30}
+                    placeholder="Type Here About Trust"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.description || user.description}
+                  />
+                  {touched.description && errors.description && (
+                    <span className="text-sm text-red-600">
+                      {errors.description}
+                    </span>
+                  )}
+                </div>
+                <div className="flex flex-col px-2 border-t-transparent focus-within:border-primary">
+                  <label className="pb-1 text-sm font-medium">Address</label>
+                  <input
+                    id="address"
+                    name="address"
+                    type="text"
+                    className="w-full rounded-lg placeholder:text-gray-650  border-2 border-gray-300 font-inter py-3 px-3 mb-4 sm:mb-0 text-base font-normal leading-4 outline-none"
+                    placeholder="A-50 , Dollar Colony"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.address || user?.address}
+                  />
+                  {touched.address && errors.address && (
+                    <span className="text-sm text-red-600">
+                      {errors.address}
+                    </span>
+                  )}
+                </div>
+                <div className="flex flex-col px-2  border-t-transparent focus-within:border-primary">
+                  <label className="pb-1 text-sm font-medium">State</label>
+                  <select
+                    className="w-full rounded-lg placeholder:text-gray-650  border-2 border-gray-300 font-inter py-3 px-3 mb-4 sm:mb-0 text-base font-normal leading-4 outline-none"
+                    id="state"
+                    name="state"
+                    onChange={(e) => handleStateChange(e.target.value)}
+                    onBlur={handleBlur}
+                    value={values.state || user?.state}
+                  >
+                    {CITY_AND_STATE?.map(({ state }, index) => (
+                      <option key={index} value={state.value}>
+                        {state.label}
+                      </option>
+                    ))}
+                    {touched.state && errors.state && (
+                      <span className="text-sm text-red-600">
+                        {errors.state}
+                      </span>
+                    )}
+                  </select>
+                </div>
+                <div className="flex flex-col px-2 border-t-transparent focus-within:border-primary">
+                  <label className="pb-1 text-sm font-medium">City</label>
+                  <select
+                    className="w-full rounded-lg placeholder:text-gray-650  border-2 border-gray-300 font-inter py-3 px-3 mb-4 sm:mb-0 text-base font-normal leading-4 outline-none"
+                    id="city"
+                    name="city"
+                    onChange={handleChange}
+                    value={values.city || user?.city}
+                    onBlur={handleBlur}
+                  >
+                    {cities.map(({ label, value }, index) => (
+                      <option key={index} value={value}>
+                        {label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
 
-            <div className="flex flex-col border-2 border-t-transparent px-2 py-1 focus-within:border-primary">
-              <label className="pb-1 text-sm font-medium">Mobile No</label>
-              <input
-                id="contactNo"
-                name="contactNo"
-                type="number"
-                value={values.contactNo || user.contactNo}
-                onChange={handleChange}
-                maxLength={10}
-                onBlur={handleBlur}
-                className="outline-none tracking-wider"
-                placeholder="+91 9878588845"
-                onInput={(e) => {
-                  e.currentTarget.value = e.currentTarget.value
-                    .replace(/\D/, "")
-                    .slice(0, 10);
-                  handleChange(e);
-                }}
-              />
-              {touched.contactNo && errors.contactNo && (
-                <span className="text-sm text-red-600">{errors.contactNo}</span>
-              )}
-            </div>
-
-            <div className="flex flex-col border-t-transparent border-2 px-2 py-1 focus-within:border-primary">
-              <label className="pb-1 text-sm font-medium">Creation Date</label>
-              <input
-                id="creationDate"
-                name="creationDate"
-                type="date"
-                className="outline-none select-none tracking-wider"
-                placeholder="John Doe"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                max={new Date().toISOString().split("T")[0]}
-                value={values.creationDate.toString() || user?.creationDate}
-              />
-            </div>
-
-            <div className="flex flex-col border-t-transparent border-2 px-2 py-1 focus-within:border-primary">
-              <label className="pb-1 text-sm font-medium">Founder</label>
-              <input
-                id="founder"
-                name="founder"
-                type="text"
-                className="outline-none tracking-wider"
-                placeholder="John Doe"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.founder || user?.founder}
-              />
-              {touched.founder && errors.founder && (
-                <span className="text-sm text-red-600">{errors.founder}</span>
-              )}
-            </div>
-
-            <div className="flex flex-col border-2 px-2 py-1 border-t-transparent focus-within:border-primary">
-              <label className="pb-1 text-sm font-medium">Address</label>
-              <input
-                id="address"
-                name="address"
-                type="text"
-                className="outline-none tracking-wider"
-                placeholder="A-50 , Dollar Colony"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.address || user?.address}
-              />
-              {touched.address && errors.address && (
-                <span className="text-sm text-red-600">{errors.address}</span>
-              )}
-            </div>
-
-            <div className="flex flex-col border-2 px-2 py-1 border-t-transparent focus-within:border-primary">
-              <label className="pb-1 text-sm font-medium">State</label>
-              <select
-                className="outline-none tracking-wider"
-                id="state"
-                name="state"
-                onChange={(e) => handleStateChange(e.target.value)}
-                onBlur={handleBlur}
-                value={values.state || user?.state}
-              >
-                {CITY_AND_STATE?.map(({ state }, index) => (
-                  <option key={index} value={state.value}>
-                    {state.label}
-                  </option>
-                ))}
-                {touched.state && errors.state && (
-                  <span className="text-sm text-red-600">{errors.state}</span>
-                )}
-              </select>
-            </div>
-
-            <div className="flex flex-col border-2 px-2 py-1 border-t-transparent focus-within:border-primary">
-              <label className="pb-1 text-sm font-medium">City</label>
-              <select
-                className="outline-none tracking-wider"
-                id="city"
-                name="city"
-                onChange={handleChange}
-                value={values.city || user?.city}
-                onBlur={handleBlur}
-              >
-                {cities.map(({ label, value }, index) => (
-                  <option key={index} value={value}>
-                    {label}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="flex flex-col border-t-transparent rounded-b-lg border-2 px-2 py-1 focus-within:border-primary">
-              <label className="pb-1 text-sm font-medium">Pincode</label>
-              <input
-                id="pincode"
-                name="pincode"
-                type="text"
-                className="outline-none tracking-wider"
-                placeholder="395004"
-                maxLength={6}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.pincode || user?.pincode}
-              />
-              {touched.pincode && errors.pincode && (
-                <span className="text-sm text-red-600">{errors.pincode}</span>
-              )}
+                <div className="flex flex-col border-t-transparent rounded-b-lg px-2 focus-within:border-primary">
+                  <label className="pb-1 text-sm font-medium">Pincode</label>
+                  <input
+                    id="pincode"
+                    name="pincode"
+                    type="text"
+                    className="w-full rounded-lg placeholder:text-gray-650  border-2 border-gray-300 font-inter py-3 px-3 mb-4 sm:mb-0 text-base font-normal leading-4 outline-none"
+                    placeholder="395004"
+                    maxLength={6}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.pincode || user?.pincode}
+                  />
+                  {touched.pincode && errors.pincode && (
+                    <span className="text-sm text-red-600">
+                      {errors.pincode}
+                    </span>
+                  )}
+                </div>
+              </div>
             </div>
 
             <div className="flex flex-col border-2 mt-5 bg-primary shadow-sm rounded-lg px-2 py-2">

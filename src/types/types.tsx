@@ -77,6 +77,7 @@ export type RequestFunds = {
   transactionDate: Date;
   isAccepted: boolean;
   isRejected: boolean;
+  status?: string;
   __v?: number;
 };
 
@@ -142,6 +143,7 @@ export type TrustWiseTransaction = {
     }
   ];
   receiveFund: number;
+  totalUniqueSupporters: number;
 };
 
 export type SingleTrustTransactions = {

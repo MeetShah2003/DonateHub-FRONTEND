@@ -42,6 +42,7 @@ const ManageTransaction = () => {
           throw new Error("Failed to fetch data");
         }
         const data = await response.json();
+        console.log("supp>>", data);
         setTrustWiseTransaction(data);
         setLoading(false);
       } catch (error) {
@@ -83,7 +84,7 @@ const ManageTransaction = () => {
                   Total Supporter
                 </h2>
                 <p className="text-2xl md:text-3xl font-bold text-primary">
-                  {5}
+                  {trustWiseTransaction.totalUniqueSupporters}
                 </p>
               </div>
             </div>
@@ -92,7 +93,15 @@ const ManageTransaction = () => {
           {trustWiseTransaction?.allTrust?.length &&
             trustWiseTransaction?.allTrust?.map(
               (
-                { _id, tId, title, description, recievedFund, disasterImage },
+                {
+                  _id,
+                  tId,
+                  title,
+                  description,
+                  recievedFund,
+                  disasterImage,
+                  status,
+                },
                 index
               ) => (
                 <TransactionTrustsModel
@@ -103,6 +112,7 @@ const ManageTransaction = () => {
                   founder={tId.founder}
                   creationDate={tId.creationDate}
                   amount={recievedFund}
+                  statusOfModel={status}
                   onShowTransaction={() => {
                     router.push(`/admin/managetransaction/${_id}/${tId._id}`);
                   }}
