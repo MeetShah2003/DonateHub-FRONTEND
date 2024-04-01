@@ -82,7 +82,7 @@ const SingleTrustTransaction = () => {
                       <TransactionInfo
                         key={_id}
                         transactionDate={transactionDate}
-                        amount={formatAmount(donatedAmount)}
+                        amount={donatedAmount}
                         paymentId={paymentId}
                         userImage={uId?.userlogo}
                         userName={`${uId?.firstName} ${uId?.lastName}`}
