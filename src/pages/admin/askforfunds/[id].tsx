@@ -91,6 +91,15 @@ const RequestFund = () => {
                 <h1 className="text-gray-600">{singleRequestData?.title}</h1>
               </div>
               <div className="w-full bg-secondary/20 border p-5">
+                <p className="font-bold pb-2">Status</p>
+                <h1 className="text-gray-600">
+                  {singleRequestData?.status
+                    ?.charAt(0)
+                    .toUpperCase()
+                    .concat(singleRequestData.status?.slice(1))}
+                </h1>
+              </div>
+              <div className="w-full bg-secondary/20 border p-5">
                 <p className="font-bold pb-2">Description</p>
                 <h1 className="text-gray-600">
                   {singleRequestData?.description}

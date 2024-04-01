@@ -71,37 +71,46 @@ const ListOfAskForFunds = () => {
               <tr>
                 <th className="py-3 px-6 text-left bg-gray-200">No</th>
                 <th className="py-3 px-6 text-left bg-gray-200">Title</th>
+                <th className="py-3 px-6 text-left bg-gray-200">Status</th>
                 <th className="py-3 px-6 text-center bg-gray-200">Action</th>
               </tr>
             </thead>
             <tbody className="bg-white rounded-b-lg">
               {fundRequests &&
                 fundRequests.length &&
-                fundRequests.map(({ _id, title, transactionDate }, index) => {
-                  return (
-                    <tr className="hover:bg-gray-100 transition" key={_id}>
-                      <td className="py-4 px-6 border-b">
-                        {index + 1 + currentPage * itemsPerPage}
-                      </td>
-                      <td className="py-4 px-6 border-b">{title}</td>
+                fundRequests.map(
+                  ({ _id, title, transactionDate, status }, index) => {
+                    return (
+                      <tr className="hover:bg-gray-100 transition" key={_id}>
+                        <td className="py-4 px-6 border-b">
+                          {index + 1 + currentPage * itemsPerPage}
+                        </td>
+                        <td className="py-4 px-6 border-b">{title}</td>
+                        <td className="py-4 px-6 border-b">
+                          {status
+                            ?.charAt(0)
+                            .toUpperCase()
+                            .concat(status.slice(1))}
+                        </td>
 
-                      <td className="py-4 px-6 border-b">
-                        <div className="flex">
-                          <div className="flex w-full flex-row items-center justify-center border-r border-dark-150">
-                            <button
-                              onClick={() => {
-                                push(`/trust/listoffundrequest/${_id}`);
-                              }}
-                              className="flex flex-row bg-primary text-white p-2 items-center justify-center gap-1 rounded-md text-base font-normal leading-5 text-gray-1000"
-                            >
-                              Show Details
-                            </button>
+                        <td className="py-4 px-6 border-b">
+                          <div className="flex">
+                            <div className="flex w-full flex-row items-center justify-center border-r border-dark-150">
+                              <button
+                                onClick={() => {
+                                  push(`/trust/listoffundrequest/${_id}`);
+                                }}
+                                className="flex flex-row bg-primary text-white p-2 items-center justify-center gap-1 rounded-md text-base font-normal leading-5 text-gray-1000"
+                              >
+                                Show Details
+                              </button>
+                            </div>
                           </div>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
+                        </td>
+                      </tr>
+                    );
+                  }
+                )}
             </tbody>
           </table>
         </div>

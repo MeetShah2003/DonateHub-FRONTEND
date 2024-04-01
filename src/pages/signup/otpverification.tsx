@@ -100,10 +100,18 @@ const OtpVerification = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(resendOtpData),
-    }).finally(() => {
-      setLoading(false);
-    });
+    })
+      .then((res) => {
+        if (res && res.status === 200) {
+          return res.json();
+        }
+      })
+      .then((data) => {
+        console.log(data);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (

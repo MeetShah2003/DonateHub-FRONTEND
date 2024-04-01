@@ -105,7 +105,7 @@ const AdminFrame: React.FC<{
         </div>
 
         <div
-          className={`sm:hidden w-2/3 absolute h-screen top-[60px] border border-t-transparent shadow-sm ${
+          className={`sm:hidden w-2/3 absolute h-screen top-[60px] border z-20 border-t-transparent shadow-sm ${
             sideBarIsOpen
               ? "-translate-x-0 transition-all duration-500 ease-in-out"
               : "-translate-x-[2000px] transition-all duration-1000 ease-in-out"
