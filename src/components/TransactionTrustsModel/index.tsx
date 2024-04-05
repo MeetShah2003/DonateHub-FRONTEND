@@ -11,7 +11,7 @@ interface TransactionTrustsModelProps {
   founder: string;
   creationDate: Date;
   amount: number;
-  fundRequirement: number;
+  fundRequirement?: number;
   statusOfModel?: string;
   onShowTransaction: () => void;
   onEditDisaster?: () => void;
