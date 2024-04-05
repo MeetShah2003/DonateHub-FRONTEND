@@ -101,6 +101,7 @@ const ManageTransaction = () => {
                   recievedFund,
                   disasterImage,
                   status,
+                  targetFund,
                 },
                 index
               ) => (
@@ -113,6 +114,7 @@ const ManageTransaction = () => {
                   creationDate={tId.creationDate}
                   amount={recievedFund}
                   statusOfModel={status}
+                  fundRequirement={targetFund}
                   onShowTransaction={() => {
                     router.push(`/admin/managetransaction/${_id}/${tId._id}`);
                   }}

@@ -11,6 +11,7 @@ interface TransactionTrustsModelProps {
   founder: string;
   creationDate: Date;
   amount: number;
+  fundRequirement: number;
   statusOfModel?: string;
   onShowTransaction: () => void;
   onEditDisaster?: () => void;
@@ -28,6 +29,7 @@ const TransactionTrustsModel: React.FC<TransactionTrustsModelProps> = ({
   title,
   trustImage,
   statusOfModel,
+  fundRequirement,
   onShowTransaction,
   onEditDisaster,
 }) => {
@@ -58,6 +60,12 @@ const TransactionTrustsModel: React.FC<TransactionTrustsModelProps> = ({
                 ₹{formatAmount(amount)}
               </span>
             </div>
+            <div className="flex items-center mr-4 mb-2">
+              <span className="mr-2 text-gray-700">Fund Requirement:</span>
+              <span className="text-gray-900 font-semibold">
+                ₹{formatAmount(fundRequirement)}
+              </span>
+            </div>
             <div className="flex items-center mb-2">
               <span className="mr-2 text-gray-700">Founder:</span>
               <span className="text-gray-900 font-semibold">{founder}</span>
@@ -65,7 +73,16 @@ const TransactionTrustsModel: React.FC<TransactionTrustsModelProps> = ({
             {statusOfModel ? (
               <div className="flex items-center mb-2">
                 <span className="mr-2 text-gray-700">Status:</span>
-                <span className="text-gray-900 font-semibold">
+                <span
+                  className={`${
+                    statusOfModel
+                      ?.charAt(0)
+                      .toUpperCase()
+                      .concat(statusOfModel?.slice(1)) === "Pending"
+                      ? "text-red-500"
+                      : "text-green-500"
+                  } font-semibold`}
+                >
                   {statusOfModel
                     ?.charAt(0)
                     .toUpperCase()

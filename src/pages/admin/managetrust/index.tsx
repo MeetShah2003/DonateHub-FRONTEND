@@ -166,11 +166,6 @@ const ManageTrust = () => {
                         return (
                           <tr
                             className="hover:bg-gray-100 transition"
-                            onClick={() => {
-                              if (_id) {
-                                push(`/admin/managetrust/${_id}`);
-                              }
-                            }}
                             key={_id}
                           >
                             <td className="py-4 px-6 border-b">
@@ -183,7 +178,14 @@ const ManageTrust = () => {
                             <td className="py-4 px-2 border-b">
                               <div className="flex">
                                 <div className="flex w-full flex-row items-center justify-center border-r border-dark-150">
-                                  <button className="flex flex-row items-center justify-center gap-1 rounded-md text-base font-normal leading-5 text-gray-1000">
+                                  <button
+                                    onClick={() => {
+                                      if (_id) {
+                                        push(`/admin/managetrust/${_id}`);
+                                      }
+                                    }}
+                                    className="flex flex-row items-center justify-center gap-1 rounded-md text-base font-normal leading-5 text-gray-1000"
+                                  >
                                     <EditIcon />
                                     <span className="hidden text-blue-600 font-inter text-base font-normal leading-5 text-gray-1000 sm:block">
                                       Edit
@@ -206,12 +208,7 @@ const ManageTrust = () => {
                                   </div>
                                 ) : (
                                   <div className="flex w-full flex-row items-center justify-center">
-                                    <button
-                                      onClick={() => {
-                                        handleBlock(_id as string);
-                                      }}
-                                      className="flex flex-row items-center justify-center gap-1 rounded-md text-base font-normal leading-5 text-danger-100"
-                                    >
+                                    <button className="flex flex-row items-center justify-center gap-1 rounded-md text-base font-normal leading-5 text-danger-100">
                                       <BlockIcon />
                                       <span className="hidden text-[#C80707] font-inter text-base font-normal leading-5 text-danger-100 sm:block">
                                         Block

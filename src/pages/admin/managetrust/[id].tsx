@@ -3,7 +3,12 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import { BACKEND_BASE_URL, MAX_LENGTH } from "@/consts";
+import {
+  BACKEND_BASE_URL,
+  CITY_AND_STATE,
+  MAX_LENGTH,
+  TRUST_CATAGORY_OPTIONS,
+} from "@/consts";
 import { TrustData } from "@/types/types";
 import AdminRoute from "@/components/AdminRoute";
 import Spinner from "@/components/Spinner";
@@ -21,6 +26,9 @@ const SingleTrust = () => {
   const [userData, setUserData] = useState<TrustData>();
   const { emailLength, inputLength } = MAX_LENGTH;
   const [image, setImage] = useState<File | null>(null);
+  const [cities, setCities] = useState<{ label: string; value: string }[]>([
+    { label: "Select City", value: "" },
+  ]);
 
   const validationSchema = Yup.object().shape({
     trustName: Yup.string().trim().required("Trust name is required"),
@@ -68,6 +76,7 @@ const SingleTrust = () => {
     setFieldValue,
     values,
     errors,
+    touched,
   } = useFormik({
     initialValues,
     onSubmit: (value) => {
@@ -129,6 +138,45 @@ const SingleTrust = () => {
     }
   }, [userData]);
 
+  // const handleOnChange = async (e: any) => {
+  //   if (e.target.files[0]) {
+  //     const uploadedImage = e.target.files[0];
+  //     setImage(uploadedImage);
+
+  //     const imageRef = ref(storage, `trust_profile_image/${v4()}`);
+
+  //     try {
+  //       await uploadBytes(imageRef, uploadedImage);
+  //       const imageUrl = await getDownloadURL(imageRef);
+
+  //       if (imageUrl) {
+  //         successToast("Image Upload Successfully");
+  //         setFieldValue("trustlogo", imageUrl);
+  //       }
+  //     } catch (error) {
+  //       errorToast("Image Upload Failed");
+  //     }
+  //   }
+  // };
+
+  const handleStateChange = (selectedState: string) => {
+    values.state = selectedState;
+
+    const selectedStateObject = CITY_AND_STATE.find(
+      (stateObj) => stateObj.state.value === selectedState
+    );
+
+    const selectedStateCities = selectedStateObject
+      ? selectedStateObject.city
+      : [];
+
+    setCities(selectedStateCities);
+  };
+
+  useEffect(() => {
+    handleStateChange(values.state);
+  }, [values.state]);
+
   const handleOnChange = async (e: any) => {
     if (e.target.files[0]) {
       const uploadedImage = e.target.files[0];
@@ -142,7 +190,12 @@ const SingleTrust = () => {
 
         if (imageUrl) {
           successToast("Image Upload Successfully");
-          setFieldValue("trustlogo", imageUrl);
+
+          // Update form values with new image URL
+          setValues((prevValues) => ({
+            ...prevValues,
+            trustlogo: imageUrl,
+          }));
         }
       } catch (error) {
         errorToast("Image Upload Failed");
@@ -238,7 +291,7 @@ const SingleTrust = () => {
           >
             Category
           </label>
-          <input
+          {/* <input
             type="text"
             id="category"
             name="category"
@@ -248,7 +301,22 @@ const SingleTrust = () => {
             onChange={handleChange}
             onBlur={handleBlur}
             value={values.category}
-          />
+          /> */}
+
+          <select
+            className="w-full rounded-lg placeholder:text-gray-650 bg-transparent font-inter py-3 px-3 mb-4 sm:mb-0 text-base font-normal leading-4 outline-none"
+            id="category"
+            name="category"
+            onChange={handleChange}
+            onBlur={handleBlur}
+            value={values.category}
+          >
+            {TRUST_CATAGORY_OPTIONS?.map(({ option }, index) => (
+              <option key={index} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
           {errors.category && (
             <span className="text-red-500">{errors.category}</span>
           )}
@@ -336,18 +404,23 @@ const SingleTrust = () => {
           >
             State
           </label>
-          <input
-            type="text"
+          <select
+            className="w-full rounded-lg placeholder:text-gray-650  bg-transparent font-inter py-3 px-3 mb-4 sm:mb-0 text-base font-normal leading-4 outline-none"
             id="state"
             name="state"
-            maxLength={inputLength}
-            placeholder="Enter State"
-            className="bg-transparent outline-none"
-            onChange={handleChange}
+            onChange={(e) => handleStateChange(e.target.value)}
             onBlur={handleBlur}
             value={values.state}
-          />
-          {errors.state && <span className="text-red-500">{errors.state}</span>}
+          >
+            {CITY_AND_STATE?.map(({ state }, index) => (
+              <option key={index} value={state.value}>
+                {state.label}
+              </option>
+            ))}
+            {touched.state && errors.state && (
+              <span className="text-sm text-red-600">{errors.state}</span>
+            )}
+          </select>
         </div>
 
         <div className=" flex flex-col w-full bg-primaryLight md:bg-secondary p-2">
@@ -357,19 +430,59 @@ const SingleTrust = () => {
           >
             City
           </label>
-          <input
-            type="text"
+          <select
+            className="w-full rounded-lg placeholder:text-gray-650   bg-transparent font-inter py-3 px-3 mb-4 sm:mb-0 text-base font-normal leading-4 outline-none"
             id="city"
             name="city"
-            maxLength={inputLength}
-            placeholder="Enter City"
-            className="bg-transparent outline-none"
             onChange={handleChange}
-            onBlur={handleBlur}
             value={values.city}
-          />
-          {errors.city && <span className="text-red-500">{errors.city}</span>}
+            onBlur={handleBlur}
+          >
+            {cities.map(({ label, value }, index) => (
+              <option key={index} value={value}>
+                {label}
+              </option>
+            ))}
+          </select>
         </div>
+
+        {/* <div className="flex flex-col px-2  border-t-transparent focus-within:border-primary">
+          <label className="pb-1 text-sm font-medium">State</label>
+          <select
+            className="w-full rounded-lg placeholder:text-gray-650  border-2 border-gray-300 font-inter py-3 px-3 mb-4 sm:mb-0 text-base font-normal leading-4 outline-none"
+            id="state"
+            name="state"
+            onChange={(e) => handleStateChange(e.target.value)}
+            onBlur={handleBlur}
+            value={values.state}
+          >
+            {CITY_AND_STATE?.map(({ state }, index) => (
+              <option key={index} value={state.value}>
+                {state.label}
+              </option>
+            ))}
+            {touched.state && errors.state && (
+              <span className="text-sm text-red-600">{errors.state}</span>
+            )}
+          </select>
+        </div>
+        <div className="flex flex-col px-2 border-t-transparent focus-within:border-primary">
+          <label className="pb-1 text-sm font-medium">City</label>
+          <select
+            className="w-full rounded-lg placeholder:text-gray-650  border-2 border-gray-300 font-inter py-3 px-3 mb-4 sm:mb-0 text-base font-normal leading-4 outline-none"
+            id="city"
+            name="city"
+            onChange={handleChange}
+            value={values.city}
+            onBlur={handleBlur}
+          >
+            {cities.map(({ label, value }, index) => (
+              <option key={index} value={value}>
+                {label}
+              </option>
+            ))}
+          </select>
+        </div> */}
 
         <div className=" flex flex-col w-full bg-secondary md:bg-primaryLight p-2">
           <label

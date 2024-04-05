@@ -20,6 +20,7 @@ const ProfileUser = () => {
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
   const [loading, setLoading] = useState(false);
   const { emailLength, inputLength } = MAX_LENGTH;
+  const [image, setImage] = useState<File | null>(null);
   const access_token = Cookies.get("access_token");
 
   const errorToast = (errorMessage: string) => toast.error(errorMessage);
@@ -72,11 +73,12 @@ const ProfileUser = () => {
     touched,
     values,
     setFieldValue,
+    setValues,
   } = useFormik({
     initialValues: {
       firstName: user?.firstName || "",
       lastName: user?.lastName || "",
-      userlogo: user?.userlogo || "",
+      userlogo: user?.userlogo,
       email: user?.email || "",
       gender: user?.gender || "",
       mono: user?.mono || "",
@@ -87,10 +89,31 @@ const ProfileUser = () => {
     },
   });
 
+  // const handleOnChange = async (e: any) => {
+  //   if (e.target.files[0]) {
+  //     const uploadedImage = e.target.files[0];
+  //     const imageRef = ref(storage, `user_profile_image/${v4()}`);
+
+  //     try {
+  //       await uploadBytes(imageRef, uploadedImage);
+  //       const imageUrl = await getDownloadURL(imageRef);
+
+  //       if (imageUrl) {
+  //         successToast("Image Upload Successfully");
+  //         setFieldValue("userlogo", imageUrl);
+  //       }
+  //     } catch (error) {
+  //       errorToast("Image Upload Failed");
+  //     }
+  //   }
+  // };
+
   const handleOnChange = async (e: any) => {
     if (e.target.files[0]) {
       const uploadedImage = e.target.files[0];
-      const imageRef = ref(storage, `user_profile_image/${v4()}`);
+      setImage(uploadedImage);
+
+      const imageRef = ref(storage, `trust_profile_image/${v4()}`);
 
       try {
         await uploadBytes(imageRef, uploadedImage);
@@ -98,7 +121,20 @@ const ProfileUser = () => {
 
         if (imageUrl) {
           successToast("Image Upload Successfully");
-          setFieldValue("userlogo", imageUrl);
+
+          // Update form values with new image URL
+          setValues((prevValues) => ({
+            ...prevValues,
+            userlogo: imageUrl,
+          }));
+
+          // Update the src attribute of the Image component directly
+          const imageElement = document.getElementById(
+            "userlogo"
+          ) as HTMLImageElement;
+          if (imageElement) {
+            imageElement.src = imageUrl;
+          }
         }
       } catch (error) {
         errorToast("Image Upload Failed");
@@ -123,7 +159,7 @@ const ProfileUser = () => {
           <div className="border-4 h-32 w-32 p-1 border-primary rounded-full overflow-hidden">
             <Image
               className="rounded-full h-full w-full object-contain"
-              src={user.userlogo || values.userlogo}
+              src={(user?.userlogo as string) || (values.userlogo as string)}
               alt="userlogo"
               width={128}
               height={128}
