@@ -1,6 +1,6 @@
 import UserRoute from "@/components/UserRoute/UserRoute";
 import Visitor from "@/components/Visitor";
-import { BACKEND_BASE_URL } from "@/consts";
+import { BACKEND_BASE_URL, MAX_LENGTH } from "@/consts";
 import { TrustData } from "@/types/types";
 import Cookies from "js-cookie";
 import { useState, useEffect } from "react";
@@ -20,6 +20,7 @@ const RequestFunds = () => {
   const [trusts, setTrusts] = useState<TrustData[]>([]);
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const { emailLength, inputLength } = MAX_LENGTH;
   const [selectedOption, setSelectedOption] = useState<TrustData | null>(null);
 
   const errorToast = (errorMessage: string) => toast.error(errorMessage);
@@ -45,9 +46,10 @@ const RequestFunds = () => {
   };
 
   const validationSchema = Yup.object({
-    tId: Yup.string().required("Trust is required"),
-    title: Yup.string().required("Title is required"),
+    tId: Yup.string().trim().required("Trust is required"),
+    title: Yup.string().trim().required("Title is required"),
     description: Yup.string()
+      .trim()
       .required("Description is required")
       .min(150, "Description must be at least 150 characters"),
     reqAmount: Yup.number()
@@ -218,6 +220,7 @@ const RequestFunds = () => {
                 className="border-2 w-full shadow-sm outline-none rounded-md p-2"
                 name="title"
                 id="title"
+                maxLength={inputLength}
                 placeholder="Enter Title"
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -237,7 +240,7 @@ const RequestFunds = () => {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 minLength={150}
-                maxLength={500}
+                maxLength={200}
                 value={values.description}
               />
               {touched.description && errors.description && (
@@ -251,6 +254,7 @@ const RequestFunds = () => {
                 className="border-2 w-full shadow-sm outline-none rounded-md p-2"
                 name="reqAmount"
                 id="reqAmount"
+                maxLength={7}
                 placeholder="₹5000"
                 onChange={handleChange}
                 onBlur={handleBlur}
