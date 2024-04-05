@@ -38,8 +38,8 @@ const TransactionTrustsModel: React.FC<TransactionTrustsModelProps> = ({
   return (
     <div className="w-full border shadow-md rounded-lg overflow-hidden">
       <div className="flex flex-col md:flex-row">
-        <div className="flex-shrink-0 md:w-40">
-          <div className="h-full">
+        <div className="flex-shrink-0 md:w-52">
+          <div className="h-full w-full">
             <Image
               alt="trustImage"
               src={trustImage}
@@ -47,6 +47,7 @@ const TransactionTrustsModel: React.FC<TransactionTrustsModelProps> = ({
               height={160}
               objectFit="cover"
               objectPosition="center"
+              className="h-full w-full"
             />
           </div>
         </div>
@@ -94,25 +95,23 @@ const TransactionTrustsModel: React.FC<TransactionTrustsModelProps> = ({
             )}
           </div>
 
-          <div className="flex gap-2">
-            <div className="mt-4 flex justify-center md:justify-start">
+          <div className="flex gap-2 mt-auto">
+            <div className="flex flex-col">
               <button
                 onClick={onShowTransaction}
                 className="py-2 px-4 bg-primary text-white rounded-md shadow-sm"
               >
                 Show Transaction
               </button>
-            </div>
-            {!isAdmin && (
-              <div className="mt-4 flex justify-center md:justify-start">
+              {!isAdmin && (
                 <button
                   onClick={onEditDisaster}
-                  className="py-2 px-4 bg-green-600 text-white rounded-md shadow-sm"
+                  className="mt-2 py-2 px-4 bg-green-600 text-white rounded-md shadow-sm"
                 >
                   Edit
                 </button>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
       </div>

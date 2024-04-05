@@ -208,7 +208,12 @@ const ManageTrust = () => {
                                   </div>
                                 ) : (
                                   <div className="flex w-full flex-row items-center justify-center">
-                                    <button className="flex flex-row items-center justify-center gap-1 rounded-md text-base font-normal leading-5 text-danger-100">
+                                    <button
+                                      onClick={() => {
+                                        handleBlock(_id as string);
+                                      }}
+                                      className="flex flex-row items-center justify-center gap-1 rounded-md text-base font-normal leading-5 text-danger-100"
+                                    >
                                       <BlockIcon />
                                       <span className="hidden text-[#C80707] font-inter text-base font-normal leading-5 text-danger-100 sm:block">
                                         Block

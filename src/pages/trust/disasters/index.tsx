@@ -56,6 +56,7 @@ const Disaters = () => {
               recievedFund,
               _id,
               status,
+              targetFund,
             }) => {
               return (
                 <TransactionTrustsModel
@@ -67,6 +68,7 @@ const Disaters = () => {
                   statusOfModel={status}
                   creationDate={tId.creationDate}
                   amount={recievedFund}
+                  fundRequirement={targetFund}
                   onShowTransaction={() => {
                     push(`/trust/disasters/${_id}`);
                   }}

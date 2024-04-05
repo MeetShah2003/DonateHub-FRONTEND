@@ -115,7 +115,7 @@ const Trust = () => {
       .then((data: any) => {
         if (data) {
           setDisasterIncomeChart(data?.myIncomeData);
-          console.log(data.myIncomeData);
+          console.log("data.myIncomeData", data.myIncomeData);
         }
       });
   };
