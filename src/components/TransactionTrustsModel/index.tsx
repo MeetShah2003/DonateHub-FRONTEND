@@ -33,7 +33,6 @@ const TransactionTrustsModel: React.FC<TransactionTrustsModelProps> = ({
   onShowTransaction,
   onEditDisaster,
 }) => {
-  const router = useRouter();
   const { isAdmin } = useAuth();
   return (
     <div className="w-full border shadow-md rounded-lg overflow-hidden">
