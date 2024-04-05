@@ -9,6 +9,7 @@ import Cookies from "js-cookie";
 import {
   BACKEND_BASE_URL,
   CITY_AND_STATE,
+  MAX_LENGTH,
   TRUST_CATAGORY_OPTIONS,
 } from "@/consts";
 import { toast } from "react-toastify";
@@ -27,6 +28,7 @@ const TrustSignup = () => {
   const [trustId, setTrustId] = useState(uuidv4());
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { emailLength, inputLength } = MAX_LENGTH;
   const [cities, setCities] = useState<{ label: string; value: string }[]>([
     { label: "Select City", value: "" },
   ]);
@@ -83,9 +85,10 @@ const TrustSignup = () => {
       .required("Creation Date is required")
       .max(new Date(), "Creation Date must be in the past"),
     category: Yup.string().trim().required("Category is required"),
-    contactNo: Yup.string().required("Contact Number is required"),
+    contactNo: Yup.string().trim().required("Contact Number is required"),
     description: Yup.string().trim().required("About Trust is required"),
     password: Yup.string()
+      .trim()
       .min(8, "Password must be at least 8 characters")
       .matches(
         /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).*$/,
@@ -97,7 +100,7 @@ const TrustSignup = () => {
     state: Yup.string().trim().required("State is required"),
     pincode: Yup.string()
       .required("Pincode is required")
-      .test("is-six-digits", "Pincode must be exactly 6 digits", (value) =>
+      .test("is-six-digits", "Enter 6 digits only", (value) =>
         value ? /^\d{6}$/.test(value.toString()) : true
       ),
   });
@@ -213,6 +216,7 @@ const TrustSignup = () => {
           id="trustName"
           name="trustName"
           type="text"
+          maxLength={inputLength}
           className="outline-none tracking-wider"
           placeholder="The Education Trust"
           onChange={handleChange}
@@ -229,6 +233,7 @@ const TrustSignup = () => {
           id="email"
           name="email"
           type="text"
+          maxLength={emailLength}
           className="outline-none tracking-wider"
           placeholder="education@donation.com"
           onChange={handleChange}
@@ -245,6 +250,8 @@ const TrustSignup = () => {
           <input
             id="password"
             name="password"
+            minLength={8}
+            maxLength={16}
             type={showPassword ? "text" : "password"}
             onChange={handleChange}
             onBlur={handleBlur}
@@ -271,6 +278,7 @@ const TrustSignup = () => {
           className="outline-none tracking-wider resize-none"
           rows={4}
           cols={30}
+          maxLength={200}
           placeholder="Type Here About Trust"
           onChange={handleChange}
           onBlur={handleBlur}
@@ -317,6 +325,7 @@ const TrustSignup = () => {
           id="founder"
           name="founder"
           type="text"
+          maxLength={inputLength}
           className="outline-none tracking-wider"
           placeholder="John Doe"
           onChange={handleChange}
