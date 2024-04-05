@@ -68,3 +68,8 @@ export const BACKEND_BASE_URL = "http://localhost:8090";
 // export const FRONTEND_BASE_URL = "https://donatehub.vercel.app/";
 // export const BACKEND_BASE_URL = "https://silly-overalls-toad.cyclic.app";
 // export const BACKEND_BASE_URL = "https://donatehub.onrender.com";
+
+export const MAX_LENGTH = {
+  emailLength: 50,
+  inputLength: 35,
+};

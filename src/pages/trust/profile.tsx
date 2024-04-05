@@ -9,6 +9,7 @@ import { useAuth } from "@/context/auth";
 import {
   BACKEND_BASE_URL,
   CITY_AND_STATE,
+  MAX_LENGTH,
   TRUST_CATAGORY_OPTIONS,
 } from "@/consts";
 import { toast } from "react-toastify";
@@ -24,6 +25,7 @@ const ProfileTrust = () => {
   const { user } = useAuth();
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
   const [loading, setLoading] = useState(false);
+  const { emailLength, inputLength } = MAX_LENGTH;
   const access_token = Cookies.get("access_token");
   const [cities, setCities] = useState<{ label: string; value: string }[]>([
     { label: "Select City", value: "" },
@@ -73,6 +75,7 @@ const ProfileTrust = () => {
     state: Yup.string().trim().required("State is required"),
     pincode: Yup.string()
       .required("Pincode is required")
+      .trim()
       .test("is-six-digits", "Pincode must be exactly 6 digits", (value) =>
         value ? /^\d{6}$/.test(value.toString()) : true
       ),
@@ -194,6 +197,7 @@ const ProfileTrust = () => {
                     id="trustName"
                     name="trustName"
                     placeholder="First name"
+                    maxLength={inputLength}
                     value={values.trustName}
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -212,13 +216,15 @@ const ProfileTrust = () => {
                     Email
                   </label>
                   <input
-                    className={
-                      "w-full rounded-lg  placeholder:text-gray-650 border-2 border-gray-300 font-inter py-3 px-3 mb-4 sm:mb-0 text-base font-normal leading-4 outline-none"
-                    }
+                    className={`w-full ${
+                      isDisabled ? "bg-gray-200" : ""
+                    } rounded-lg  placeholder:text-gray-650 border-2 border-gray-300 font-inter py-3 px-3 mb-4 sm:mb-0 text-base font-normal leading-4 outline-none`}
                     type="text"
                     id="email"
                     name="email"
                     placeholder="Email"
+                    disabled={isDisabled}
+                    maxLength={emailLength}
                     value={values.email}
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -244,6 +250,7 @@ const ProfileTrust = () => {
                     name="contactNo"
                     placeholder="ContactNo"
                     value={values.contactNo as number}
+                    maxLength={10}
                     onChange={handleChange}
                     onBlur={handleBlur}
                   />
@@ -266,9 +273,10 @@ const ProfileTrust = () => {
                       "w-full rounded-lg placeholder:text-gray-650  border-2 border-gray-300 font-inter py-3 px-3 mb-4 sm:mb-0 text-base font-normal leading-4 outline-none"
                     }
                     type="text"
-                    id="contactNo"
-                    name="contactNo"
-                    placeholder="ContactNo"
+                    id="creationDate"
+                    name="creationDate"
+                    placeholder="creationDate"
+                    maxLength={inputLength}
                     max={new Date().toISOString().split("T")[0]}
                     value={values.creationDate.toString() || user?.creationDate}
                     onChange={handleChange}
@@ -319,6 +327,7 @@ const ProfileTrust = () => {
                     name="founder"
                     placeholder="Founder"
                     value={values.founder}
+                    maxLength={inputLength}
                     onChange={handleChange}
                     onBlur={handleBlur}
                   />
@@ -340,6 +349,7 @@ const ProfileTrust = () => {
                     className="w-full rounded-lg placeholder:text-gray-650  border-2 border-gray-300 font-inter py-3 px-3 mb-4 sm:mb-0 text-base font-normal leading-4 outline-none"
                     rows={6}
                     cols={30}
+                    maxLength={500}
                     placeholder="Type Here About Trust"
                     onChange={handleChange}
                     onBlur={handleBlur}

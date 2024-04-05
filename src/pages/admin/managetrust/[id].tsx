@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import { BACKEND_BASE_URL } from "@/consts";
+import { BACKEND_BASE_URL, MAX_LENGTH } from "@/consts";
 import { TrustData } from "@/types/types";
 import AdminRoute from "@/components/AdminRoute";
 import Spinner from "@/components/Spinner";
@@ -19,21 +19,22 @@ const SingleTrust = () => {
   const [loading, setLoading] = useState(false);
   const access_token = Cookies.get("access_token");
   const [userData, setUserData] = useState<TrustData>();
+  const { emailLength, inputLength } = MAX_LENGTH;
   const [image, setImage] = useState<File | null>(null);
 
   const validationSchema = Yup.object().shape({
-    trustName: Yup.string().required("Trust name is required"),
-    description: Yup.string().required("Description is required"),
-    category: Yup.string().required("Category is required"),
-    founder: Yup.string().required("Founder is required"),
+    trustName: Yup.string().trim().required("Trust name is required"),
+    description: Yup.string().trim().required("Description is required"),
+    category: Yup.string().trim().required("Category is required"),
+    founder: Yup.string().trim().required("Founder is required"),
     contactNo: Yup.number()
       .typeError("Mobile number must be a number")
       .positive("Mobile number must be positive")
       .integer("Mobile number must be an integer")
       .nullable(),
-    address: Yup.string().required("Address is required"),
-    state: Yup.string().required("State is required"),
-    city: Yup.string().required("City is required"),
+    address: Yup.string().trim().required("Address is required"),
+    state: Yup.string().trim().required("State is required"),
+    city: Yup.string().trim().required("City is required"),
     pincode: Yup.number()
       .typeError("Pincode must be a number")
       .positive("Pincode must be positive")
@@ -199,6 +200,7 @@ const SingleTrust = () => {
             className="bg-transparent outline-none"
             onChange={handleChange}
             onBlur={handleBlur}
+            maxLength={inputLength}
             value={values.trustName}
           />
           {errors.trustName && (
@@ -217,6 +219,7 @@ const SingleTrust = () => {
             type="text"
             id="description"
             name="description"
+            maxLength={500}
             placeholder="Enter Description"
             className="bg-transparent outline-none"
             onChange={handleChange}
@@ -239,6 +242,7 @@ const SingleTrust = () => {
             type="text"
             id="category"
             name="category"
+            maxLength={inputLength}
             placeholder="Enter Category"
             className="bg-transparent outline-none"
             onChange={handleChange}
@@ -266,6 +270,7 @@ const SingleTrust = () => {
             onChange={handleChange}
             onBlur={handleBlur}
             value={values.founder}
+            maxLength={inputLength}
           />
           {errors.founder && (
             <span className="text-red-500">{errors.founder}</span>
@@ -312,6 +317,7 @@ const SingleTrust = () => {
             type="text"
             id="address"
             name="address"
+            maxLength={inputLength}
             placeholder="Enter Address"
             className="bg-transparent outline-none"
             onChange={handleChange}
@@ -334,6 +340,7 @@ const SingleTrust = () => {
             type="text"
             id="state"
             name="state"
+            maxLength={inputLength}
             placeholder="Enter State"
             className="bg-transparent outline-none"
             onChange={handleChange}
@@ -354,6 +361,7 @@ const SingleTrust = () => {
             type="text"
             id="city"
             name="city"
+            maxLength={inputLength}
             placeholder="Enter City"
             className="bg-transparent outline-none"
             onChange={handleChange}

@@ -12,7 +12,7 @@ import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import { getAuthenticatedRouteCheck } from "@/authguard/authguard";
 import { useAuth } from "@/context/auth";
-import { BACKEND_BASE_URL } from "@/consts";
+import { BACKEND_BASE_URL, MAX_LENGTH } from "@/consts";
 import Spinner from "../Spinner";
 import { auth, authProvider } from "../../firebase";
 import {
@@ -34,9 +34,11 @@ const loginSchema = Yup.object().shape({
   email: Yup.string()
     .trim()
     .email("Invalid email")
+    .trim()
     .required("Email is required"),
   password: Yup.string()
     .min(8, "Password must be at least 8 characters")
+    .trim()
     .matches(
       /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).*$/,
       "Password must contain at least one uppercase letter, one lowercase letter, and one number"
@@ -50,6 +52,7 @@ const LogIn = () => {
   const [loading, setLoading] = useState(false);
   const { isAuthenticated, user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
+  const { inputLength, emailLength } = MAX_LENGTH;
   const [reason, setReason] = useState<"blocked" | "pending">();
 
   const errorToast = (errorMessage: string) => toast.error(errorMessage);
@@ -253,6 +256,7 @@ const LogIn = () => {
               id="email"
               name="email"
               type="email"
+              maxLength={emailLength}
               onChange={handleChange}
               onBlur={handleBlur}
               className="outline-none tracking-wider"
@@ -269,6 +273,7 @@ const LogIn = () => {
                 id="password"
                 name="password"
                 type={showPassword ? "text" : "password"}
+                maxLength={15}
                 onChange={handleChange}
                 onBlur={handleBlur}
                 className="outline-none tracking-wider w-full"

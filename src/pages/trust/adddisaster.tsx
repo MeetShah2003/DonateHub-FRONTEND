@@ -1,7 +1,7 @@
 import Spinner from "@/components/Spinner";
 import TrustNavbar from "@/components/TrustNavbar";
 import TrustRoute from "@/components/TrustRoute/TrustRoute";
-import { BACKEND_BASE_URL } from "@/consts";
+import { BACKEND_BASE_URL, MAX_LENGTH } from "@/consts";
 import { useAuth } from "@/context/auth";
 import { storage } from "@/firebase";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
@@ -19,21 +19,23 @@ const AddDisaster = () => {
   const { push } = useRouter();
   const [loading, setLoading] = useState(false);
   const access_token = Cookies.get("access_token");
+  const { emailLength, inputLength } = MAX_LENGTH;
 
   const errorToast = (errorMessage: string) => toast.error(errorMessage);
   const successToast = (successMessage: string) =>
     toast.success(successMessage);
 
   const validationSchema = Yup.object().shape({
-    title: Yup.string().required("Title is required"),
+    title: Yup.string().trim().required("Title is required"),
     description: Yup.string()
+      .trim()
       .required("Description is required")
       .min(150, "Description must be at least 150 characters")
       .max(500, "Description must be at most 500 characters"),
     targetFund: Yup.number()
       .required("Target fund is required")
       .min(0, "Target fund must be a positive number or zero"),
-    altContact: Yup.string().required("Alternate contact is required"),
+    altContact: Yup.string().trim().required("Alternate contact is required"),
   });
 
   const initialValue: {
@@ -161,6 +163,7 @@ const AddDisaster = () => {
               id="title"
               placeholder="Enter Title"
               onChange={handleChange}
+              maxLength={inputLength}
               onBlur={handleBlur}
               value={values.title}
             />
@@ -190,23 +193,22 @@ const AddDisaster = () => {
           <div className="w-full bg-secondary/20 border p-5">
             <p className="font-bold pb-2">Tartget Funds</p>
             <input
-              type="number"
+              type="text"
               className="border-2 w-full shadow-sm outline-none rounded-md p-2"
               name="targetFund"
               id="targetFund"
               placeholder="₹5000"
-              onChange={handleChange}
+              onChange={(e) => {
+                const regex = /^[0-9]*$/; // Regex to allow only numeric characters
+                if (!regex.test(e.target.value)) {
+                  // If input doesn't match regex, set value to empty string
+                  e.target.value = "";
+                } else {
+                  handleChange(e); // If input matches regex, update form state
+                }
+              }}
               onBlur={handleBlur}
-              onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-                if (e.key === "ArrowUp" || e.key === "ArrowDown") {
-                  e.preventDefault();
-                }
-              }}
-              onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
-                if (e.target.value.length > 6) {
-                  e.target.value = e.target.value.slice(0, 6);
-                }
-              }}
+              maxLength={7}
               value={values.targetFund || ""}
             />
             {touched.targetFund && errors.targetFund && (
@@ -217,24 +219,22 @@ const AddDisaster = () => {
           <div className="w-full bg-secondary/20 border p-5">
             <p className="font-bold pb-2">Contact No</p>
             <input
-              type="number"
+              type="text"
               className="border-2 w-full shadow-sm outline-none rounded-md p-2"
               name="altContact"
               id="altContact"
               placeholder="+91 9858988854"
-              onChange={handleChange}
+              onChange={(e) => {
+                const regex = /^[0-9]*$/;
+                if (!regex.test(e.target.value)) {
+                  e.target.value = "";
+                } else {
+                  handleChange(e);
+                }
+              }}
               onBlur={handleBlur}
+              maxLength={10}
               value={values.altContact}
-              onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-                if (e.key === "ArrowUp" || e.key === "ArrowDown") {
-                  e.preventDefault();
-                }
-              }}
-              onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
-                if (e.target.value.length > 10) {
-                  e.target.value = e.target.value.slice(0, 10);
-                }
-              }}
             />
             {touched.altContact && errors.altContact && (
               <div className="text-red-500">{errors.altContact}</div>

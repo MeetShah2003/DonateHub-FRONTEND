@@ -6,7 +6,7 @@ import * as Yup from "yup";
 import React, { useState } from "react";
 import Cookies from "js-cookie";
 import { useAuth } from "@/context/auth";
-import { BACKEND_BASE_URL } from "@/consts";
+import { BACKEND_BASE_URL, MAX_LENGTH } from "@/consts";
 import { toast } from "react-toastify";
 import Spinner from "@/components/Spinner";
 import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
@@ -19,27 +19,12 @@ const ProfileUser = () => {
   const { user } = useAuth();
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
   const [loading, setLoading] = useState(false);
+  const { emailLength, inputLength } = MAX_LENGTH;
   const access_token = Cookies.get("access_token");
 
   const errorToast = (errorMessage: string) => toast.error(errorMessage);
   const successToast = (successMessage: string) =>
     toast.success(successMessage);
-
-  // const getAdminProfile = () => {
-  //   fetch(`${BACKEND_BASE_URL}/admin/adminProfile`, {
-  //     method: "GET",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Authorization: `Bearer ${token}`,
-  //     },
-  //   })
-  //     .then((res) => {
-  //       return res.json();
-  //     })
-  //     .then((data) => {
-  //       setUserData(data["myProfile"]);
-  //     });
-  // };
 
   const getUpdateAdminProfile = (data: any) => {
     setLoading(true);
@@ -64,11 +49,12 @@ const ProfileUser = () => {
   };
 
   const profileSchema = Yup.object().shape({
-    firstName: Yup.string().required("FirstName is required"),
-    lastName: Yup.string().required("LastName is required"),
-    gender: Yup.string().required("Please select a gender"),
+    firstName: Yup.string().trim().required("FirstName is required"),
+    lastName: Yup.string().trim().required("LastName is required"),
+    gender: Yup.string().trim().required("Please select a gender"),
     email: Yup.string().trim().email("Invalid email"),
     mono: Yup.string()
+      .trim()
       .matches(
         /^[+]?[0-9]+$/,
         "Mobile number must contain only digits and can optionally start with a '+'"
@@ -167,6 +153,7 @@ const ProfileUser = () => {
               type="text"
               className="outline-none tracking-wider"
               placeholder="John"
+              maxLength={inputLength}
               onChange={handleChange}
               onBlur={handleBlur}
               value={values.firstName}
@@ -187,6 +174,7 @@ const ProfileUser = () => {
               placeholder="Doe"
               onChange={handleChange}
               onBlur={handleBlur}
+              maxLength={inputLength}
               value={values.lastName}
             />
             {touched.lastName && errors.lastName && (
@@ -249,6 +237,7 @@ const ProfileUser = () => {
             disabled={isDisabled}
             value={values.email}
             onChange={handleChange}
+            maxLength={emailLength}
             onBlur={handleBlur}
             className="outline-none tracking-wider"
             placeholder="johndoe@gmail.com"
