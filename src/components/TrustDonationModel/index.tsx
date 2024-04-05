@@ -35,24 +35,18 @@ const TrustDonationModel: React.FC<TrustCardProps> = ({ trust }) => {
   return (
     <div className="relative rounded-lg border-2 w-full">
       <div className="flex items-center w-full mx-auto bg-white  shadow-sm overflow-hidden">
-        {/* <div className="m-2 flex sm:flex-shrink-0">
-          <Image
-            alt="trustImage"
-            className="rounded-md sm:h-24 w-full "
-            src={trustlogo}
-            width={100}
-            height={100}
-          ></Image>
-        </div> */}
         <div className="flex flex-col md:flex-row w-full p-3 shadow-md borde rounded-lg gap-5 bg-white">
-          <div className="w-full md:w-1/4 h-full rounded-lg">
-            <Image
-              src={trustlogo}
-              width={500}
-              height={300}
-              className="h-full w-full rounded-lg"
-              alt={"trustLogo"}
-            />
+          <div className="flex-shrink-0 md:w-60">
+            <div className="h-full w-full">
+              <Image
+                alt="trustImage"
+                src={trustlogo}
+                width={500}
+                height={500}
+                objectFit="contain"
+                className="h-full w-full"
+              />
+            </div>
           </div>
           <div className="flex flex-row gap-5 justify-between md:gap-48">
             <div className="w-3/4 flex flex-col gap-5 justify-between">

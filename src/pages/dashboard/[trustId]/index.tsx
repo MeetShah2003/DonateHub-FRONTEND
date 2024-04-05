@@ -147,6 +147,7 @@ const TrustDetails = () => {
         });
         if (res.ok) {
           const data = await res.json();
+          console.log(data);
           setSingleData(data.singleTrust);
         }
       } catch (error) {
@@ -180,7 +181,7 @@ const TrustDetails = () => {
           <div className="flex flex-col md:flex-row w-full p-3 shadow-sm rounded-lg gap-5 bg-gray-100">
             <div className="w-full md:w-1/4 h-full rounded-lg">
               <Image
-                src={singleData.tId.trustlogo}
+                src={singleData.disasterImage}
                 width={500}
                 height={300}
                 className="h-full w-full rounded-lg"

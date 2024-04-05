@@ -60,7 +60,7 @@ const RequestFund = () => {
         if (res && res.status === 200) {
           return res.json();
         } else if (res && res.status === 400) {
-          errorToast("Insufficient funds");
+          errorToast("Some Thing Went Wrong");
           setTimeout(() => {
             push(`/trust/fundrequest`);
           }, 3000);
@@ -68,7 +68,12 @@ const RequestFund = () => {
       })
       .then((data) => {
         if (data) {
-          successToast("Fund Request Accepted");
+          console.log(data.message);
+          if (data.message === "Insufficient funds") {
+            errorToast("Insufficient funds");
+          } else {
+            successToast("Fund Request Accepted");
+          }
           setTimeout(() => {
             push(`/trust/fundrequest`);
           }, 3000);

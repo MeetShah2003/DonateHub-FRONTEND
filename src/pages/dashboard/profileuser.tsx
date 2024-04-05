@@ -21,6 +21,8 @@ const ProfileUser = () => {
   const [loading, setLoading] = useState(false);
   const { emailLength, inputLength } = MAX_LENGTH;
   const [image, setImage] = useState<File | null>(null);
+  const [imageKey, setImageKey] = useState<number>(0);
+
   const access_token = Cookies.get("access_token");
 
   const errorToast = (errorMessage: string) => toast.error(errorMessage);
@@ -128,13 +130,10 @@ const ProfileUser = () => {
             userlogo: imageUrl,
           }));
 
-          // Update the src attribute of the Image component directly
-          const imageElement = document.getElementById(
-            "userlogo"
-          ) as HTMLImageElement;
-          if (imageElement) {
-            imageElement.src = imageUrl;
-          }
+          // Update the src attribute of the Image component
+          // Note: next/image doesn't allow src to be changed dynamically.
+          // So, we need to set the key prop to force re-render with new src.
+          setImageKey(new Date().getTime()); // Generate a new key
         }
       } catch (error) {
         errorToast("Image Upload Failed");
@@ -159,7 +158,7 @@ const ProfileUser = () => {
           <div className="border-4 h-32 w-32 p-1 border-primary rounded-full overflow-hidden">
             <Image
               className="rounded-full h-full w-full object-contain"
-              src={(user?.userlogo as string) || (values.userlogo as string)}
+              src={values.userlogo || user?.userlogo}
               alt="userlogo"
               width={128}
               height={128}
