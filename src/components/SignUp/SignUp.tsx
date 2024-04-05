@@ -7,7 +7,7 @@ import HidePasswordIcon from "@/icons/HidePasswordIcon";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
-import { BACKEND_BASE_URL } from "@/consts";
+import { BACKEND_BASE_URL, MAX_LENGTH } from "@/consts";
 import Spinner from "../Spinner";
 import Image from "next/image";
 import CameraIcon from "@/icons/CameraIcon";
@@ -20,6 +20,7 @@ const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { inputLength, emailLength } = MAX_LENGTH;
 
   const errorToast = (errorMessage: string) => toast.error(errorMessage);
   const successToast = (successMessage: string) =>
@@ -39,10 +40,12 @@ const SignUp = () => {
         /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).*$/,
         "Password must contain at least one uppercase letter, one lowercase letter, and one number"
       )
+      .trim()
       .required("Password is required"),
     gender: Yup.string().required("Please select a gender"),
     confirmPassword: Yup.string()
       .oneOf([Yup.ref("password")], "Passwords must match")
+      .trim()
       .required("Confirm Password is required"),
     mono: Yup.string()
       .matches(
@@ -51,6 +54,7 @@ const SignUp = () => {
       )
       .min(10, "Mobile number must be at least 10 digits")
       .max(15, "Mobile number can't exceed 15 digits")
+      .trim()
       .required("Mobile Number is required"),
   });
 
@@ -187,6 +191,7 @@ const SignUp = () => {
                   id="firstName"
                   name="firstName"
                   type="text"
+                  maxLength={inputLength}
                   className="outline-none tracking-wider"
                   placeholder="John"
                   onChange={handleChange}
@@ -205,6 +210,7 @@ const SignUp = () => {
                   id="lastName"
                   name="lastName"
                   type="text"
+                  maxLength={inputLength}
                   className="outline-none tracking-wider"
                   placeholder="Doe"
                   onChange={handleChange}
@@ -225,6 +231,7 @@ const SignUp = () => {
                 id="email"
                 name="email"
                 type="email"
+                maxLength={emailLength}
                 onChange={handleChange}
                 onBlur={handleBlur}
                 className="outline-none tracking-wider"
@@ -298,6 +305,7 @@ const SignUp = () => {
               <div className="flex justify-between">
                 <input
                   id="password"
+                  maxLength={15}
                   name="password"
                   type={showPassword ? "text" : "password"}
                   onChange={handleChange}
@@ -325,6 +333,7 @@ const SignUp = () => {
                 id="confirmPassword"
                 name="confirmPassword"
                 type="text"
+                maxLength={15}
                 onChange={handleChange}
                 onBlur={handleBlur}
                 className="outline-none tracking-wider"

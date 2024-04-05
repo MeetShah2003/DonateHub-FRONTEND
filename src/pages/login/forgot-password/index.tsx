@@ -4,7 +4,7 @@ import { useFormik } from "formik";
 import { useRouter } from "next/router";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
-import { BACKEND_BASE_URL } from "@/consts";
+import { BACKEND_BASE_URL, MAX_LENGTH } from "@/consts";
 import { useAuth } from "@/context/auth";
 import Spinner from "@/components/Spinner";
 import { useState } from "react";
@@ -23,7 +23,9 @@ const forgotPasswordSchema = Yup.object().shape({
 const ForgotPassword = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const { forgotPasswordEmail, setForgotPasswordEmail } = useAuth();
+  const { setForgotPasswordEmail } = useAuth();
+  const { inputLength, emailLength } = MAX_LENGTH;
+
   const { handleChange, handleSubmit, handleBlur, touched, errors } = useFormik(
     {
       initialValues: {
@@ -69,6 +71,7 @@ const ForgotPassword = () => {
             id="email"
             name="email"
             type="email"
+            maxLength={emailLength}
             onChange={handleChange}
             onBlur={handleBlur}
             className="outline-none tracking-wider"

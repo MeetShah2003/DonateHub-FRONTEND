@@ -2,7 +2,7 @@ import Spinner from "@/components/Spinner";
 import { useFormik } from "formik";
 import { useState } from "react";
 import { ContactUsType } from "@/types/types";
-import { BACKEND_BASE_URL } from "@/consts";
+import { BACKEND_BASE_URL, MAX_LENGTH } from "@/consts";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
@@ -11,6 +11,7 @@ import * as Yup from "yup";
 const TrustContactUs = () => {
   const [loading, setLoading] = useState(false);
   const access_token = Cookies.get("access_token");
+  const { emailLength, inputLength } = MAX_LENGTH;
   const { push } = useRouter();
 
   const errorToast = (errorMessage: string) => toast.error(errorMessage);
@@ -26,11 +27,14 @@ const TrustContactUs = () => {
   };
 
   const validationSchema = Yup.object().shape({
-    name: Yup.string().required("Name is required"),
-    email: Yup.string().email("Invalid email").required("Email is required"),
-    contactNo: Yup.string().required("Mobile No is required"),
-    subject: Yup.string().required("Subject is required"),
-    message: Yup.string().required("Message is required"),
+    name: Yup.string().trim().required("Name is required"),
+    email: Yup.string()
+      .trim()
+      .email("Invalid email")
+      .required("Email is required"),
+    contactNo: Yup.string().trim().required("Mobile No is required"),
+    subject: Yup.string().trim().required("Subject is required"),
+    message: Yup.string().trim().required("Message is required"),
   });
 
   const { handleBlur, handleChange, handleSubmit, values, errors, touched } =
@@ -82,6 +86,7 @@ const TrustContactUs = () => {
             name="name"
             type="text"
             value={values.name}
+            maxLength={inputLength}
             onChange={handleChange}
             onBlur={handleBlur}
             className="outline-none tracking-wider"
@@ -97,6 +102,7 @@ const TrustContactUs = () => {
             id="email"
             name="email"
             type="email"
+            maxLength={emailLength}
             value={values.email}
             onChange={handleChange}
             onBlur={handleBlur}
@@ -143,6 +149,7 @@ const TrustContactUs = () => {
             id="subject"
             name="subject"
             type="text"
+            maxLength={inputLength}
             value={values.subject}
             onChange={handleChange}
             onBlur={handleBlur}
@@ -162,6 +169,7 @@ const TrustContactUs = () => {
             className="outline-none tracking-wider resize-none"
             rows={4}
             cols={30}
+            maxLength={500}
             placeholder="Enter Message Here"
             onChange={handleChange}
             onBlur={handleBlur}

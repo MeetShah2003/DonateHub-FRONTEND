@@ -5,7 +5,7 @@ import { useFormik } from "formik";
 import { useState } from "react";
 import * as Yup from "yup";
 import { useRouter } from "next/router";
-import { BACKEND_BASE_URL } from "@/consts";
+import { BACKEND_BASE_URL, MAX_LENGTH } from "@/consts";
 import Spinner from "@/components/Spinner";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
@@ -14,11 +14,11 @@ const validationSchema = Yup.object().shape({
   password: Yup.string()
     .required("Required")
     .min(8, "Password must be at least 8 characters")
-    .matches(/^[A-Z]/, "First character must be a capital letter"),
-  confirmPassword: Yup.string().oneOf(
-    [Yup.ref("password")],
-    "Passwords must match"
-  ),
+    .matches(/^[A-Z]/, "First character must be a capital letter")
+    .trim(),
+  confirmPassword: Yup.string()
+    .oneOf([Yup.ref("password")], "Passwords must match")
+    .trim(),
 });
 
 const Password = () => {
@@ -27,6 +27,7 @@ const Password = () => {
   const router = useRouter();
   const forgotPasswordEmail = Cookies.get("forgotPasswordEmail");
   const [loading, setLoading] = useState(false);
+  const { inputLength } = MAX_LENGTH;
   const [showPassword, setShowPassword] = useState(false);
   const { handleSubmit, handleChange, handleBlur, errors, touched } = useFormik(
     {
@@ -80,6 +81,7 @@ const Password = () => {
               type={showPassword ? "text" : "password"}
               onChange={handleChange}
               onBlur={handleBlur}
+              maxLength={15}
               className="outline-none tracking-wider w-full"
               placeholder="••••••••"
             />
@@ -103,6 +105,7 @@ const Password = () => {
             type="text"
             onChange={handleChange}
             onBlur={handleBlur}
+            maxLength={15}
             className="outline-none tracking-wider"
             placeholder="••••••••"
           />

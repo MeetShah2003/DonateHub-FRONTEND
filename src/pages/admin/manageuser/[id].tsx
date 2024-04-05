@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import { BACKEND_BASE_URL } from "@/consts";
+import { BACKEND_BASE_URL, MAX_LENGTH } from "@/consts";
 import { UserData } from "@/types/types";
 import AdminRoute from "@/components/AdminRoute";
 import Spinner from "@/components/Spinner";
@@ -18,13 +18,14 @@ const SingleUser = () => {
   const { query } = useRouter();
   const [loading, setLoading] = useState(false);
   const access_token = Cookies.get("access_token");
+  const { emailLength, inputLength } = MAX_LENGTH;
   const [userData, setUserData] = useState<UserData>();
   const [image, setImage] = useState<File | null>(null);
 
   const validationSchema = Yup.object().shape({
-    firstName: Yup.string().required("First name is required"),
-    lastName: Yup.string().required("Last name is required"),
-    gender: Yup.string().required("Gender is required"),
+    firstName: Yup.string().trim().required("First name is required"),
+    lastName: Yup.string().trim().required("Last name is required"),
+    gender: Yup.string().trim().required("Gender is required"),
     mono: Yup.number()
       .typeError("Mobile number must be a number")
       .positive("Mobile number must be positive")
@@ -42,10 +43,10 @@ const SingleUser = () => {
     email: string;
     gender: string;
     mono: number | null;
-    createdate: Date;
+    createdate: string;
     userlogo: string;
   } = {
-    createdate: new Date(),
+    createdate: "",
     email: "",
     gender: "",
     mono: null,
@@ -141,7 +142,7 @@ const SingleUser = () => {
       setValues({
         firstName: userData.firstName,
         lastName: userData.lastName,
-        createdate: new Date(userData.createdAt),
+        createdate: userData.createdAt.toString(),
         email: userData.email,
         gender: userData.gender,
         mono: userData.mono,
@@ -170,6 +171,8 @@ const SingleUser = () => {
       }
     }
   };
+
+  console.log(values.createdate);
 
   return (
     <AdminFrame title="User Detail">
@@ -221,6 +224,7 @@ const SingleUser = () => {
               className="bg-transparent outline-none"
               onChange={handleChange}
               onBlur={handleBlur}
+              maxLength={inputLength}
               value={values.firstName}
             />
             {errors.firstName && (
@@ -238,6 +242,7 @@ const SingleUser = () => {
               type="text"
               id="lastName"
               name="lastName"
+              maxLength={inputLength}
               placeholder="Enter Lastname"
               className="bg-transparent outline-none"
               onChange={handleChange}
@@ -335,7 +340,7 @@ const SingleUser = () => {
               Creation Date & Time
             </label>
 
-            <h1>{values.createdate.toString()}</h1>
+            <h1>{values.createdate.toLocaleString()}</h1>
           </div>
         </div>
         <div className=" flex flex-col gap-2 mt-2 md:flex-row ">

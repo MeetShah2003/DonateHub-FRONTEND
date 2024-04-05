@@ -4,7 +4,7 @@ import Spinner from "@/components/Spinner";
 import TrustModel from "@/components/TrustModel";
 import UserRoute from "@/components/UserRoute/UserRoute";
 import Visitor from "@/components/Visitor";
-import { BACKEND_BASE_URL, TRUST_CATAGORY_OPTIONS } from "@/consts";
+import { BACKEND_BASE_URL, MAX_LENGTH, TRUST_CATAGORY_OPTIONS } from "@/consts";
 import { FundRequirement } from "@/types/types";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
@@ -13,6 +13,7 @@ const Dashboard = () => {
   const access_token = Cookies.get("access_token");
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(0);
+  const { inputLength } = MAX_LENGTH;
   const [loading, setLoading] = useState(false);
   const [fundRequirement, setFundRequirement] = useState<FundRequirement[]>();
   const [searchQuery, setSearchQuery] = useState("");
@@ -79,6 +80,7 @@ const Dashboard = () => {
               type="text"
               placeholder="Search Here"
               value={searchQuery}
+              maxLength={inputLength}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="border-2 w-full shadow-sm outline-none rounded p-2"
             />

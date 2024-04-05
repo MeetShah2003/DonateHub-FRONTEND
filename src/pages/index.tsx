@@ -51,7 +51,7 @@ const home = () => {
               <div className="mt-10 flex flex-col items-center sm:flex-row sm:justify-center sm:gap-x-6">
                 <Link
                   href="/login"
-                  className="rounded-md bg-primary px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-primaryLight focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mb-4 sm:mb-0"
+                  className="rounded-md bg-primary px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-secondary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mb-4 sm:mb-0"
                 >
                   Donate Now
                 </Link>

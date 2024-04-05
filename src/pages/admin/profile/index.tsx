@@ -7,7 +7,7 @@ import * as Yup from "yup";
 import React, { useState } from "react";
 import Cookies from "js-cookie";
 import { useAuth } from "@/context/auth";
-import { BACKEND_BASE_URL } from "@/consts";
+import { BACKEND_BASE_URL, MAX_LENGTH } from "@/consts";
 import { toast } from "react-toastify";
 import AdminRoute from "@/components/AdminRoute";
 import Spinner from "@/components/Spinner";
@@ -18,6 +18,7 @@ import { v4 } from "uuid";
 const AdminProfile = () => {
   const { user } = useAuth();
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
+  const { emailLength, inputLength } = MAX_LENGTH;
   const [loading, setLoading] = useState(false);
   const access_token = Cookies.get("access_token");
 
@@ -48,11 +49,12 @@ const AdminProfile = () => {
   };
 
   const profileSchema = Yup.object().shape({
-    firstName: Yup.string().required("FirstName is required"),
-    lastName: Yup.string().required("LastName is required"),
-    gender: Yup.string().required("Please select a gender"),
+    firstName: Yup.string().trim().required("FirstName is required"),
+    lastName: Yup.string().trim().required("LastName is required"),
+    gender: Yup.string().trim().required("Please select a gender"),
     email: Yup.string().trim().email("Invalid email"),
     mono: Yup.string()
+      .trim()
       .matches(
         /^[+]?[0-9]+$/,
         "Mobile number must contain only digits and can optionally start with a '+'"
@@ -149,6 +151,7 @@ const AdminProfile = () => {
               id="firstName"
               name="firstName"
               type="text"
+              maxLength={inputLength}
               className="outline-none tracking-wider"
               placeholder="John"
               onChange={handleChange}
@@ -165,6 +168,7 @@ const AdminProfile = () => {
               id="lastName"
               name="lastName"
               type="text"
+              maxLength={inputLength}
               className="outline-none tracking-wider"
               placeholder="Doe"
               onChange={handleChange}
@@ -224,6 +228,7 @@ const AdminProfile = () => {
             id="email"
             name="email"
             type="email"
+            maxLength={emailLength}
             disabled={isDisabled}
             value={values.email}
             onChange={handleChange}
