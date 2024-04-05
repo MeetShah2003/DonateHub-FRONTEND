@@ -89,6 +89,7 @@ const LogIn = () => {
           .then((res) => res.json())
           .then((data) => {
             if (data && data?.token) {
+              console.log("data>>", data);
               Cookies.set("role", data?.user?.role);
               if (data?.user?.role === "admin") {
                 Cookies.set("access_token", data?.token);
@@ -131,7 +132,12 @@ const LogIn = () => {
                 }
               }
             } else {
-              errorToast("email not found");
+              console.log(data.message);
+              if (data.message === "invalid password") {
+                errorToast("Incorrect Password");
+              } else {
+                errorToast("email not found");
+              }
             }
           })
           .catch((error) => {

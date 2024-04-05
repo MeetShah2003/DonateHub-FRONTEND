@@ -154,7 +154,7 @@ const SingleUser = () => {
   const handleOnChange = async (e: any) => {
     if (e.target.files[0]) {
       const uploadedImage = e.target.files[0];
-      setImage(uploadedImage); // Set image state with the selected file
+      setImage(uploadedImage);
 
       const imageRef = ref(storage, `trust_profile_image/${v4()}`);
 
@@ -164,7 +164,20 @@ const SingleUser = () => {
 
         if (imageUrl) {
           successToast("Image Upload Successfully");
-          setFieldValue("userlogo", imageUrl);
+
+          // Update form values with new image URL
+          setValues((prevValues) => ({
+            ...prevValues,
+            userlogo: imageUrl,
+          }));
+
+          // Update the src attribute of the Image component directly
+          const imageElement = document.getElementById(
+            "userImage"
+          ) as HTMLImageElement;
+          if (imageElement) {
+            imageElement.src = imageUrl;
+          }
         }
       } catch (error) {
         errorToast("Image Upload Failed");
@@ -188,8 +201,10 @@ const SingleUser = () => {
           ) : (
             <Image
               className="h-28 w-28 rounded-md"
-              alt="user Image"
-              src={userData?.userlogo as string}
+              alt="User Image"
+              src={
+                (values.userlogo as string) || (userData?.userlogo as string)
+              }
               width={100}
               height={500}
             />
