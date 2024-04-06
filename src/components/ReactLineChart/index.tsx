@@ -30,7 +30,7 @@ const ReactLineChart: React.FC<{ data: any; title: string }> = ({
           <Legend />
           <Line
             type="monotone"
-            dataKey="supporters"
+            dataKey="supporters" 
             stroke="#8884d8"
             activeDot={{ r: 8 }}
           />

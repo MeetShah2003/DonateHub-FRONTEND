@@ -191,7 +191,7 @@ const TrustDetails = () => {
             <div className="flex flex-col md:flex-row gap-5 justify-between md:gap-48">
               <div className="w-3/4 flex flex-col gap-5 justify-between">
                 <div>
-                  <h1 className="text-lg font-semibold">Trust Name</h1>
+                  <h1 className="text-lg font-semibold">Disaster Name</h1>
                   <p className="text-xl text-gray-500">{singleData?.title}</p>
                 </div>
                 <div>

@@ -20,6 +20,7 @@ const Trust = () => {
   const [totalDisasterCollection, setTotalDisasterCollection] =
     useState<number>(0);
   const [incomeChart, setIncomeChart] = useState();
+  const [suppChartData, setSuppChartData] = useState();
   const [disasterIncomeChart, setDisasterIncomeChart] = useState();
   const [loading, setLoading] = useState(false);
 
@@ -119,12 +120,34 @@ const Trust = () => {
         }
       });
   };
+  const suppChart = () => {
+    setLoading(true);
+    fetch(`${BACKEND_BASE_URL}/trust/myManualSupporterChart`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${access_token}`,
+      },
+    })
+      .then((res) => {
+        if (res && res.status === 200) {
+          return res.json();
+        }
+      })
+      .then((data: any) => {
+        if (data) {
+          setSuppChartData(data?.formattedData);
+          console.log("data.myIncomeData", data.formattedData);
+        }
+      });
+  };
 
   useEffect(() => {
     getSupporterAndCollectionData();
     manualIncomeChart();
     disaterIncomChart();
     disastersCount();
+    suppChart();
   }, [access_token]);
 
   const supporterChartData = [
@@ -210,7 +233,7 @@ const Trust = () => {
         </h1>
       </div>
       <div className="flex flex-col md:flex-row -z-10 gap-5">
-        <ReactLineChart data={supporterChartData} title="Supporter Chart" />
+        <ReactLineChart data={suppChartData} title="Supporter Chart" />
         <ReactBarChart data={incomeChart} title="Income Chart" />
       </div>
       <div className="flex mt-5 flex-col md:flex-row -z-10 gap-5">
