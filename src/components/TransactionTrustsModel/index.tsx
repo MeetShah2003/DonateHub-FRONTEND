@@ -34,6 +34,10 @@ const TransactionTrustsModel: React.FC<TransactionTrustsModelProps> = ({
   onEditDisaster,
 }) => {
   const { isAdmin } = useAuth();
+
+  const { asPath } = useRouter();
+
+  console.log(asPath);
   return (
     <div className="w-full border shadow-md rounded-lg overflow-hidden">
       <div className="flex flex-col md:flex-row">
@@ -60,12 +64,17 @@ const TransactionTrustsModel: React.FC<TransactionTrustsModelProps> = ({
                 ₹{formatAmount(amount)}
               </span>
             </div>
-            <div className="flex items-center mr-4 mb-2">
-              <span className="mr-2 text-gray-700">Fund Requirement:</span>
-              <span className="text-gray-900 font-semibold">
-                ₹{formatAmount(fundRequirement)}
-              </span>
-            </div>
+            {asPath !== "/admin/transactions" ? (
+              <div className="flex items-center mr-4 mb-2">
+                <span className="mr-2 text-gray-700">Fund Requirement:</span>
+                <span className="text-gray-900 font-semibold">
+                  ₹{formatAmount(fundRequirement)}
+                </span>
+              </div>
+            ) : (
+              ""
+            )}
+
             <div className="flex items-center mb-2">
               <span className="mr-2 text-gray-700">Founder:</span>
               <span className="text-gray-900 font-semibold">{founder}</span>
