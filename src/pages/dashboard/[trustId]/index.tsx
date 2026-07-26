@@ -69,7 +69,7 @@ const TrustDetails = () => {
   const { handleSubmit, handleChange, setValues, values, errors, touched } =
     useFormik({
       initialValues: {
-        amount: null || 0,
+        amount: 0,
       },
       validationSchema: amountValidationSchema,
       onSubmit: async (values) => {
