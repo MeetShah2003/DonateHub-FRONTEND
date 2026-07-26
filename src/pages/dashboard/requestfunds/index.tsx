@@ -8,9 +8,7 @@ import Image from "next/image";
 import { useFormik } from "formik";
 import DropDownArrow from "@/icons/DropDownArrow";
 import * as Yup from "yup";
-import { storage } from "@/firebase";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { v4 } from "uuid";
+import { uploadToCloudinary } from "@/lib/cloudinary";
 import { toast } from "react-toastify";
 import Spinner from "@/components/Spinner";
 import { useRouter } from "next/router";
@@ -115,24 +113,28 @@ const RequestFunds = () => {
   };
 
   const handleFileUpload = async (event: any) => {
+    const files = Array.from(event.target.files || []) as File[];
+    if (!files.length) return;
+
     setLoading(true);
-    const files = event.target.files;
-    const uploadedURLs = [];
+    const uploadedURLs: string[] = [];
 
-    for (const file of files) {
-      const documentRef = ref(storage, `fund_request_documents/${v4()}`);
-      try {
-        await uploadBytes(documentRef, file);
-        const downloadURL = await getDownloadURL(documentRef);
-        uploadedURLs.push(downloadURL);
-      } catch (error) {
-        console.error("Error uploading document:", error);
-      } finally {
-        setLoading(false);
+    try {
+      for (const file of files) {
+        const documentUrl = await uploadToCloudinary(
+          file,
+          "fund-request-document",
+          access_token
+        );
+        uploadedURLs.push(documentUrl);
       }
+      setFieldValue("documents", [...values.documents, ...uploadedURLs]);
+      successToast("Documents uploaded successfully");
+    } catch (error: any) {
+      errorToast(error.message || "Document upload failed");
+    } finally {
+      setLoading(false);
     }
-
-    setFieldValue("documents", [...values.documents, ...uploadedURLs]);
   };
 
   return (

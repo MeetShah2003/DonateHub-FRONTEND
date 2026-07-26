@@ -13,11 +13,10 @@ import {
   TRUST_CATAGORY_OPTIONS,
 } from "@/consts";
 import { toast } from "react-toastify";
-import { v4 as uuidv4, v4 } from "uuid";
+import { v4 as uuidv4 } from "uuid";
 import Image from "next/image";
 import { TrustData } from "@/types/types";
-import { storage } from "../../firebase";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { uploadToCloudinary } from "@/lib/cloudinary";
 import Spinner from "../Spinner";
 import { useRouter } from "next/router";
 
@@ -36,11 +35,8 @@ const TrustSignup = () => {
   const handleOnChange = async (e: any) => {
     if (e.target.files[0]) {
       const uploadedImage = e.target.files[0];
-      const imageRef = ref(storage, `trust_logos/${v4()}`);
-
       try {
-        await uploadBytes(imageRef, uploadedImage);
-        const imageUrl = await getDownloadURL(imageRef);
+        const imageUrl = await uploadToCloudinary(uploadedImage, "trust-logo");
 
         if (imageUrl) {
           successToast("Image Upload Successfully");

@@ -13,8 +13,7 @@ import Visitor from "@/components/Visitor";
 import RuppeSymbol from "@/icons/RuppeSymbol";
 import ReviewSection from "@/components/ReviewSection";
 import { toast } from "react-toastify";
-import Razorpay from "razorpay";
-import RazorpayScript from "@/components/RazorpayScript";
+import { openRazorpayCheckout } from "@/lib/razorpay";
 
 const TrustDetails = () => {
   const [singleData, setSingleData] = useState<TrustData>();
@@ -50,39 +49,39 @@ const TrustDetails = () => {
     }
   };
 
-  const onSuccess = (response: any) => {
-    console.log("Payment successful:", response);
+  const onSuccess = async (response: any) => {
     setLoading(true);
-    console.log(response?.razorpay_payment_id);
-    fetch(`${BACKEND_BASE_URL}/api/manualDonate`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        paymentId: response?.razorpay_payment_id,
-        trustId: query?.id,
-        amount: values?.amount,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        getSingleTrustData(query.id as string);
-        if (data) {
-          const successTransaction = JSON.stringify(data.userTransaction);
-          Cookies.set("successTransaction", successTransaction);
-          successToast("Thank You For Donation");
-          push(`/dashboard/trustdonation/${query.id}/showtransaction`);
-        }
-      })
-      .finally(() => {
-        setLoading(false);
+    try {
+      const verifyRes = await fetch(`${BACKEND_BASE_URL}/api/verify-payment`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          razorpay_payment_id: response?.razorpay_payment_id,
+          razorpay_order_id: response?.razorpay_order_id,
+          razorpay_signature: response?.razorpay_signature,
+        }),
       });
+      const data = (await verifyRes.json()) as { message?: string; userTransaction?: any };
+      if (!verifyRes.ok) {
+        throw new Error(data?.message || "Payment verification failed");
+      }
+      getSingleTrustData(query.id as string);
+      const successTransaction = JSON.stringify(data.userTransaction);
+      Cookies.set("successTransaction", successTransaction);
+      successToast("Thank You For Donation");
+      push(`/dashboard/trustdonation/${query.id}/showtransaction`);
+    } catch (error: any) {
+      errorToast(error.message || "Payment verification failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const onFailure = (response: any) => {
-    console.log("Payment failed:", response);
+  const onFailure = () => {
+    errorToast("Last transaction was cancelled");
   };
 
   const initialValues: { amount: number | null } = {
@@ -108,44 +107,41 @@ const TrustDetails = () => {
           body: JSON.stringify({
             amount: data.amount,
             currency: data.curruncy,
+            donationType: "manual",
+            trustId: data.trustId,
           }),
         });
-        const order = await response.json();
+        const orderPayload = await response.json();
+        if (!response.ok) {
+          throw new Error(orderPayload.message || "Unable to create donation order");
+        }
 
-        var options = {
-          key: "rzp_test_zfmhrR9Z3TReMH",
-          amount: data.amount,
+        const options = {
+          key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+          amount: orderPayload.order.amount,
           currency: data.curruncy,
           name: "DonateHub",
-          description: "Test Transaction",
-          image:
-            "https://firebasestorage.googleapis.com/v0/b/donatehub-d09f5.appspot.com/o/DonateHUB_Logo%2Fdonatehublogo.png?alt=media&token=2cd59db5-3e2a-4d23-93e8-b2ee36314453",
-          order_id: order.order.id,
+          description: "Trust donation",
+          image: "/images/donatehublogo.png",
+          order_id: orderPayload.order.id,
           handler: (response: any) => {
             if (response.razorpay_payment_id) {
               onSuccess(response);
             } else {
-              onFailure(response);
+              onFailure();
             }
           },
           prefill: {
-            name: `${user.firstName} ${user.lastName}`,
-            email: user.email,
-            contact: "9000090000",
-          },
-          notes: {
-            address: "Razorpay Corporate Office",
+            name: `${user?.firstName || "Donor"} ${user?.lastName || ""}`.trim(),
+            email: user?.email || "",
+            contact: user?.mono || "",
           },
           theme: {
             color: "#674CC4",
           },
         };
-        var rzp1 = new window.Razorpay(options);
-        rzp1.on("payment.failed", function (response: any) {
-          console.log(response);
-        });
 
-        rzp1.open();
+        await openRazorpayCheckout(options);
       },
     });
 
@@ -169,7 +165,6 @@ const TrustDetails = () => {
         <Visitor />
       </div>
       {loading && <Spinner />}
-      <RazorpayScript />
       <div className="max-w-full w-90% mx-auto my-5">
         <div className="flex flex-col gap-3">
           <div className="flex flex-col md:flex-row w-full p-3 shadow-md rounded-lg gap-5 bg-gray-100">

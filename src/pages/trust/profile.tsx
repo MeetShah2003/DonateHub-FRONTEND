@@ -14,9 +14,7 @@ import {
 } from "@/consts";
 import { toast } from "react-toastify";
 import Spinner from "@/components/Spinner";
-import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
-import { storage } from "@/firebase";
-import { v4 } from "uuid";
+import { uploadToCloudinary } from "@/lib/cloudinary";
 import TrustRoute from "@/components/TrustRoute/TrustRoute";
 import { TrustData } from "@/types/types";
 import TrustNavbar from "@/components/TrustNavbar";
@@ -115,11 +113,8 @@ const ProfileTrust = () => {
   const handleOnChange = async (e: any) => {
     if (e.target.files[0]) {
       const uploadedImage = e.target.files[0];
-      const imageRef = ref(storage, `trust_profile_image/${v4()}`);
-
       try {
-        await uploadBytes(imageRef, uploadedImage);
-        const imageUrl = await getDownloadURL(imageRef);
+        const imageUrl = await uploadToCloudinary(uploadedImage, "trust-logo", access_token);
 
         if (imageUrl) {
           successToast("Image Upload Successfully");

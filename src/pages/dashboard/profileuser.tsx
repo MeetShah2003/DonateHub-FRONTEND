@@ -9,9 +9,7 @@ import { useAuth } from "@/context/auth";
 import { BACKEND_BASE_URL, MAX_LENGTH } from "@/consts";
 import { toast } from "react-toastify";
 import Spinner from "@/components/Spinner";
-import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
-import { storage } from "@/firebase";
-import { v4 } from "uuid";
+import { uploadToCloudinary } from "@/lib/cloudinary";
 import UserRoute from "@/components/UserRoute/UserRoute";
 import Visitor from "@/components/Visitor";
 
@@ -115,11 +113,8 @@ const ProfileUser = () => {
       const uploadedImage = e.target.files[0];
       setImage(uploadedImage);
 
-      const imageRef = ref(storage, `trust_profile_image/${v4()}`);
-
       try {
-        await uploadBytes(imageRef, uploadedImage);
-        const imageUrl = await getDownloadURL(imageRef);
+        const imageUrl = await uploadToCloudinary(uploadedImage, "user-profile", access_token);
 
         if (imageUrl) {
           successToast("Image Upload Successfully");

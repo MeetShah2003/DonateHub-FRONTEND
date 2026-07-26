@@ -11,9 +11,7 @@ import { BACKEND_BASE_URL, MAX_LENGTH } from "@/consts";
 import { toast } from "react-toastify";
 import AdminRoute from "@/components/AdminRoute";
 import Spinner from "@/components/Spinner";
-import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
-import { storage } from "@/firebase";
-import { v4 } from "uuid";
+import { uploadToCloudinary } from "@/lib/cloudinary";
 
 const AdminProfile = () => {
   const { user } = useAuth();
@@ -99,11 +97,8 @@ const AdminProfile = () => {
   const handleOnChange = async (e: any) => {
     if (e.target.files[0]) {
       const uploadedImage = e.target.files[0];
-      const imageRef = ref(storage, `admin_logo/${v4()}`);
-
       try {
-        await uploadBytes(imageRef, uploadedImage);
-        const imageUrl = await getDownloadURL(imageRef);
+        const imageUrl = await uploadToCloudinary(uploadedImage, "admin-profile", access_token);
 
         if (imageUrl) {
           successToast("Image Upload Successfully");

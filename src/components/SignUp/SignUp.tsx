@@ -11,9 +11,7 @@ import { BACKEND_BASE_URL, MAX_LENGTH } from "@/consts";
 import Spinner from "../Spinner";
 import Image from "next/image";
 import CameraIcon from "@/icons/CameraIcon";
-import { uploadBytes, ref, getDownloadURL } from "firebase/storage";
-import { storage } from "@/firebase";
-import { v4 } from "uuid";
+import { uploadToCloudinary } from "@/lib/cloudinary";
 import Cookies from "js-cookie";
 
 const SignUp = () => {
@@ -135,11 +133,8 @@ const SignUp = () => {
   const handleOnChange = async (e: any) => {
     if (e.target.files[0]) {
       const uploadedImage = e.target.files[0];
-      const imageRef = ref(storage, `user_profile_image/${v4()}`);
-
       try {
-        await uploadBytes(imageRef, uploadedImage);
-        const imageUrl = await getDownloadURL(imageRef);
+        const imageUrl = await uploadToCloudinary(uploadedImage, "user-profile");
 
         if (imageUrl) {
           successToast("Image Upload Successfully");

@@ -3,13 +3,11 @@ import TrustNavbar from "@/components/TrustNavbar";
 import TrustRoute from "@/components/TrustRoute/TrustRoute";
 import { BACKEND_BASE_URL, MAX_LENGTH } from "@/consts";
 import { useAuth } from "@/context/auth";
-import { storage } from "@/firebase";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { uploadToCloudinary } from "@/lib/cloudinary";
 import { useFormik } from "formik";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { v4 } from "uuid";
 import * as Yup from "yup";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
@@ -134,11 +132,8 @@ const EditDisaster = () => {
     setLoading(true);
     if (e.target.files[0]) {
       const uploadedImage = e.target.files[0];
-      const imageRef = ref(storage, `disaster_image/${v4()}`);
-
       try {
-        await uploadBytes(imageRef, uploadedImage);
-        const imageUrl = await getDownloadURL(imageRef);
+        const imageUrl = await uploadToCloudinary(uploadedImage, "disaster-image", access_token);
 
         if (imageUrl) {
           successToast("Image Upload Successfully");

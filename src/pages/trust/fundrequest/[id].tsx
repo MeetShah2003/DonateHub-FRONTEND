@@ -9,8 +9,7 @@ import { useRouter } from "next/router";
 import TrustNavbar from "../../../components/TrustNavbar";
 import TrustRoute from "@/components/TrustRoute/TrustRoute";
 import { RequestFunds } from "@/types/types";
-import { getDownloadURL, ref } from "firebase/storage";
-import { storage } from "@/firebase";
+import UploadDocumentList from "@/components/UploadDocumentList";
 
 const RequestFund = () => {
   const access_token = Cookies.get("access_token");
@@ -118,9 +117,7 @@ const RequestFund = () => {
     setLoading(true);
     try {
       for (const imageUrl of imageUrls) {
-        const imageRef = ref(storage, imageUrl);
-        const downloadURL = await getDownloadURL(imageRef);
-        window.open(downloadURL, "_blank");
+        window.open(imageUrl, "_blank", "noopener,noreferrer");
       }
     } catch (error) {
       console.error("Error downloading images:", error);
@@ -193,21 +190,7 @@ const RequestFund = () => {
                 {Array.isArray(singleRequestData?.documents) &&
                   singleRequestData?.documents.length > 0 && (
                     <div className="w-full  border p-5">
-                      <div className="flex flex-wrap gap-2">
-                        {singleRequestData?.documents.map((document, index) => (
-                          <Image
-                            height={100}
-                            width={100}
-                            key={index}
-                            src={document}
-                            alt="documents"
-                            onClick={() => {
-                              DownloadImages(singleRequestData.documents);
-                            }}
-                            className="max-w-xs border rounded-md max-h-40"
-                          />
-                        ))}
-                      </div>
+                      <UploadDocumentList documents={singleRequestData.documents} />
                     </div>
                   )}
               </div>

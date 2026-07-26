@@ -8,10 +8,8 @@ import { UserData } from "@/types/types";
 import AdminRoute from "@/components/AdminRoute";
 import Spinner from "@/components/Spinner";
 import { useFormik } from "formik";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { storage } from "@/firebase";
+import { uploadToCloudinary } from "@/lib/cloudinary";
 import { toast } from "react-toastify";
-import { v4 } from "uuid";
 import * as Yup from "yup";
 
 const SingleUser = () => {
@@ -156,11 +154,8 @@ const SingleUser = () => {
       const uploadedImage = e.target.files[0];
       setImage(uploadedImage);
 
-      const imageRef = ref(storage, `trust_profile_image/${v4()}`);
-
       try {
-        await uploadBytes(imageRef, uploadedImage);
-        const imageUrl = await getDownloadURL(imageRef);
+        const imageUrl = await uploadToCloudinary(uploadedImage, "user-profile", access_token);
 
         if (imageUrl) {
           successToast("Image Upload Successfully");
