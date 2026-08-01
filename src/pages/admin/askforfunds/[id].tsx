@@ -74,51 +74,75 @@ const RequestFund = () => {
       {loading && <Spinner />}
 
       <AdminFrame title="Request Funds">
-        <div className="mx-auto">
-          <div>
-            <div className="flex flex-col gap-5 w-full">
-              <div className="w-full bg-secondary/20 border p-5">
-                <p className="font-bold pb-2">Trust Name</p>
-                <h1 className="text-gray-600">
-                  {singleRequestData?.tId?.trustName}
-                </h1>
-              </div>
-              <div className="w-full bg-secondary/20 border p-5">
-                <p className="font-bold pb-2">Title</p>
-                <h1 className="text-gray-600">{singleRequestData?.title}</h1>
-              </div>
-              <div className="w-full bg-secondary/20 border p-5">
-                <p className="font-bold pb-2">Status</p>
-                <h1 className="text-gray-600">
-                  {singleRequestData?.status
-                    ?.charAt(0)
-                    .toUpperCase()
-                    .concat(singleRequestData.status?.slice(1))}
-                </h1>
-              </div>
-              <div className="w-full bg-secondary/20 border p-5">
-                <p className="font-bold pb-2">Description</p>
-                <h1 className="text-gray-600">
-                  {singleRequestData?.description}
-                </h1>
-              </div>
-              <div className="w-full bg-secondary/20 border p-5">
-                <p className="font-bold pb-2">Amount</p>
-                <h1 className="text-gray-600">
-                  ₹{formatAmount(singleRequestData?.reqAmount)}
-                </h1>
-              </div>
-              <div className="w-full bg-secondary/20 border p-5">
-                <p className="font-bold pb-2">Upload Documents</p>
-
-                {Array.isArray(singleRequestData?.documents) &&
-                  singleRequestData?.documents.length > 0 && (
-                    <div className="w-full  border p-5">
-                      <UploadDocumentList documents={singleRequestData.documents} />
-                    </div>
-                  )}
-              </div>
+        <div className="w-full rounded-[24px] border border-slate-200 bg-white p-6 shadow-[0_20px_60px_rgba(15,23,42,0.08)]">
+          <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-primary">
+                Fund Request Detail
+              </p>
+              <h2 className="mt-2 text-2xl font-semibold text-slate-900">
+                {singleRequestData?.title || "Fund request"}
+              </h2>
+              <p className="mt-2 text-sm text-slate-500">
+                Review the request summary and supporting documents here.
+              </p>
             </div>
+            <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
+              <span className="block text-xs uppercase tracking-[0.2em] text-slate-400">
+                Status
+              </span>
+              <span className="mt-1 block font-semibold text-slate-900">
+                {singleRequestData?.status
+                  ?.charAt(0)
+                  .toUpperCase()
+                  .concat(singleRequestData.status?.slice(1)) || "Pending"}
+              </span>
+            </div>
+          </div>
+
+          <div className="mt-8 grid gap-4 lg:grid-cols-2">
+            <div className="rounded-3xl border border-slate-200 bg-slate-50 p-5">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
+                Trust Name
+              </p>
+              <p className="mt-3 text-base font-semibold text-slate-900">
+                {singleRequestData?.tId?.trustName || "Not available"}
+              </p>
+            </div>
+
+            <div className="rounded-3xl border border-slate-200 bg-slate-50 p-5">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
+                Requested Amount
+              </p>
+              <p className="mt-3 text-base font-semibold text-slate-900">
+                ₹{formatAmount(singleRequestData?.reqAmount) || "0"}
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-4 rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
+              Description
+            </p>
+            <p className="mt-3 whitespace-pre-wrap text-base leading-7 text-slate-700">
+              {singleRequestData?.description || "No description provided."}
+            </p>
+          </div>
+
+          <div className="mt-4 rounded-3xl border border-slate-200 bg-slate-50 p-5">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
+              Upload Documents
+            </p>
+            {Array.isArray(singleRequestData?.documents) &&
+            singleRequestData?.documents.length > 0 ? (
+              <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-4">
+                <UploadDocumentList documents={singleRequestData.documents} />
+              </div>
+            ) : (
+              <p className="mt-3 text-sm text-slate-500">
+                No documents uploaded for this request.
+              </p>
+            )}
           </div>
         </div>
       </AdminFrame>

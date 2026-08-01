@@ -143,12 +143,27 @@ const RequestFunds = () => {
       <div className="navbar sticky top-0 bg-white z-10">
         <Visitor />
       </div>
-      <div className="max-w-screen-lg w-90% mx-auto py-10">
-        <h1 className="my-5 text-2xl font-semibold">Request Funds</h1>
+      <div className="mx-auto max-w-5xl w-[90%] py-8 md:py-10">
+        <div className="mb-6 rounded-[30px] bg-gradient-to-r from-violet-700 via-primary to-fuchsia-600 p-[1px] shadow-[0_25px_70px_-30px_rgba(109,40,217,0.7)]">
+          <div className="rounded-[29px] bg-white/95 px-5 py-6 md:px-8">
+            <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.28em] text-primary">
+                  New campaign request
+                </p>
+                <h1 className="mt-2 text-3xl font-bold text-slate-900">Request Funds</h1>
+              </div>
+              <div className="rounded-full bg-violet-50 px-4 py-2 text-sm font-medium text-primary">
+                Submit your campaign details
+              </div>
+            </div>
+          </div>
+        </div>
+
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col gap-5 w-full">
-            <div className="w-full bg-secondary/20 border p-5">
-              <p className="font-bold pb-2">Select Trust</p>
+            <div className="w-full rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm">
+              <p className="pb-2 text-sm font-semibold uppercase tracking-[0.24em] text-slate-500">Select Trust</p>
               <div className="relative w-full">
                 <div>
                   <span className="rounded-md shadow-sm">
@@ -215,8 +230,8 @@ const RequestFunds = () => {
                 )}
               </div>
             </div>
-            <div className="w-full bg-secondary/20 border p-5">
-              <p className="font-bold pb-2">Title</p>
+            <div className="w-full rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm">
+              <p className="pb-2 text-sm font-semibold uppercase tracking-[0.24em] text-slate-500">Title</p>
               <input
                 type="text"
                 className="border-2 w-full shadow-sm outline-none rounded-md p-2"
@@ -232,8 +247,8 @@ const RequestFunds = () => {
                 <div className="text-red-500">{errors.title}</div>
               )}
             </div>
-            <div className="w-full bg-secondary/20 border p-5">
-              <p className="font-bold pb-2">Description</p>
+            <div className="w-full rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm">
+              <p className="pb-2 text-sm font-semibold uppercase tracking-[0.24em] text-slate-500">Description</p>
               <textarea
                 className="border-2 w-full shadow-sm outline-none rounded-md p-2"
                 name="description"
@@ -249,8 +264,8 @@ const RequestFunds = () => {
                 <div className="text-red-500">{errors.description}</div>
               )}
             </div>
-            <div className="w-full bg-secondary/20 border p-5">
-              <p className="font-bold pb-2">Tartget Funds</p>
+            <div className="w-full rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm">
+              <p className="pb-2 text-sm font-semibold uppercase tracking-[0.24em] text-slate-500">Target Funds</p>
               <input
                 type="number"
                 className="border-2 w-full shadow-sm outline-none rounded-md p-2"
@@ -277,8 +292,8 @@ const RequestFunds = () => {
               )}
             </div>
 
-            <div className="w-full bg-secondary/20 border p-5">
-              <p className="font-bold pb-2">Upload Documents</p>
+            <div className="w-full rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm">
+              <p className="pb-2 text-sm font-semibold uppercase tracking-[0.24em] text-slate-500">Upload Documents</p>
               <input
                 type="file"
                 className="border-2 w-full shadow-sm outline-none rounded-md p-2"
@@ -309,9 +324,9 @@ const RequestFunds = () => {
             </div>
             <button
               type="submit"
-              className="bg-primary text-white py-2 px-4 rounded-md hover:bg-primary-dark"
+              className="rounded-2xl bg-primary px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-primary/90"
             >
-              Submit
+              Submit Request
             </button>
           </div>
         </form>

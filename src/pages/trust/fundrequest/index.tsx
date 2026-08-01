@@ -59,38 +59,40 @@ const FundRequests = () => {
       {loading && <Spinner />}
 
       <TrustNavbar title="Fund Requests">
-        <div className="w-fit mx-auto">
-          {fundRequests.map((data, index) => {
-            return <FundRequestsModel key={index} data={data} />;
-          })}
+        <div className="rounded-[28px] border border-slate-200 bg-white p-4 shadow-sm md:p-6">
+          <div className="mx-auto w-full max-w-5xl">
+            {fundRequests.map((data, index) => {
+              return <FundRequestsModel key={index} data={data} />;
+            })}
+          </div>
+          {fundRequests.length === 0 && !loading && <NoData />}
+          {fundRequests.length > 0 && !loading && (
+            <>
+              <ReactPaginate
+                previousLabel={<ArrowIcon />}
+                nextLabel={
+                  <div className="rotate-180">
+                    <ArrowIcon />
+                  </div>
+                }
+                breakLabel={<div className="rounded border px-4 py-2">...</div>}
+                breakClassName={"break-me"}
+                pageCount={Math.ceil(fundRequests.length / itemsPerPage)}
+                marginPagesDisplayed={2}
+                pageRangeDisplayed={5}
+                containerClassName={"pagination mt-4 flex justify-center gap-2"}
+                activeClassName={"text-primary border border-primary"}
+                previousClassName={"rounded border px-4 py-2"}
+                nextClassName={"rounded border px-4 py-2"}
+                pageClassName={"rounded border px-4 py-2"}
+                pageLinkClassName={"cursor-pointer"}
+                activeLinkClassName={"text-primary border-primary"}
+                disabledClassName={"cursor-not-allowed opacity-50"}
+                onPageChange={handlePageChange}
+              />
+            </>
+          )}
         </div>
-        {fundRequests.length === 0 && !loading && <NoData />}
-        {fundRequests.length > 0 && !loading && (
-          <>
-            <ReactPaginate
-              previousLabel={<ArrowIcon />}
-              nextLabel={
-                <div className="rotate-180">
-                  <ArrowIcon />
-                </div>
-              }
-              breakLabel={<div className="px-4 py-2 border rounded">...</div>}
-              breakClassName={"break-me"}
-              pageCount={Math.ceil(fundRequests.length / itemsPerPage)}
-              marginPagesDisplayed={2}
-              pageRangeDisplayed={5}
-              containerClassName={"pagination flex justify-center mt-4"}
-              activeClassName={"text-primary border border-primary"}
-              previousClassName={"px-4 py-2 border rounded"}
-              nextClassName={"px-4 py-2 border rounded"}
-              pageClassName={"px-4 py-2 border rounded"}
-              pageLinkClassName={"cursor-pointer"}
-              activeLinkClassName={"text-primary  border-primary"}
-              disabledClassName={"opacity-50 cursor-not-allowed"}
-              onPageChange={handlePageChange}
-            />
-          </>
-        )}
       </TrustNavbar>
     </div>
   );

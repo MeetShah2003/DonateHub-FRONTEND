@@ -12,16 +12,9 @@ const TrustDonationModel: React.FC<TrustCardProps> = ({ trust }) => {
     trustName,
     trustlogo,
     founder,
-    creationDate,
     category,
     contactNo,
-    description,
-    address,
-    city,
-    state,
-    pincode,
     email,
-    TotalAmount,
     manualDonation,
     _id,
   } = trust;
@@ -33,63 +26,68 @@ const TrustDonationModel: React.FC<TrustCardProps> = ({ trust }) => {
   const { push } = useRouter();
 
   return (
-    <div className="relative rounded-lg border-2 w-full">
-      <div className="flex items-center w-full mx-auto bg-white  shadow-sm overflow-hidden">
-        <div className="flex flex-col md:flex-row w-full p-3 shadow-md borde rounded-lg gap-5 bg-white">
-          <div className="flex-shrink-0 md:w-60">
-            <div className="h-full w-full">
-              <Image
-                alt="trustImage"
-                src={trustlogo}
-                width={500}
-                height={500}
-                objectFit="contain"
-                className="h-full w-full"
-              />
+    <div className="relative w-full overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-[0_22px_65px_-30px_rgba(15,23,42,0.3)]">
+      <div className="flex flex-col gap-5 p-4 md:flex-row md:p-5">
+        <div className="relative h-52 overflow-hidden rounded-2xl md:w-[260px]">
+          <Image
+            alt="trustImage"
+            src={trustlogo}
+            width={500}
+            height={500}
+            objectFit="cover"
+            className="h-full w-full"
+          />
+        </div>
+
+        <div className="flex w-full flex-col gap-4 md:flex-row md:justify-between">
+          <div className="grid flex-1 gap-3 sm:grid-cols-2">
+            <div className="rounded-2xl bg-slate-50 p-3">
+              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">
+                Trust Name
+              </p>
+              <p className="mt-2 text-lg font-semibold text-slate-900">{trustName}</p>
+            </div>
+            <div className="rounded-2xl bg-slate-50 p-3">
+              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">
+                Category
+              </p>
+              <p className="mt-2 text-lg font-semibold text-slate-900">{category}</p>
+            </div>
+            <div className="rounded-2xl bg-slate-50 p-3">
+              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">
+                Founder
+              </p>
+              <p className="mt-2 text-lg font-semibold text-slate-900">{founder}</p>
+            </div>
+            <div className="rounded-2xl bg-slate-50 p-3">
+              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">
+                Current Balance
+              </p>
+              <p className="mt-2 text-lg font-semibold text-slate-900">
+                ₹{formatAmount(manualDonation)}
+              </p>
+            </div>
+            <div className="rounded-2xl bg-slate-50 p-3 sm:col-span-2">
+              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">
+                Contact
+              </p>
+              <p className="mt-2 text-base font-semibold text-slate-900">{email}</p>
+              <p className="mt-1 text-base text-slate-700">{contactNo}</p>
             </div>
           </div>
-          <div className="flex flex-row gap-5 justify-between md:gap-48">
-            <div className="w-3/4 flex flex-col gap-5 justify-between">
-              <div>
-                <h1 className="text-lg font-semibold">Trust Name</h1>
-                <p className="text-xl text-gray-500">{trustName}</p>
-              </div>
-              <div>
-                <h1 className="text-lg font-semibold">Category</h1>
-                <p className="text-xl text-gray-500">{category}</p>
-              </div>
-              <div>
-                <h1 className="text-lg font-semibold">Founder</h1>
-                <p className="text-xl text-gray-500">{founder}</p>
-              </div>
-              <div>
-                <h1 className="text-lg font-semibold">Current Balance</h1>
-                <p className="text-xl text-gray-500">
-                  ₹{formatAmount(manualDonation)}
-                </p>
-              </div>
-            </div>
-            <div className="w-3/4 flex flex-col gap-5">
-              <div>
-                <h1 className="text-lg font-semibold">Email</h1>
-                <p className="text-xl text-gray-500">{email}</p>
-              </div>
-              <div>
-                <h1 className="text-lg font-semibold">Contact No</h1>
-                <p className="text-xl text-gray-500">{contactNo}</p>
-              </div>
-            </div>
+
+          <div className="flex items-end justify-end">
+            <button
+              onClick={() => {
+                push(`/dashboard/trustdonation/${_id}`);
+              }}
+              className="rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-primary/90"
+            >
+              Donate
+            </button>
           </div>
         </div>
       </div>
-      <button
-        onClick={() => {
-          push(`/dashboard/trustdonation/${_id}`);
-        }}
-        className="absolute bottom-4 right-4 bg-primary text-white px-4 py-2 rounded-lg shadow-md"
-      >
-        Donate
-      </button>
     </div>
   );
 };

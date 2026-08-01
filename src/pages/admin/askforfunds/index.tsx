@@ -65,52 +65,67 @@ const FundRequests = () => {
       {loading && <Spinner />}
 
       <AdminFrame title="Fund Requests">
-        <div className="w-full mx-auto">
-          <table className="w-full">
-            <thead>
-              <tr>
-                <th className="py-3 px-6 text-left bg-gray-200">No</th>
-                <th className="py-3 px-6 text-left bg-gray-200">Title</th>
-                <th className="py-3 px-6 text-left bg-gray-200">Status</th>
-                <th className="py-3 px-6 text-center bg-gray-200">Action</th>
-              </tr>
-            </thead>
-            <tbody className="bg-white rounded-b-lg">
-              {fundRequests.map(
-                ({ _id, title, transactionDate, status }, index) => {
-                  return (
-                    <tr className="hover:bg-gray-100 transition" key={_id}>
-                      <td className="py-4 px-6 border-b">
-                        {index + 1 + currentPage * itemsPerPage}
-                      </td>
-                      <td className="py-4 px-6 border-b">{title}</td>
-                      <td className="py-4 px-6 border-b">
-                        {status
-                          ?.charAt(0)
-                          .toUpperCase()
-                          .concat(status?.slice(1))}
-                      </td>
+        <div className="rounded-[24px] border border-slate-200 bg-white p-5 shadow-[0_20px_60px_rgba(15,23,42,0.08)]">
+          <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-primary">
+                Fund Requests
+              </p>
+              <h2 className="mt-2 text-2xl font-semibold text-slate-900">
+                Review support requests from trusts
+              </h2>
+              <p className="mt-2 text-sm text-slate-500">
+                Each request is shown with status and quick access to the full detail view.
+              </p>
+            </div>
+          </div>
 
-                      <td className="py-4 px-6 border-b">
-                        <div className="flex">
-                          <div className="flex w-full flex-row items-center justify-center border-r border-dark-150">
-                            <button
-                              onClick={() => {
-                                push(`/admin/askforfunds/${_id}`);
-                              }}
-                              className="flex flex-row bg-primary text-white p-2 items-center justify-center gap-1 rounded-md text-base font-normal leading-5 text-gray-1000"
-                            >
-                              Show Details
-                            </button>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                }
-              )}
-            </tbody>
-          </table>
+          <div className="mt-6 overflow-hidden rounded-[20px] border border-slate-200">
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[680px]">
+                <thead>
+                  <tr className="bg-slate-100 text-left text-sm font-semibold text-slate-600">
+                    <th className="px-6 py-3">No</th>
+                    <th className="px-6 py-3">Title</th>
+                    <th className="px-6 py-3">Status</th>
+                    <th className="px-6 py-3 text-center">Action</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white">
+                  {fundRequests.map(
+                    ({ _id, title, transactionDate, status }, index) => {
+                      return (
+                        <tr className="border-t border-slate-100 text-sm text-slate-700 transition hover:bg-slate-50" key={_id}>
+                          <td className="px-6 py-4">
+                            {index + 1 + currentPage * itemsPerPage}
+                          </td>
+                          <td className="px-6 py-4 font-medium text-slate-900">{title}</td>
+                          <td className="px-6 py-4">
+                            {status
+                              ?.charAt(0)
+                              .toUpperCase()
+                              .concat(status?.slice(1))}
+                          </td>
+                          <td className="px-6 py-4">
+                            <div className="flex justify-center">
+                              <button
+                                onClick={() => {
+                                  push(`/admin/askforfunds/${_id}`);
+                                }}
+                                className="rounded-full bg-primary px-4 py-2 text-sm font-medium text-white transition hover:bg-primary/90"
+                              >
+                                Show Details
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    }
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
         {fundRequests.length === 0 && !loading && <NoData />}
         {fundRequests.length > 0 && !loading && (

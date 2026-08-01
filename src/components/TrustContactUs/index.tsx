@@ -77,96 +77,100 @@ const TrustContactUs = () => {
 
       <form
         onSubmit={handleSubmit}
-        className="max-w-full mx-auto flex flex-col gap-2 w-full"
+        className="mx-auto flex w-full max-w-3xl flex-col gap-4 rounded-[28px] border border-slate-200 bg-white p-4 shadow-sm md:p-6"
       >
-        <div className="flex flex-col border-2 px-2 py-1 focus-within:border-primary">
-          <label className="pb-1 text-sm font-medium">Your Full Name</label>
-          <input
-            id="name"
-            name="name"
-            type="text"
-            value={values.name}
-            maxLength={inputLength}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            className="outline-none tracking-wider"
-            placeholder="John Doe"
-          />
-          {touched.name && errors.name && (
-            <span className="text-sm text-red-600">{errors.name}</span>
-          )}
-        </div>
-        <div className="flex flex-col border-2 px-2 py-1 focus-within:border-primary">
-          <label className="pb-1 text-sm font-medium">Your Email Address</label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            maxLength={emailLength}
-            value={values.email}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            className="outline-none tracking-wider"
-            placeholder="johndoe@gmail.com"
-          />
-          {touched.email && errors.email && (
-            <span className="text-sm text-red-600">{errors.email}</span>
-          )}
-        </div>
-
-        <div className="flex flex-col border-2 px-2 py-1 focus-within:border-primary">
-          <label className="pb-1 text-sm font-medium">Mobile No</label>
-          <input
-            id="contactNo"
-            name="contactNo"
-            type="number"
-            value={values.contactNo as number}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            maxLength={10}
-            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-              if (e.key === "ArrowUp" || e.key === "ArrowDown") {
-                e.preventDefault();
-              }
-            }}
-            onInput={(e) => {
-              e.currentTarget.value = e.currentTarget.value
-                .replace(/\D/, "")
-                .slice(0, 10);
-              handleChange(e);
-            }}
-            className="outline-none tracking-wider"
-            placeholder="+91 9878588845"
-          />
-          {touched.contactNo && errors.contactNo && (
-            <span className="text-sm text-red-600">{errors.contactNo}</span>
-          )}
+        <div className="grid gap-4 md:grid-cols-2">
+          <div className="flex flex-col rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 focus-within:border-primary">
+            <label className="pb-1 text-sm font-medium text-slate-700">Your Full Name</label>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              value={values.name}
+              maxLength={inputLength}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className="w-full bg-transparent text-sm text-slate-900 outline-none tracking-wider"
+              placeholder="John Doe"
+            />
+            {touched.name && errors.name && (
+              <span className="text-sm text-red-600">{errors.name}</span>
+            )}
+          </div>
+          <div className="flex flex-col rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 focus-within:border-primary">
+            <label className="pb-1 text-sm font-medium text-slate-700">Your Email Address</label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              maxLength={emailLength}
+              value={values.email}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className="w-full bg-transparent text-sm text-slate-900 outline-none tracking-wider"
+              placeholder="johndoe@gmail.com"
+            />
+            {touched.email && errors.email && (
+              <span className="text-sm text-red-600">{errors.email}</span>
+            )}
+          </div>
         </div>
 
-        <div className="flex flex-col border-2 px-2 py-1 focus-within:border-primary">
-          <label className="pb-1 text-sm font-medium">Subject</label>
-          <input
-            id="subject"
-            name="subject"
-            type="text"
-            maxLength={inputLength}
-            value={values.subject}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            className="outline-none tracking-wider"
-            placeholder="For Donation Support"
-          />
-          {touched.subject && errors.subject && (
-            <span className="text-sm text-red-600">{errors.subject}</span>
-          )}
+        <div className="grid gap-4 md:grid-cols-2">
+          <div className="flex flex-col rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 focus-within:border-primary">
+            <label className="pb-1 text-sm font-medium text-slate-700">Mobile No</label>
+            <input
+              id="contactNo"
+              name="contactNo"
+              type="number"
+              value={values.contactNo as number}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              maxLength={10}
+              onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+                  e.preventDefault();
+                }
+              }}
+              onInput={(e) => {
+                e.currentTarget.value = e.currentTarget.value
+                  .replace(/\D/, "")
+                  .slice(0, 10);
+                handleChange(e);
+              }}
+              className="w-full bg-transparent text-sm text-slate-900 outline-none tracking-wider"
+              placeholder="+91 9878588845"
+            />
+            {touched.contactNo && errors.contactNo && (
+              <span className="text-sm text-red-600">{errors.contactNo}</span>
+            )}
+          </div>
+
+          <div className="flex flex-col rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 focus-within:border-primary">
+            <label className="pb-1 text-sm font-medium text-slate-700">Subject</label>
+            <input
+              id="subject"
+              name="subject"
+              type="text"
+              maxLength={inputLength}
+              value={values.subject}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className="w-full bg-transparent text-sm text-slate-900 outline-none tracking-wider"
+              placeholder="For Donation Support"
+            />
+            {touched.subject && errors.subject && (
+              <span className="text-sm text-red-600">{errors.subject}</span>
+            )}
+          </div>
         </div>
 
-        <div className="flex flex-col border-2 px-2 py-1 focus-within:border-primary">
-          <label className="pb-1 text-sm font-medium">Message</label>
+        <div className="flex flex-col rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 focus-within:border-primary">
+          <label className="pb-1 text-sm font-medium text-slate-700">Message</label>
           <textarea
             id="message"
             name="message"
-            className="outline-none tracking-wider resize-none"
+            className="min-h-[140px] w-full resize-none bg-transparent text-sm text-slate-900 outline-none tracking-wider"
             rows={4}
             cols={30}
             maxLength={500}
@@ -183,7 +187,7 @@ const TrustContactUs = () => {
         <div className="w-full">
           <button
             type="submit"
-            className="bg-primary w-full font-bold text-white p-3"
+            className="w-full rounded-2xl bg-primary p-3 text-sm font-semibold text-white shadow-sm transition hover:bg-primary/90"
           >
             Submit
           </button>

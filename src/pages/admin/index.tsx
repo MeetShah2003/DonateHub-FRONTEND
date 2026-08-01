@@ -9,6 +9,7 @@ import ManageTrustIcon from "@/icons/ManageTrustIcon";
 import { useRouter } from "next/router";
 import ReactLineChart from "@/components/ReactLineChart";
 import ReactBarChart from "@/components/ReactBarChart.tsx";
+import ReactAreaChart from "@/components/ReactAreaChart";
 import { toast } from "react-toastify";
 
 const Admin = () => {
@@ -135,13 +136,8 @@ const Admin = () => {
     }
   };
 
-  const data = [
-    { name: "Page A", uv: 4000, pv: 2400, amt: 2400 },
-    { name: "Page B", uv: 3000, pv: 1398, amt: 2210 },
-  ];
-
   const formatAmount = (amount: any) => {
-    return new Intl.NumberFormat("en-IN").format(amount);
+    return new Intl.NumberFormat("en-IN").format(amount || 0);
   };
 
   useEffect(() => {
@@ -155,77 +151,97 @@ const Admin = () => {
   }, [totalSuppoters, totalTrusts]);
   return (
     <AdminFrame title="Dashboard">
-      <div className="flex flex-col gap-5 py-5">
-        <div className="grid grid-cols-2 justify-between gap-5">
-          <div
-            onClick={() => {
-              router.push("/admin/manageuser");
-            }}
-            className="flex flex-col py-5 justify-center hover:scale-105 cursor-pointer hover:transition-all hover:duration-400 hover:ease-out items-center bg-primary w-full rounded-md text-white"
-          >
-            <h1 className="font-inter flex items-center justify-center gap-2 font-bold text-2xl">
-              <span>
-                <ProfileIcon color="#FFFFFF" />
-              </span>
-              {totalSuppoters}
-            </h1>
-            <p className="text-base font-medium">Suppoters</p>
+      <div className="flex flex-col gap-6 py-4">
+        <div className="rounded-[24px] border border-slate-200 bg-gradient-to-br from-slate-900 via-slate-800 to-primary p-6 text-white shadow-[0_20px_60px_rgba(15,23,42,0.18)]">
+          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-slate-300">
+                Admin Overview
+              </p>
+              <h2 className="mt-2 text-2xl font-semibold sm:text-3xl">
+                DonateHub operations at a glance
+              </h2>
+              <p className="mt-3 max-w-2xl text-sm text-slate-300 sm:text-base">
+                Track supporters, verified trusts, collections, and pending approvals in one professional command center.
+              </p>
+            </div>
+            <div className="rounded-2xl border border-white/10 bg-white/10 px-4 py-3 backdrop-blur">
+              <p className="text-sm text-slate-300">Live collection</p>
+              <p className="mt-1 text-2xl font-semibold">₹{formatAmount(totalCollection)}</p>
+            </div>
           </div>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           <div
-            onClick={() => {
-              router.push("/admin/managetrust");
-            }}
-            className="flex flex-col py-5 justify-center hover:scale-105 cursor-pointer hover:transition-all hover:duration-400 hover:ease-out items-center bg-secondary w-full rounded-md text-white"
+            onClick={() => router.push("/admin/manageuser")}
+            className="cursor-pointer rounded-[20px] border border-slate-200 bg-white p-5 shadow-[0_20px_60px_rgba(15,23,42,0.08)] transition hover:-translate-y-1"
           >
-            <h1 className="font-inter flex items-center justify-center gap-2 font-bold text-2xl">
-              <span>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-slate-500">Supporters</p>
+                <p className="mt-2 text-3xl font-semibold text-slate-900">{totalSuppoters}</p>
+              </div>
+              <div className="rounded-2xl bg-primary/10 p-3 text-primary">
+                <ProfileIcon color="#4f46e5" />
+              </div>
+            </div>
+          </div>
+
+          <div
+            onClick={() => router.push("/admin/managetrust")}
+            className="cursor-pointer rounded-[20px] border border-slate-200 bg-white p-5 shadow-[0_20px_60px_rgba(15,23,42,0.08)] transition hover:-translate-y-1"
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-slate-500">Verified Trusts</p>
+                <p className="mt-2 text-3xl font-semibold text-slate-900">{totalTrusts}</p>
+              </div>
+              <div className="rounded-2xl bg-emerald-50 p-3 text-emerald-600">
                 <ManageTrustIcon />
-              </span>
-              {totalTrusts}
-            </h1>
-            <p className="text-base font-medium">Verified Trusts</p>
+              </div>
+            </div>
           </div>
+
           <div
-            onClick={() => {
-              router.push("/admin/managetransaction");
-            }}
-            className="flex flex-col py-5 justify-center hover:scale-105 cursor-pointer hover:transition-all hover:duration-400 hover:ease-out items-center bg-secondary w-full rounded-md text-white"
+            onClick={() => router.push("/admin/managetransaction")}
+            className="cursor-pointer rounded-[20px] border border-slate-200 bg-white p-5 shadow-[0_20px_60px_rgba(15,23,42,0.08)] transition hover:-translate-y-1"
           >
-            <h1 className="font-inter font-bold text-2xl">
-              <span className="font-normal">₹</span>{" "}
-              {formatAmount(totalCollection)}
-            </h1>
-            <p className="text-base font-medium">Collection</p>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-slate-500">Collection</p>
+                <p className="mt-2 text-3xl font-semibold text-slate-900">₹{formatAmount(totalCollection)}</p>
+              </div>
+              <div className="rounded-2xl bg-amber-50 p-3 text-amber-600">
+                <span className="text-xl font-semibold">₹</span>
+              </div>
+            </div>
           </div>
+
           <div
-            onClick={() => {
-              router.push("/admin/verifytrust");
-            }}
-            className="flex flex-col py-5 justify-center hover:scale-105 cursor-pointer hover:transition-all hover:duration-400 hover:ease-out items-center bg-primary w-full rounded-md text-white"
+            onClick={() => router.push("/admin/verifytrust")}
+            className="cursor-pointer rounded-[20px] border border-slate-200 bg-white p-5 shadow-[0_20px_60px_rgba(15,23,42,0.08)] transition hover:-translate-y-1"
           >
-            <h1 className="font-inter flex items-center justify-center gap-2 font-bold text-2xl">
-              <span>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-slate-500">Pending Approvals</p>
+                <p className="mt-2 text-3xl font-semibold text-slate-900">{totalUnverifiedTrusts}</p>
+              </div>
+              <div className="rounded-2xl bg-rose-50 p-3 text-rose-600">
                 <ManageTrustIcon />
-              </span>
-              {totalUnverifiedTrusts}
-            </h1>
-            <p className="text-base font-medium">Unverified Trusts</p>
+              </div>
+            </div>
           </div>
         </div>
-        <div>
-          <h1 className="sm:block py-5 font-inter font-semibold text-steelGray text-xl sm:text-2xl">
-            Analytics
-          </h1>
+
+        <div className="grid gap-6 xl:grid-cols-2">
+          <ReactLineChart data={supporterChartData} title="Supporter Growth" />
+          <ReactBarChart data={IncomeChartData} title="Manual Donations" />
         </div>
-        <div className="flex flex-col md:flex-row -z-10 gap-5">
-          <ReactLineChart data={supporterChartData} title="Supporter Chart" />
-          <ReactBarChart data={IncomeChartData} title="Income Chart" />
-        </div>
-        <div className="flex flex-col md:flex-row -z-10 gap-5">
-          <ReactBarChart
-            data={disasterIncomeChartData}
-            title="Disaster Income Chart"
-          />
+
+        <div className="grid gap-6 xl:grid-cols-2">
+          <ReactAreaChart data={disasterIncomeChartData} title="Disaster Fund Trend" dataKey="income" />
+          <ReactAreaChart data={supporterChartData} title="Supporter Activity" dataKey="supporters" />
         </div>
       </div>
     </AdminFrame>

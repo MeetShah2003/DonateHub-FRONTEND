@@ -17,23 +17,27 @@ const WelcomePage: React.FC<{
   secondTitle: string;
 }> = ({ children, secondTitle, title }) => {
   return (
-    <div className="max-w-full w-full h-screen flex">
-      <div className="hidden md:flex md:flex-col md:justify-center w-3/5 gap-5 bg-primary z-50 p-20 justify-start items-start">
-        <div className="text-white font-bold flex flex-col text-6xl leading-snug font-josefinSans">
+    <div className="flex h-screen w-full max-w-full overflow-hidden bg-slate-50">
+      <div className="hidden w-[58%] flex-col items-start justify-center gap-6 bg-gradient-to-br from-primary via-violet-800 to-slate-950 p-20 md:flex">
+        <div className="rounded-[28px] border border-white/20 bg-white/10 px-5 py-3 text-sm font-semibold uppercase tracking-[0.35em] text-white/80 backdrop-blur-sm">
+          DonateHub
+        </div>
+        <div className="flex flex-col text-6xl font-bold leading-snug text-white font-josefinSans">
           <p className="drop-shadow-2xl">{title}</p>
           <p className="drop-shadow-2xl">{secondTitle}</p>
         </div>
-        <div className="flex text-white text-3xl">
-          <p className="mr-2">Help To</p>
+        <div className="flex items-center gap-3 rounded-full bg-white/10 px-4 py-2 text-2xl text-white backdrop-blur-sm">
+          <p className="mr-1 text-white/90">Help To</p>
           <Typewriter loop={false} cursor words={DISPLAY_WORDS} />
         </div>
       </div>
-      <div className="w-full h-full flex flex-col justify-center overflow-auto gap-10 md:w-2/5 overflow-y-auto">
-        {/* Added overflow-y-auto for scrolling */}
-        <div className="flex md:hidden items-center justify-center">
+      <div className="flex w-full flex-col justify-center gap-10 overflow-hidden bg-slate-50 md:w-[42%]">
+        <div className="flex items-center justify-center md:hidden">
           <Logo />
         </div>
-        {children}
+        <div className="mx-auto w-full max-w-[520px] px-4 md:px-0">
+          {children}
+        </div>
       </div>
     </div>
   );

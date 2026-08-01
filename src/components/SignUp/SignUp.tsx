@@ -149,14 +149,17 @@ const SignUp = () => {
     <>
       <WelcomePage title="Welcome To" secondTitle="DonateHub">
         {loading && <Spinner />}
-        <div className="h-screen overflow-y-auto py-16">
-          <form className="mx-5 lg:mx-20 gap-10" onSubmit={handleSubmit}>
-            <div className="flex justify-center relative bottom-6">
-              <div className="border-4 h-32 w-32 p-1 border-primary rounded-full overflow-hidden">
+        <div className="max-h-[calc(100vh-2rem)] overflow-y-auto py-5">
+          <form
+            className="mx-auto w-full max-w-xl rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_18px_45px_-30px_rgba(15,23,42,0.35)] md:p-8"
+            onSubmit={handleSubmit}
+          >
+            <div className="relative bottom-6 flex justify-center">
+              <div className="h-32 w-32 overflow-hidden rounded-full border-4 border-primary p-1">
                 <Image
                   alt="trustlogo"
                   src={values.userlogo}
-                  className="rounded-full h-full w-full object-contain"
+                  className="h-full w-full rounded-full object-contain"
                   width={300}
                   height={200}
                 ></Image>
@@ -169,59 +172,65 @@ const SignUp = () => {
                 className="hidden"
                 onChange={handleOnChange}
               />
-              <div className="absolute z-50 left-1/2 bottom-0 translate-x-1/2">
+              <div className="absolute bottom-0 left-1/2 z-50 translate-x-1/2">
                 <label htmlFor="userlogo" className="cursor-pointer">
                   <CameraIcon />
                 </label>
               </div>
             </div>
-            <h3 className="font-inter text-3xl drop-shadow-2xl tracking-wider font-bold mb-8">
-              Sign Up
-            </h3>
 
-            <div className="flex w-full">
-              <div className="flex w-1/2 flex-col border-2 px-2 py-1 rounded-tl-lg focus-within:border-primary">
-                <label className="pb-1 text-sm font-medium">First Name</label>
+            <div className="mb-6">
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
+                Join Now
+              </p>
+              <h3 className="mt-2 text-3xl font-bold text-slate-900">
+                Sign Up
+              </h3>
+            </div>
+
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="flex flex-col rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 focus-within:border-primary">
+                <label className="pb-1 text-sm font-medium text-slate-700">First Name</label>
                 <input
                   id="firstName"
                   name="firstName"
                   type="text"
                   maxLength={inputLength}
-                  className="outline-none tracking-wider"
+                  className="w-full bg-transparent text-sm text-slate-900 outline-none tracking-wider"
                   placeholder="John"
                   onChange={handleChange}
                   onBlur={handleBlur}
                   value={values.firstName}
                 />
                 {touched.firstName && errors.firstName && (
-                  <span className="text-sm text-red-600">
+                  <span className="mt-1 text-sm text-red-600">
                     {errors.firstName}
                   </span>
                 )}
               </div>
-              <div className="flex w-1/2 flex-col border-2 border-l-transparent px-2 py-1 rounded-tr-lg focus-within:border-primary">
-                <label className="pb-1 text-sm font-medium">Last Name</label>
+              <div className="flex flex-col rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 focus-within:border-primary">
+                <label className="pb-1 text-sm font-medium text-slate-700">Last Name</label>
                 <input
                   id="lastName"
                   name="lastName"
                   type="text"
                   maxLength={inputLength}
-                  className="outline-none tracking-wider"
+                  className="w-full bg-transparent text-sm text-slate-900 outline-none tracking-wider"
                   placeholder="Doe"
                   onChange={handleChange}
                   onBlur={handleBlur}
                   value={values.lastName}
                 />
                 {touched.lastName && errors.lastName && (
-                  <span className="text-sm text-red-600">
+                  <span className="mt-1 text-sm text-red-600">
                     {errors.lastName}
                   </span>
                 )}
               </div>
             </div>
 
-            <div className="flex flex-col border-t-transparent border-2 px-2 py-1 focus-within:border-primary">
-              <label className="pb-1 text-sm font-medium">Email</label>
+            <div className="mt-4 flex flex-col rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 focus-within:border-primary">
+              <label className="pb-1 text-sm font-medium text-slate-700">Email</label>
               <input
                 id="email"
                 name="email"
@@ -229,16 +238,16 @@ const SignUp = () => {
                 maxLength={emailLength}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                className="outline-none tracking-wider"
+                className="w-full bg-transparent text-sm text-slate-900 outline-none tracking-wider"
                 placeholder="johndoe@gmail.com"
               />
               {touched.email && errors.email && (
-                <span className="text-sm text-red-600">{errors.email}</span>
+                <span className="mt-1 text-sm text-red-600">{errors.email}</span>
               )}
             </div>
 
-            <div className="flex flex-col border-t-transparent border-2 px-2 py-1 focus-within:border-primary">
-              <label className="pb-1 text-sm font-medium">Mobile No</label>
+            <div className="mt-4 flex flex-col rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 focus-within:border-primary">
+              <label className="pb-1 text-sm font-medium text-slate-700">Mobile No</label>
               <input
                 id="mono"
                 name="mono"
@@ -246,7 +255,7 @@ const SignUp = () => {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 maxLength={10}
-                className="outline-none tracking-wider"
+                className="w-full bg-transparent text-sm text-slate-900 outline-none tracking-wider"
                 placeholder="+91 9858888454"
                 onInput={(e) => {
                   e.currentTarget.value = e.currentTarget.value
@@ -256,11 +265,12 @@ const SignUp = () => {
                 }}
               />
               {touched.mono && errors.mono && (
-                <span className="text-sm text-red-600">{errors.mono}</span>
+                <span className="mt-1 text-sm text-red-600">{errors.mono}</span>
               )}
             </div>
-            <div className="flex flex-col border-t-transparent border-2 px-2 py-1 focus-within:border-primary">
-              <label className="pb-1 text-sm font-medium">Gender</label>
+
+            <div className="mt-4 flex flex-col rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 focus-within:border-primary">
+              <label className="pb-1 text-sm font-medium text-slate-700">Gender</label>
               <div className="flex space-x-4">
                 <div className="flex items-center">
                   <input
@@ -272,7 +282,7 @@ const SignUp = () => {
                     onChange={handleChange}
                     onBlur={handleBlur}
                   />
-                  <label htmlFor="male" className="ml-2">
+                  <label htmlFor="male" className="ml-2 text-sm text-slate-700">
                     Male
                   </label>
                 </div>
@@ -286,18 +296,19 @@ const SignUp = () => {
                     onChange={handleChange}
                     onBlur={handleBlur}
                   />
-                  <label htmlFor="female" className="ml-2">
+                  <label htmlFor="female" className="ml-2 text-sm text-slate-700">
                     Female
                   </label>
                 </div>
               </div>
               {touched.gender && errors.gender && (
-                <span className="text-sm text-red-600">{errors.gender}</span>
+                <span className="mt-1 text-sm text-red-600">{errors.gender}</span>
               )}
             </div>
-            <div className="flex flex-col border-t-transparent border-2 px-2 py-1 focus-within:border-primary">
-              <label className="pb-1 text-sm font-medium">Password</label>
-              <div className="flex justify-between">
+
+            <div className="mt-4 flex flex-col rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 focus-within:border-primary">
+              <label className="pb-1 text-sm font-medium text-slate-700">Password</label>
+              <div className="flex items-center justify-between gap-2">
                 <input
                   id="password"
                   maxLength={15}
@@ -305,7 +316,7 @@ const SignUp = () => {
                   type={showPassword ? "text" : "password"}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  className="outline-none tracking-wider w-full"
+                  className="w-full bg-transparent text-sm text-slate-900 outline-none tracking-wider"
                   placeholder="••••••••"
                 />
                 <div
@@ -317,11 +328,12 @@ const SignUp = () => {
                 </div>
               </div>
               {touched.password && errors.password && (
-                <span className="text-sm text-red-600">{errors.password}</span>
+                <span className="mt-1 text-sm text-red-600">{errors.password}</span>
               )}
             </div>
-            <div className="flex flex-col border-t-transparent border-2 rounded-b-lg px-2 py-1 focus-within:border-primary">
-              <label className="pb-1 text-sm font-medium">
+
+            <div className="mt-4 flex flex-col rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 focus-within:border-primary">
+              <label className="pb-1 text-sm font-medium text-slate-700">
                 Confirm Password
               </label>
               <input
@@ -331,29 +343,32 @@ const SignUp = () => {
                 maxLength={15}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                className="outline-none tracking-wider"
+                className="w-full bg-transparent text-sm text-slate-900 outline-none tracking-wider"
                 placeholder="••••••••"
               />
               {touched.confirmPassword && errors.confirmPassword && (
-                <span className="text-sm text-red-600">
+                <span className="mt-1 text-sm text-red-600">
                   {errors.confirmPassword}
                 </span>
               )}
             </div>
-            <div className="my-3 text-primary underline-offset-2 underline">
+
+            <div className="mt-4 text-sm text-primary underline-offset-2 underline">
               <Link href={"/trustsignup"}>As a trust?</Link>
             </div>
-            <div className="flex flex-col border-2 mt-2 bg-primary shadow-sm rounded-lg px-2 py-2">
+
+            <div className="mt-5 flex flex-col rounded-2xl bg-primary px-2 py-3 shadow-sm">
               <button
                 type="submit"
-                className="outline-none text-white font-inter font-medium"
+                className="text-sm font-semibold text-white"
               >
                 Sign Up
               </button>
             </div>
-            <div className="my-3 flex justify-center ">
+
+            <div className="mt-4 flex justify-center text-sm text-slate-600">
               <p>
-                Already have an account?
+                Already have an account?{' '}
                 <span className="text-primary underline-offset-2 underline">
                   <Link href={"/login"}>Login</Link>
                 </span>

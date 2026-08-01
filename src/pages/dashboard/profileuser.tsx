@@ -119,16 +119,11 @@ const ProfileUser = () => {
         if (imageUrl) {
           successToast("Image Upload Successfully");
 
-          // Update form values with new image URL
           setValues((prevValues) => ({
             ...prevValues,
             userlogo: imageUrl,
           }));
-
-          // Update the src attribute of the Image component
-          // Note: next/image doesn't allow src to be changed dynamically.
-          // So, we need to set the key prop to force re-render with new src.
-          setImageKey(new Date().getTime()); // Generate a new key
+          setImageKey(new Date().getTime());
         }
       } catch (error) {
         errorToast("Image Upload Failed");
@@ -138,182 +133,213 @@ const ProfileUser = () => {
 
   return (
     <div>
-      <div className="navbar sticky top-0 bg-white z-10">
+      <div className="navbar sticky top-0 z-10 bg-white">
         <Visitor />
       </div>
       {loading && <Spinner />}
-      <h1 className="font-inter p-5  font-semibold text-steelGray text-xl sm:text-2xl mx-auto max-w-md flex flex-col gap-2 w-full">
-        Profile
-      </h1>
-      <form
-        className="mx-auto w-full max-w-md gap-10 py-24"
-        onSubmit={handleSubmit}
-      >
-        <div className="flex items-center justify-center relative bottom-6">
-          <div className="border-4 h-32 w-32 p-1 border-primary rounded-full overflow-hidden">
-            <Image
-              className="rounded-full h-full w-full object-contain"
-              src={values.userlogo || user?.userlogo}
-              alt="userlogo"
-              width={128}
-              height={128}
-            />
-          </div>
-          <input
-            type="file"
-            id="userlogo"
-            name="userlogo"
-            accept="image/*"
-            className="hidden"
-            onChange={handleOnChange}
-          />
-          <div className="absolute  left-1/2 bottom-0 translate-x-1/2">
-            <label htmlFor="userlogo" className="cursor-pointer">
-              <CameraIcon />
-            </label>
-          </div>
+      <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
+        <div className="mb-8">
+          <p className="text-sm font-semibold uppercase tracking-[0.24em] text-primary">Profile</p>
+          <h1 className="mt-3 text-3xl font-semibold text-slate-900">Your Account</h1>
+          <p className="mt-2 max-w-2xl text-sm text-slate-500">
+            View and update your profile details. Keep your contact information and account settings current.
+          </p>
         </div>
 
-        <div className="flex w-full">
-          <div className="flex w-1/2 flex-col border-2 px-2 py-1 rounded-tl-lg focus-within:border-primary">
-            <label className="pb-1 text-sm font-medium">First Name</label>
-            <input
-              id="firstName"
-              name="firstName"
-              type="text"
-              className="outline-none tracking-wider"
-              placeholder="John"
-              maxLength={inputLength}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.firstName}
-            />
-            {touched.firstName && errors.firstName && (
-              <span className="text-sm text-red-600">
-                {errors.firstName.toString()}
-              </span>
-            )}
-          </div>
-          <div className="flex w-1/2 flex-col border-2 border-l-transparent px-2 py-1 rounded-tr-lg focus-within:border-primary">
-            <label className="pb-1 text-sm font-medium">Last Name</label>
-            <input
-              id="lastName"
-              name="lastName"
-              type="text"
-              className="outline-none tracking-wider"
-              placeholder="Doe"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              maxLength={inputLength}
-              value={values.lastName}
-            />
-            {touched.lastName && errors.lastName && (
-              <span className="text-sm text-red-600">
-                {errors.lastName.toString()}
-              </span>
-            )}
-          </div>
-        </div>
-
-        <div className="flex flex-col border-t-transparent border-2 px-2 py-1 focus-within:border-primary">
-          <label className="pb-1 text-sm font-medium">Gender</label>
-          <div className="flex space-x-4">
-            <div className="flex items-center">
-              <input
-                type="radio"
-                id="male"
-                name="gender"
-                value="male"
-                checked={values.gender === "male" || user?.gender === "male"}
-                onChange={handleChange}
-                onBlur={handleBlur}
+        <form className="grid gap-8 lg:grid-cols-[320px_1fr]" onSubmit={handleSubmit}>
+          <div className="rounded-[32px] border border-slate-200 bg-white p-6 shadow-[0_20px_60px_rgba(15,23,42,0.08)]">
+            <div className="relative mx-auto mb-8 h-36 w-36 overflow-hidden rounded-full border-4 border-primary bg-slate-100">
+              <Image
+                key={imageKey}
+                className="h-full w-full object-cover"
+                src={values.userlogo || user?.userlogo}
+                alt="user profile"
+                width={144}
+                height={144}
               />
-              <label htmlFor="male" className="ml-2">
-                Male
+              <input
+                type="file"
+                id="userlogo"
+                name="userlogo"
+                accept="image/*"
+                className="hidden"
+                onChange={handleOnChange}
+              />
+              <label
+                htmlFor="userlogo"
+                className="absolute bottom-0 right-0 flex h-11 w-11 items-center justify-center rounded-full border border-white bg-primary text-white shadow-lg transition hover:bg-primary/90"
+              >
+                <CameraIcon />
               </label>
             </div>
-            <div className="flex items-center">
-              <input
-                type="radio"
-                id="female"
-                name="gender"
-                value="female"
-                checked={values.gender === "female" || user.gender === "female"}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-              <label htmlFor="female" className="ml-2">
-                Female
-              </label>
+            <div className="text-center">
+              <p className="text-2xl font-semibold text-slate-900">
+                {values.firstName || "User"} {values.lastName || "Profile"}
+              </p>
+              <p className="mt-2 text-sm text-slate-500">Member</p>
+            </div>
+            <div className="mt-8 space-y-4 text-sm text-slate-600">
+              <div className="rounded-3xl border border-slate-200 bg-slate-50 p-4">
+                <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Email</p>
+                <p className="mt-3 text-sm text-slate-900">{values.email || user?.email}</p>
+              </div>
+              <div className="rounded-3xl border border-slate-200 bg-slate-50 p-4">
+                <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Phone</p>
+                <p className="mt-3 text-sm text-slate-900">{values.mono || user?.mono || "Not added"}</p>
+              </div>
+              <div className="rounded-3xl border border-slate-200 bg-slate-50 p-4">
+                <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Gender</p>
+                <p className="mt-3 text-sm text-slate-900">{values.gender || user?.gender || "Not specified"}</p>
+              </div>
             </div>
           </div>
-          {touched.gender && errors.gender && (
-            <span className="text-sm text-red-600">
-              {errors.gender.toString()}
-            </span>
-          )}
-        </div>
 
-        <div
-          className={`flex flex-col border-2 border-t-transparent px-2 py-1 ${
-            isDisabled ? "bg-gray-100" : ""
-          } focus-within:border-primary`}
-        >
-          <label className="pb-1 text-sm font-medium">Email</label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            disabled={isDisabled}
-            value={values.email}
-            onChange={handleChange}
-            maxLength={emailLength}
-            onBlur={handleBlur}
-            className="outline-none tracking-wider"
-            placeholder="johndoe@gmail.com"
-          />
-          {touched.email && errors.email && (
-            <span className="text-sm text-red-600">
-              {errors.email.toString()}
-            </span>
-          )}
-        </div>
+          <div className="rounded-[32px] border border-slate-200 bg-white p-6 shadow-[0_20px_60px_rgba(15,23,42,0.08)]">
+            <div className="mb-6">
+              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-primary">Account details</p>
+              <h2 className="mt-3 text-2xl font-semibold text-slate-900">Edit your profile</h2>
+              <p className="mt-2 text-sm text-slate-500">
+                Make changes to your personal info and keep it refreshed for a better experience.
+              </p>
+            </div>
 
-        <div className="flex flex-col border-2 border-t-transparent px-2 py-1 rounded-b-lg focus-within:border-primary">
-          <label className="pb-1 text-sm font-medium">Mobile No</label>
-          <input
-            id="mono"
-            name="mono"
-            type="number"
-            value={values.mono}
-            onChange={handleChange}
-            maxLength={10}
-            onBlur={handleBlur}
-            className="outline-none tracking-wider"
-            placeholder="+91 9878588845"
-            onInput={(e) => {
-              e.currentTarget.value = e.currentTarget.value
-                .replace(/\D/, "")
-                .slice(0, 10);
-              handleChange(e);
-            }}
-          />
-          {touched.mono && errors.mono && (
-            <span className="text-sm text-red-600">
-              {errors.mono.toString()}
-            </span>
-          )}
-        </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-slate-700">First Name</label>
+                <input
+                  id="firstName"
+                  name="firstName"
+                  type="text"
+                  className="w-full rounded-3xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  placeholder="John"
+                  maxLength={inputLength}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.firstName}
+                />
+                {touched.firstName && errors.firstName && (
+                  <span className="text-sm text-red-600">{errors.firstName.toString()}</span>
+                )}
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-slate-700">Last Name</label>
+                <input
+                  id="lastName"
+                  name="lastName"
+                  type="text"
+                  className="w-full rounded-3xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  placeholder="Doe"
+                  maxLength={inputLength}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.lastName}
+                />
+                {touched.lastName && errors.lastName && (
+                  <span className="text-sm text-red-600">{errors.lastName.toString()}</span>
+                )}
+              </div>
+            </div>
 
-        <div className="flex flex-col border-2 mt-5 bg-primary shadow-sm rounded-lg px-2 py-2">
-          <button
-            type="submit"
-            className="outline-none text-white font-inter font-medium"
-          >
-            Save Changes
-          </button>
-        </div>
-      </form>
+            <div className="mt-4 space-y-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-slate-700">Gender</label>
+                <div className="grid grid-cols-2 gap-3">
+                  <label className={`flex cursor-pointer items-center justify-center rounded-3xl border px-4 py-3 text-sm font-semibold transition ${
+                    values.gender === "male" || user?.gender === "male"
+                      ? "border-primary bg-primary/10 text-slate-900"
+                      : "border-slate-300 bg-white text-slate-600"
+                  }`}>
+                    <input
+                      type="radio"
+                      id="male"
+                      name="gender"
+                      value="male"
+                      checked={values.gender === "male" || user?.gender === "male"}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      className="sr-only"
+                    />
+                    Male
+                  </label>
+                  <label className={`flex cursor-pointer items-center justify-center rounded-3xl border px-4 py-3 text-sm font-semibold transition ${
+                    values.gender === "female" || user?.gender === "female"
+                      ? "border-primary bg-primary/10 text-slate-900"
+                      : "border-slate-300 bg-white text-slate-600"
+                  }`}>
+                    <input
+                      type="radio"
+                      id="female"
+                      name="gender"
+                      value="female"
+                      checked={values.gender === "female" || user?.gender === "female"}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      className="sr-only"
+                    />
+                    Female
+                  </label>
+                </div>
+                {touched.gender && errors.gender && (
+                  <span className="text-sm text-red-600">{errors.gender.toString()}</span>
+                )}
+              </div>
+
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-slate-700">Email</label>
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    disabled={isDisabled}
+                    value={values.email}
+                    onChange={handleChange}
+                    maxLength={emailLength}
+                    onBlur={handleBlur}
+                    className="w-full rounded-3xl border border-slate-300 bg-slate-100 px-4 py-3 text-sm text-slate-500 outline-none"
+                    placeholder="johndoe@gmail.com"
+                  />
+                  {touched.email && errors.email && (
+                    <span className="text-sm text-red-600">{errors.email.toString()}</span>
+                  )}
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-slate-700">Mobile No</label>
+                  <input
+                    id="mono"
+                    name="mono"
+                    type="number"
+                    value={values.mono}
+                    onChange={handleChange}
+                    maxLength={10}
+                    onBlur={handleBlur}
+                    className="w-full rounded-3xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+                    placeholder="+91 9878588845"
+                    onInput={(e) => {
+                      e.currentTarget.value = e.currentTarget.value
+                        .replace(/\D/, "")
+                        .slice(0, 10);
+                      handleChange(e);
+                    }}
+                  />
+                  {touched.mono && errors.mono && (
+                    <span className="text-sm text-red-600">{errors.mono.toString()}</span>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-end">
+              <button
+                type="submit"
+                className="inline-flex w-full items-center justify-center rounded-3xl bg-primary px-6 py-3 text-sm font-semibold text-white transition hover:bg-primary/90 sm:w-auto"
+              >
+                Save Changes
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

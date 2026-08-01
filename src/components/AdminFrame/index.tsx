@@ -82,13 +82,18 @@ const AdminFrame: React.FC<{
 
   return (
     <>
-      <div className="flex h-screen z-50 overflow-hidden">
-        <div className="hidden  sm:block sm:w-1/2 md:w-[30%] z-50 border border-t-transparent shadow-sm bg-primary rounded-tr-md rounded-tb-md overflow-y-auto">
-          <ul className="my-5">
+      <div className="z-50 flex h-screen overflow-hidden bg-slate-50">
+        <div className="z-50 hidden overflow-y-auto border-r border-slate-200 bg-gradient-to-b from-primary to-violet-800 shadow-[0_18px_60px_-35px_rgba(109,40,217,0.95)] sm:block sm:w-1/2 md:w-[28%]">
+          <div className="px-5 pt-5">
+            <div className="rounded-[24px] bg-white/10 px-4 py-3 text-sm font-semibold text-white/90 backdrop-blur-sm">
+              Admin Panel
+            </div>
+          </div>
+          <ul className="my-5 space-y-2 px-3">
             {ADMIN_MENUS.map(({ icon, id, menu, path }) => (
               <div
                 key={id}
-                className="flex items-center cursor-pointer gap-5 py-4 px-5"
+                className="flex cursor-pointer items-center gap-4 rounded-2xl px-4 py-3 text-white transition hover:bg-white/10"
                 onClick={() => {
                   if (menu === "Logout") {
                     logout();
@@ -98,24 +103,29 @@ const AdminFrame: React.FC<{
                 }}
               >
                 <div className="h-5">{icon}</div>
-                <li className="text-white">{menu}</li>
+                <li className="text-sm font-semibold tracking-wide">{menu}</li>
               </div>
             ))}
           </ul>
         </div>
 
         <div
-          className={`sm:hidden w-2/3 absolute h-screen top-[60px] border z-20 border-t-transparent shadow-sm ${
+          className={`absolute top-[60px] z-20 h-screen w-2/3 border border-t-transparent bg-gradient-to-b from-primary to-violet-800 shadow-[0_18px_60px_-35px_rgba(109,40,217,0.95)] sm:hidden ${
             sideBarIsOpen
               ? "-translate-x-0 transition-all duration-500 ease-in-out"
               : "-translate-x-[2000px] transition-all duration-1000 ease-in-out"
-          } bg-primary rounded-tr-md rounded-tb-md overflow-y-auto`}
+          } overflow-y-auto rounded-tr-md rounded-tb-md`}
         >
-          <ul className="my-5">
+          <div className="px-4 pt-4">
+            <div className="rounded-[20px] bg-white/10 px-4 py-3 text-sm font-semibold text-white/90">
+              Admin Panel
+            </div>
+          </div>
+          <ul className="my-5 space-y-2 px-3">
             {ADMIN_MENUS.map(({ icon, id, menu, path }) => (
               <div
                 key={id}
-                className="flex items-center cursor-pointer gap-5 py-4 px-5"
+                className="flex cursor-pointer items-center gap-4 rounded-2xl px-4 py-3 text-white transition hover:bg-white/10"
                 onClick={() => {
                   if (menu === "Logout") {
                     logout();
@@ -125,15 +135,15 @@ const AdminFrame: React.FC<{
                 }}
               >
                 <div className="h-5">{icon}</div>
-                <li className="text-white">{menu}</li>
+                <li className="text-sm font-semibold tracking-wide">{menu}</li>
               </div>
             ))}
           </ul>
         </div>
 
-        <div className="flex flex-col w-full">
-          <div className="border-b-2 sticky top-0 bg-white z-50">
-            <nav className="max-w-full px-7 mx-auto flex items-center justify-between">
+        <div className="flex w-full flex-col">
+          <div className="sticky top-0 z-50 border-b border-slate-200 bg-white/90 backdrop-blur">
+            <nav className="mx-auto flex max-w-full items-center justify-between px-7">
               <div
                 onClick={() => {
                   setSideBarIsOpen(!sideBarIsOpen);
@@ -142,7 +152,7 @@ const AdminFrame: React.FC<{
               >
                 {sideBarIsOpen ? <CloseHamburgerIcon /> : <HamburgerIcon />}
               </div>
-              <div className="font-bold text-3xl text-primary">
+              <div className="text-3xl font-bold text-primary">
                 <Logo />
               </div>
               <UserProfile />
@@ -151,13 +161,13 @@ const AdminFrame: React.FC<{
 
           <div className="flex-grow overflow-y-auto">
             <div className="px-5">
-              <div className="flex sm:hidden py-5 items-center gap-3">
-                <p className="font-inter font-semibold text-steelGray text-xl sm:text-2xl">
+              <div className="flex items-center gap-3 py-5 sm:hidden">
+                <p className="font-inter text-xl font-semibold text-steelGray sm:text-2xl">
                   {title}
                 </p>
               </div>
 
-              <p className="hidden sm:block py-5 font-inter font-semibold text-steelGray text-xl sm:text-2xl">
+              <p className="hidden py-5 font-inter text-xl font-semibold text-steelGray sm:block sm:text-2xl">
                 {title}
               </p>
               {children}

@@ -76,54 +76,78 @@ const CustomerQuery = () => {
   return (
     <AdminFrame title="Customer Query">
       {loading && <Spinner />}
-      <div>
-        <input
-          type="text"
-          placeholder="Search..."
-          value={searchQuery}
-          onChange={handleSearch}
-          className="border outline-none rounded p-2 mb-2"
-        />
-      </div>
-      <div className="border rounded-t-lg rounded-b-lg shadow-sm overflow-x-auto">
-        {!currentQueries ? (
-          <NoData />
-        ) : (
-          <div className="bg-gray-200 rounded-t-lg">
+      <div className="rounded-[24px] border border-slate-200 bg-white p-5 shadow-[0_20px_60px_rgba(15,23,42,0.08)]">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-primary">
+              Customer Messages
+            </p>
+            <h2 className="mt-2 text-2xl font-semibold text-slate-900">
+              Review incoming customer queries
+            </h2>
+            <p className="mt-2 text-sm text-slate-500">
+              Search and open any customer message to view the full request.
+            </p>
+          </div>
+          <div className="w-full md:w-80">
+            <input
+              type="text"
+              placeholder="Search queries..."
+              value={searchQuery}
+              onChange={handleSearch}
+              className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-primary"
+            />
+          </div>
+        </div>
+
+        <div className="mt-6 overflow-hidden rounded-[20px] border border-slate-200">
+          {!currentQueries ? (
+            <NoData />
+          ) : (
             <div className="overflow-x-auto">
-              <table className="w-full">
+              <table className="w-full min-w-[720px]">
                 <thead>
-                  <tr>
-                    <th className="py-3 px-6 text-left bg-gray-200">No</th>
-                    <th className="py-3 px-6 text-left bg-gray-200">Subject</th>
-                    <th className="py-3 px-6 text-left bg-gray-200">Message</th>
+                  <tr className="bg-slate-100 text-left text-sm font-semibold text-slate-600">
+                    <th className="px-6 py-3">No</th>
+                    <th className="px-6 py-3">Subject</th>
+                    <th className="px-6 py-3">Message</th>
+                    <th className="px-6 py-3 text-center">Action</th>
                   </tr>
                 </thead>
-                <tbody className="bg-white rounded-b-lg">
+                <tbody className="bg-white">
                   {currentQueries &&
                     currentQueries.length > 0 &&
                     currentQueries.map(({ _id, subject, message }, index) => {
                       return (
                         <tr
-                          className="hover:bg-gray-100 transition cursor-pointer"
-                          onClick={() => {
-                            push(`/admin/customerquery/${_id}`);
-                          }}
+                          className="border-t border-slate-100 text-sm text-slate-700 transition hover:bg-slate-50"
                           key={index}
                         >
-                          <td className="py-4 px-6 border-b">
+                          <td className="px-6 py-4">
                             {index + 1 + currentPage * itemsPerPage}
                           </td>
-                          <td className="py-4 px-6 border-b">{subject}</td>
-                          <td className="py-4 px-6 border-b">{message}</td>
+                          <td className="px-6 py-4 font-medium text-slate-900">{subject}</td>
+                          <td className="px-6 py-4">{message}</td>
+                          <td className="px-6 py-4">
+                            <div className="flex justify-center">
+                              <button
+                                onClick={() => {
+                                  push(`/admin/customerquery/${_id}`);
+                                }}
+                                className="rounded-full bg-primary px-4 py-2 text-sm font-medium text-white transition hover:bg-primary/90"
+                              >
+                                View
+                              </button>
+                            </div>
+                          </td>
                         </tr>
                       );
                     })}
                 </tbody>
               </table>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
       {!currentQueries?.length ? (
         ""

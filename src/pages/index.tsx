@@ -126,7 +126,7 @@ const home = () => {
           </div>
         </div>
       </div>
-      <div className="py-10 lg:py-20">
+      {/* <div className="py-10 lg:py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-full w-90% mx-auto">
             <h1 className="flex justify-center py-5 text-3xl lg:text-4xl font-bold mb-4 font-inter text-gray-900/75 text-center">
@@ -155,7 +155,7 @@ const home = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
       <div className="bg-primary py-10 sm:py-20">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl lg:text-center">
@@ -256,7 +256,7 @@ const home = () => {
         </div>
       </div>
       <div className="w-full py-5 border-t-2 flex justify-center items-center">
-        &copy; Donate Hub Right Reserved 2024
+        &copy; Donate Hub Right Reserved 2026
       </div>
     </div>
   );

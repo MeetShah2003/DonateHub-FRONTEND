@@ -45,9 +45,17 @@ const ProfileTrust = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data) {
+        if (data?.updatedTrust) {
           successToast("Profile Update Successfully");
+          setTimeout(() => {
+            window.location.reload();
+          }, 700);
+        } else {
+          errorToast(data?.message || "Profile update failed");
         }
+      })
+      .catch(() => {
+        errorToast("Something went wrong while updating profile");
       })
       .finally(() => {
         setLoading(false);

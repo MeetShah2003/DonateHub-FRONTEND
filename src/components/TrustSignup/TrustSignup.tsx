@@ -426,164 +426,145 @@ const TrustSignup = () => {
   return (
     <WelcomePage title="Welcome To" secondTitle="DonateHub">
       {loading && <Spinner />}
-      <div className="mx-5 lg:mx-20 mb-10 flex flex-col justify-center items-center gap-8">
-        {/* <div className="relative bottom-6">
-          <div className="border-4 h-32 w-32 p-1 border-primary rounded-full overflow-hidden">
-            <Image
-              className="rounded-full h-full w-full object-contain"
-              src={values.trustlogo}
-              alt="trustLogo"
-              width={128}
-              height={128}
-            />
-          </div>
-          <input
-            type="file"
-            id="imageUpload"
-            name="imageUpload"
-            accept="image/*"
-            className="hidden"
-            onChange={(e) => setFile(e.target.files?.[0])}
-          />
-          <div className="absolute z-50  left-1/2 bottom-0 translate-x-1/2 ">
-            <label htmlFor="imageUpload" className="cursor-pointer">
-              <CameraIcon />
-            </label>
-          </div>
-        </div> */}
-        <div className="relative bottom-6">
-          <div className="border-4 h-32 w-32 p-1 border-primary rounded-full overflow-hidden">
-            <Image
-              alt="trustlogo"
-              src={values.trustlogo}
-              className="rounded-full h-full w-full object-contain"
-              width={300}
-              height={200}
-            ></Image>
-          </div>
-          <input
-            type="file"
-            id="imageUpload"
-            name="imageUpload"
-            accept="image/*"
-            className="hidden"
-            onChange={handleOnChange}
-          />
-          <div className="absolute z-50 left-1/2 bottom-0 translate-x-1/2">
-            <label htmlFor="imageUpload" className="cursor-pointer">
-              <CameraIcon />
-            </label>
-          </div>
-        </div>
+      <div className="max-h-[calc(100vh-2rem)] overflow-y-auto py-5">
+        <div className="mx-auto w-full max-w-2xl rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_18px_45px_-30px_rgba(15,23,42,0.35)] md:p-8">
+          <div className="mb-8 flex flex-col items-center gap-6">
+            <div className="relative bottom-6">
+              <div className="h-32 w-32 overflow-hidden rounded-full border-4 border-primary p-1">
+                <Image
+                  alt="trustlogo"
+                  src={values.trustlogo}
+                  className="h-full w-full rounded-full object-contain"
+                  width={300}
+                  height={200}
+                ></Image>
+              </div>
+              <input
+                type="file"
+                id="imageUpload"
+                name="imageUpload"
+                accept="image/*"
+                className="hidden"
+                onChange={handleOnChange}
+              />
+              <div className="absolute bottom-0 left-1/2 z-50 translate-x-1/2">
+                <label htmlFor="imageUpload" className="cursor-pointer">
+                  <CameraIcon />
+                </label>
+              </div>
+            </div>
 
-        <div className="w-full flex justify-around">
-          <div
-            className={`h-8 w-8 flex items-center hover:scale-125 transition-transform ease-in-out cursor-pointer justify-center font-bold rounded-full border ${
-              currentStep === 2 || currentStep === 3
-                ? "text-white bg-primary"
-                : "text-primary border-primary"
-            }`}
-            onClick={() => {
-              setCurrentStep(1);
-            }}
-          >
-            1
+            <div className="w-full">
+              <div className="flex items-center justify-around gap-2 rounded-2xl bg-slate-50 px-4 py-3">
+                <div
+                  className={`flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border text-sm font-bold transition hover:scale-110 ${
+                    currentStep === 2 || currentStep === 3
+                      ? "border-primary bg-primary text-white"
+                      : "border-primary bg-white text-primary"
+                  }`}
+                  onClick={() => {
+                    setCurrentStep(1);
+                  }}
+                >
+                  1
+                </div>
+                <div className="hidden text-primary lg:block">━━━━━━━━━━━</div>
+                <div className="hidden text-primary md:block lg:hidden">━━━━━━━</div>
+                <div className="hidden text-primary sm:block md:hidden">
+                  ━━━━━━━━━━━━━━━
+                </div>
+                <div className="text-primary sm:hidden">━━━━━━━━━━━</div>
+                <div
+                  className={`flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border text-sm font-bold transition hover:scale-110 ${
+                    currentStep === 3
+                      ? "border-primary bg-primary text-white"
+                      : "border-primary bg-white text-primary"
+                  }`}
+                  onClick={() => {
+                    if (
+                      values.trustName &&
+                      values.email &&
+                      values.password &&
+                      values.description
+                    ) {
+                      setCurrentStep(2);
+                    } else {
+                      errorToast("Please Complete Step 1");
+                    }
+                  }}
+                >
+                  2
+                </div>
+                <div className="hidden text-primary lg:block">━━━━━━━━━━━</div>
+                <div className="hidden text-primary md:block lg:hidden">━━━━━━━</div>
+                <div className="hidden text-primary sm:block md:hidden">
+                  ━━━━━━━━━━━━━━━
+                </div>
+                <div className="text-primary sm:hidden">━━━━━━━━━━━</div>
+                <div
+                  onClick={() => {
+                    setCurrentStep(3);
+                  }}
+                  className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-primary bg-white text-sm font-bold text-primary transition hover:scale-110"
+                >
+                  3
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="hidden lg:block text-primary">━━━━━━━━━━━</div>
-          <div className="hidden md:block lg:hidden text-primary">━━━━━━━</div>
-          <div className="hidden sm:block md:hidden text-primary">
-            ━━━━━━━━━━━━━━━
-          </div>
-          <div className=" text-primary sm:hidden">━━━━━━━━━━━</div>
-          <div
-            className={`h-8 w-8 flex items-center cursor-pointer hover:scale-125 transition-transform ease-in-out justify-center font-bold rounded-full text-primary border ${
-              currentStep === 3
-                ? "text-white bg-primary"
-                : "text-primary border-primary"
-            }`}
-            onClick={() => {
-              if (
-                values.trustName &&
-                values.email &&
-                values.password &&
-                values.description
-              ) {
-                setCurrentStep(2);
-              } else {
-                errorToast("Please Complete Step 1");
-              }
-            }}
-          >
-            2
-          </div>
-          <div className="hidden lg:block text-primary">━━━━━━━━━━━</div>
-          <div className="hidden md:block lg:hidden text-primary">━━━━━━━</div>
-          <div className="hidden sm:block md:hidden text-primary">
-            ━━━━━━━━━━━━━━━
-          </div>
-          <div className=" text-primary sm:hidden">━━━━━━━━━━━</div>
 
-          <div
-            onClick={() => {
-              setCurrentStep(3);
-            }}
-            className="h-8 w-8 flex cursor-pointer items-center hover:scale-125 transition-transform ease-in-out justify-center font-bold rounded-full text-primary border border-primary bg-white"
-          >
-            3
-          </div>
+          <form onSubmit={handleSubmit}>
+            {formSections.map((section, index) => {
+              return (
+                <div
+                  key={index}
+                  className={`form-section ${
+                    index + 1 === currentStep ? "current" : "hidden"
+                  }`}
+                >
+                  {section}
+                </div>
+              );
+            })}
+            <div className="mt-5 flex flex-col rounded-2xl bg-primary px-2 py-3 shadow-sm">
+              {currentStep === 1 && (
+                <button
+                  type="button"
+                  className={`text-sm font-semibold text-white ${
+                    currentStep !== 1 ? "hidden" : "block"
+                  }`}
+                  onClick={handleFirstStep}
+                >
+                  Next
+                </button>
+              )}
+              {currentStep === 2 && (
+                <button
+                  type="button"
+                  className={`text-sm font-semibold text-white ${
+                    currentStep !== 2 ? "hidden" : "block"
+                  }`}
+                  onClick={handleSecondStep}
+                >
+                  Next
+                </button>
+              )}
+              {currentStep === 3 && (
+                <button
+                  type="submit"
+                  name="submit"
+                  id="submit"
+                  className={`text-sm font-semibold text-white ${
+                    currentStep !== 3 ? "hidden" : "block"
+                  }`}
+                >
+                  Submit
+                </button>
+              )}
+            </div>
+          </form>
         </div>
       </div>
-
-      <form onSubmit={handleSubmit}>
-        {formSections.map((section, index) => {
-          return (
-            <div
-              key={index}
-              className={`form-section ${
-                index + 1 === currentStep ? "current" : "hidden"
-              }`}
-            >
-              {section}
-            </div>
-          );
-        })}
-        <div className="flex flex-col mx-5 lg:mx-20 gap-10 border-2 mt-5 bg-primary shadow-sm rounded-lg px-2 py-2">
-          {currentStep === 1 && (
-            <button
-              type="button"
-              className={`outline-none ${
-                currentStep !== 1 ? "hidden" : "block"
-              } text-white font-inter font-medium`}
-              onClick={handleFirstStep}
-            >
-              Next
-            </button>
-          )}
-          {currentStep === 2 && (
-            <button
-              type="button"
-              className={`outline-none ${
-                currentStep !== 2 ? "hidden" : "block"
-              } text-white font-inter font-medium`}
-              onClick={handleSecondStep}
-            >
-              Next
-            </button>
-          )}
-          {currentStep === 3 && (
-            <button
-              type="submit"
-              name="submit"
-              id="submit"
-              className={`outline-none ${
-                currentStep !== 3 ? "hidden" : "block"
-              } text-white font-inter font-medium`}
-            >
-              Submit
-            </button>
-          )}
-        </div>
-      </form>
     </WelcomePage>
   );
 };

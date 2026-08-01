@@ -201,320 +201,100 @@ const SingleTrust = () => {
   return (
     <AdminFrame title="Trust Detail">
       {loading && <Spinner />}
-      <form onSubmit={handleSubmit} className="w-full flex flex-col my-3 gap-1">
-        <div className="bg-secondary flex flex-col justify-center items-center py-5">
-          {image ? (
-            <img
-              src={URL.createObjectURL(image)}
-              alt="trust"
-              className="h-28 w-28 rounded-md"
-            />
-          ) : (
-            <Image
-              className="h-28 w-28 rounded-md"
-              alt="trust Image"
-              src={userData?.trustlogo as string}
-              width={100}
-              height={500}
-            />
-          )}
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleOnChange}
-            className="hidden"
-            id="trustlogo"
-          />
-          <label
-            htmlFor="trustlogo"
-            className="cursor-pointer bg-primary text-white p-2 mt-2 rounded-md"
-          >
-            Change Image
-          </label>
-        </div>
+      <form onSubmit={handleSubmit} className="w-full">
+        <div className="overflow-hidden rounded-[24px] border border-slate-200 bg-white shadow-[0_20px_60px_rgba(15,23,42,0.08)]">
+          <div className="bg-gradient-to-r from-primary to-slate-900 p-6 text-white">
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-[0.24em] text-slate-300">
+                  Trust Profile
+                </p>
+                <h2 className="mt-2 text-2xl font-semibold">{values.trustName || "Trust profile"}</h2>
+              </div>
+              <div className="flex items-center gap-3">
+                {image ? (
+                  <img src={URL.createObjectURL(image)} alt="trust" className="h-20 w-20 rounded-2xl border border-white/30 object-cover" />
+                ) : (
+                  <Image className="h-20 w-20 rounded-2xl border border-white/30 object-cover" alt="trust Image" src={userData?.trustlogo as string} width={100} height={100} />
+                )}
+                <label htmlFor="trustlogo" className="cursor-pointer rounded-full bg-white/15 px-4 py-2 text-sm font-medium backdrop-blur">
+                  Change Image
+                </label>
+              </div>
+            </div>
+            <input type="file" accept="image/*" onChange={handleOnChange} className="hidden" id="trustlogo" />
+          </div>
 
-        <div className="flex flex-col w-full  bg-primaryLight p-2">
-          <label
-            htmlFor="trustName"
-            className="pb-1 text-sm tracking-wider text-gray-500 font-medium"
-          >
-            Trust Name
-          </label>
-          <input
-            type="text"
-            id="trustName"
-            name="trustName"
-            placeholder="Enter Trust Name"
-            className="bg-transparent outline-none"
-            onChange={handleChange}
-            onBlur={handleBlur}
-            maxLength={inputLength}
-            value={values.trustName}
-          />
-          {errors.trustName && (
-            <span className="text-red-500">{errors.trustName}</span>
-          )}
-        </div>
+          <div className="grid gap-4 p-6 md:grid-cols-2">
+            <div className="flex flex-col rounded-2xl border border-slate-200 bg-slate-50 p-4">
+              <label htmlFor="trustName" className="pb-1 text-sm font-medium text-slate-500">Trust Name</label>
+              <input type="text" id="trustName" name="trustName" placeholder="Enter Trust Name" className="bg-transparent text-base font-medium text-slate-900 outline-none" onChange={handleChange} onBlur={handleBlur} maxLength={inputLength} value={values.trustName} />
+              {errors.trustName && <span className="mt-1 text-sm text-red-500">{errors.trustName}</span>}
+            </div>
 
-        <div className="flex flex-col w-full bg-primaryLight md:bg-secondary p-2">
-          <label
-            htmlFor="description"
-            className="pb-1 text-sm tracking-wider text-gray-500 font-medium"
-          >
-            Description
-          </label>
-          <input
-            type="text"
-            id="description"
-            name="description"
-            maxLength={500}
-            placeholder="Enter Description"
-            className="bg-transparent outline-none"
-            onChange={handleChange}
-            onBlur={handleBlur}
-            value={values.description}
-          />
-          {errors.description && (
-            <span className="text-red-500">{errors.description}</span>
-          )}
-        </div>
+            <div className="flex flex-col rounded-2xl border border-slate-200 bg-slate-50 p-4">
+              <label htmlFor="category" className="pb-1 text-sm font-medium text-slate-500">Category</label>
+              <select className="bg-transparent text-base font-medium text-slate-900 outline-none" id="category" name="category" onChange={handleChange} onBlur={handleBlur} value={values.category}>
+                {TRUST_CATAGORY_OPTIONS?.map(({ option }, index) => (
+                  <option key={index} value={option.value}>{option.label}</option>
+                ))}
+              </select>
+              {errors.category && <span className="mt-1 text-sm text-red-500">{errors.category}</span>}
+            </div>
 
-        <div className=" flex flex-col w-full bg-secondary md:bg-primaryLight p-2">
-          <label
-            htmlFor="category"
-            className="pb-1 text-sm tracking-wider text-gray-500 font-medium"
-          >
-            Category
-          </label>
-          {/* <input
-            type="text"
-            id="category"
-            name="category"
-            maxLength={inputLength}
-            placeholder="Enter Category"
-            className="bg-transparent outline-none"
-            onChange={handleChange}
-            onBlur={handleBlur}
-            value={values.category}
-          /> */}
+            <div className="flex flex-col rounded-2xl border border-slate-200 bg-slate-50 p-4 md:col-span-2">
+              <label htmlFor="description" className="pb-1 text-sm font-medium text-slate-500">Description</label>
+              <textarea id="description" name="description" rows={4} maxLength={500} placeholder="Enter Description" className="bg-transparent text-base text-slate-700 outline-none" onChange={handleChange} onBlur={handleBlur} value={values.description} />
+              {errors.description && <span className="mt-1 text-sm text-red-500">{errors.description}</span>}
+            </div>
 
-          <select
-            className="w-full rounded-lg placeholder:text-gray-650 bg-transparent font-inter py-3 px-3 mb-4 sm:mb-0 text-base font-normal leading-4 outline-none"
-            id="category"
-            name="category"
-            onChange={handleChange}
-            onBlur={handleBlur}
-            value={values.category}
-          >
-            {TRUST_CATAGORY_OPTIONS?.map(({ option }, index) => (
-              <option key={index} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-          {errors.category && (
-            <span className="text-red-500">{errors.category}</span>
-          )}
-        </div>
+            <div className="flex flex-col rounded-2xl border border-slate-200 bg-slate-50 p-4">
+              <label htmlFor="founder" className="pb-1 text-sm font-medium text-slate-500">Founder</label>
+              <input type="text" id="founder" name="founder" placeholder="Enter Founder" className="bg-transparent text-base font-medium text-slate-900 outline-none" onChange={handleChange} onBlur={handleBlur} value={values.founder} maxLength={inputLength} />
+              {errors.founder && <span className="mt-1 text-sm text-red-500">{errors.founder}</span>}
+            </div>
 
-        <div className=" flex flex-col w-full bg-primaryLight md:bg-secondary p-2">
-          <label
-            htmlFor="founder"
-            className="pb-1 text-sm tracking-wider text-gray-500 font-medium"
-          >
-            Founder
-          </label>
-          <input
-            type="text"
-            id="founder"
-            name="founder"
-            placeholder="Enter Founder"
-            className="bg-transparent outline-none"
-            onChange={handleChange}
-            onBlur={handleBlur}
-            value={values.founder}
-            maxLength={inputLength}
-          />
-          {errors.founder && (
-            <span className="text-red-500">{errors.founder}</span>
-          )}
-        </div>
+            <div className="flex flex-col rounded-2xl border border-slate-200 bg-slate-50 p-4">
+              <label htmlFor="contactNo" className="pb-1 text-sm font-medium text-slate-500">Contact No</label>
+              <input type="text" id="contactNo" name="contactNo" maxLength={10} placeholder="Enter Contact No" className="bg-transparent text-base font-medium text-slate-900 outline-none" onChange={handleChange} onBlur={handleBlur} onInput={(e) => { e.currentTarget.value = e.currentTarget.value.replace(/\D/, "").slice(0, 10); handleChange(e); }} value={values.contactNo ?? ""} />
+              {errors.contactNo && <span className="mt-1 text-sm text-red-500">{errors.contactNo}</span>}
+            </div>
 
-        <div className=" flex flex-col w-full bg-secondary md:bg-primaryLight p-2">
-          <label
-            htmlFor="contactNo"
-            className="pb-1 text-sm tracking-wider text-gray-500 font-medium"
-          >
-            Contact No
-          </label>
-          <input
-            type="text"
-            id="contactNo"
-            name="contactNo"
-            maxLength={10}
-            placeholder="Enter Contact No"
-            className="bg-transparent outline-none"
-            onChange={handleChange}
-            onBlur={handleBlur}
-            onInput={(e) => {
-              e.currentTarget.value = e.currentTarget.value
-                .replace(/\D/, "")
-                .slice(0, 10);
-              handleChange(e);
-            }}
-            value={values.contactNo ?? ""}
-          />
-          {errors.contactNo && (
-            <span className="text-red-500">{errors.contactNo}</span>
-          )}
-        </div>
+            <div className="flex flex-col rounded-2xl border border-slate-200 bg-slate-50 p-4">
+              <label htmlFor="address" className="pb-1 text-sm font-medium text-slate-500">Address</label>
+              <input type="text" id="address" name="address" maxLength={inputLength} placeholder="Enter Address" className="bg-transparent text-base font-medium text-slate-900 outline-none" onChange={handleChange} onBlur={handleBlur} value={values.address} />
+              {errors.address && <span className="mt-1 text-sm text-red-500">{errors.address}</span>}
+            </div>
 
-        <div className=" flex flex-col w-full bg-primaryLight md:bg-secondary p-2">
-          <label
-            htmlFor="address"
-            className="pb-1 text-sm tracking-wider text-gray-500 font-medium"
-          >
-            Address
-          </label>
-          <input
-            type="text"
-            id="address"
-            name="address"
-            maxLength={inputLength}
-            placeholder="Enter Address"
-            className="bg-transparent outline-none"
-            onChange={handleChange}
-            onBlur={handleBlur}
-            value={values.address}
-          />
-          {errors.address && (
-            <span className="text-red-500">{errors.address}</span>
-          )}
-        </div>
+            <div className="flex flex-col rounded-2xl border border-slate-200 bg-slate-50 p-4">
+              <label htmlFor="state" className="pb-1 text-sm font-medium text-slate-500">State</label>
+              <select className="bg-transparent text-base font-medium text-slate-900 outline-none" id="state" name="state" onChange={(e) => handleStateChange(e.target.value)} onBlur={handleBlur} value={values.state}>
+                {CITY_AND_STATE?.map(({ state }, index) => (
+                  <option key={index} value={state.value}>{state.label}</option>
+                ))}
+              </select>
+              {touched.state && errors.state && <span className="mt-1 text-sm text-red-600">{errors.state}</span>}
+            </div>
 
-        <div className=" flex flex-col w-full bg-secondary md:bg-primaryLight p-2">
-          <label
-            htmlFor="state"
-            className="pb-1 text-sm tracking-wider text-gray-500 font-medium"
-          >
-            State
-          </label>
-          <select
-            className="w-full rounded-lg placeholder:text-gray-650  bg-transparent font-inter py-3 px-3 mb-4 sm:mb-0 text-base font-normal leading-4 outline-none"
-            id="state"
-            name="state"
-            onChange={(e) => handleStateChange(e.target.value)}
-            onBlur={handleBlur}
-            value={values.state}
-          >
-            {CITY_AND_STATE?.map(({ state }, index) => (
-              <option key={index} value={state.value}>
-                {state.label}
-              </option>
-            ))}
-            {touched.state && errors.state && (
-              <span className="text-sm text-red-600">{errors.state}</span>
-            )}
-          </select>
-        </div>
+            <div className="flex flex-col rounded-2xl border border-slate-200 bg-slate-50 p-4">
+              <label htmlFor="city" className="pb-1 text-sm font-medium text-slate-500">City</label>
+              <select className="bg-transparent text-base font-medium text-slate-900 outline-none" id="city" name="city" onChange={handleChange} value={values.city} onBlur={handleBlur}>
+                {cities.map(({ label, value }, index) => (
+                  <option key={index} value={value}>{label}</option>
+                ))}
+              </select>
+            </div>
 
-        <div className=" flex flex-col w-full bg-primaryLight md:bg-secondary p-2">
-          <label
-            htmlFor="city"
-            className="pb-1 text-sm tracking-wider text-gray-500 font-medium"
-          >
-            City
-          </label>
-          <select
-            className="w-full rounded-lg placeholder:text-gray-650   bg-transparent font-inter py-3 px-3 mb-4 sm:mb-0 text-base font-normal leading-4 outline-none"
-            id="city"
-            name="city"
-            onChange={handleChange}
-            value={values.city}
-            onBlur={handleBlur}
-          >
-            {cities.map(({ label, value }, index) => (
-              <option key={index} value={value}>
-                {label}
-              </option>
-            ))}
-          </select>
-        </div>
+            <div className="flex flex-col rounded-2xl border border-slate-200 bg-slate-50 p-4">
+              <label htmlFor="pincode" className="pb-1 text-sm font-medium text-slate-500">Pincode</label>
+              <input type="text" id="pincode" name="pincode" maxLength={6} placeholder="Enter Pincode" className="bg-transparent text-base font-medium text-slate-900 outline-none" onChange={handleChange} onBlur={handleBlur} onInput={(e) => { e.currentTarget.value = e.currentTarget.value.replace(/\D/, "").slice(0, 6); handleChange(e); }} value={values.pincode ?? ""} />
+              {errors.pincode && <span className="mt-1 text-sm text-red-500">{errors.pincode}</span>}
+            </div>
+          </div>
 
-        {/* <div className="flex flex-col px-2  border-t-transparent focus-within:border-primary">
-          <label className="pb-1 text-sm font-medium">State</label>
-          <select
-            className="w-full rounded-lg placeholder:text-gray-650  border-2 border-gray-300 font-inter py-3 px-3 mb-4 sm:mb-0 text-base font-normal leading-4 outline-none"
-            id="state"
-            name="state"
-            onChange={(e) => handleStateChange(e.target.value)}
-            onBlur={handleBlur}
-            value={values.state}
-          >
-            {CITY_AND_STATE?.map(({ state }, index) => (
-              <option key={index} value={state.value}>
-                {state.label}
-              </option>
-            ))}
-            {touched.state && errors.state && (
-              <span className="text-sm text-red-600">{errors.state}</span>
-            )}
-          </select>
-        </div>
-        <div className="flex flex-col px-2 border-t-transparent focus-within:border-primary">
-          <label className="pb-1 text-sm font-medium">City</label>
-          <select
-            className="w-full rounded-lg placeholder:text-gray-650  border-2 border-gray-300 font-inter py-3 px-3 mb-4 sm:mb-0 text-base font-normal leading-4 outline-none"
-            id="city"
-            name="city"
-            onChange={handleChange}
-            value={values.city}
-            onBlur={handleBlur}
-          >
-            {cities.map(({ label, value }, index) => (
-              <option key={index} value={value}>
-                {label}
-              </option>
-            ))}
-          </select>
-        </div> */}
-
-        <div className=" flex flex-col w-full bg-secondary md:bg-primaryLight p-2">
-          <label
-            htmlFor="pincode"
-            className="pb-1 text-sm tracking-wider text-gray-500 font-medium"
-          >
-            Pincode
-          </label>
-          <input
-            type="text"
-            id="pincode"
-            name="pincode"
-            maxLength={6}
-            placeholder="Enter Pincode"
-            className="bg-transparent outline-none"
-            onChange={handleChange}
-            onBlur={handleBlur}
-            onInput={(e) => {
-              e.currentTarget.value = e.currentTarget.value
-                .replace(/\D/, "")
-                .slice(0, 6);
-              handleChange(e);
-            }}
-            value={values.pincode ?? ""}
-          />
-          {errors.pincode && (
-            <span className="text-red-500">{errors.pincode}</span>
-          )}
-        </div>
-
-        <div className=" flex flex-col gap-2 mt-2 md:flex-row ">
-          <div className="w-full">
-            <button
-              type="submit"
-              className="w-full p-2 rounded-md bg-primary font-bold hover:bg-secondary text-white"
-            >
-              Edit
+          <div className="border-t border-slate-200 p-6">
+            <button type="submit" className="w-full rounded-2xl bg-primary px-4 py-3 font-semibold text-white transition hover:bg-primary/90">
+              Save Changes
             </button>
           </div>
         </div>

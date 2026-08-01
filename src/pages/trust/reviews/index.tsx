@@ -102,51 +102,52 @@ const Reviews = () => {
 
   return (
     <TrustNavbar title="Reviews">
-      {reviews.map(({ uId, reviewText, _id }, index) => (
-        <div
-          key={index}
-          className="flex w-full flex-col justify-between md:flex-row gap-3 bg-white border shadow-md rounded-lg p-3 mb-4"
-        >
-          <div className="flex flex-col gap-2 justify-between w-full">
-            <div className="flex items-center gap-2">
-              <Image
-                className="h-7 w-7 rounded-full"
-                src={uId.userlogo}
-                alt="User avatar"
-                height={200}
-                width={300}
-              />
-              <p className="text-black text-sm">
-                {uId.firstName} {uId.lastName}
-              </p>
-            </div>
-            <div className="w-full md:w-3/4">
-              <p
-                className="text-gray-600 mb-4 overflow-hidden"
-                style={{ maxHeight: "3rem" }}
-              >
-                {reviewText}
-              </p>
-            </div>
-          </div>
-          <div className="flex gap-5 justify-between items-end">
+      <div className="rounded-[28px] border border-slate-200 bg-white p-4 shadow-sm md:p-6">
+        <div className="flex flex-col gap-4">
+          {reviews.map(({ uId, reviewText, _id }, index) => (
             <div
-              className="flex flex-col justify-center items-center"
-              onClick={() => markAsHelpful(_id as string)}
+              key={index}
+              className="flex w-full flex-col justify-between gap-4 rounded-[24px] border border-slate-200 bg-slate-50 p-4 md:flex-row"
             >
-              <ThumbUpIcon isLike={helpfulStatus[_id as string]} />
-              <p className="text-sm">Helpful</p>
+              <div className="flex w-full flex-col justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <Image
+                    className="h-10 w-10 rounded-full border border-slate-200 object-cover"
+                    src={uId.userlogo}
+                    alt="User avatar"
+                    height={200}
+                    width={300}
+                  />
+                  <p className="text-sm font-semibold text-slate-900">
+                    {uId.firstName} {uId.lastName}
+                  </p>
+                </div>
+                <div className="w-full md:w-3/4">
+                  <p className="break-words whitespace-pre-wrap text-sm leading-6 text-slate-700">
+                    {reviewText}
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-end justify-between gap-5 md:flex-col md:items-center">
+                <div
+                  className="flex cursor-pointer flex-col items-center justify-center rounded-full px-3 py-2 transition hover:bg-white"
+                  onClick={() => markAsHelpful(_id as string)}
+                >
+                  <ThumbUpIcon isLike={helpfulStatus[_id as string]} />
+                  <p className="text-xs text-slate-600">Helpful</p>
+                </div>
+                <div
+                  className="flex cursor-pointer flex-col items-center justify-center rounded-full px-3 py-2 transition hover:bg-white"
+                  onClick={() => markAsNotHelpful(_id as string)}
+                >
+                  <ThumbDownIcon isLike={!helpfulStatus[_id as string]} />
+                  <p className="text-xs text-slate-600">Not Helpful</p>
+                </div>
+              </div>
             </div>
-            <div
-              className="flex flex-col justify-center items-center"
-              onClick={() => markAsNotHelpful(_id as string)}
-            >
-              <ThumbDownIcon isLike={!helpfulStatus[_id as string]} />
-              <p className="text-sm">NotHelpful</p>
-            </div>
-          </div>
+          ))}
         </div>
-      ))}
+      </div>
     </TrustNavbar>
   );
 };

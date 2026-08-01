@@ -171,72 +171,73 @@ const Trust = () => {
   return (
     <TrustNavbar title="Home">
       {loading && <Spinner />}
-      <div className="grid grid-cols-2 grid-rows-2 justify-between gap-5">
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
         <div
           onClick={() => {
-            // router.push("/admin/manageuser");
+            push(`/trust/transactions`);
           }}
-          className="flex flex-col py-5 justify-center hover:scale-105 cursor-pointer hover:transition-all hover:duration-400 hover:ease-out items-center bg-primary w-full rounded-md text-white"
+          className="flex cursor-pointer flex-col items-center justify-center rounded-[28px] bg-gradient-to-br from-primary to-violet-700 p-6 text-white shadow-[0_20px_55px_-30px_rgba(109,40,217,0.85)] transition hover:-translate-y-0.5"
         >
-          <h1 className="font-inter flex items-center justify-center gap-2 font-bold text-2xl">
+          <h1 className="flex items-center justify-center gap-2 text-3xl font-bold">
             <span>
               <ProfileIcon color="#FFFFFF" />
             </span>
             {supporter}
           </h1>
-          <p className="text-base font-medium">Suppoters</p>
+          <p className="mt-2 text-base font-medium">Supporters</p>
         </div>
 
         <div
           onClick={() => {
             push(`/trust/transactions`);
           }}
-          className="flex flex-col py-5 justify-center hover:scale-105 cursor-pointer hover:transition-all hover:duration-400 hover:ease-out items-center bg-secondary w-full rounded-md text-white"
+          className="flex cursor-pointer flex-col items-center justify-center rounded-[28px] bg-gradient-to-br from-slate-900 to-slate-700 p-6 text-white shadow-[0_20px_55px_-30px_rgba(15,23,42,0.9)] transition hover:-translate-y-0.5"
         >
-          <h1 className="font-inter font-bold text-2xl">
+          <h1 className="text-3xl font-bold">
             <span className="font-normal">₹</span>{" "}
             {formatAmount(totalCollection)}
           </h1>
-          <p className="text-base font-medium">Collection</p>
+          <p className="mt-2 text-base font-medium">Collection</p>
         </div>
 
         <div
           onClick={() => {
             push(`/trust/disasters`);
           }}
-          className="flex flex-col py-5 justify-center hover:scale-105 cursor-pointer hover:transition-all hover:duration-400 hover:ease-out items-center bg-secondary w-full rounded-md text-white"
+          className="flex cursor-pointer flex-col items-center justify-center rounded-[28px] bg-gradient-to-br from-emerald-500 to-teal-700 p-6 text-white shadow-[0_20px_55px_-30px_rgba(16,185,129,0.8)] transition hover:-translate-y-0.5"
         >
-          <h1 className="font-inter font-bold text-2xl">
+          <h1 className="text-3xl font-bold">
             <span className="font-normal">₹</span>{" "}
             {formatAmount(totalDisasterCollection)}
           </h1>
-          <p className="text-base font-medium">Disasters Collection</p>
+          <p className="mt-2 text-base font-medium">Disasters Collection</p>
         </div>
+
         <div
           onClick={() => {
             push("/trust/disasters");
           }}
-          className="flex flex-col py-5 justify-center hover:scale-105 cursor-pointer hover:transition-all hover:duration-400 hover:ease-out items-center bg-primary w-full rounded-md text-white"
+          className="flex cursor-pointer flex-col items-center justify-center rounded-[28px] bg-gradient-to-br from-amber-500 to-orange-600 p-6 text-white shadow-[0_20px_55px_-30px_rgba(249,115,22,0.9)] transition hover:-translate-y-0.5"
         >
-          <h1 className="font-inter flex items-center justify-center gap-2 font-bold text-2xl">
+          <h1 className="flex items-center justify-center gap-2 text-3xl font-bold">
             <span>
               <DisasterIcon color="#FFFFFF" />
             </span>
             {disasterCount}
           </h1>
-          <p className="text-base font-medium">Disasters</p>
+          <p className="mt-2 text-base font-medium">Disasters</p>
         </div>
       </div>
       <div>
-        <h1 className="sm:block py-5 font-inter font-semibold text-steelGray text-xl sm:text-2xl">
+        <h1 className="py-5 text-xl font-semibold text-slate-900 sm:text-2xl">
           Analytics
         </h1>
       </div>
-      <div className="flex flex-col md:flex-row -z-10 gap-5">
+      <div className="flex -z-10 flex-col gap-5 md:flex-row">
         <ReactLineChart data={suppChartData} title="Supporter Chart" />
         <ReactBarChart data={incomeChart} title="Income Chart" />
       </div>
-      <div className="flex mt-5 flex-col md:flex-row -z-10 gap-5">
+      <div className="mt-5 flex -z-10 flex-col gap-5 md:flex-row">
         <ReactBarChart
           data={disasterIncomeChart}
           title="Disaster Income Chart"

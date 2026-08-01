@@ -39,35 +39,6 @@ const AboutUs = () => {
           </div>
         </div>
       </div>
-      <div className="bg-gray-100 py-12">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <h1 className="flex justify-center py-10 text-3xl font-bold mb-4">
-              Our Team
-            </h1>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="bg-white p-6 rounded-lg shadow-lg">
-                <h3 className="text-xl font-semibold mb-2">
-                  Darshan Prajapati
-                </h3>
-                <p className="text-sm">Team Member</p>
-              </div>
-              <div className="bg-white p-6 rounded-lg shadow-lg">
-                <h3 className="text-xl font-semibold mb-2">Meet Shah</h3>
-                <p className="text-sm">Team Member</p>
-              </div>
-              <div className="bg-white p-6 rounded-lg shadow-lg">
-                <h3 className="text-xl font-semibold mb-2">Kishan Pandav</h3>
-                <p className="text-sm">Team Member</p>
-              </div>
-              <div className="bg-white p-6 rounded-lg shadow-lg">
-                <h3 className="text-xl font-semibold mb-2">Parth Katariya</h3>
-                <p className="text-sm">Team Member</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
       <div className="bg-secondary py-12">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center text-white">

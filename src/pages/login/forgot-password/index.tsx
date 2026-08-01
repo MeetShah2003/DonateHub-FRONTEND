@@ -61,12 +61,24 @@ const ForgotPassword = () => {
   return (
     <WelcomePage title="Reset" secondTitle="Password">
       {loading && <Spinner />}
-      <form className="mx-5 lg:mx-20 py-10 gap-20" onSubmit={handleSubmit}>
-        <h3 className="font-inter text-3xl drop-shadow-2xl tracking-wider font-bold mb-8">
-          Reset Password
-        </h3>
-        <div className="flex flex-col border-2 px-2 py-1 rounded-lg focus-within:border-primary">
-          <label className="pb-1 text-sm font-medium">Email</label>
+      <form
+        className="mx-auto w-full max-w-md rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_18px_45px_-30px_rgba(15,23,42,0.35)] md:p-8"
+        onSubmit={handleSubmit}
+      >
+        <div className="mb-6">
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
+            Security
+          </p>
+          <h3 className="mt-2 text-3xl font-bold text-slate-900">
+            Reset Password
+          </h3>
+          <p className="mt-2 text-sm text-slate-500">
+            Enter your email and we will send the password reset code.
+          </p>
+        </div>
+
+        <div className="flex flex-col rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 focus-within:border-primary">
+          <label className="pb-1 text-sm font-medium text-slate-700">Email</label>
           <input
             id="email"
             name="email"
@@ -74,25 +86,28 @@ const ForgotPassword = () => {
             maxLength={emailLength}
             onChange={handleChange}
             onBlur={handleBlur}
-            className="outline-none tracking-wider"
+            className="w-full bg-transparent text-sm text-slate-900 outline-none tracking-wider"
             placeholder="johndoe@gmail.com"
           />
           {touched.email && errors.email && (
-            <span className="text-sm text-red-600">{errors.email}</span>
+            <span className="mt-1 text-sm text-red-600">{errors.email}</span>
           )}
         </div>
-        <div className="flex mt-5 flex-col border-2  bg-primary shadow-sm rounded-lg px-2 py-2">
+
+        <div className="mt-5 flex flex-col rounded-2xl bg-primary px-2 py-3 shadow-sm">
           <button
             type="submit"
-            className="outline-none text-white font-inter font-medium"
+            className="text-sm font-semibold text-white"
           >
             Send Otp
           </button>
         </div>
 
-        <div className="my-5 flex justify-center ">
-          <p className="text-gray-400">
-            <Link href={"/login"}>&lt;Back</Link>
+        <div className="mt-6 flex justify-center">
+          <p className="text-sm text-slate-500">
+            <Link href={"/login"} className="hover:text-primary">
+              &lt;Back
+            </Link>
           </p>
         </div>
       </form>

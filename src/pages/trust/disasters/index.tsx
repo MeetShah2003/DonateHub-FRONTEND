@@ -43,42 +43,44 @@ const Disaters = () => {
 
   console.log(disasters);
   return (
-    <TrustNavbar title="Disaters">
-      <div className="flex flex-col gap-2">
-        {disasters &&
-          disasters.myDisasters.length &&
-          disasters.myDisasters.map(
-            ({
-              title,
-              description,
-              disasterImage,
-              tId,
-              recievedFund,
-              _id,
-              status,
-              targetFund,
-            }) => {
-              return (
-                <TransactionTrustsModel
-                  key={1}
-                  title={title}
-                  description={description}
-                  trustImage={disasterImage}
-                  founder={tId.founder}
-                  statusOfModel={status}
-                  creationDate={tId.creationDate}
-                  amount={recievedFund}
-                  fundRequirement={targetFund}
-                  onShowTransaction={() => {
-                    push(`/trust/disasters/${_id}`);
-                  }}
-                  onEditDisaster={() => {
-                    push(`/trust/${_id}`);
-                  }}
-                />
-              );
-            }
-          )}
+    <TrustNavbar title="Disasters">
+      <div className="rounded-[28px] border border-slate-200 bg-white p-4 shadow-sm md:p-6">
+        <div className="flex flex-col gap-4">
+          {disasters &&
+            disasters.myDisasters.length &&
+            disasters.myDisasters.map(
+              ({
+                title,
+                description,
+                disasterImage,
+                tId,
+                recievedFund,
+                _id,
+                status,
+                targetFund,
+              }) => {
+                return (
+                  <TransactionTrustsModel
+                    key={1}
+                    title={title}
+                    description={description}
+                    trustImage={disasterImage}
+                    founder={tId.founder}
+                    statusOfModel={status}
+                    creationDate={tId.creationDate}
+                    amount={recievedFund}
+                    fundRequirement={targetFund}
+                    onShowTransaction={() => {
+                      push(`/trust/disasters/${_id}`);
+                    }}
+                    onEditDisaster={() => {
+                      push(`/trust/${_id}`);
+                    }}
+                  />
+                );
+              }
+            )}
+        </div>
       </div>
     </TrustNavbar>
   );

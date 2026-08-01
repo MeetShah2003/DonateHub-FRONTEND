@@ -1,16 +1,13 @@
 import { BACKEND_BASE_URL } from "@/consts";
 import Cookies from "js-cookie";
 import { useState, useEffect } from "react";
-import Image from "next/image";
-import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import Spinner from "@/components/Spinner";
 import { useRouter } from "next/router";
 import TrustNavbar from "../../../components/TrustNavbar";
 import TrustRoute from "@/components/TrustRoute/TrustRoute";
-import { RequestFunds, RequestFundsForAdmin } from "@/types/types";
+import { RequestFundsForAdmin } from "@/types/types";
 import UploadDocumentList from "@/components/UploadDocumentList";
-import AdminRoute from "@/components/AdminRoute";
 
 const SingleAskForFunds = () => {
   const access_token = Cookies.get("access_token");
@@ -47,22 +44,77 @@ const SingleAskForFunds = () => {
       });
   };
 
-  const DownloadImages = async (imageUrls: string[]) => {
+  const fundRequestAccept = (id: string) => {
     setLoading(true);
-    try {
-      for (const imageUrl of imageUrls) {
-        window.open(imageUrl, "_blank", "noopener,noreferrer");
-      }
-    } catch (error) {
-      console.error("Error downloading images:", error);
-    } finally {
-      setLoading(false);
-    }
+    fetch(`${BACKEND_BASE_URL}/trust/accptFundReq/${id}`, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        if (res && res.status === 200) {
+          return res.json();
+        } else if (res && res.status === 400) {
+          errorToast("Some Thing Went Wrong");
+          setTimeout(() => {
+            push(`/trust/listoffundrequest`);
+          }, 3000);
+        }
+      })
+      .then((data) => {
+        if (data) {
+          if (data.message === "Insufficient funds") {
+            errorToast("Insufficient funds");
+          } else {
+            successToast("Fund Request Accepted");
+          }
+          setTimeout(() => {
+            push(`/trust/listoffundrequest`);
+          }, 3000);
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
+  const fundRequestReject = (id: string) => {
+    setLoading(true);
+    fetch(`${BACKEND_BASE_URL}/trust/rejFundReq/${id}`, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        if (res && res.status === 200) {
+          return res.json();
+        } else if (res && res.status === 400) {
+          errorToast("Some Thing Went Wrong");
+          push(`/trust/listoffundrequest`);
+        }
+      })
+      .then((data) => {
+        if (data) {
+          successToast("Fund Request Rejected");
+          setTimeout(() => {
+            push(`/trust/listoffundrequest`);
+          }, 3000);
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   useEffect(() => {
-    getSingleRequestData(query.id as string);
-  }, [access_token]);
+    if (query.id) {
+      getSingleRequestData(query.id as string);
+    }
+  }, [query.id, access_token]);
 
   const formatAmount = (amount: any) => {
     return new Intl.NumberFormat("en-IN").format(amount);
@@ -112,10 +164,31 @@ const SingleAskForFunds = () => {
 
                 {Array.isArray(singleRequestData?.documents) &&
                   singleRequestData?.documents.length > 0 && (
-                    <div className="w-full  border p-5">
+                    <div className="w-full border p-5">
                       <UploadDocumentList documents={singleRequestData.documents} />
                     </div>
                   )}
+              </div>
+
+              <div className="flex w-full gap-5">
+                <button
+                  onClick={() => {
+                    fundRequestAccept(query.id as string);
+                  }}
+                  type="button"
+                  className="w-full rounded-md bg-green-500 px-4 py-2 text-white transition hover:bg-green-400"
+                >
+                  Accept
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    fundRequestReject(query.id as string);
+                  }}
+                  className="w-full rounded-md bg-red-500 px-4 py-2 text-white transition hover:bg-red-400"
+                >
+                  Reject
+                </button>
               </div>
             </div>
           </div>

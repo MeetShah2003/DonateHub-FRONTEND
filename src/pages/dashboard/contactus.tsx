@@ -60,15 +60,21 @@ const ContactUsPage = () => {
     });
 
   return (
-    <div>
-      <div className="sticky top-0 bg-white z-10">
+    <div className="min-h-screen bg-slate-50">
+      <div className="sticky top-0 bg-white z-10 border-b border-slate-200">
         <Visitor />
       </div>
       {loading && <Spinner />}
-      <h1 className="font-inter py-5 font-semibold text-steelGray text-xl sm:text-2xl max-w-screen-md mx-auto flex flex-col gap-2 w-full">
-        Contact Us
-      </h1>
-      <ContactUs />
+      <main className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+        <section className="mb-8 rounded-[32px] bg-white px-6 py-8 shadow-[0_20px_60px_rgba(15,23,42,0.08)] sm:px-10">
+          <p className="text-sm font-semibold uppercase tracking-[0.3em] text-primary">Support</p>
+          <h1 className="mt-3 text-3xl font-semibold text-slate-900">Contact Us</h1>
+          <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-500">
+            Have a question or need help? Send us a message and our support team will get back to you within 24 hours.
+          </p>
+        </section>
+        <ContactUs />
+      </main>
     </div>
   );
 };

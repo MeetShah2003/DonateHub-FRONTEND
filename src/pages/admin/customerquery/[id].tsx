@@ -45,59 +45,74 @@ const CustomerQueryDetail = () => {
   return (
     <AdminFrame title="Customer Query Detail">
       {loading && <Spinner />}
-      <div className="w-full flex flex-col border gap-1">
-        <div className="w-full bg-secondary p-2">
-          <h1 className="pb-1 text-sm tracking-wider text-gray-500 font-medium">
-            Customer Name
-          </h1>
-          <h1 className="pb-1 text-sm font-medium">{contactQuery?.name}</h1>
+      <div className="w-full rounded-[24px] border border-slate-200 bg-white p-6 shadow-[0_20px_60px_rgba(15,23,42,0.08)]">
+        <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-primary">
+              Customer Query
+            </p>
+            <h2 className="mt-2 text-2xl font-semibold text-slate-900">
+              {contactQuery?.name || "Customer details"}
+            </h2>
+            <p className="mt-2 text-sm text-slate-500">
+              Review the customer’s message and contact details in one place.
+            </p>
+          </div>
+          <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
+            <span className="block text-xs uppercase tracking-[0.2em] text-slate-400">
+              Query ID
+            </span>
+            <span className="mt-1 block font-semibold text-slate-900">
+              {contactQuery?._id || "—"}
+            </span>
+          </div>
         </div>
 
-        <div className=" flex flex-col gap-1 md:flex-row ">
-          <div className="w-full bg-primaryLight p-2">
-            <h1 className="pb-1 text-sm tracking-wider text-gray-500 font-medium">
+        <div className="mt-8 grid gap-4 lg:grid-cols-2">
+          <div className="rounded-3xl border border-slate-200 bg-slate-50 p-5">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
+              Customer Name
+            </p>
+            <p className="mt-3 text-base font-semibold text-slate-900">
+              {contactQuery?.name || "Not provided"}
+            </p>
+          </div>
+
+          <div className="rounded-3xl border border-slate-200 bg-slate-50 p-5">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
               Email
-            </h1>
-            <h1 className="pb-1 text-sm font-medium">{contactQuery?.email}</h1>
+            </p>
+            <p className="mt-3 text-base font-semibold text-slate-900">
+              {contactQuery?.email || "Not provided"}
+            </p>
           </div>
-        </div>
-        <div className=" flex flex-col gap-1 md:flex-row ">
-          <div className="w-full bg-secondary p-2">
-            <h1 className="pb-1 text-sm tracking-wider text-gray-500 font-medium">
-              Contact No
-            </h1>
-            <h1 className="pb-1 text-sm font-medium">
-              {contactQuery?.contactNo}
-            </h1>
+
+          <div className="rounded-3xl border border-slate-200 bg-slate-50 p-5">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
+              Contact Number
+            </p>
+            <p className="mt-3 text-base font-semibold text-slate-900">
+              {contactQuery?.contactNo || "Not provided"}
+            </p>
           </div>
-        </div>
-        <div className=" flex flex-col gap-1 md:flex-row ">
-          <div className="w-full bg-primaryLight p-2">
-            <h1 className="pb-1 text-sm tracking-wider text-gray-500 font-medium">
+
+          <div className="rounded-3xl border border-slate-200 bg-slate-50 p-5">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
               Subject
-            </h1>
-            <h1 className="pb-1 text-sm font-medium">
-              {contactQuery?.subject}
-            </h1>
+            </p>
+            <p className="mt-3 text-base font-semibold text-slate-900">
+              {contactQuery?.subject || "Not provided"}
+            </p>
           </div>
         </div>
-        <div className=" flex flex-col gap-1 md:flex-row ">
-          <div className="w-full bg-secondary p-2">
-            <h1 className="pb-1 text-sm tracking-wider text-gray-500 font-medium">
-              Message
-            </h1>
-            <h1 className="pb-1 text-sm font-medium">
-              {contactQuery?.message}
-            </h1>
-          </div>
-        </div>
-        <div className=" flex flex-col gap-1 md:flex-row ">
-          <div className="w-full bg-primaryLight p-2">
-            <h1 className="pb-1 text-sm tracking-wider text-gray-500 font-medium">
-              Query Id
-            </h1>
-            <h1 className="pb-1 text-sm font-medium">{contactQuery?._id}</h1>
-          </div>
+
+        <div className="mt-4 rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
+            Message
+          </p>
+          <p className="mt-3 whitespace-pre-wrap text-base leading-7 text-slate-700">
+            {contactQuery?.message || "No message provided."}
+          </p>
         </div>
       </div>
     </AdminFrame>

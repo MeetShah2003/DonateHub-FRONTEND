@@ -112,48 +112,47 @@ const AddDisaster = () => {
   return (
     <TrustNavbar title="Add Disaster">
       {loading && <Spinner />}
-      <div className="w-full">
+      <div className="rounded-[28px] border border-slate-200 bg-white p-4 shadow-sm md:p-6">
         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-          <div>
-            <div className="bg-secondary/20 flex flex-col p-5 items-center">
-              <p className="w-full font-bold pb-2">Upload Image</p>
-
-              <div className=" h-40 w-44 p-1 overflow-hidden">
+          <div className="rounded-[24px] border border-slate-200 bg-slate-50 p-5">
+            <p className="pb-3 text-sm font-semibold uppercase tracking-[0.24em] text-slate-500">
+              Upload Image
+            </p>
+            <div className="flex flex-col items-center gap-4">
+              <div className="h-44 w-44 overflow-hidden rounded-[20px] border border-primary bg-white p-2">
                 <Image
-                  className="border-2 border-primary p-2 h-full w-full object-cover object-center"
+                  className="h-full w-full rounded-[16px] object-cover object-center"
                   src={values?.disasterImage}
                   alt="trustlogo"
                   width={500}
                   height={500}
                 />
               </div>
-              <div className="flex flex-col mt-5">
-                <label
-                  htmlFor="documents"
-                  className="text-primary cursor-pointer"
-                >
-                  <span className="bg-primary text-white px-4 py-2 rounded-md shadow-md">
-                    Upload Image
-                  </span>
-                  <input
-                    type="file"
-                    id="documents"
-                    name="documents"
-                    className="hidden"
-                    multiple
-                    accept="*/*"
-                    onChange={handleOnChange}
-                  />
-                </label>
-              </div>
+              <label
+                htmlFor="documents"
+                className="cursor-pointer"
+              >
+                <span className="rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm">
+                  Upload Image
+                </span>
+                <input
+                  type="file"
+                  id="documents"
+                  name="documents"
+                  className="hidden"
+                  multiple
+                  accept="*/*"
+                  onChange={handleOnChange}
+                />
+              </label>
             </div>
           </div>
 
-          <div className="w-full bg-secondary/20 border p-5">
-            <p className="font-bold pb-2">Title</p>
+          <div className="rounded-[24px] border border-slate-200 bg-slate-50 p-5">
+            <p className="pb-2 text-sm font-semibold text-slate-900">Title</p>
             <input
               type="text"
-              className="border-2 w-full shadow-sm outline-none rounded-md p-2"
+              className="w-full rounded-2xl border border-slate-200 bg-white p-3 text-sm text-slate-900 outline-none transition focus:border-primary"
               name="title"
               id="title"
               placeholder="Enter Title"
@@ -163,14 +162,14 @@ const AddDisaster = () => {
               value={values.title}
             />
             {touched.title && errors.title && (
-              <div className="text-red-500">{errors.title}</div>
+              <div className="mt-2 text-sm text-red-500">{errors.title}</div>
             )}
           </div>
 
-          <div className="w-full bg-secondary/20 border p-5">
-            <p className="font-bold pb-2">Description</p>
+          <div className="rounded-[24px] border border-slate-200 bg-slate-50 p-5">
+            <p className="pb-2 text-sm font-semibold text-slate-900">Description</p>
             <textarea
-              className="border-2 w-full shadow-sm outline-none rounded-md p-2"
+              className="min-h-[140px] w-full rounded-2xl border border-slate-200 bg-white p-3 text-sm text-slate-900 outline-none transition focus:border-primary"
               name="description"
               id="description"
               placeholder="why need funds?"
@@ -181,25 +180,24 @@ const AddDisaster = () => {
               value={values.description}
             />
             {touched.description && errors.description && (
-              <div className="text-red-500">{errors.description}</div>
+              <div className="mt-2 text-sm text-red-500">{errors.description}</div>
             )}
           </div>
 
-          <div className="w-full bg-secondary/20 border p-5">
-            <p className="font-bold pb-2">Tartget Funds</p>
+          <div className="rounded-[24px] border border-slate-200 bg-slate-50 p-5">
+            <p className="pb-2 text-sm font-semibold text-slate-900">Target Funds</p>
             <input
               type="text"
-              className="border-2 w-full shadow-sm outline-none rounded-md p-2"
+              className="w-full rounded-2xl border border-slate-200 bg-white p-3 text-sm text-slate-900 outline-none transition focus:border-primary"
               name="targetFund"
               id="targetFund"
               placeholder="₹5000"
               onChange={(e) => {
-                const regex = /^[0-9]*$/; // Regex to allow only numeric characters
+                const regex = /^[0-9]*$/;
                 if (!regex.test(e.target.value)) {
-                  // If input doesn't match regex, set value to empty string
                   e.target.value = "";
                 } else {
-                  handleChange(e); // If input matches regex, update form state
+                  handleChange(e);
                 }
               }}
               onBlur={handleBlur}
@@ -207,15 +205,15 @@ const AddDisaster = () => {
               value={values.targetFund || ""}
             />
             {touched.targetFund && errors.targetFund && (
-              <div className="text-red-500">{errors.targetFund}</div>
+              <div className="mt-2 text-sm text-red-500">{errors.targetFund}</div>
             )}
           </div>
 
-          <div className="w-full bg-secondary/20 border p-5">
-            <p className="font-bold pb-2">Contact No</p>
+          <div className="rounded-[24px] border border-slate-200 bg-slate-50 p-5">
+            <p className="pb-2 text-sm font-semibold text-slate-900">Contact No</p>
             <input
               type="text"
-              className="border-2 w-full shadow-sm outline-none rounded-md p-2"
+              className="w-full rounded-2xl border border-slate-200 bg-white p-3 text-sm text-slate-900 outline-none transition focus:border-primary"
               name="altContact"
               id="altContact"
               placeholder="+91 9858988854"
@@ -232,13 +230,13 @@ const AddDisaster = () => {
               value={values.altContact}
             />
             {touched.altContact && errors.altContact && (
-              <div className="text-red-500">{errors.altContact}</div>
+              <div className="mt-2 text-sm text-red-500">{errors.altContact}</div>
             )}
           </div>
           <div className="w-full">
             <button
               type="submit"
-              className="bg-primary w-full text-white rounded-lg p-2"
+              className="w-full rounded-2xl bg-primary p-3 text-sm font-semibold text-white shadow-sm transition hover:bg-primary/90"
             >
               Submit
             </button>

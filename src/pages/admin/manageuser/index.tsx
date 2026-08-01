@@ -108,39 +108,47 @@ const ManageUser = () => {
   return (
     <AdminFrame title="Manage Users">
       {loading && <Spinner />}
-      <div>
-        <input
-          type="text"
-          placeholder="Search..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="border outline-none rounded p-2 mb-2"
-        />
-      </div>
-      <div className="border rounded-t-lg rounded-b-lg shadow-sm overflow-x-auto">
-        {!currentItems ? (
-          <NoData />
-        ) : (
-          <div className="bg-gray-200 rounded-t-lg">
+      <div className="rounded-[24px] border border-slate-200 bg-white p-5 shadow-[0_20px_60px_rgba(15,23,42,0.08)]">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-primary">
+              User Directory
+            </p>
+            <h2 className="mt-2 text-2xl font-semibold text-slate-900">
+              Manage registered users
+            </h2>
+            <p className="mt-2 text-sm text-slate-500">
+              Search users, review profiles, and control account access.
+            </p>
+          </div>
+          <div className="w-full md:w-80">
+            <input
+              type="text"
+              placeholder="Search users..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-primary"
+            />
+          </div>
+        </div>
+
+        <div className="mt-6 overflow-hidden rounded-[20px] border border-slate-200">
+          {!currentItems ? (
+            <NoData />
+          ) : (
             <div className="overflow-x-auto">
-              <table className="w-full">
+              <table className="w-full min-w-[720px]">
                 <thead>
-                  <tr>
-                    <th className="py-3 px-6 text-left bg-gray-200">No</th>
-                    <th className="py-3 px-6 text-left bg-gray-200">
-                      First Name
-                    </th>
-                    <th className="py-3 px-6 text-left bg-gray-200">
-                      Last Name
-                    </th>
-                    <th className="py-3 px-6 text-left bg-gray-200">Email</th>
-                    <th className="py-3 px-6 text-left bg-gray-200">Gender</th>
-                    <th className="py-3 px-6 text-center bg-gray-200">
-                      Action
-                    </th>
+                  <tr className="bg-slate-100 text-left text-sm font-semibold text-slate-600">
+                    <th className="px-6 py-3">No</th>
+                    <th className="px-6 py-3">First Name</th>
+                    <th className="px-6 py-3">Last Name</th>
+                    <th className="px-6 py-3">Email</th>
+                    <th className="px-6 py-3">Gender</th>
+                    <th className="px-6 py-3 text-center">Action</th>
                   </tr>
                 </thead>
-                <tbody className="bg-white rounded-b-lg">
+                <tbody className="bg-white">
                   {currentItems &&
                     currentItems.length > 0 &&
                     currentItems.map(
@@ -150,59 +158,51 @@ const ManageUser = () => {
                       ) => {
                         return (
                           <tr
-                            className="hover:bg-gray-100 transition"
-                            onClick={() => {
-                              if (_id) {
-                                push(`/admin/manageuser/${_id}`);
-                              }
-                            }}
+                            className="border-t border-slate-100 text-sm text-slate-700 transition hover:bg-slate-50"
                             key={index}
                           >
-                            <td className="py-4 px-6 border-b">
+                            <td className="px-6 py-4">
                               {index + 1 + currentPage * itemsPerPage}
                             </td>
-                            <td className="py-4 px-6 border-b">{firstName}</td>
-                            <td className="py-4 px-6 border-b">{lastName}</td>
-                            <td className="py-4 px-6 border-b">{email}</td>
-                            <td className="py-4 px-6 border-b">{gender}</td>
-                            <td className="py-4 px-2 border-b">
-                              <div className="flex">
-                                <div className="flex w-full flex-row items-center justify-center border-r border-dark-150">
-                                  <button className="flex flex-row items-center justify-center gap-1 rounded-md text-base font-normal leading-5 text-gray-1000">
-                                    <EditIcon />
-                                    <span className="hidden text-blue-600 font-inter text-base font-normal leading-5 text-gray-1000 sm:block">
-                                      Edit
-                                    </span>
-                                  </button>
-                                </div>
+                            <td className="px-6 py-4 font-medium text-slate-900">
+                              {firstName}
+                            </td>
+                            <td className="px-6 py-4">{lastName}</td>
+                            <td className="px-6 py-4">{email}</td>
+                            <td className="px-6 py-4">{gender}</td>
+                            <td className="px-6 py-4">
+                              <div className="flex items-center justify-center gap-2">
+                                <button
+                                  onClick={() => {
+                                    if (_id) {
+                                      push(`/admin/manageuser/${_id}`);
+                                    }
+                                  }}
+                                  className="flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-medium text-slate-700 transition hover:border-primary hover:text-primary"
+                                >
+                                  <EditIcon />
+                                  <span>Edit</span>
+                                </button>
                                 {isBlocked ? (
-                                  <div className="flex w-full flex-row items-center justify-center">
-                                    <button
-                                      onClick={() => {
-                                        handleUnblock(_id);
-                                      }}
-                                      className="flex flex-row items-center justify-center gap-1 rounded-md text-base font-normal leading-5 text-danger-100"
-                                    >
-                                      <UnBlockIcon />
-                                      <span className="hidden text-blue-600 font-inter text-base font-normal leading-5 text-danger-100 sm:block">
-                                        Unblock
-                                      </span>
-                                    </button>
-                                  </div>
+                                  <button
+                                    onClick={() => {
+                                      handleUnblock(_id);
+                                    }}
+                                    className="flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm font-medium text-emerald-700 transition"
+                                  >
+                                    <UnBlockIcon />
+                                    <span>Unblock</span>
+                                  </button>
                                 ) : (
-                                  <div className="flex w-full flex-row items-center justify-center">
-                                    <button
-                                      onClick={() => {
-                                        handleBlock(_id);
-                                      }}
-                                      className="flex flex-row items-center justify-center gap-1 rounded-md text-base font-normal leading-5 text-danger-100"
-                                    >
-                                      <BlockIcon />
-                                      <span className="hidden text-[#C80707] font-inter text-base font-normal leading-5 text-danger-100 sm:block">
-                                        Block
-                                      </span>
-                                    </button>
-                                  </div>
+                                  <button
+                                    onClick={() => {
+                                      handleBlock(_id);
+                                    }}
+                                    className="flex items-center gap-2 rounded-full border border-rose-200 bg-rose-50 px-3 py-2 text-sm font-medium text-rose-700 transition"
+                                  >
+                                    <BlockIcon />
+                                    <span>Block</span>
+                                  </button>
                                 )}
                               </div>
                             </td>
@@ -213,8 +213,8 @@ const ManageUser = () => {
                 </tbody>
               </table>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
       {!currentItems?.length ? (
         ""

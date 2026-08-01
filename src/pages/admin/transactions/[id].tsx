@@ -51,27 +51,20 @@ const SingleTrustTransaction = () => {
         {!transactions?.myTrust?.length ? (
           <NoData />
         ) : (
-          <div>
-            <div className="w-full flex flex-col md:flex-row justify-between items-center bg-gray-100 rounded-lg p-6">
-              <div className="flex flex-col w-1/2 items-center justify-center mb-4 md:mb-0">
-                <h2 className="font-semibold flex-wrap text-xl md:text-2xl">
-                  Total Collection
-                </h2>
-                <p className="text-2xl md:text-3xl font-bold text-primary">
-                  ₹{formatAmount(transactions.totalDonatedAmount)}
-                </p>
+          <div className="rounded-[24px] border border-slate-200 bg-white p-5 shadow-[0_20px_60px_rgba(15,23,42,0.08)]">
+            <div className="flex flex-col gap-4 rounded-[20px] border border-slate-200 bg-slate-50 p-6 md:flex-row md:items-center md:justify-between">
+              <div className="flex flex-col items-center text-center md:items-start md:text-left">
+                <p className="text-sm font-semibold uppercase tracking-[0.24em] text-primary">Trust Summary</p>
+                <h2 className="mt-2 text-2xl font-semibold text-slate-900">Total Collection</h2>
+                <p className="mt-2 text-3xl font-bold text-primary">₹{formatAmount(transactions.totalDonatedAmount)}</p>
               </div>
-              <div className="w-1/2 border-t border-gray-300 md:border-none my-4 md:my-0"></div>
-              <div className="flex flex-col w-1/2 items-center justify-center mb-4 md:mb-0">
-                <h2 className="font-semibold flex-wrap text-xl md:text-2xl">
-                  Total Supporter
-                </h2>
-                <p className="text-2xl md:text-3xl font-bold text-primary">
-                  {transactions.totalUniqueSupporters}
-                </p>
+              <div className="hidden h-16 w-px bg-slate-200 md:block" />
+              <div className="flex flex-col items-center text-center md:items-start md:text-left">
+                <h2 className="text-2xl font-semibold text-slate-900">Total Supporters</h2>
+                <p className="mt-2 text-3xl font-bold text-primary">{transactions.totalUniqueSupporters}</p>
               </div>
             </div>
-            <div className="flex flex-col mt-2 gap-2">
+            <div className="mt-6 flex flex-col gap-3">
               {transactions &&
                 transactions.myTrust.length &&
                 transactions.myTrust.map(

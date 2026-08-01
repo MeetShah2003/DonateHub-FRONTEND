@@ -87,68 +87,69 @@ const EnterOtp = () => {
   return (
     <WelcomePage title="Reset" secondTitle="Password">
       {loading && <Spinner />}
-      <form className="mx-5 lg:mx-20 py-10 gap-20" onSubmit={handleSubmit}>
-        <h3 className="font-inter text-3xl drop-shadow-2xl tracking-wider font-bold mb-1">
-          Enter Otp
-        </h3>
-        <p className="mb-5 text-steelGray">
-          Please enter the verification code sent to your email
-        </p>
-        <OtpInput
-          value={values.otp}
-          onChange={(otp) =>
-            handleChange({ target: { name: "otp", value: otp } })
-          }
-          numInputs={4}
-          placeholder="0000"
-          containerStyle="flex justify-center"
-          renderInput={(props, index) => (
-            <input
-              {...props}
-              key={index}
-              className={`border-2 ${
-                errors.otp && (touched.otp || submitted)
-                  ? "border-red-600"
-                  : "border-gray-300"
-              } focus:border-primary`}
-              name="otp"
-              id="otp"
-              style={{
-                flex: 1,
-                width: "40px",
-                height: "40px",
-                fontSize: "16px",
-                margin: "0 5px",
-                textAlign: "center",
-                borderRadius: "4px",
-                outline: "none",
-              }}
-            />
-          )}
-        />
-        {errors.otp && (touched.otp || submitted) && (
-          <div className="text-red-600">{errors.otp}</div>
-        )}
+      <form
+        className="mx-auto w-full max-w-md rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_18px_45px_-30px_rgba(15,23,42,0.35)] md:p-8"
+        onSubmit={handleSubmit}
+      >
+        <div className="mb-6">
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
+            Verification
+          </p>
+          <h3 className="mt-2 text-3xl font-bold text-slate-900">
+            Enter Otp
+          </h3>
+          <p className="mt-2 text-sm text-slate-500">
+            Please enter the verification code sent to your email.
+          </p>
+        </div>
 
-        <div className="flex mt-5 flex-col border-2 bg-primary shadow-sm rounded-lg px-2 py-2">
+        <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+          <OtpInput
+            value={values.otp}
+            onChange={(otp) =>
+              handleChange({ target: { name: "otp", value: otp } })
+            }
+            numInputs={4}
+            placeholder="0000"
+            containerStyle="flex justify-center gap-2"
+            renderInput={(props, index) => (
+              <input
+                {...props}
+                key={index}
+                className={`h-11 w-11 rounded-xl border text-center text-base outline-none ${
+                  errors.otp && (touched.otp || submitted)
+                    ? "border-red-600"
+                    : "border-slate-300"
+                } focus:border-primary`}
+                name="otp"
+                id="otp"
+              />
+            )}
+          />
+          {errors.otp && (touched.otp || submitted) && (
+            <div className="mt-3 text-sm text-red-600">{errors.otp}</div>
+          )}
+        </div>
+
+        <div className="mt-5 flex flex-col rounded-2xl bg-primary px-2 py-3 shadow-sm">
           <button
             type="submit"
-            className="outline-none text-white font-inter font-medium"
+            className="text-sm font-semibold text-white"
           >
             Submit
           </button>
         </div>
 
-        <div className="my-5 flex justify-center">
+        <div className="mt-6 flex justify-center">
           {resendTimer === 0 ? (
             <p
-              className="text-steelGray cursor-pointer"
+              className="cursor-pointer text-sm text-slate-500 hover:text-primary"
               onClick={handleResendOtp}
             >
               Resend Otp
             </p>
           ) : (
-            <p className="text-steelGray">
+            <p className="text-sm text-slate-500">
               Resend Otp in {resendTimer} seconds
             </p>
           )}

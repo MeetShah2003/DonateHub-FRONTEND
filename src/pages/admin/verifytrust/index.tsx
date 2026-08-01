@@ -47,40 +47,58 @@ const VerifyTrust = () => {
   return (
     <AdminFrame title="Verify Trust">
       {loading && <Spinner />}
-      {unVerifiedTrusts &&
-        unVerifiedTrusts?.length > 0 &&
-        unVerifiedTrusts?.map(
-          ({
-            trustName,
-            description,
-            _id,
-            trustlogo,
-            founder,
-            creationDate,
-          }) => {
-            const date = new Date(creationDate);
-            const formattedDate = date.toLocaleDateString("en-GB", {
-              day: "numeric",
-              month: "short",
-              year: "numeric",
-            });
-            return (
-              <div key={_id} className="my-2">
-                <TrustApprovalModal
-                  description={description}
-                  title={trustName}
-                  creationDate={formattedDate}
-                  founder={founder}
-                  trustImage={trustlogo}
-                  onVerify={() => {
-                    router.push(`/admin/verifytrust/${_id}`);
-                  }}
-                />
-              </div>
-            );
-          }
-        )}
-      {!unVerifiedTrusts?.length && !loading && <NoData />}
+      <div className="rounded-[24px] border border-slate-200 bg-white p-5 shadow-[0_20px_60px_rgba(15,23,42,0.08)]">
+        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-primary">
+              Pending Approvals
+            </p>
+            <h2 className="mt-2 text-2xl font-semibold text-slate-900">
+              Review and approve incoming trusts
+            </h2>
+            <p className="mt-2 text-sm text-slate-500">
+              Each request is shown with the trust summary and review option.
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-6 space-y-4">
+          {unVerifiedTrusts &&
+            unVerifiedTrusts?.length > 0 &&
+            unVerifiedTrusts?.map(
+              ({
+                trustName,
+                description,
+                _id,
+                trustlogo,
+                founder,
+                creationDate,
+              }) => {
+                const date = new Date(creationDate);
+                const formattedDate = date.toLocaleDateString("en-GB", {
+                  day: "numeric",
+                  month: "short",
+                  year: "numeric",
+                });
+                return (
+                  <div key={_id} className="rounded-[20px] border border-slate-200 bg-slate-50 p-2">
+                    <TrustApprovalModal
+                      description={description}
+                      title={trustName}
+                      creationDate={formattedDate}
+                      founder={founder}
+                      trustImage={trustlogo}
+                      onVerify={() => {
+                        router.push(`/admin/verifytrust/${_id}`);
+                      }}
+                    />
+                  </div>
+                );
+              }
+            )}
+          {!unVerifiedTrusts?.length && !loading && <NoData />}
+        </div>
+      </div>
       <ReactPaginate
         previousLabel={<ArrowIcon />}
         nextLabel={

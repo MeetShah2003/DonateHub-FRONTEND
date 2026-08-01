@@ -185,182 +185,67 @@ const SingleUser = () => {
   return (
     <AdminFrame title="User Detail">
       {loading && <Spinner />}
-      <form onSubmit={handleSubmit} className="w-full flex flex-col gap-1">
-        <div className="bg-secondary flex flex-col justify-center items-center py-5">
-          {image ? (
-            <img
-              src={URL.createObjectURL(image)}
-              alt="user"
-              className="h-28 w-28 rounded-md"
-            />
-          ) : (
-            <Image
-              className="h-28 w-28 rounded-md"
-              alt="User Image"
-              src={
-                (values.userlogo as string) || (userData?.userlogo as string)
-              }
-              width={100}
-              height={500}
-            />
-          )}
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleOnChange}
-            className="hidden"
-            id="userImage"
-          />
-          <label
-            htmlFor="userImage"
-            className="cursor-pointer bg-primary text-white p-2 mt-2 rounded-md"
-          >
-            Change Image
-          </label>
-        </div>
-        <div className=" flex flex-col gap-1 md:flex-row ">
-          <div className="flex flex-col w-full md:w-1/2 bg-primaryLight p-2">
-            <label
-              htmlFor="firstname"
-              className="pb-1 text-sm tracking-wider text-gray-500 font-medium"
-            >
-              Firstname
-            </label>
-            <input
-              type="text"
-              id="firstName"
-              name="firstName"
-              placeholder="Enter Firstname"
-              className="bg-transparent outline-none"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              maxLength={inputLength}
-              value={values.firstName}
-            />
-            {errors.firstName && (
-              <span className="text-red-500">{errors.firstName}</span>
-            )}
-          </div>
-          <div className="flex flex-col w-full md:w-1/2 bg-secondary md:bg-primaryLight p-2">
-            <label
-              htmlFor="lastname"
-              className="pb-1 text-sm tracking-wider text-gray-500 font-medium"
-            >
-              Lastname
-            </label>
-            <input
-              type="text"
-              id="lastName"
-              name="lastName"
-              maxLength={inputLength}
-              placeholder="Enter Lastname"
-              className="bg-transparent outline-none"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.lastName}
-            />
-            {errors.lastName && (
-              <span className="text-red-500">{errors.lastName}</span>
-            )}
-          </div>
-        </div>
-        <div className=" flex flex-col gap-1 md:flex-row ">
-          <div className="flex flex-col w-full bg-primaryLight md:bg-secondary p-2">
-            <label
-              htmlFor="email"
-              className="pb-1 text-sm tracking-wider text-gray-500 font-medium"
-            >
-              Email
-            </label>
-            <h1>{values.email}</h1>
-          </div>
-        </div>
-
-        <div className=" flex flex-col gap-1 md:flex-row ">
-          <div className="flex flex-col w-full bg-secondary md:bg-primaryLight p-2">
-            <label className="pb-1 text-sm tracking-wider text-gray-500 font-medium">
-              Gender
-            </label>
-            <div className="flex items-center">
-              <input
-                type="radio"
-                id="male"
-                name="gender"
-                value="male"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                checked={values.gender === "male"}
-              />
-              <label htmlFor="male" className="ml-2 mr-4">
-                Male
-              </label>
-              <input
-                type="radio"
-                id="female"
-                name="gender"
-                value="female"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                checked={values.gender === "female"}
-              />
-              <label htmlFor="female" className="ml-2">
-                Female
-              </label>
+      <form onSubmit={handleSubmit} className="w-full">
+        <div className="overflow-hidden rounded-[24px] border border-slate-200 bg-white shadow-[0_20px_60px_rgba(15,23,42,0.08)]">
+          <div className="bg-gradient-to-r from-primary to-slate-900 p-6 text-white">
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-[0.24em] text-slate-300">User Profile</p>
+                <h2 className="mt-2 text-2xl font-semibold">{`${values.firstName} ${values.lastName}`}</h2>
+              </div>
+              <div className="flex items-center gap-3">
+                {image ? (
+                  <img src={URL.createObjectURL(image)} alt="user" className="h-20 w-20 rounded-2xl border border-white/30 object-cover" />
+                ) : (
+                  <Image className="h-20 w-20 rounded-2xl border border-white/30 object-cover" alt="User Image" src={(values.userlogo as string) || (userData?.userlogo as string)} width={100} height={100} />
+                )}
+                <label htmlFor="userImage" className="cursor-pointer rounded-full bg-white/15 px-4 py-2 text-sm font-medium backdrop-blur">Change Image</label>
+              </div>
             </div>
-            {errors.gender && (
-              <span className="text-red-500">{errors.gender}</span>
-            )}
+            <input type="file" accept="image/*" onChange={handleOnChange} className="hidden" id="userImage" />
           </div>
-        </div>
-        <div className=" flex flex-col gap-1 md:flex-row ">
-          <div className="flex flex-col w-full bg-primaryLight md:bg-secondary p-2">
-            <label
-              htmlFor="mobile"
-              className="pb-1 text-sm tracking-wider text-gray-500 font-medium"
-            >
-              Mobile No
-            </label>
-            <input
-              type="number"
-              id="mono"
-              name="mono"
-              maxLength={10}
-              pattern="[0-9]*"
-              placeholder="Enter Mobile No"
-              className="bg-transparent outline-none"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              onInput={(e) => {
-                e.currentTarget.value = e.currentTarget.value
-                  .replace(/\D/, "")
-                  .slice(0, 10);
-                handleChange(e);
-              }}
-              value={values.mono as number}
-            />
-            {errors.mono && <span className="text-red-500">{errors.mono}</span>}
-          </div>
-        </div>
-        <div className="flex flex-col gap-1 md:flex-row">
-          <div className="flex flex-col w-full bg-secondary md:bg-primaryLight p-2">
-            <label
-              htmlFor="createdate"
-              className="pb-1 text-sm tracking-wider text-gray-500 font-medium"
-            >
-              Creation Date & Time
-            </label>
 
-            <h1>{values.createdate.toLocaleString()}</h1>
+          <div className="grid gap-4 p-6 md:grid-cols-2">
+            <div className="flex flex-col rounded-2xl border border-slate-200 bg-slate-50 p-4">
+              <label htmlFor="firstName" className="pb-1 text-sm font-medium text-slate-500">First Name</label>
+              <input type="text" id="firstName" name="firstName" placeholder="Enter Firstname" className="bg-transparent text-base font-medium text-slate-900 outline-none" onChange={handleChange} onBlur={handleBlur} maxLength={inputLength} value={values.firstName} />
+              {errors.firstName && <span className="mt-1 text-sm text-red-500">{errors.firstName}</span>}
+            </div>
+
+            <div className="flex flex-col rounded-2xl border border-slate-200 bg-slate-50 p-4">
+              <label htmlFor="lastName" className="pb-1 text-sm font-medium text-slate-500">Last Name</label>
+              <input type="text" id="lastName" name="lastName" maxLength={inputLength} placeholder="Enter Lastname" className="bg-transparent text-base font-medium text-slate-900 outline-none" onChange={handleChange} onBlur={handleBlur} value={values.lastName} />
+              {errors.lastName && <span className="mt-1 text-sm text-red-500">{errors.lastName}</span>}
+            </div>
+
+            <div className="flex flex-col rounded-2xl border border-slate-200 bg-slate-50 p-4">
+              <label htmlFor="email" className="pb-1 text-sm font-medium text-slate-500">Email</label>
+              <div className="text-base font-medium text-slate-900">{values.email}</div>
+            </div>
+
+            <div className="flex flex-col rounded-2xl border border-slate-200 bg-slate-50 p-4">
+              <label className="pb-1 text-sm font-medium text-slate-500">Gender</label>
+              <div className="flex items-center gap-4 text-sm text-slate-700">
+                <label className="flex items-center gap-2"><input type="radio" id="male" name="gender" value="male" onChange={handleChange} onBlur={handleBlur} checked={values.gender === "male"} />Male</label>
+                <label className="flex items-center gap-2"><input type="radio" id="female" name="gender" value="female" onChange={handleChange} onBlur={handleBlur} checked={values.gender === "female"} />Female</label>
+              </div>
+              {errors.gender && <span className="mt-1 text-sm text-red-500">{errors.gender}</span>}
+            </div>
+
+            <div className="flex flex-col rounded-2xl border border-slate-200 bg-slate-50 p-4">
+              <label htmlFor="mono" className="pb-1 text-sm font-medium text-slate-500">Mobile No</label>
+              <input type="text" id="mono" name="mono" maxLength={10} pattern="[0-9]*" placeholder="Enter Mobile No" className="bg-transparent text-base font-medium text-slate-900 outline-none" onChange={handleChange} onBlur={handleBlur} onInput={(e) => { e.currentTarget.value = e.currentTarget.value.replace(/\D/, "").slice(0, 10); handleChange(e); }} value={values.mono as number} />
+              {errors.mono && <span className="mt-1 text-sm text-red-500">{errors.mono}</span>}
+            </div>
+
+            <div className="flex flex-col rounded-2xl border border-slate-200 bg-slate-50 p-4">
+              <label htmlFor="createdate" className="pb-1 text-sm font-medium text-slate-500">Creation Date & Time</label>
+              <div className="text-base font-medium text-slate-900">{values.createdate.toLocaleString()}</div>
+            </div>
           </div>
-        </div>
-        <div className=" flex flex-col gap-2 mt-2 md:flex-row ">
-          <div className="w-full">
-            <button
-              type="submit"
-              className="w-full p-2 rounded-md bg-primary font-bold hover:bg-secondary text-white"
-            >
-              Edit
-            </button>
+
+          <div className="border-t border-slate-200 p-6">
+            <button type="submit" className="w-full rounded-2xl bg-primary px-4 py-3 font-semibold text-white transition hover:bg-primary/90">Save Changes</button>
           </div>
         </div>
       </form>

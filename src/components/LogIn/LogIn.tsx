@@ -243,7 +243,7 @@ const LogIn = () => {
       });
   };
   return (
-    <div className="flex justify-center h-full">
+    <div className="flex h-screen justify-center overflow-hidden bg-slate-50">
       <WelcomePage title="Welcome To" secondTitle="DonateHub">
         {loading && <Spinner />}
         <TrustNotLoginPopup
@@ -252,12 +252,15 @@ const LogIn = () => {
           setIsOpen={setIsOpen}
         />
 
-        <form className="mx-5 lg:mx-20 gap-20 pb-8" onSubmit={handleSubmit}>
-          <h3 className="font-inter text-3xl drop-shadow-2xl tracking-wider font-bold mb-8">
+        <form
+          className="mx-5 w-full max-w-xl rounded-[28px] border border-slate-200 bg-white/95 p-6 shadow-[0_25px_60px_-30px_rgba(15,23,42,0.35)] lg:mx-10 lg:p-8"
+          onSubmit={handleSubmit}
+        >
+          <h3 className="mb-8 text-3xl font-bold tracking-wider text-slate-900 font-inter">
             Sign in
           </h3>
-          <div className="flex flex-col border-2 px-2 py-1 rounded-t-lg focus-within:border-primary">
-            <label className="pb-1 text-sm font-medium">Email</label>
+          <div className="flex flex-col rounded-t-2xl border border-slate-200 bg-slate-50 px-3 py-2 focus-within:border-primary">
+            <label className="pb-1 text-sm font-medium text-slate-700">Email</label>
             <input
               id="email"
               name="email"
@@ -265,16 +268,16 @@ const LogIn = () => {
               maxLength={emailLength}
               onChange={handleChange}
               onBlur={handleBlur}
-              className="outline-none tracking-wider"
+              className="w-full bg-transparent text-sm text-slate-900 outline-none tracking-wider"
               placeholder="johndoe@gmail.com"
             />
             {touched.email && errors.email && (
               <span className="text-sm text-red-600">{errors.email}</span>
             )}
           </div>
-          <div className="flex flex-col border-t-transparent rounded-b-lg border-2 px-2 py-1 focus-within:border-primary">
-            <label className="pb-1 text-sm font-medium">Password</label>
-            <div className="flex justify-between">
+          <div className="mt-3 flex flex-col rounded-b-2xl border border-slate-200 bg-slate-50 px-3 py-2 focus-within:border-primary">
+            <label className="pb-1 text-sm font-medium text-slate-700">Password</label>
+            <div className="flex items-center justify-between gap-2">
               <input
                 id="password"
                 name="password"
@@ -282,7 +285,7 @@ const LogIn = () => {
                 maxLength={15}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                className="outline-none tracking-wider w-full"
+                className="w-full bg-transparent text-sm text-slate-900 outline-none tracking-wider"
                 placeholder="••••••••"
               />
               <div
@@ -297,23 +300,23 @@ const LogIn = () => {
               <span className="text-sm text-red-600">{errors.password}</span>
             )}
           </div>
-          <div className="w-full mt-5 font-normal flex flex-row-reverse">
+          <div className="mt-5 flex w-full flex-row-reverse text-sm font-medium text-slate-600">
             <Link href={"/login/forgot-password"}>Forgot Password?</Link>
           </div>
-          <div className="flex flex-col border-2 mt-5 bg-primary shadow-sm rounded-lg px-2 py-2">
+          <div className="mt-5 flex flex-col rounded-2xl bg-primary px-2 py-3 shadow-sm">
             <button
               type="submit"
-              className="outline-none text-white font-inter font-medium"
+              className="text-sm font-semibold text-white outline-none"
             >
               Sign In
             </button>
           </div>
 
-          <div className="flex flex-col border-2 mt-4 shadow-sm rounded-lg px-2 py-2">
+          <div className="mt-4 flex flex-col rounded-2xl border border-slate-200 bg-white px-2 py-3 shadow-sm">
             <button
               type="button"
               onClick={handleGoogleLogin}
-              className="outline-none flex justify-center gap-3 text-black font-inter font-medium"
+              className="flex items-center justify-center gap-3 text-sm font-semibold text-slate-800 outline-none"
             >
               <span>
                 <GoogleIcon />
@@ -322,11 +325,11 @@ const LogIn = () => {
             </button>
           </div>
 
-          <div className="flex flex-col border-2 mt-4 shadow-sm rounded-lg px-2 py-2">
+          <div className="mt-4 flex flex-col rounded-2xl border border-slate-200 bg-white px-2 py-3 shadow-sm">
             <button
               type="button"
               onClick={handleGithubLogin}
-              className="outline-none flex justify-center gap-3 text-black font-inter font-medium"
+              className="flex items-center justify-center gap-3 text-sm font-semibold text-slate-800 outline-none"
             >
               <span>
                 <GithubIcon />
@@ -334,10 +337,10 @@ const LogIn = () => {
               Continue with GitHub
             </button>
           </div>
-          <div className="my-3 flex justify-center ">
+          <div className="my-3 flex justify-center text-sm text-slate-600">
             <p>
               Not a registered user yet?
-              <span className="text-primary pl-1 underline-offset-2 underline">
+              <span className="pl-1 text-primary underline-offset-2 underline">
                 <Link href={"/signup"}>SignUp</Link>
               </span>
             </p>
